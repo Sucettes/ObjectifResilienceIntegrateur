@@ -1,0 +1,71 @@
+version: 1.0.{build}
+image: Ubuntu2004
+clone_depth: 1
+stack: node 14.17
+services:
+- docker
+
+branches:
+  only:
+  - develop
+  - /release\/.*/
+  - master
+
+nuget:
+  account_feed: true
+  project_feed: true
+
+dotnet_csproj:
+  patch: true
+  file: '**\*.csproj'
+  version: '{version}'
+  package_version: '{version}'
+  assembly_version: '{version}'
+  file_version: '{version}'
+  informational_version: '{version}'
+
+before_build:
+  - ps: Remove-Item -Path src\Web\web.config
+  - ps: Move-Item -Path src\Web\web.$env:APPVEYOR_REPO_BRANCH.config -Destination src\Web\web.config
+
+after_build:
+  - ps: docker-compose -f "docker-compose.yml" -f "docker-compose.appveyor.yml" up -d --build
+  - ps: Start-Sleep -s 120
+  - ps: npm install -s -g --unicode=false newman
+  - newman run --disable-unicode tests/Postman/WebAppTemplate.postman_collection.json --insecure
+
+build_script:
+  - cd ./src/Web
+  - npm install
+  - npm run prod
+  - dotnet publish ./ -o __publish
+  - cd ../..
+
+#test_script:
+  - dotnet build Gwenael.sln
+  - dotnet test --no-build ./tests/Application -l "console;verbosity=detailed"
+  - dotnet test --no-build ./tests/Domain -l "console;verbosity=detailed"
+  - dotnet test --no-build ./tests/Web -l "console;verbosity=detailed"
+
+artifacts:
+- path: ./src/Web/__publish
+  name: Gwenael.Web
+
+deploy:
+- provider: Environment
+  website: gwenael
+  username: $gwenael
+  password:
+    secure: f11A8JLgw2zo2nf1ms1Z93m5mZ3MwLABm7xL8++aqT9+3ckpjfJ1Vs0XdIkGh07AsF6r+3RM5YoKGwWFO/5sBg==
+  aspnet_core: true
+  aspnet_core_force_restart: true
+  app_offline: true
+  remove_files: true
+  skip_dirs: \\App_Data;\\.well-known;
+  on:
+    branch: master
+
+notifications:
+  - provider: Slack
+    incoming_webhook:
+      secure: XulVWzcYl6EUIlpI6q3QvEBhx8mKB4ia5B5m0HKIRj9o99UZmThYVLMlEl4kK2rT8yvXzTmEKMANzTXzJvW49npQuTz61aWcWwLWpORlLOQ=

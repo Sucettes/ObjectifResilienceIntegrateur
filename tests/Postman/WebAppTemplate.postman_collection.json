@@ -1,0 +1,957 @@
+{
+	"info": {
+		"_postman_id": "0687d319-2957-4704-90c0-f40ff3a3e389",
+		"name": "Web App Template",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Requests",
+			"item": [
+				{
+					"name": "http://:5000/connect/token",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.sendRequest(pm.collectionVariables.get(\"host\") + \"/.dev/db/seed?reset=true\", function (err, response) { });"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Access token is defined\", function () {\r",
+									"    pm.expect(jsonData.access_token).not.to.be.null;\r",
+									"    pm.expect(jsonData.access_token).not.to.be.undefined;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Token type is Bearer\", function () {\r",
+									"    pm.expect(jsonData.token_type).to.eql(\"Bearer\");\r",
+									"});\r",
+									"\r",
+									"pm.collectionVariables.set(\"bearer_token\", jsonData.access_token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "{{connect_username}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "{{connect_password}}",
+									"type": "text"
+								},
+								{
+									"key": "scope",
+									"value": "openid profile offline_access",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "{{connect_clientId}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/connect/token",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"connect",
+								"token"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "WebAppTemplate - Geeks",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "grant_type",
+											"value": "password",
+											"type": "text"
+										},
+										{
+											"key": "username",
+											"value": "geeks",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "123qwe",
+											"type": "text"
+										},
+										{
+											"key": "scope",
+											"value": "openid profile offline_access",
+											"type": "text"
+										},
+										{
+											"key": "client_id",
+											"value": "Gwenael.client",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{host}}/connect/token",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"connect",
+										"token"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						}
+					]
+				},
+				{
+					"name": "Users - Get",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response should contains user attributes\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.id).to.not.be.undefined;\r",
+									"    pm.expect(jsonData.firstName).to.not.be.undefined;\r",
+									"    pm.expect(jsonData.lastName).to.not.be.undefined;    \r",
+									"    pm.expect(jsonData.email).to.not.be.undefined;\r",
+									"    pm.expect(jsonData.phoneNumber).to.not.be.undefined;\r",
+									"    pm.expect(jsonData.active).to.not.be.undefined;\r",
+									"    pm.expect(jsonData.roles).to.not.be.undefined;\r",
+									"    pm.expect(jsonData.roles).to.not.be.null;\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/{{apiVersion}}/users/{{connect_username}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"{{apiVersion}}",
+								"users",
+								"{{connect_username}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Users - Search",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let keywords = pm.collectionVariables.get(\"keywords\");\r",
+									"let pageSizes = pm.collectionVariables.get(\"pageSizes\");\r",
+									"if(!keywords || keywords.length == 0) {\r",
+									"    keywords = [\"\", \"\", \"geeks\"];\r",
+									"}\r",
+									"\r",
+									"if(!pageSizes || pageSizes.length == 0) {\r",
+									"    pageSizes = [20, -1, 20];\r",
+									"}\r",
+									"let keyword = keywords.shift();\r",
+									"pm.collectionVariables.set(\"keyword\", keyword);\r",
+									"pm.collectionVariables.set(\"keywords\", keywords);\r",
+									"\r",
+									"let pageSize = pageSizes.shift();\r",
+									"pm.collectionVariables.set(\"pageSize\", pageSize);\r",
+									"pm.collectionVariables.set(\"pageSizes\", pageSizes);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const keywords = pm.collectionVariables.get(\"keywords\");\r",
+									"const keyword = pm.collectionVariables.get(\"keyword\");\r",
+									"const pageSize = pm.collectionVariables.get(\"pageSize\");\r",
+									"\r",
+									"if (keywords && keywords.length > 0){\r",
+									"    postman.setNextRequest(\"Users - Search\");\r",
+									"}\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response should contains paged attributes\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.currentPage).to.be.greaterThan(0);\r",
+									"    pm.expect(jsonData.items).to.not.be.null;\r",
+									"    pm.expect(jsonData.pageSize).to.not.be.null;\r",
+									"    pm.expect(jsonData.items).to.not.be.null;\r",
+									"    pm.expect(jsonData.totalPages).to.not.be.null;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Items should be less than or equal to page size\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.items.length).to.be.lessThan(jsonData.pageSize+1)\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Total items should be less than or equal to pageSize * totalPages\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.totalItems).to.be.lessThan(jsonData.pageSize*jsonData.totalPages+1)\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Items should be equal to Total items when items length is less than or equal to page size\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    if (jsonData.totalPages == 1)\r",
+									"    {\r",
+									"        pm.expect(jsonData.items.length).to.be.equal(jsonData.totalItems);\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/{{apiVersion}}/users?keyword={{keyword}}&size={{pageSize}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"{{apiVersion}}",
+								"users"
+							],
+							"query": [
+								{
+									"key": "keyword",
+									"value": "{{keyword}}"
+								},
+								{
+									"key": "size",
+									"value": "{{pageSize}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Roles - Search",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response should contains paged attributes\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.currentPage).to.not.be.null;\r",
+									"    pm.expect(jsonData.items).to.not.be.null;\r",
+									"    pm.expect(jsonData.pageSize).to.not.be.null;\r",
+									"    pm.expect(jsonData.items).to.not.be.null;\r",
+									"    pm.expect(jsonData.totalPages).to.not.be.null;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Items should be less than or equal to page size\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.items.length).to.be.lessThan(jsonData.pageSize+1)\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Total items should be less than or equal to pageSize * totalPages\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.totalItems).to.be.lessThan(jsonData.pageSize*jsonData.totalPages+1)\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Items should be equal to Total items when total pages is equal to 1\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    if (jsonData.totalPages == 1)\r",
+									"    {\r",
+									"        pm.expect(jsonData.items.length).to.be.equal(jsonData.totalItems);\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Role claims should not be null\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.items.length).to.be.greaterThan(0);\r",
+									"    pm.expect(jsonData.items[0].claims).to.not.be.null;\r",
+									"});\r",
+									"pm.test(\"Super Admin role claims should not be empty\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.items.length).to.be.greaterThan(0);\r",
+									"    var superAdmin = null\r",
+									"    for (var i = 0; i < jsonData.items.length; i++)\r",
+									"    {\r",
+									"        if (jsonData.items[i].name == \"Super Administrator\")\r",
+									"        {\r",
+									"            superAdmin = jsonData.items[i]\r",
+									"        }\r",
+									"    }\r",
+									"    pm.expect(superAdmin).to.not.be.null;\r",
+									"    pm.expect(superAdmin.claims).to.not.be.empty;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/{{apiVersion}}/roles",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"{{apiVersion}}",
+								"roles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Roles - Edit",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response should contains role attributes\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.id).to.not.be.undefined;\r",
+									"    pm.expect(jsonData.name).to.not.be.undefined;\r",
+									"    pm.expect(jsonData.active).to.not.be.undefined;\r",
+									"    pm.expect(jsonData.claims).to.not.be.undefined;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Claims sould be empty\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.claims).to.not.be.undefined;\r",
+									"    pm.expect(jsonData.claims).to.be.empty;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\" : \"{{roleId}}\",\r\n    \"name\": \"Super\",\r\n    \"active\" : true,\r\n    \"claims\": []\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/{{apiVersion}}/roles/{{roleId}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"{{apiVersion}}",
+								"roles",
+								"{{roleId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Roles - Create",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let roleNames = pm.collectionVariables.get(\"roleNames\");\r",
+									"let roleClaimsList = pm.collectionVariables.get(\"roleClaimsList\");\r",
+									"if(!roleNames || roleNames.length == 0) {\r",
+									"    roleNames = [\"Super Administrator\", \"Comptabilité \", \"Billeterie\"];\r",
+									"}\r",
+									"\r",
+									"if(!roleClaimsList || roleClaimsList.length == 0) {\r",
+									"    roleClaimsList = [\"\\\"Permissions.User.Create\\\", \\\"Permissions.User.View\\\", \\\"Permissions.User.Edit\\\", \\\"Permissions.User.Delete\\\"\",\r",
+									"                    \"\\\"Permissions.User.View\\\"\",\r",
+									"                    \"\"];\r",
+									"}\r",
+									"let roleName = roleNames.shift();\r",
+									"pm.collectionVariables.set(\"roleName\", roleName);\r",
+									"pm.collectionVariables.set(\"roleNames\", roleNames);\r",
+									"\r",
+									"let roleClaims = roleClaimsList.shift();\r",
+									"pm.collectionVariables.set(\"roleClaims\", roleClaims);\r",
+									"pm.collectionVariables.set(\"roleClaimsList\", roleClaimsList);\r",
+									"\r",
+									"pm.sendRequest(pm.collectionVariables.get(\"host\") + \"/.dev/db/seed?reset=true\", function (err, response) { });\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const roleNames = pm.collectionVariables.get(\"roleNames\");\r",
+									"const roleName = pm.collectionVariables.get(\"roleName\");\r",
+									"const roleClaims = pm.collectionVariables.get(\"roleClaims\");\r",
+									"if (roleNames && roleNames.length > 0){\r",
+									"    postman.setNextRequest(\"Roles - Create\");\r",
+									"}\r",
+									"\r",
+									"if (roleName == \"Super Administrator\") {\r",
+									"    pm.test(\"Status code is 400\", function () {\r",
+									"        pm.response.to.have.status(400);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Response should contains error code\", function () {\r",
+									"        let jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData.isSuccess).to.be.false;\r",
+									"        pm.expect(jsonData.errors[\"\"][0].code).to.be.equal(\"DuplicateRoleName\");\r",
+									"    });\r",
+									"}\r",
+									"else\r",
+									"{\r",
+									"    pm.test(\"Status code is 200\", function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Response should contains role attributes\", function() {\r",
+									"        let jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData.id).to.not.be.undefined;\r",
+									"        pm.expect(jsonData.name).to.be.equal(roleName);\r",
+									"        pm.expect(jsonData.active).to.be.true;\r",
+									"        _.each(jsonData.claims, (claim) => {\r",
+									"            pm.expect(roleClaims).to.include(claim);\r",
+									"        });\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"{{roleName}}\",\r\n    \"active\" : true,\r\n    \"claims\": [{{roleClaims}}]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/{{apiVersion}}/roles",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"{{apiVersion}}",
+								"roles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Account - Get",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Employee Code should be equal to logged in user\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.userName).to.eql(pm.collectionVariables.get(\"connect_username\"));\r",
+									"});\r",
+									"pm.test(\"Response should contains user attributes\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.id).to.not.be.undefined;\r",
+									"    pm.expect(jsonData.userName).to.not.be.undefined;\r",
+									"    pm.expect(jsonData.firstName).to.not.be.undefined;\r",
+									"    pm.expect(jsonData.lastName).to.not.be.undefined;    \r",
+									"    pm.expect(jsonData.email).to.not.be.undefined;\r",
+									"    pm.expect(jsonData.phoneNumber).to.not.be.undefined;\r",
+									"    pm.expect(jsonData.active).to.not.be.undefined;\r",
+									"    pm.expect(jsonData.isLockedOut).to.not.be.undefined;\r",
+									"    pm.expect(jsonData.roles).to.not.be.undefined;\r",
+									"    pm.expect(jsonData.roles).to.not.be.null;\r",
+									"\r",
+									"    pm.expect(jsonData.permissions).to.not.be.undefined;\r",
+									"    pm.expect(jsonData.permissions).to.not.be.null;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/{{apiVersion}}/account",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"{{apiVersion}}",
+								"account"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Forgot Password",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let userNames = pm.collectionVariables.get(\"userNames\");\r",
+									"if(!userNames || userNames.length == 0) {\r",
+									"    userNames = [pm.collectionVariables.get('userName'), \"astark\"];\r",
+									"}\r",
+									"\r",
+									"\r",
+									"let username = userNames.shift();\r",
+									"pm.collectionVariables.set(\"userName\", username);\r",
+									"pm.collectionVariables.set(\"userNames\", userNames);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let userName = pm.collectionVariables.get('userName');\r",
+									"let connect_username = pm.collectionVariables.get('connect_username');\r",
+									"\r",
+									"if (connect_username == userName)\r",
+									"{\r",
+									"    pm.test(\"Status code is 200\", function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    });\r",
+									"}\r",
+									"else\r",
+									"{\r",
+									"    pm.test(\"Status code is 404\", function () {\r",
+									"        pm.response.to.have.status(404);\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"let userNames = pm.collectionVariables.get(\"userNames\");\r",
+									"if (userNames && userNames.length > 0){\r",
+									"    postman.setNextRequest(\"Forgot Password\");\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userName\" : \"{{userName}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/{{apiVersion}}/account/forgotpassword",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"{{apiVersion}}",
+								"account",
+								"forgotpassword"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ChangePassword",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.sendRequest({\r",
+									"    url: pm.collectionVariables.get('host') + '/connect/token',\r",
+									"    method: 'POST',\r",
+									"    header: {\r",
+									"        'Accept': 'application/json',\r",
+									"        'Content-Type': 'application/x-www-form-urlencoded'\r",
+									"    },\r",
+									"    body: {\r",
+									"        mode: 'urlencoded',\r",
+									"        urlencoded: [\r",
+									"            {key: \"grant_type\", value: \"password\", disabled: false},\r",
+									"            {key: \"username\", value: pm.collectionVariables.get(\"connect_username\"), disabled: false},\r",
+									"            {key: \"password\", value: pm.variables.get('new_password'), disabled: false},\r",
+									"            {key: \"client_id\", value: pm.collectionVariables.get(\"connect_clientId\"), disabled: false},\r",
+									"            {key: \"scope\", value: \"profile offline_access\", disabled: false}\r",
+									"        ]\r",
+									"      }\r",
+									"}, function (err, res) {\r",
+									"    pm.test(\"Status code is 200\", function () {\r",
+									"        pm.expect(res.code).to.be.eq(200);\r",
+									"    });\r",
+									"    pm.collectionVariables.set('connect_password', pm.variables.get('previous_password'));\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.sendRequest(pm.collectionVariables.get(\"host\") + \"/.dev/db/seed?reset=true\", function (err, response) { });\r",
+									"pm.variables.set('new_password', \"lol123lol\");\r",
+									"pm.variables.set('previous_password', pm.collectionVariables.get('connect_password'));\r",
+									"pm.collectionVariables.set('connect_password', pm.variables.get('new_password'));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"password\": \"{{new_password}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/{{apiVersion}}/account/{{connect_username}}/password",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"{{apiVersion}}",
+								"account",
+								"{{connect_username}}",
+								"password"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{bearer_token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"// var host = pm.collectionVariables.get(\"host\");",
+							"// pm.sendRequest(host + \"/.dev/db/seed?reset=true\", function (err, response) {",
+							"//     console.log(response);",
+							"// });"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "oauth2",
+		"oauth2": [
+			{
+				"key": "clientId",
+				"value": "Gwenael.client",
+				"type": "string"
+			},
+			{
+				"key": "tokenName",
+				"value": "Template",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "geeks",
+				"type": "string"
+			},
+			{
+				"key": "password",
+				"value": "123qwe",
+				"type": "string"
+			},
+			{
+				"key": "accessTokenUrl",
+				"value": "http://localhost:5000/connect/token",
+				"type": "string"
+			},
+			{
+				"key": "scope",
+				"value": "openid profile offline_access",
+				"type": "string"
+			},
+			{
+				"key": "clientSecret",
+				"value": "",
+				"type": "string"
+			},
+			{
+				"key": "grant_type",
+				"value": "password_credentials",
+				"type": "string"
+			},
+			{
+				"key": "challengeAlgorithm",
+				"value": "S256",
+				"type": "string"
+			},
+			{
+				"key": "useBrowser",
+				"value": true,
+				"type": "boolean"
+			},
+			{
+				"key": "authUrl",
+				"value": "https://accounts.google.com/o/oauth2/auth",
+				"type": "string"
+			},
+			{
+				"key": "addTokenTo",
+				"value": "header",
+				"type": "string"
+			},
+			{
+				"key": "client_authentication",
+				"value": "body",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "apiVersion",
+			"value": "v1"
+		},
+		{
+			"key": "userName",
+			"value": "geeks"
+		},
+		{
+			"key": "host",
+			"value": "http://localhost:5000"
+		},
+		{
+			"key": "roleId",
+			"value": "4B93FE7F-A48A-4F60-BEA4-54F5B1E77315"
+		},
+		{
+			"key": "connect_username",
+			"value": "geeks"
+		},
+		{
+			"key": "connect_password",
+			"value": "123qwe"
+		},
+		{
+			"key": "connect_clientId",
+			"value": "Gwenael.client"
+		},
+		{
+			"key": "bearer_token",
+			"value": ""
+		},
+		{
+			"key": "keyword",
+			"value": ""
+		},
+		{
+			"key": "keywords",
+			"value": ""
+		},
+		{
+			"key": "pageSize",
+			"value": ""
+		},
+		{
+			"key": "pageSizes",
+			"value": ""
+		},
+		{
+			"key": "roleName",
+			"value": ""
+		},
+		{
+			"key": "roleNames",
+			"value": ""
+		},
+		{
+			"key": "roleClaims",
+			"value": ""
+		},
+		{
+			"key": "roleClaimsList",
+			"value": ""
+		},
+		{
+			"key": "userNames",
+			"value": ""
+		}
+	]
+}

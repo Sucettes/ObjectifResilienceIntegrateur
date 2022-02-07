@@ -1,0 +1,18 @@
+﻿@using Gwenael.Domain
+@using Gwenael.Domain.Entities
+@using Gwenael.Web.Pages.Account.Manage
+@inject SignInManager<User> SignInManager
+@{
+    var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+}
+
+<ul class="nav nav-pills flex-column">
+    <li class="@ManageNavPages.IndexNavClass(ViewContext) nav-item"><a class="nav-link" asp-page="./Index">Profile</a></li>
+    <li class="@ManageNavPages.ChangePasswordNavClass(ViewContext) nav-item"><a class="nav-link" asp-page="./ChangePassword">Password</a></li>
+    @if (hasExternalLogins)
+    {
+        <li class="@ManageNavPages.ExternalLoginsNavClass(ViewContext) nav-item"><a class="nav-link" asp-page="./ExternalLogins">External logins</a></li>
+    }
+    <li class="@ManageNavPages.TwoFactorAuthenticationNavClass(ViewContext) nav-item"><a class="nav-link" asp-page="./TwoFactorAuthentication">Two-factor authentication</a></li>
+</ul>
+

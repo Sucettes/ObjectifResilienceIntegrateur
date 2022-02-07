@@ -1,0 +1,17 @@
+version: '3.4'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: src/Web/Development.Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80 # Port running inside the container
+      - ASPNETCORE_HTTPS_PORT=5001 # Host https port, see docker-compose file.
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=${Dev_Certificate_Path} # From .env file
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=${Dev_Certificate_Password} # From .env file
+    volumes:
+      - './:/app' # Mounting the host app directory to /app in the container. This allow dotnet watch to detect file changes within the container!
+      - '/app/src/Web/node_modules/' # Anonymous volume, Docker will mount the /app/src/Web/node_modules/ directory from the image and add it to the previous mapping (./:/app)
+      - '${Dev_Certificate_Volume_Path}/https:/https/' # From .env file. Mounting our host https directory to /https/ in the container

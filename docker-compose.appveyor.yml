@@ -1,0 +1,13 @@
+version: '3.4'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: src/Web/Appveyor.Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Integration
+      - ASPNETCORE_URLS=http://+:80
+# We cannot mount volumes here obviously, we need to have a fully running container with all the files, (COPY . . in the docker file).
+# Only HTTP for the integration tests, working with dev certificates on linux is a mess. 
+# Best bet would be to use NGINX as Proxy for HTTPS.

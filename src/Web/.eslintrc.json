@@ -1,0 +1,12 @@
+{
+	"env": { "browser": true },
+	"extends": "standard",
+	"rules": {
+		"space-before-function-paren": 0,
+		"object-property-newline": 0,
+		"arrow-parens": 0,
+		"new-cap": 0,
+		"no-eval": 0,
+		"semi": 0
+	}
+}
