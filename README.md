@@ -66,3 +66,14 @@ net stop winnat
 docker start container_name
 net start winnat
 ```
+
+## Azure database
+When booting the app with Azure SQL database connection string, if you have this error
+```
+Cannot open server '[your-server-name]' requested by the login.
+Client with IP address '161.184.136.100' is not allowed to access the server. 
+```
+- Go to your SQL database in Azure 
+- Click on ``Set server firewall``
+- Add the IP address mentionned in the error message
+- Click on ``Save``
