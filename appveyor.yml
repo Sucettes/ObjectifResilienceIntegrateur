@@ -54,9 +54,9 @@ artifacts:
 deploy:
 - provider: Environment
   website: gwenael
-  username: $gwenael
+  username: gwenael\$gwenael
   password:
-    secure: f11A8JLgw2zo2nf1ms1Z93m5mZ3MwLABm7xL8++aqT9+3ckpjfJ1Vs0XdIkGh07AsF6r+3RM5YoKGwWFO/5sBg==
+    secure: C5mfb4qz8PPSMgdv1ll1aE99PmJPcAN9X3h0FM4wsYptQ3X5KCKTPwvyfWgg
   aspnet_core: true
   aspnet_core_force_restart: true
   app_offline: true
