@@ -53,6 +53,7 @@ artifacts:
 
 deploy:
 - provider: Environment
+  name: gwenael-env
   website: gwenael
   username: $gwenael
   password:
