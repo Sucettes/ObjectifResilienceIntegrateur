@@ -34,38 +34,22 @@ dotnet build
 npm install
 npm run build
 ```
-- Renouveller le certificat Docker
-```
-cd path/to/my-new-app
-powershell ./docker/build/dev.ps1
-```
 
 ## Build and run the app
-Avant de rouler cette commande qui est assez longue, suivez la procédure de la section ``Troubleshooting`` afin de donner le droit à Docker d'accéder au dossier
+Ouvez deux invites de commandes. 
+Dans la première exécutez les commande suivantes :
 ```
-cd path/to/my-new-app
-docker-compose -f "docker-compose.yml" -f "docker-compose.override.yml" up --build
+cd .\src\Web
+dotnet watch run
 ```
-L'application va ensuite rouler à l'adresse ``http://localhost:5000/``
-## Troubleshooting
-In case you run into this error:
+L'application va maintenant rouler à l'adresse ``http://localhost:5000/``
 
-``ERROR: for your-new-project-app  Cannot create container for service app: user declined directory sharing [...]``
-- Open Docker Desktop
-- Go to Settings → Resources → File Sharing
-- Add ``C:\Users\[YourUser]``
-- Add ``path/to/my-new-app``
-- Click on Apply & Restart
-- Try running docker-compose command again
-
-In case you run into this error during docker compose command:
-``Cannot start service db: Ports are not available: listen tcp 0.0.0.0:1433``
-Run these commands in a command prompt as Administrator
+Dans la deuxième invite de commande, exécutez les commandes suivantes :
 ```
-net stop winnat
-docker start container_name
-net start winnat
+cd .\src\Web
+npm run sync
 ```
+Cette commande appelle ``gulp sync`` qui va mettre à jour les fichiers ``site.css`` et ``site.js`` lorsqu'un fichier ``.scss`` ou ``.js`` est changé.
 
 ## Azure database
 When booting the app with Azure SQL database connection string, if you have this error

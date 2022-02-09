@@ -22,7 +22,6 @@
 
     <ItemGroup>
       <Content Remove="appsettings.local.Development.json" />
-      <Content Remove="appsettings.local.Integration.json" />
       <Content Remove="appsettings.local.json" />
     </ItemGroup>
 
