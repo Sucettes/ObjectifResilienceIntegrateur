@@ -14,6 +14,9 @@ namespace Gwenael.Web
     {
         public static void Main(string[] args)
         {
+            if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")))
+                Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Development");
+
             Console.WriteLine("****************************************");
             Console.WriteLine($"dotnet.exe process id: {Process.GetCurrentProcess().Id}");
             Console.WriteLine($"ASPNETCORE_ENVIRONMENT is {Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}");

@@ -2,10 +2,7 @@
   "profiles": {
     "Gwenael.Web": {
       "commandName": "Project",
-      "launchBrowser": true,
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      "launchBrowser": true
     },
     "Docker": {
       "commandName": "Docker",
