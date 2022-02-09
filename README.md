@@ -35,8 +35,21 @@ npm install
 npm run build
 ```
 
+## Configuration de la base de données locale
+- Ouvrez SSMS (SQL Server Management Studio)
+- Connectez-vous à votre serveur de bd local
+- Créez une nouvelle bd
+    - Clic droit sur ``Databases`` > ``New database``
+    - Donnez-lui le même nom que celui qui se trouve dans ``appsettings.Development.json``
+- Maintenant, il faut donner accès à un user à la bd qu'on vient de créer
+    - Ouvrez le dossier ``Security``
+    - Clic droit sur ``Logins`` > ``New login``
+    - Sélectionnez SQL Authentication
+    - Dans ``appsettings.Development.json``, j'ai défini le username à dev et le password à dev, mais vous pouvez choisir le username et mot de passe de votre choix, il suffit de changer ensuite les valeurs dans le ``appsettings.Development.json``
+
 ## Build and run the app
-Ouvez deux invites de commandes. 
+
+Ouvez deux invites de commandes.
 Dans la première exécutez les commande suivantes :
 ```
 cd .\src\Web
@@ -57,7 +70,7 @@ When booting the app with Azure SQL database connection string, if you have this
 Cannot open server '[your-server-name]' requested by the login.
 Client with IP address '161.184.136.100' is not allowed to access the server. 
 ```
-- Go to your SQL database in Azure 
+- Go to your SQL database in Azure
 - Click on ``Set server firewall``
 - Add the IP address mentionned in the error message
 - Click on ``Save``
