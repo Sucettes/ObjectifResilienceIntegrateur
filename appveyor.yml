@@ -28,12 +28,6 @@ before_build:
   - ps: Remove-Item -Path src\Web\web.config
   - ps: Move-Item -Path src\Web\web.$env:APPVEYOR_REPO_BRANCH.config -Destination src\Web\web.config
 
-after_build:
-  - ps: docker-compose -f "docker-compose.yml" -f "docker-compose.appveyor.yml" up -d --build
-  - ps: Start-Sleep -s 120
-  - ps: npm install -s -g --unicode=false newman
-  - newman run --disable-unicode tests/Postman/WebAppTemplate.postman_collection.json --insecure
-
 build_script:
   - cd ./src/Web
   - npm install
@@ -41,7 +35,13 @@ build_script:
   - dotnet publish ./ -o __publish
   - cd ../..
 
-#test_script:
+after_build:
+  - ps: docker-compose -f "docker-compose.yml" -f "docker-compose.appveyor.yml" up -d --build
+  - ps: Start-Sleep -s 120
+  - ps: npm install -s -g --unicode=false newman
+  - newman run --disable-unicode tests/Postman/WebAppTemplate.postman_collection.json --insecure
+
+test_script:
   - dotnet build Gwenael.sln
   - dotnet test --no-build ./tests/Application -l "console;verbosity=detailed"
   - dotnet test --no-build ./tests/Domain -l "console;verbosity=detailed"
