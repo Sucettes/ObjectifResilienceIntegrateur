@@ -1,0 +1,41 @@
+﻿@page "{id:Guid?}"
+@using Web.Pages
+@model Web.Pages.UserModel
+@using Domain.Entities
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Modification d'un Utilisateur";
+}
+
+<div>
+    <h1>Modification d'un Utilisateur</h1>
+    @*<a href="../Pages/AdminMenu.cshtml">Retour Panneau Admin</a>*@
+    <form method="post">
+        <input type="hidden" asp-for="user.Id" />
+        <div class="form-group row">
+            <div class="col-4">
+                <label asp-for="user.UserName">Pseudonyme</label>
+                <input asp-for="user.UserName"/>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-8">
+                <label asp-for="user.Email">Courriel</label>
+                <input asp-for="user.Email"/>
+            </div>
+        </div>
+         <div class="form-group row">
+            <div class="col-4">
+                <label asp-for="user.FirstName">Prénom</label>
+                <input asp-for="user.FirstName"/>
+            </div>
+        </div>
+         <div class="form-group row">
+            <div class="col-4">
+                <label asp-for="user.LastName">Nom de Famille</label>
+                <input asp-for="user.LastName"/>
+            </div>
+        </div>
+        <input type="submit" value="Update" class="btn btn-primary form-control" />
+    </form>
+</div>
