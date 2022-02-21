@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
 using Gwenael.Domain;
+using Microsoft.AspNetCore.Razor.TagHelpers;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace Gwenael.Web.Pages
 {
@@ -16,26 +18,15 @@ namespace Gwenael.Web.Pages
         public AdminMenuModel(GwenaelDbContext context)
         {
             _context = context;
-            // Ajout Manuel d'un user
-            //User antho = new User
-            //{
-            //    Active = true,
-            //    FirstName = "Anthony",
-            //    LastName = "Levesque",
-            //    Email = "antho20k@hotmail.com"
-            //};
-            //_context.Add<User>(antho);
-            //_context.SaveChanges();
         }
         public IList<User> Users { get; set; }
+        [BindProperty]
+        public User user { get; set; }
         public async Task OnGetAsync()
         {
             Users = await _context.Users.ToListAsync();
             ViewData["lstUsers"] = Users;
         }
-        public void OnPost() {
-            
-        }
-
+       
     }
 }
