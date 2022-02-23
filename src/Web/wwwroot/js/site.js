@@ -1,22 +1,16 @@
-"use strict";
+(function () {
+'use strict';
 
-var photos =
-    [
-        {
-            "src": "slide1.jpg",
-            "desc": "1. Le bateau"
-        },
-        {
-            "src": "slide2.jpg",
-            "desc": "2. Vue de l'hélicoptère"
-        },
-        {
-            "src": "slide3.png",
-            "desc": "3. Quelle belle montagne!"
-        }
-       
-    ];
-
+var photos = [{
+    "src": "imageArticle.jpg",
+    "desc": "Comment fabriquer une maison pour chat"
+}, {
+    "src": "imageArticle1.jpg",
+    "desc": "tutoriel de recyclage"
+}, {
+    "src": "imageArticle2.jpg",
+    "desc": "fabriquer un panier avec un carton"
+}];
 
 var indice = 0;
 
@@ -31,7 +25,7 @@ function rafraichirPhoto() {
 }
 
 /**
- * Avance à la prochaine photo
+ * Avance ï¿½ la prochaine photo
  */
 function clicSuivant() {
     indice = (indice + 1) % photos.length;
@@ -39,13 +33,12 @@ function clicSuivant() {
 }
 
 /**
- * Recule à la photo précédente
+ * Recule ï¿½ la photo prï¿½cï¿½dente
  */
 function clicPrecedent() {
     indice = (indice + photos.length - 1) % photos.length;
     rafraichirPhoto();
 }
-
 
 /**
  * Initialisation de la page
@@ -64,3 +57,5 @@ function initialisation() {
 }
 
 window.addEventListener('load', initialisation, false);
+
+}());

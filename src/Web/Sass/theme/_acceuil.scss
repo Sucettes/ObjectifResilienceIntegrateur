@@ -2,7 +2,7 @@
 
 
 .main {
-    background-color: rgba(127, 186, 194, 0.8);
+    background-color: white;
 }
 
 
@@ -21,6 +21,8 @@
     flex-direction: row;
     justify-content: center;
     background-color: #6B8E23;
+    box-shadow: 3px 3px 3px black;
+    
 }
 
 nav li {
@@ -36,7 +38,8 @@ nav li {
 nav a {
     display: inline-block;
     
-    text-decoration: none;
+    /*text-decoration: none;*/
+    text-decoration-color:black;
     border: 3px solid black;
     border-radius: 7px;
 
@@ -44,8 +47,8 @@ nav a {
 
 
 nav a:hover {
-    background-image: url("../images/fondBois.jpg");
-    box-shadow: 5px 5px 5px black;
+    background-image: url("../images/fondBois3.png");
+    box-shadow: 2px 2px 2px black;
 }
 
 .page
@@ -81,7 +84,7 @@ nav a:hover {
     margin-bottom: 30px;
     /* on centre la page en ajustant les marges de façon automatique */
     border: 3px solid black;
-    background-image: url("../images/fondBois.jpg");
+    background-image: url("../images/fondBois3.png");
     background-size: cover;
 }
 .containerMain {
@@ -97,6 +100,21 @@ nav a:hover {
     border-radius: 7px;
     background-color:aqua;
 }
+
+.makeGras {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.z-index 1
+{
+    z-index:1;
+}
+.z-index -2 {
+    z-index:-2;
+}
+
+
 
 
 /***********************/
@@ -205,12 +223,15 @@ input:focus::-moz-placeholder {
 
 .slide-text {
     position: absolute;
-    color: #ffffff;
-    font-size: 15px;
+    color: black;
+    font-size: 20px;
     padding: 15px;
+    margin-left:200px;
+    margin-bottom:210px;
     bottom: 15px;
-    width: 100%;
+    width: 50%;
     text-align: center;
+    background-color:white;
 }
 
 .slide-index {
@@ -278,100 +299,4 @@ input:focus::-moz-placeholder {
 
 
 
-.custom-slider {
-    display: none;
-}
 
-.slide-container {
-    max-width: 800px;
-    position: relative;
-    margin: auto;
-}
-
-.prev, .next {
-    cursor: pointer;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 60px;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    color: white;
-    font-size: 30px;
-    background-color: rgba(0,0,0,0);
-    transition: background-color 0.6s ease;
-}
-
-.prev {
-    left: 15px;
-}
-
-.next {
-    right: 15px;
-}
-
-.prev:hover, .next:hover {
-    background-color: rgba(0,0,0,0.5);
-}
-
-.slide-text {
-    position: absolute;
-    color: #ffffff;
-    font-size: 15px;
-    padding: 15px;
-    bottom: 15px;
-    width: 100%;
-    text-align: center;
-}
-
-.slide-index {
-    color: #ffffff;
-    font-size: 13px;
-    padding: 15px;
-    position: absolute;
-    top: 0;
-}
-
-.slide-img {
-    width: 100%;
-    height: 300px;
-    object-fit: cover;
-    object-position: center;
-}
-
-.slide-dot {
-    text-align: center;
-}
-
-.dot {
-    cursor: pointer;
-    height: 10px;
-    width: 10px;
-    margin: 0 2px;
-    background-color: #999999;
-    border-radius: 50%;
-    display: inline-block;
-    transition: background-color 0.6s ease;
-}
-
-.active, .dot:hover {
-    background-color: #111111;
-}
-
-.fade {
-    animation-name: fade;
-    animation-duration: 1s;
-}
-
-@keyframes fade {
-    from {
-        opacity: 0
-    }
-
-    to {
-        opacity: 1
-    }
-}
