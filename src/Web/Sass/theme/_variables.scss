@@ -17,7 +17,7 @@ $gray-800: #343a40 !default;
 $gray-900: #212529 !default;
 $black:    #000 !default;
 
-$blue:    #2C3E50 !default;
+$blue: #1176db !default;
 $indigo:  #6610f2 !default;
 $purple:  #6f42c1 !default;
 $pink:    #e83e8c !default;
@@ -35,11 +35,11 @@ $info:          $cyan !default;
 $warning:       $yellow !default;
 $danger:        $red !default;
 $light:         $gray-200 !default;
-$dark:          $gray-700 !default;
+$dark:          $white !default;
 
 // Links
 
-$link-color:                $success !default;
+$link-color:                $primary !default;
 
 // Fonts
 
@@ -74,7 +74,7 @@ $nav-tabs-border-color:             $gray-200 !default;
 $navbar-padding-y:                  1rem !default;
 
 $navbar-dark-color:                 $white !default;
-$navbar-dark-hover-color:           $success !default;
+$navbar-dark-hover-color:           $black !default;
 
 // Pagination
 
