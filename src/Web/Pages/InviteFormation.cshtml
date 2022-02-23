@@ -1,0 +1,177 @@
+﻿@page
+@using Web.Pages
+@using Microsoft.AspNetCore.Components.Forms
+@using IdentityServer4.Extensions
+@model Web.Pages.InviteFormationModel
+@{
+    ViewData["Title"] = "Ajouté membres formation";
+}
+
+<section class="row">
+    <div class="col-md-6">
+        <h4>Ajouté des membres à une formation</h4>
+        <br />
+
+        <p>Ajouté des membres via un fichier Excel</p>
+        <a href="/fichiers/Templates_Formation_Invitation.xlsx" download>Télécharger Template Exel (xlsx)</a>
+
+        <form method="post" runat="server" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="formFile" class="form-label"></label>
+                <input asp-for="Input.FormFile" class="form-control" type="file" id="formFile">
+            </div>
+
+            <div>
+                <button class="btn btn-outline-primary" type="submit" value="Upload">Importé</button>
+            </div>
+        </form>
+        <br />
+        <hr />
+        <br />
+        <p>Ajouté un membre via un courriel</p>
+        <form method="post">
+            <div class="md-3">
+                <label asp-for="Input.Email"></label>
+                <input asp-for="Input.Email" type="email" class="form-control">
+            </div>
+            <div class="md-3">
+                <label class="form-label">Formations</label>
+                <select class="form-select">
+                    <option selected>Sélectionné...</option>
+                    <option>Formation1</option>
+                    <option>Formation2</option>
+                    <option>Formation3</option>
+                    <option>Toutes les formations</option>
+                </select>
+            </div>
+            <div>
+                <button type="submit" class="btn btn-outline-primary">Invité</button>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-6">
+        <h4>Informations complémentaires</h4>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        Utilisateur
+                    </th>
+                    <th>
+                        Formation
+                    </th>
+                    <th>Voir son profils</th>
+                </tr>
+            </thead>
+            @if (!(@Model.Input.lstEmailFormation.IsNullOrEmpty()))
+            {
+                @foreach (var item in @Model.Input.lstEmailFormation)
+                {
+                    <tr>
+                        <td>@item.GetEmail()</td>
+                        <td>@item.GetFormation()</td>
+                        <td><a href="#" class="btn btn-outline-primary">Voir profils</a></td>
+                    </tr>
+                }
+            }
+        </table>
+        
+        <hr/>
+        <p>
+            Pour ajouter des utilisateurs avec un fichier Excel, il suffit de télécharger le Gabarit 
+            en cliquant sur le lien. Par la suite, le remplir comme les instructions l’indiquent. 
+            Il faut seulement mettre le nom de la formation et les courriels des utilisateurs. 
+            Attentions, la formation doit exister et avoir exactement le même nom que dans le 
+            fichier Excel. Par la suite il faut importer le fichier sur le site web puis cliqué 
+            sur le bouton importé pour valider. Les utilisateurs seront ajoutés à la formation, 
+            s’ils n’ont pas de comptes à l’adresse courriel fournis, des instructions seront 
+            envoyées afin qu’il puisse obtenir un compte. Il est aussi possible d’ajouter un 
+            utilisateur à la main. Il suffit de choisir la formation et inscrire son adresse 
+            courriel dans le champ indiqué puis appuyé sur le bouton invité.
+        </p>
+        <p>
+            La liste des utilisateur qui sont ajouté et si il y a une erreures ou non.
+            possibilité d'allez sur leur profils pour les modifiers? etc. des trucs utiles...
+        </p>
+    </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--<br />
+<div class="row">
+    <div class="col-md-5">
+        <section>
+            <form method="post" runat="server" enctype="multipart/form-data">
+                <h4>Invité une liste de membres</h4>
+                <hr />
+                <br />
+                <div class="form-group">-->
+                    @*<input type="file" id="upload"/>*@
+                    <!--<input style="display: block" asp-for="Input.FormFile" type="file">-->
+                    @*<span asp-validation-for="Input.FormFile"></span>*@
+                <!--</div>
+                <a href="/fichiers/Templates_Formation_Invitation.xlsx" download>Télécharger Template Exel (xlsx)</a>
+
+                <div class="form-group">
+                    <input--> @*asp-page-handler="Upload"*@ <!--class="btn" type="submit" value="Upload" />
+                </div>
+            </form>
+        </section>
+    </div>
+    <div class="col-md-4 @*col-md-offset-2*@">
+        <section>
+            <form method="post">
+                <h4>Invité un utilisateur manuellement</h4>
+                <hr />
+                <br />
+
+                <div class="form-group">
+                    <label asp-for="Input.Email"></label>
+                    <input asp-for="Input.Email" class="form-control" />
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-default">Invité</button>
+                </div>
+            </form>
+        </section>
+    </div>
+    <div class="col-md-3">
+        <h4>List email invité a la formation</h4>
+        <p>Formation: Exemple</p>
+        <ul>
+            <li>exemple@exemple.com : Réussie</li>
+            <li>exemple@exemple.com : Réussie</li>
+            <li>exemple@exemple.com : Échec</li>
+            <li>exemple@exemple.com : Réussie</li>
+            <li>exemple@exemple.com : Échec</li>
+            <li>exemple@exemple.com : Échec</li>
+            <li>exemple@exemple.com : Réussie</li>
+            <li>exemple@exemple.com : Réussie</li>
+        </ul>
+    </div>
+</div>-->
