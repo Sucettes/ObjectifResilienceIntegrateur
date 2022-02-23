@@ -1,0 +1,377 @@
+﻿
+
+
+.main {
+    background-color: rgba(127, 186, 194, 0.8);
+}
+
+
+/*h1
+/* le style s'applique au titre de niveau 1 du premier "header" de la page  {
+    color: white;
+    margin: 0;
+    visibility: hidden;
+}*/
+.affichageEtendu {
+    width: stretch;
+}
+
+#containerNav {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    background-color: #6B8E23;
+}
+
+nav li {
+    display: inline-block;
+    border-radius: 7px;
+    /*padding-right: 100px;*/ 
+    /*padding-left: 100px;*/
+    margin-left:110px;
+    margin-right:110px;
+    /*background-color:red;*/
+}
+
+nav a {
+    display: inline-block;
+    
+    text-decoration: none;
+    border: 3px solid black;
+    border-radius: 7px;
+
+}
+
+
+nav a:hover {
+    background-image: url("../images/fondBois.jpg");
+    box-shadow: 5px 5px 5px black;
+}
+
+.page
+/* division qui englobe toute la page */ {
+    
+    /* la largeur est fixée à 1000 pixels */
+    margin: auto;
+    /* on centre la page en ajustant les marges de façon automatique */
+    border: 3px solid black;
+}
+
+.globalContainer {
+    display: flex; 
+    flex-wrap: wrap;
+}
+
+.topContainer {
+    display: flex; 
+    justify-content: space-around;
+    background-color :white;
+}
+
+.pageBox {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-right: 20px;
+    padding-left: 20px;
+    width: 1500px;
+    /* la largeur est fixée à 1000 pixels */
+    height: auto;
+    margin: auto;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    /* on centre la page en ajustant les marges de façon automatique */
+    border: 3px solid black;
+    background-image: url("../images/fondBois.jpg");
+    background-size: cover;
+}
+.containerMain {
+    display: flex;
+    flex-direction: column;
+    justify-content:center;
+    
+}
+.loginButton {
+    display: inline-block;
+    text-decoration: none;
+    border: 3px solid black;
+    border-radius: 7px;
+    background-color:aqua;
+}
+
+
+/***********************/
+.searchBoxPlacement{
+    padding-top : 15px;
+}
+
+.form-recherche {
+    /*background: url(http://3.bp.blogspot.com/-g-zH25_DoxI/VD1BuatkgII/AAAAAAAAAgc/00hxspfvv3s/s1600/searchbar.png) no-repeat;*/
+    width: 400px;
+    height: 29px;
+}
+
+input:focus::-webkit-input-placeholder {
+    color: transparent;
+}
+
+input:focus:-moz-placeholder {
+    color: transparent;
+}
+
+input:focus::-moz-placeholder {
+    color: transparent;
+}
+
+#searchbox input {
+    outline: none;
+}
+
+#searchbox input[type= "text"] {
+    background: transparent;
+    margin: 3px 0px 0px 20px;
+    padding: 5px 0px 5px 0px;
+    border-width: 0px;
+    font-family: « Arial Narrow », Arial, sans-serif;
+    font-size: 12px;
+    color: #828282;
+    width: 70%;
+    display: inline-table;
+    vertical-align: top;
+}
+
+#button-submit {
+    background: url(http://4.bp.blogspot.com/-OcDQ6Z9ojlQ/VD1KnwJjFOI/AAAAAAAAAgs/cu_pKN6bpL8/s1600/magnifier.png) no-repeat;
+    border-width: 0px;
+    cursor: pointer;
+    margin-left: 10px;
+    margin-top: 4px;
+    width: 21px;
+    height: 22px;
+}
+
+#button-submit:hover {
+    background: url(http://2.bp.blogspot.com/-4-xFDFGKJrA/VD1Kn04f9TI/AAAAAAAAAgw/2ta84QY1x9A/s1600/magnifier-hover.png) no-repeat;
+}
+
+#button-submit:active {
+    background: url(http://2.bp.blogspot.com/-4-xFDFGKJrA/VD1Kn04f9TI/AAAAAAAAAgw/2ta84QY1x9A/s1600/magnifier-hover.png) no-repeat;
+    outline: none;
+}
+
+#button-submit::-moz-focus-inner {
+    border: 0;
+}
+
+/***********************/
+
+.custom-slider {
+    display: none;
+}
+
+.slide-container {
+    max-width: 800px;
+    position: relative;
+    margin: auto;
+}
+
+.prev, .next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: white;
+    font-size: 30px;
+    background-color: rgba(0,0,0,0);
+    transition: background-color 0.6s ease;
+}
+
+.prev {
+    left: 15px;
+}
+
+.next {
+    right: 15px;
+}
+
+.prev:hover, .next:hover {
+    background-color: rgba(0,0,0,0.5);
+}
+
+.slide-text {
+    position: absolute;
+    color: #ffffff;
+    font-size: 15px;
+    padding: 15px;
+    bottom: 15px;
+    width: 100%;
+    text-align: center;
+}
+
+.slide-index {
+    color: #ffffff;
+    font-size: 13px;
+    padding: 15px;
+    position: absolute;
+    top: 0;
+}
+
+.slide-img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    object-position: center;
+}
+
+.slide-dot {
+    text-align: center;
+}
+
+.dot {
+    cursor: pointer;
+    height: 10px;
+    width: 10px;
+    margin: 0 2px;
+    background-color: #999999;
+    border-radius: 50%;
+    display: inline-block;
+    transition: background-color 0.6s ease;
+}
+
+.active, .dot:hover {
+    background-color: #111111;
+}
+
+.fade {
+    animation-name: fade;
+    animation-duration: 1s;
+}
+
+@keyframes fade {
+    from {
+        opacity: 0
+    }
+
+    to {
+        opacity: 1
+    }
+}
+
+/***********************/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.custom-slider {
+    display: none;
+}
+
+.slide-container {
+    max-width: 800px;
+    position: relative;
+    margin: auto;
+}
+
+.prev, .next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: white;
+    font-size: 30px;
+    background-color: rgba(0,0,0,0);
+    transition: background-color 0.6s ease;
+}
+
+.prev {
+    left: 15px;
+}
+
+.next {
+    right: 15px;
+}
+
+.prev:hover, .next:hover {
+    background-color: rgba(0,0,0,0.5);
+}
+
+.slide-text {
+    position: absolute;
+    color: #ffffff;
+    font-size: 15px;
+    padding: 15px;
+    bottom: 15px;
+    width: 100%;
+    text-align: center;
+}
+
+.slide-index {
+    color: #ffffff;
+    font-size: 13px;
+    padding: 15px;
+    position: absolute;
+    top: 0;
+}
+
+.slide-img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    object-position: center;
+}
+
+.slide-dot {
+    text-align: center;
+}
+
+.dot {
+    cursor: pointer;
+    height: 10px;
+    width: 10px;
+    margin: 0 2px;
+    background-color: #999999;
+    border-radius: 50%;
+    display: inline-block;
+    transition: background-color 0.6s ease;
+}
+
+.active, .dot:hover {
+    background-color: #111111;
+}
+
+.fade {
+    animation-name: fade;
+    animation-duration: 1s;
+}
+
+@keyframes fade {
+    from {
+        opacity: 0
+    }
+
+    to {
+        opacity: 1
+    }
+}
