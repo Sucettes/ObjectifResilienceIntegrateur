@@ -9,10 +9,11 @@ namespace Gwenael.Domain.Entities
 {
     [Index(nameof(FirstName), IsUnique = false)]
     [Index(nameof(LastName), IsUnique = false)]
+    [Index(nameof(UserName), IsUnique = true)]
     public class User : IdentityUser<Guid>
     {
-        [Required] [MaxLength(50)] public string FirstName { get; set; }
-        [Required] [MaxLength(50)] public string LastName { get; set; }
+        [MaxLength(50)] public string FirstName { get; set; }
+        [MaxLength(50)] public string LastName { get; set; }
         public bool Active { get; set; }
         public virtual IEnumerable<UserRole> Roles { get; set; }
         public DateTime CreationDate { get; protected set; }
