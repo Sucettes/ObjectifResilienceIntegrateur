@@ -3,6 +3,7 @@
 
 .main {
     background-color: white;
+    
 }
 
 
@@ -13,7 +14,7 @@
     visibility: hidden;
 }*/
 .affichageEtendu {
-    width: stretch;
+    width: 100%;
 }
 
 #containerNav {
@@ -21,17 +22,22 @@
     flex-direction: row;
     justify-content: center;
     background-color: #6B8E23;
-    box-shadow: 3px 3px 3px black;
-    
+    width: 100%;
+}
+.containerNavLv2 {
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
 }
 
 nav li {
     display: inline-block;
     border-radius: 7px;
-    /*padding-right: 100px;*/ 
+    /*padding-right: 100px;*/
     /*padding-left: 100px;*/
-    margin-left:110px;
-    margin-right:110px;
+    margin-left: auto;
+    margin-right: auto;
+    text-decoration-color: black;
     /*background-color:red;*/
 }
 
@@ -49,6 +55,17 @@ nav a {
 nav a:hover {
     background-image: url("../images/fondBois3.png");
     box-shadow: 2px 2px 2px black;
+}
+
+.main-nav-item {
+    padding-left : 5vw;
+}
+
+.borderCancell
+{
+    border: none;
+    background-image:none;
+
 }
 
 .page
@@ -77,7 +94,7 @@ nav a:hover {
     padding-right: 20px;
     padding-left: 20px;
     width: 1500px;
-    /* la largeur est fixée à 1000 pixels */
+    
     height: auto;
     margin: auto;
     margin-top: 30px;
@@ -91,7 +108,7 @@ nav a:hover {
     display: flex;
     flex-direction: column;
     justify-content:center;
-    
+
 }
 .loginButton {
     display: inline-block;

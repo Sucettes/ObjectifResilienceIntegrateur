@@ -1,0 +1,33 @@
+﻿
+label {
+    width: 110px;
+    display: inline-block;
+    vertical-align: top;
+    margin: 8px;
+}
+
+input:focus {
+    background: #eaeaea;
+}
+
+input {
+    width: 600px;
+    height: 35px;
+}
+
+#centerForm
+{
+    width: 50%; 
+    margin-left : 30%;
+}
+
+#btnAddMod
+{
+    margin-top:15px;
+}
+
+.containerForm
+{
+    display:flex;
+}
+ 
