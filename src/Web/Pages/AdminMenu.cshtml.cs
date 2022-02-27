@@ -20,12 +20,23 @@ namespace Gwenael.Web.Pages
             _context = context;
         }
         public IList<User> Users { get; set; }
+        public IList<Formation> Formations { get; set; }
+        public String Tab { get; set; }
         [BindProperty]
         public User user { get; set; }
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
+            if (Request.Query.Count == 1)
+            {
+                Tab = Request.Query["tab"];
+                ViewData["Tab"] = Tab;
+            }
+
             Users = await _context.Users.ToListAsync();
             ViewData["lstUsers"] = Users;
+            Formations = await _context.Formations.ToListAsync();
+            ViewData["lstFormations"] = Formations;
+            return Page();
         }
        
     }
