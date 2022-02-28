@@ -13,12 +13,23 @@
         <br />
 
         <p>Ajouté des membres via un fichier Excel</p>
-        <a href="/fichiers/Templates_Formation_Invitation.xlsx" download>Télécharger Template Exel (xlsx)</a>
+        <a href="/fichiers/Templates_Formation_Invitation_csv.csv" download>Télécharger Template Exel (csv)</a>
 
         <form method="post" runat="server" enctype="multipart/form-data">
             <div class="mb-3">
                 <label for="formFile" class="form-label"></label>
-                <input asp-for="Input.FormFile" class="form-control" type="file" id="formFile">
+                <input asp-for="Input.FormFile" class="form-control" type="file" id="formFile" name="formFile">
+            </div>
+            <div class="mb-3">
+                @* TODO Faire en sorte f'afficher les catégorie existente' *@
+                <label class="form-label">Formations</label>
+                <select class="form-select" required>
+                    <option selected>Sélectionné...</option>
+                    <option>Formation1</option>
+                    <option>Formation2</option>
+                    <option>Formation3</option>
+                    <option>Toutes les formations</option>
+                </select>
             </div>
 
             <div>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
+using System.Globalization;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -12,8 +13,12 @@ using System.Reflection;
 using System.Threading.Tasks;
 using OfficeOpenXml;
 using System.Linq;
+using CsvHelper;
+using CsvHelper.Configuration;
+using Microsoft.AspNetCore.Components.Forms;
 using Newtonsoft.Json;
 using NuGet.Packaging;
+using NuGet.Protocol;
 using OfficeOpenXml;
 using Spk.Common.Helpers.String;
 
@@ -46,57 +51,85 @@ namespace Gwenael.Web.Pages
             Console.WriteLine("GET-----------------");
         }
 
-        [HttpPost("FileUpload")]
         public async Task<IActionResult> OnPostAsync()
         {
-            if (Input.FormFile != null && Input.FormFile.FileName.EndsWith(".xlsx"))
+            if (Input.FormFile != null && Input.FormFile.FileName.EndsWith(".csv"))
             {
-                string path = _environment.ContentRootPath + "\\wwwroot\\fichiers\\uploadsExcel\\" + DateTime.Now.Ticks + Input.FormFile.FileName;
+                List<EmailFormation> list = new List<EmailFormation>();
 
-                using (var stream = new FileStream(path, FileMode.Create))
+                using (var reader = new System.IO.StreamReader(Input.FormFile.OpenReadStream()))
                 {
-                    await Input.FormFile.CopyToAsync(stream);
+                    string result = reader.ReadToEnd();
+                    result = result.Replace("\r", "");
+                    string[] vectLignes = result.Split('\n');
+                    int nbLignes = vectLignes.Length - 2;
 
-                    Console.WriteLine("ONPOSTASYNC-------------------");
-                    using (ExcelPackage package = new ExcelPackage(new FileInfo(path)))
+                    if (vectLignes[vectLignes.Length - 1] != "")
                     {
-                        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-                        var sheet = package.Workbook.Worksheets[0];
-
-                        Input.lstEmailFormation = GetExcelEmail(sheet);
+                        nbLignes = vectLignes.Length - 1;
                     }
-                }
 
-                FileInfo file = new FileInfo(path);
-                if (file.Exists)
-                {
-                    file.Delete();
+                    string formation = "FormationPlaceHolder";
+
+                    for (int i = 0; i <= nbLignes; i++)
+                    {
+                        string[] vectChamps = vectLignes[i].Split(';');
+                        if(vectChamps[0] != "" && vectChamps[0].Length > 1)
+                            list.Add(new EmailFormation(formation, vectChamps[0]));
+                    }
+
                 }
+                Input.lstEmailFormation = list;
+
+
+                //// TODO: Réusir a importer un fichier excel a la place d'un csv.
+                //string path = _environment.ContentRootPath + "\\wwwroot\\fichiers\\uploadsExcel\\" + DateTime.Now.Ticks + Input.FormFile.FileName;
+
+                //using (var stream = new FileStream(path, FileMode.Create))
+                //{
+                //    await Input.FormFile.CopyToAsync(stream);
+
+                //    Console.WriteLine("ONPOSTASYNC-------------------");
+                //    using (ExcelPackage package = new ExcelPackage(new FileInfo(path)))
+                //    {
+                //        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+                //        var sheet = package.Workbook.Worksheets[0];
+
+                //        Input.lstEmailFormation = GetExcelEmail(sheet);
+                //    }
+                //}
+
+                //FileInfo file = new FileInfo(path);
+                //if (file.Exists)
+                //{
+                //    file.Delete();
+                //}
             }
 
             return Page();
         }
 
-        public List<EmailFormation> GetExcelEmail(ExcelWorksheet sheet)
-        {
-            Console.WriteLine("GETEXCEL EMAIL------------------------");
-            List<EmailFormation> list = new List<EmailFormation>();
-            var columnInfo = Enumerable.Range(1, sheet.Dimension.Columns).ToList().Select(n =>
-                new { Index = n, ColumnName = sheet.Cells[1, n].Value.ToString() }
-            );
+        //public List<EmailFormation> GetExcelEmail(ExcelWorksheet sheet)
+        //{
+        //    //List<EmailFormation> list = new List<EmailFormation>();
+        //    Console.WriteLine("GETEXCEL EMAIL------------------------");
+        //    List<EmailFormation> list = new List<EmailFormation>();
+        //    var columnInfo = Enumerable.Range(1, sheet.Dimension.Columns).ToList().Select(n =>
+        //        new { Index = n, ColumnName = sheet.Cells[1, n].Value.ToString() }
+        //    );
 
-            var formation = (string)sheet.Cells[2, 2].Value;
-            for (int row = 3; row < sheet.Dimension.Rows; row++)
-            {
-                var contenue = (string)sheet.Cells[row, 2].Value;
-                if (!contenue.IsNullOrEmpty() && contenue != " " && contenue != "")
-                {
-                    list.Add(new EmailFormation(formation, contenue));
-                }
-            }
+        //    var formation = (string)sheet.Cells[2, 2].Value;
+        //    for (int row = 3; row < sheet.Dimension.Rows; row++)
+        //    {
+        //        var contenue = (string)sheet.Cells[row, 2].Value;
+        //        if (!contenue.IsNullOrEmpty() && contenue != " " && contenue != "")
+        //        {
+        //            list.Add(new EmailFormation(formation, contenue));
+        //        }
+        //    }
 
-            return list;
-        }
+        //    return list;
+        //}
 
         public class EmailFormation
         {
