@@ -72,6 +72,7 @@
                         Formation
                     </th>
                     <th>Voir son profils</th>
+                    <th>Status</th>
                 </tr>
             </thead>
             @if (!(@Model.Input.lstEmailFormation.IsNullOrEmpty()))
@@ -82,6 +83,7 @@
                         <td>@item.GetEmail()</td>
                         <td>@item.GetFormation()</td>
                         <td><a href="#" class="btn btn-outline-primary">Voir profils</a></td>
+                        <td>@item.GetStatus()</td>
                     </tr>
                 }
             }
