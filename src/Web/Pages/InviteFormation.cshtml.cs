@@ -15,7 +15,10 @@ using OfficeOpenXml;
 using System.Linq;
 using CsvHelper;
 using CsvHelper.Configuration;
+using Gwenael.Domain;
+using Gwenael.Domain.Entities;
 using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using NuGet.Packaging;
 using NuGet.Protocol;
@@ -27,14 +30,14 @@ namespace Gwenael.Web.Pages
 {
     public class InviteFormationModel : PageModel
     {
-        private IHostingEnvironment _environment;
-
         [BindProperty]
         public InputModel Input { get; set; }
 
-        public InviteFormationModel(IHostingEnvironment environement)
+        private readonly GwenaelDbContext _context;
+
+        public InviteFormationModel(GwenaelDbContext context)
         {
-            _environment = environement;
+            _context = context;
         }
 
         public class InputModel
@@ -80,66 +83,64 @@ namespace Gwenael.Web.Pages
 
                 }
                 Input.lstEmailFormation = list;
-
-
-                //// TODO: Réusir a importer un fichier excel a la place d'un csv.
-                //string path = _environment.ContentRootPath + "\\wwwroot\\fichiers\\uploadsExcel\\" + DateTime.Now.Ticks + Input.FormFile.FileName;
-
-                //using (var stream = new FileStream(path, FileMode.Create))
-                //{
-                //    await Input.FormFile.CopyToAsync(stream);
-
-                //    Console.WriteLine("ONPOSTASYNC-------------------");
-                //    using (ExcelPackage package = new ExcelPackage(new FileInfo(path)))
-                //    {
-                //        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-                //        var sheet = package.Workbook.Worksheets[0];
-
-                //        Input.lstEmailFormation = GetExcelEmail(sheet);
-                //    }
-                //}
-
-                //FileInfo file = new FileInfo(path);
-                //if (file.Exists)
-                //{
-                //    file.Delete();
-                //}
+                CreeUserEmail();
             }
 
             return Page();
         }
 
-        //public List<EmailFormation> GetExcelEmail(ExcelWorksheet sheet)
-        //{
-        //    //List<EmailFormation> list = new List<EmailFormation>();
-        //    Console.WriteLine("GETEXCEL EMAIL------------------------");
-        //    List<EmailFormation> list = new List<EmailFormation>();
-        //    var columnInfo = Enumerable.Range(1, sheet.Dimension.Columns).ToList().Select(n =>
-        //        new { Index = n, ColumnName = sheet.Cells[1, n].Value.ToString() }
-        //    );
+        private async void CreeUserEmail()
+        {
+            try
+            {
+                foreach (var item in Input.lstEmailFormation)
+                {
+                    User newUser = new User
+                    {
+                        Email = item.GetEmail(),
+                        UserName = item.GetEmail().Split('@')[0]
+                    };
 
-        //    var formation = (string)sheet.Cells[2, 2].Value;
-        //    for (int row = 3; row < sheet.Dimension.Rows; row++)
-        //    {
-        //        var contenue = (string)sheet.Cells[row, 2].Value;
-        //        if (!contenue.IsNullOrEmpty() && contenue != " " && contenue != "")
-        //        {
-        //            list.Add(new EmailFormation(formation, contenue));
-        //        }
-        //    }
+                    //int index = Input.lstEmailFormation.IndexOf(item);
 
-        //    return list;
-        //}
+                    _context.Add<User>(newUser);
+                    _context.SaveChanges();
+
+                    //if (_context.Users.Contains(newUser))
+                    //{
+                    //    Input.lstEmailFormation[index].SetStatus("Erreur");
+                    //}
+                    //else
+                    //{
+                    //    _context.Add<User>(newUser);
+                    //    Input.lstEmailFormation[index].SetStatus("Réussie");
+                    //    _context.SaveChanges();
+                    //}
+                }
+            }
+            catch
+            {
+            }
+        }
 
         public class EmailFormation
         {
             private string _formation;
             private string _email;
+            private string _status;
 
             public EmailFormation(string formation, string email)
             {
                 _formation = formation;
                 _email = email;
+                _status = "";
+            }
+
+            public EmailFormation(string formation, string email, string status)
+            {
+                _formation = formation;
+                _email = email;
+                _status = _status;
             }
 
             public string GetEmail()
@@ -150,6 +151,17 @@ namespace Gwenael.Web.Pages
             public string GetFormation()
             {
                 return _formation;
+            }
+
+            public string GetStatus()
+            {
+                return _status;
+            }
+
+            public string SetStatus(string status)
+            {
+                _status = status;
+                return _status;
             }
         }
     }
