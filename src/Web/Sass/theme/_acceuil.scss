@@ -1,33 +1,24 @@
 ﻿
-
-
-.main {
-    background-color: white;
-    
-}
-
-
-/*h1
-/* le style s'applique au titre de niveau 1 du premier "header" de la page  {
-    color: white;
-    margin: 0;
-    visibility: hidden;
-}*/
-.affichageEtendu {
-    width: 100%;
-}
-
+// Menu Nav ===================================================================
 #containerNav {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    background-color: #6B8E23;
+    /*background-color: #6B8E23;*/
+    background-color: white;
     width: 100%;
 }
+
 .containerNavLv2 {
     display: flex;
     justify-content: space-between;
     width: 80%;
+}
+
+.containerNavLv3 {
+    display: flex;
+    justify-content: center;
+    flex-wrap: nowrap
 }
 
 nav li {
@@ -43,12 +34,10 @@ nav li {
 
 nav a {
     display: inline-block;
-    
     /*text-decoration: none;*/
-    text-decoration-color:black;
-    border: 3px solid black;
-    border-radius: 7px;
-
+    /*text-decoration-color:black;*/
+    background-color: #6B8E23
+    /*border-radius: 7px;*/
 }
 
 
@@ -58,34 +47,44 @@ nav a:hover {
 }
 
 .main-nav-item {
-    padding-left : 5vw;
+    padding-left: 4vw;
 }
 
-.borderCancell
-{
+.borderCancell {
     border: none;
-    background-image:none;
+    background-image: none;
+    background-color: transparent;
+}
 
+// Main ===================================================================
+
+.main {
+    /*background-color: white;*/
+}
+
+.containerMain {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .page
 /* division qui englobe toute la page */ {
-    
     /* la largeur est fixée à 1000 pixels */
-    margin: auto;
+    width: 100%;
+    height: 100%;
     /* on centre la page en ajustant les marges de façon automatique */
-    border: 3px solid black;
 }
 
 .globalContainer {
-    display: flex; 
+    display: flex;
     flex-wrap: wrap;
 }
 
 .topContainer {
-    display: flex; 
+    display: flex;
     justify-content: space-around;
-    background-color :white;
+    background-color: white;
 }
 
 .pageBox {
@@ -93,112 +92,18 @@ nav a:hover {
     padding-bottom: 20px;
     padding-right: 20px;
     padding-left: 20px;
-    width: 1500px;
-    
+    width: 95%;
     height: auto;
     margin: auto;
-    margin-top: 30px;
-    margin-bottom: 30px;
+    margin-top: 2%;
+    margin-bottom: 2%;
     /* on centre la page en ajustant les marges de façon automatique */
-    border: 3px solid black;
+
     background-image: url("../images/fondBois3.png");
     background-size: cover;
 }
-.containerMain {
-    display: flex;
-    flex-direction: column;
-    justify-content:center;
 
-}
-.loginButton {
-    display: inline-block;
-    text-decoration: none;
-    border: 3px solid black;
-    border-radius: 7px;
-    background-color:aqua;
-}
-
-.makeGras {
-    font-weight: bold;
-    font-size: 20px;
-}
-
-.z-index 1
-{
-    z-index:1;
-}
-.z-index -2 {
-    z-index:-2;
-}
-
-
-
-
-/***********************/
-.searchBoxPlacement{
-    padding-top : 15px;
-}
-
-.form-recherche {
-    /*background: url(http://3.bp.blogspot.com/-g-zH25_DoxI/VD1BuatkgII/AAAAAAAAAgc/00hxspfvv3s/s1600/searchbar.png) no-repeat;*/
-    width: 400px;
-    height: 29px;
-}
-
-input:focus::-webkit-input-placeholder {
-    color: transparent;
-}
-
-input:focus:-moz-placeholder {
-    color: transparent;
-}
-
-input:focus::-moz-placeholder {
-    color: transparent;
-}
-
-#searchbox input {
-    outline: none;
-}
-
-#searchbox input[type= "text"] {
-    background: transparent;
-    margin: 3px 0px 0px 20px;
-    padding: 5px 0px 5px 0px;
-    border-width: 0px;
-    font-family: « Arial Narrow », Arial, sans-serif;
-    font-size: 12px;
-    color: #828282;
-    width: 70%;
-    display: inline-table;
-    vertical-align: top;
-}
-
-#button-submit {
-    background: url(http://4.bp.blogspot.com/-OcDQ6Z9ojlQ/VD1KnwJjFOI/AAAAAAAAAgs/cu_pKN6bpL8/s1600/magnifier.png) no-repeat;
-    border-width: 0px;
-    cursor: pointer;
-    margin-left: 10px;
-    margin-top: 4px;
-    width: 21px;
-    height: 22px;
-}
-
-#button-submit:hover {
-    background: url(http://2.bp.blogspot.com/-4-xFDFGKJrA/VD1Kn04f9TI/AAAAAAAAAgw/2ta84QY1x9A/s1600/magnifier-hover.png) no-repeat;
-}
-
-#button-submit:active {
-    background: url(http://2.bp.blogspot.com/-4-xFDFGKJrA/VD1Kn04f9TI/AAAAAAAAAgw/2ta84QY1x9A/s1600/magnifier-hover.png) no-repeat;
-    outline: none;
-}
-
-#button-submit::-moz-focus-inner {
-    border: 0;
-}
-
-/***********************/
-
+// Carrousel ===================================================================
 .custom-slider {
     display: none;
 }
@@ -300,7 +205,36 @@ input:focus::-moz-placeholder {
     }
 }
 
-/***********************/
+// Autres styles ===================================================================
+
+
+.loginStyle {
+    color: black;
+    text-decoration: none;
+}
+
+.link {
+    color: blue;
+    text-decoration: underline;
+}
+
+.affichageEtendu {
+    width: 100%;
+}
+
+.loginButton {
+    display: inline-block;
+    text-decoration: none;
+    border: 3px solid black;
+    border-radius: 7px;
+    background-color: aqua;
+}
+
+.makeGras {
+    font-weight: bold;
+    font-size: 20px;
+}
+
 
 
 
