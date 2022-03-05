@@ -17,8 +17,8 @@
     {
         <h1>Ajout d'un utilisateur</h1>
     }
-    <a href="../AdminMenu?tab=utilisateurs">Retour Panneau Admin</a>
-    <form method="post">
+    <a class="link" asp-page="adminMenu">Retour Panneau Admin</a>
+    <form method="post" id="centerForm">
         <input type="hidden" asp-for="user.Id" />
         <div class="form-group row">
             <div class="col-4">
@@ -27,7 +27,7 @@
             </div>
         </div>
         <div class="form-group row">
-            <div class="col-8">
+            <div class="col-4">
                 <label asp-for="user.Email">Courriel</label>
                 <input asp-for="user.Email" />
             </div>

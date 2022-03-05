@@ -5,73 +5,110 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Gwenael</title>
     <link rel="stylesheet" href="~/css/site.css" />
+    
 
     <environment exclude="Production">
         <meta name="robots" content="noindex">
     </environment>
 </head>
 <body>
-
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
-        <a asp-page="/Index" class="navbar-brand">Gwenael</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-main" aria-controls="navbar-main" aria-expanded="false" aria-label="Toggle navigation" style="">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbar-main">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Menu #1</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Menu #2</a>
-                </li>
-            </ul>
-            @await Html.PartialAsync("_LoginPartial")
-        </div>
-    </nav>
-
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - Gwenael</p>
-        </footer>
-    </div>
-    
-@* Useless? delete this? *@
-@*    <environment include="Development">
-        <script src="~/js/jquery.slim.js"></script>
-        <script src="~/js/bootstrap.js"></script>
-        <script src="~/js/fontawesome-all.js"></script>
-    </environment>*@
-
-    <environment exclude="Development">
-
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.slim.min.js"
-                asp-fallback-src="~/js/jquery.slim.min.js"
-                asp-fallback-test="window.jQuery"
-                integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g="
-                crossorigin="anonymous">
-        </script>
-
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js"
-                asp-fallback-src="~/js/bootstrap.min.js"
-                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
-                integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4"
-                crossorigin="anonymous">
-        </script>
+    <div class="globalContainer page">
+        <!-- En-tête de la page, avec la bannière -->
         
-        <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js"
-                asp-fallback-src="~/js/fontawesome-all.min.js"
-                asp-fallback-test="window.FontAwesome"
-                integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl"
-                crossorigin="anonymous">
-        </script>
-    </environment>
+        <header class="affichageEtendu">
+            <!-- div pour le flexbox row (en ligne) -->
 
-    <script src="~/js/site.js" asp-append-version="true"></script>
+            
+            
+            <!-- <h1>Équipe AAAG</h1> -->
+        </header>
 
-    @RenderSection("Scripts", required: false)
-</body>
-</html>
+
+
+                <nav class="navbar navbar-expand-lg navbar-dark affichageEtendu z-index 1" id="containerNav">
+                    <div class="containerNavLv2">
+                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-main" aria-controls="navbar-main" aria-expanded="false" aria-label="Toggle navigation" style="">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div><a asp-page="/Index" class="navbar-brand borderCancell"><img src="../images/CJC-ObjectifResilience-Mangue.png" alt="image du site" title="image du site" /></a></div>
+                        <div class="collapse navbar-collapse containerNavLv3" id="navbar-main">
+                            
+                            <ul>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">Menu 1</a>
+                                </li>
+                                <li class="nav-item main-nav-item">
+                                    <a class="nav-link" href="#">Menu 2</a>
+                                </li>
+                                <li class="nav-item main-nav-item">
+                                    <a class="nav-link" href="#">Menu 3</a>
+                                </li>
+                                <li class="nav-item main-nav-item">
+                                    <a class="nav-link" href="#">Menu 4</a>
+                                </li>
+                                <li class="nav-item main-nav-item">
+                                    <a class="nav-link" href="#">Menu 5</a>
+                                </li>
+
+                            </ul>
+
+                        </div>
+                        <div> @await Html.PartialAsync("_LoginPartial") </div>
+                    </div>
+                </nav>
+
+
+            <div class="body-content main affichageEtendu containerMain z-index -2">
+                @RenderBody()
+                <footer>
+                    <hr />
+                    <p>&copy; @DateTime.Now.Year - Gwenael</p>
+                </footer>
+            </div>
+
+
+        </div>
+        @* Useless? delete this? *@
+        @*    <environment include="Development">
+                <script src="~/js/jquery.slim.js"></script>
+                <script src="~/js/bootstrap.js"></script>
+                <script src="~/js/fontawesome-all.js"></script>
+            </environment>*@
+
+<environment exclude="Development">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.slim.min.js"
+            asp-fallback-src="~/js/jquery.slim.min.js"
+            asp-fallback-test="window.jQuery"
+            integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g="
+            crossorigin="anonymous">
+    </script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js"
+            asp-fallback-src="~/js/bootstrap.min.js"
+            asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+            integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4"
+            crossorigin="anonymous">
+    </script>
+
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js"
+            asp-fallback-src="~/js/fontawesome-all.min.js"
+            asp-fallback-test="window.FontAwesome"
+            integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl"
+            crossorigin="anonymous">
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+</environment>
+
+        <script src="~/js/site.js" asp-append-version="true"></script>
+
+        @RenderSection("Scripts", required: false)
+    </body>
+    </html>

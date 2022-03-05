@@ -1,0 +1,253 @@
+﻿
+// Menu Nav ===================================================================
+#containerNav {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    /*background-color: #6B8E23;*/
+    background-color: white;
+    width: 100%;
+}
+
+.containerNavLv2 {
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+}
+
+.containerNavLv3 {
+    display: flex;
+    justify-content: center;
+    flex-wrap: nowrap
+}
+
+nav li {
+    display: inline-block;
+    border-radius: 7px;
+    /*padding-right: 100px;*/
+    /*padding-left: 100px;*/
+    margin-left: auto;
+    margin-right: auto;
+    text-decoration-color: black;
+    /*background-color:red;*/
+}
+
+nav a {
+    display: inline-block;
+    /*text-decoration: none;*/
+    /*text-decoration-color:black;*/
+    background-color: #6B8E23
+    /*border-radius: 7px;*/
+}
+
+
+nav a:hover {
+    background-image: url("../images/fondBois3.png");
+    box-shadow: 2px 2px 2px black;
+}
+
+.main-nav-item {
+    padding-left: 4vw;
+}
+
+.borderCancell {
+    border: none;
+    background-image: none;
+    background-color: transparent;
+}
+
+// Main ===================================================================
+
+.main {
+    /*background-color: white;*/
+}
+
+.containerMain {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.page
+/* division qui englobe toute la page */ {
+    /* la largeur est fixée à 1000 pixels */
+    width: 100%;
+    height: 100%;
+    /* on centre la page en ajustant les marges de façon automatique */
+}
+
+.globalContainer {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.topContainer {
+    display: flex;
+    justify-content: space-around;
+    background-color: white;
+}
+
+.pageBox {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-right: 20px;
+    padding-left: 20px;
+    width: 95%;
+    height: auto;
+    margin: auto;
+    margin-top: 2%;
+    margin-bottom: 2%;
+    /* on centre la page en ajustant les marges de façon automatique */
+
+    background-image: url("../images/fondBois3.png");
+    background-size: cover;
+}
+
+// Carrousel ===================================================================
+.custom-slider {
+    display: none;
+}
+
+.slide-container {
+    max-width: 800px;
+    position: relative;
+    margin: auto;
+}
+
+.prev, .next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: white;
+    font-size: 30px;
+    background-color: rgba(0,0,0,0);
+    transition: background-color 0.6s ease;
+}
+
+.prev {
+    left: 15px;
+}
+
+.next {
+    right: 15px;
+}
+
+.prev:hover, .next:hover {
+    background-color: rgba(0,0,0,0.5);
+}
+
+.slide-text {
+    position: absolute;
+    color: black;
+    font-size: 20px;
+    padding: 15px;
+    margin-left:200px;
+    margin-bottom:210px;
+    bottom: 15px;
+    width: 50%;
+    text-align: center;
+    background-color:white;
+}
+
+.slide-index {
+    color: #ffffff;
+    font-size: 13px;
+    padding: 15px;
+    position: absolute;
+    top: 0;
+}
+
+.slide-img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    object-position: center;
+}
+
+.slide-dot {
+    text-align: center;
+}
+
+.dot {
+    cursor: pointer;
+    height: 10px;
+    width: 10px;
+    margin: 0 2px;
+    background-color: #999999;
+    border-radius: 50%;
+    display: inline-block;
+    transition: background-color 0.6s ease;
+}
+
+.active, .dot:hover {
+    background-color: #111111;
+}
+
+.fade {
+    animation-name: fade;
+    animation-duration: 1s;
+}
+
+@keyframes fade {
+    from {
+        opacity: 0
+    }
+
+    to {
+        opacity: 1
+    }
+}
+
+// Autres styles ===================================================================
+
+
+.loginStyle {
+    color: black;
+    text-decoration: none;
+}
+
+.link {
+    color: blue;
+    text-decoration: underline;
+}
+
+.affichageEtendu {
+    width: 100%;
+}
+
+.loginButton {
+    display: inline-block;
+    text-decoration: none;
+    border: 3px solid black;
+    border-radius: 7px;
+    background-color: aqua;
+}
+
+.makeGras {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

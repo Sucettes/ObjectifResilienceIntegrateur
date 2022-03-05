@@ -23,10 +23,13 @@
     <ItemGroup>
       <Content Remove="appsettings.local.Development.json" />
       <Content Remove="appsettings.local.json" />
+      <Content Remove="wwwroot\images\avengers-lere-dultron-banniere23.jpg" />
     </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+        <PackageReference Include="CsvHelper" Version="27.2.1" />
+        <PackageReference Include="EPPlus" Version="5.8.6" />
         <PackageReference Include="FluentEmail.Razor" Version="3.0.0" />
         <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.3" />
         <PackageReference Include="IdentityServer4" Version="4.1.2" />
@@ -64,7 +67,16 @@
 
     <ItemGroup>
       <Folder Include="Scripts\modules\" />
+      <Folder Include="wwwroot\fichiers\uploadsExcel\" />
+      <Folder Include="wwwroot\fichiers\uploadsExcel\" />
       <Folder Include="wwwroot\js\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="wwwroot\images\avengers-lere-dultron-banniere23.jpg" />
+      <None Include="wwwroot\images\slide1.jpg" />
+      <None Include="wwwroot\images\slide2.jpg" />
+      <None Include="wwwroot\images\slide3.png" />
     </ItemGroup>
 
 </Project>
