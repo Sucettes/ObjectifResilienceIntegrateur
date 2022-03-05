@@ -3,13 +3,17 @@
 @model Web.Pages.FormationModel
 @using Domain.Entities
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-
+@{
+    ViewData["Title"] = "Formation";
+}
 
 <div>
-    @if (@ViewContext.RouteData.Values["id"] is not null){
+    @if (@ViewContext.RouteData.Values["id"] is not null)
+    {
         <h1>Modification d'une formation</h1>
     }
-    else{
+    else
+    {
         <h1>Ajout d'une formation</h1>
     }
     <a href="../AdminMenu?tab=formations">Retour Panneau Admin</a>
@@ -18,23 +22,25 @@
         <div class="form-group row">
             <div class="col-4">
                 <label asp-for="Formation.Name">Nom</label>
-                <input asp-for="Formation.Name"/>
+                <input asp-for="Formation.Name" />
             </div>
         </div>
         <div class="form-group row">
             <div class="col-8">
                 <label asp-for="Formation.Description">Description</label>
-                <input asp-for="Formation.Description"/>
+                <input asp-for="Formation.Description" />
             </div>
         </div>
-        @if (@ViewContext.RouteData.Values["id"] is not null){
+        @if (@ViewContext.RouteData.Values["id"] is not null)
+        {
             <input name="btnSave" type="submit" value="Sauvegarder les changements" class="btn btn-success form-control" />
-            <input name="btnDelete" type="submit" value="Supprimer une formation" class="btn btn-danger form-control"/>
+            <input name="btnDelete" type="submit" value="Supprimer une formation" class="btn btn-danger form-control" />
         }
-        else{
+        else
+        {
             <input name="btnAdd" type="submit" value="Ajouter une formation" class="btn btn-success form-control" />
             <a name="btnAnnuler" class="btn btn-danger form-control" asp-page="adminMenu">Annuler</a>
         }
-        
+
     </form>
 </div>
