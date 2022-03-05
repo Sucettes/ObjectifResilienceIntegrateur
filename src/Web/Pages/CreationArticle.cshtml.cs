@@ -14,33 +14,35 @@ namespace Gwenael.Web.Pages
 {
     public class CreationArticle : PageModel
     {
-        //public string InerText { get; set; }
-        //public string Titre { get; set; }
-
         private readonly GwenaelDbContext _context;
-
 
         public CreationArticle(GwenaelDbContext context)
         {
             _context = context;
         }
-        [BindProperty(SupportsGet = true)]
 
+        [BindProperty(SupportsGet = true)]
         public Article article { get; set; }
 
         [BindProperty]
-        public IFormFile Upload { get; set; }
+        public InputModel Input { get; set; }
 
         public void OnGet()
         {
+            Input = new InputModel();
+        }
+
+        public class InputModel
+        {
+            public IFormFile FormFile { get; set; }
 
         }
 
+        [HttpPost("FileUpload")]
         public async Task<IActionResult> OnPost(string titre, string inerText)
         {
-
-            // Upload de l'article en html avec sont titre 
-            Article newArticle = new Article
+                // Upload de l'article en html avec sont titre 
+                Article newArticle = new Article
             {
                 Titre = titre,
                 InerText = inerText
@@ -55,12 +57,12 @@ namespace Gwenael.Web.Pages
 
                 using (var newMemoryStream = new MemoryStream())
                 {
-                    Upload.CopyTo(newMemoryStream);
+                    Input.FormFile.CopyTo(newMemoryStream);
                     Debug.WriteLine("My debug string here");
                     var uploadRequest = new TransferUtilityUploadRequest
                     {
                         InputStream = newMemoryStream,
-                        Key = Upload.FileName, // filename
+                        Key = Input.FormFile.FileName, // filename
                         BucketName = "mediafileobjectifresiliance" // bucket name of S3
                     };
 
