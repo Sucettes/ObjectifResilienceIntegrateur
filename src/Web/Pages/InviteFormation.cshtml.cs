@@ -10,11 +10,10 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Text;
 using System.Reflection;
 using System.Threading.Tasks;
-using OfficeOpenXml;
+//using OfficeOpenXml;
 using System.Linq;
 using Newtonsoft.Json;
 using NuGet.Packaging;
-using OfficeOpenXml;
 using Spk.Common.Helpers.String;
 
 
@@ -58,13 +57,13 @@ namespace Gwenael.Web.Pages
                     await Input.FormFile.CopyToAsync(stream);
 
                     Console.WriteLine("ONPOSTASYNC-------------------");
-                    using (ExcelPackage package = new ExcelPackage(new FileInfo(path)))
-                    {
-                        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-                        var sheet = package.Workbook.Worksheets[0];
+                    //using (ExcelPackage package = new ExcelPackage(new FileInfo(path)))
+                    //{
+                    //    ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+                    //    var sheet = package.Workbook.Worksheets[0];
 
-                        Input.lstEmailFormation = GetExcelEmail(sheet);
-                    }
+                    //    Input.lstEmailFormation = GetExcelEmail(sheet);
+                    //}
                 }
 
                 FileInfo file = new FileInfo(path);
@@ -77,26 +76,27 @@ namespace Gwenael.Web.Pages
             return Page();
         }
 
-        public List<EmailFormation> GetExcelEmail(ExcelWorksheet sheet)
-        {
-            Console.WriteLine("GETEXCEL EMAIL------------------------");
-            List<EmailFormation> list = new List<EmailFormation>();
-            var columnInfo = Enumerable.Range(1, sheet.Dimension.Columns).ToList().Select(n =>
-                new { Index = n, ColumnName = sheet.Cells[1, n].Value.ToString() }
-            );
+        //public List<EmailFormation> GetExcelEmail(ExcelWorksheet sheet)
+        //{
+        //    Console.WriteLine("GETEXCEL EMAIL------------------------");
+        //    List<EmailFormation> list = new List<EmailFormation>();
+        //    var columnInfo = Enumerable.Range(1, sheet.Dimension.Columns).ToList().Select(n =>
+        //        new { Index = n, ColumnName = sheet.Cells[1, n].Value.ToString() }
+        //    );
 
-            var formation = (string)sheet.Cells[2, 2].Value;
-            for (int row = 3; row < sheet.Dimension.Rows; row++)
-            {
-                var contenue = (string)sheet.Cells[row, 2].Value;
-                if (!contenue.IsNullOrEmpty() && contenue != " " && contenue != "")
-                {
-                    list.Add(new EmailFormation(formation, contenue));
-                }
-            }
+        //    var formation = (string)sheet.Cells[2, 2].Value;
+        //    for (int row = 3; row < sheet.Dimension.Rows; row++)
+        //    {
+        //        var contenue = (string)sheet.Cells[row, 2].Value;
+        //        if (!
+        //        contenue.IsNullOrEmpty() && contenue != " " && contenue != "")
+        //        {
+        //            list.Add(new EmailFormation(formation, contenue));
+        //        }
+        //    }
 
-            return list;
-        }
+        //    return list;
+        //}
 
         public class EmailFormation
         {
