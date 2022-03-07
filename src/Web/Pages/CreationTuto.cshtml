@@ -1,0 +1,35 @@
+﻿@page
+@using Web.Pages
+@using Microsoft.AspNetCore.Components.Forms
+@using IdentityServer4.Extensions
+@model Web.Pages.CreationTutoModel
+@{
+    ViewData["Title"] = "Création tutoriel";
+}
+
+<div class="container-fluid">
+
+    @*
+        Table Tutoriel
+        - Int               Id
+        - String            ImageBanière (url)
+        - String(50)        Titre
+        - Int(2)            Difficulté (1 a 10)
+        - Number(7)         Cout
+        - int(4)            Durée (heure)
+        - Liste<Catégorie>  Categories
+        - Useur             AuteurUserId
+        - String(250)       References
+        - String(2000)      Introduction
+        
+
+        Table RangeTutoriel
+        - Int               Id
+        - Int               IdTutoriel
+        - String            Texte
+        - String            Image (url)
+        - Int(2)            Ordre (1..99)
+    *@
+
+
+</div>
