@@ -24,6 +24,9 @@ namespace Gwenael.Web.Pages
         [BindProperty(SupportsGet = true)]
         public Article article { get; set; }
 
+        [BindProperty(SupportsGet = true)]
+        public Media media { get; set; } 
+
         [BindProperty]
         public InputModel Input { get; set; }
 
@@ -34,46 +37,62 @@ namespace Gwenael.Web.Pages
 
         public class InputModel
         {
-            public IFormFile FormFile { get; set; }
+            public IFormFile[] FormFile { get; set; }
 
         }
+
 
         [HttpPost("FileUpload")]
         public async Task<IActionResult> OnPost(string titre, string inerText)
         {
-                // Upload de l'article en html avec sont titre 
-                Article newArticle = new Article
+
+            // Upload de l'article et sont titre 
+            int idNewArticle = 0;
+            Article newArticle = new Article
             {
                 Titre = titre,
                 InerText = inerText
             };
             _context.Articles.Add(newArticle);
             await _context.SaveChangesAsync();
+            idNewArticle = newArticle.Id;
 
-            
+
             // mettre dans app setting
             using (var client = new AmazonS3Client("AKIAVDH3AEDD6PUJMKGG", "kKV5WKu0tFe8Svl2QdTIMIydLc7CGSMiy2h+KOvV", RegionEndpoint.CACentral1))
             {
 
-                using (var newMemoryStream = new MemoryStream())
-                {
-                    Input.FormFile.CopyTo(newMemoryStream);
-                    Debug.WriteLine("My debug string here");
-                    var uploadRequest = new TransferUtilityUploadRequest
-                    {
-                        InputStream = newMemoryStream,
-                        Key = Input.FormFile.FileName, // filename
-                        BucketName = "mediafileobjectifresiliance" // bucket name of S3
-                    };
+                foreach (IFormFile File in Input.FormFile) {
+                        using (var newMemoryStream = new MemoryStream())
+                        {
+                            File.CopyTo(newMemoryStream);
+                            Debug.WriteLine("My debug string here");
+                            var uploadRequest = new TransferUtilityUploadRequest
+                            {
+                                InputStream = newMemoryStream,
+                                Key = File.FileName, // filename
+                                BucketName = "mediafileobjectifresiliance" // bucket name of S3
+                            };
 
-                    var fileTransferUtility = new TransferUtility(client);
-                    await fileTransferUtility.UploadAsync(uploadRequest);
+                            var fileTransferUtility = new TransferUtility(client);
+                            await fileTransferUtility.UploadAsync(uploadRequest);
+                        }
+
+                    Media newMedia = new Media
+                    {
+                        Id = File.FileName,
+                        Idreference = idNewArticle,
+                        LinkS3 = "s3/mediafileobjectifresiliance/" + File.FileName,
+                        OrderInThePage = 0
+                    };
+                    _context.Medias.Add(newMedia);
+                    await _context.SaveChangesAsync();
                 }
             }
-
 
             return Page();
         }
 
     }
 }
+//s3://mediafileobjectifresiliance/burger.jpg
