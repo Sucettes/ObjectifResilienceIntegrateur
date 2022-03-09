@@ -4,6 +4,7 @@ using Gwenael.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gwenael.Persistence.Migrations
 {
     [DbContext(typeof(GwenaelDbContext))]
-    partial class GwenaelDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220307200251_Tutoriel_RangeeTutoriel_Categoriev3")]
+    partial class Tutoriel_RangeeTutoriel_Categoriev3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

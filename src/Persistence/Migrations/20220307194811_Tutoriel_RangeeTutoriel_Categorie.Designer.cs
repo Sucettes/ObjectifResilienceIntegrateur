@@ -4,6 +4,7 @@ using Gwenael.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gwenael.Persistence.Migrations
 {
     [DbContext(typeof(GwenaelDbContext))]
-    partial class GwenaelDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220307194811_Tutoriel_RangeeTutoriel_Categorie")]
+    partial class Tutoriel_RangeeTutoriel_Categorie
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -184,10 +186,6 @@ namespace Gwenael.Persistence.Migrations
                         .HasMaxLength(2000)
                         .HasColumnType("nvarchar(2000)");
 
-                    b.Property<string>("LienImgBanniere")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -200,6 +198,10 @@ namespace Gwenael.Persistence.Migrations
 
                     b.Property<string>("Titre")
                         .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("lienImgBanniere")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
