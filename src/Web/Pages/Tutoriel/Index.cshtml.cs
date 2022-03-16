@@ -28,14 +28,14 @@ using Spk.Common.Helpers.String;
 
 namespace Gwenael.Web.Pages
 {
-    public class CreationTutoModel : PageModel
+    public class TutorielIndexModel : PageModel
     {
         [BindProperty]
         public InputModel Input { get; set; }
 
         private readonly GwenaelDbContext _context;
 
-        public CreationTutoModel(GwenaelDbContext context)
+        public TutorielIndexModel(GwenaelDbContext context)
         {
             _context = context;
         }
