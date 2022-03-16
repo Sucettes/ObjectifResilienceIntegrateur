@@ -1,4 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Gwenael.Domain;
+using Gwenael.Web;
+using Gwenael.Domain.Entities;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,24 +13,128 @@ namespace Gwenael.Web.Controllers
 {
     public class TutorielController : Controller
     {
-        public IActionResult Index()
+        GwenaelDbContext context;
+        public TutorielController(GwenaelDbContext pcontext)
         {
-            // Tutoriel -> tutoriel/hometuto
-            //return RedirectToAction("HomeTuto");
+            context = pcontext;
+        }
+
+        // GET: TutorielController
+        public ActionResult Index(GwenaelDbContext pcontext)
+        {
+            context = pcontext;
             return View();
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> GoToCreationTuto()
+        // GET: TutorielController/Details/5
+        public ActionResult Details(int id)
         {
-            return RedirectToAction("CreationTuto");
+            return View();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> BackToIndexTuto()
+        // GET: TutorielController/CreationTuto
+        public ActionResult CreationTuto()
         {
-            return RedirectToAction("Index");
+            return View();
+        }
+
+        // POST: TutorielController/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreationTuto(IFormCollection collection)
+        {
+            try
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        // GET: TutorielController/Edit/5
+        public ActionResult Edit(int id)
+        {
+            return View();
+        }
+
+        // POST: TutorielController/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(int id, IFormCollection collection)
+        {
+            try
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        // GET: TutorielController/Delete/5
+        public ActionResult Delete(int id)
+        {
+            return View();
+        }
+
+        // POST: TutorielController/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int id, IFormCollection collection)
+        {
+            try
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+
+
+
+
+        // POST: TutorielController/CreationCategorie
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreationCategorie(IFormCollection collection)
+        {
+            try
+            {
+                string nom = "";
+                string desc = "";
+                if(collection.TryGetValue("formDesc", out var descOut))
+                {
+                    desc = descOut;
+                }                
+                if(collection.TryGetValue("formNom", out var nomOut))
+                {
+                    nom = nomOut;
+                }
+
+                if(nom != "" && desc != "")
+                {
+                    Categorie newCategorie = new Categorie
+                    {
+                        Nom = nom,
+                        Description = desc
+                    };
+                    context.Categories.Add(newCategorie);
+                    context.SaveChanges();
+                }
+
+                //return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                //return View();
+            }
+            return RedirectToAction(nameof(Index));
         }
     }
 }

@@ -10,7 +10,7 @@ namespace Gwenael.Domain.Entities
     {
         public int Id { get; set; }
         [MaxLength(50)] public string LienImgBanniere { get; set; }
-        [Required] [MaxLength(50)] public string Name { get; set; }
+        [Required] [MaxLength(50)] public string Name { get; set; } 
         [Required] [MaxLength(50)] public string Titre { get; set; }
         [Required] [MaxLength(2)] public int Difficulte { get; set; }
         [Required] [MaxLength(7)] public double Cout { get; set; }

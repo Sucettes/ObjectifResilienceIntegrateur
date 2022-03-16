@@ -13,6 +13,9 @@ namespace Gwenael.Domain
         }
 
         public DbSet<Formation> Formations { get; set; }
+        public DbSet<Categorie> Categories { get; set; }
+        public DbSet<RangeeTutoriel> RangeeTutoriels { get; set; }
+        public DbSet<Tutoriel> Tutoriels { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
