@@ -42,7 +42,16 @@ namespace Gwenael.Web.Pages
 
         public class InputModel
         {
-
+            // LienImgBanniere
+            protected string Titre { get; set; }
+            protected int Difficulte { get; set; }
+            protected double Cout { get; set; }
+            protected int Duree { get; set; }
+            // lst Categories
+            // AuteurUserId
+            // references
+            protected string Introduction { get; set; }
+            // RangeeTutoriels
         }
         public async Task<IActionResult> OnGetAsync()
         {
@@ -52,11 +61,6 @@ namespace Gwenael.Web.Pages
         public async Task<IActionResult> OnPostAsync()
         {
             return Page();
-        }
-
-        public void AddRow()
-        {
-            Console.WriteLine("Test pour ajouté une row");
         }
     }
 }

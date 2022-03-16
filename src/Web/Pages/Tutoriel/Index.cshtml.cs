@@ -30,9 +30,6 @@ namespace Gwenael.Web.Pages
 {
     public class TutorielIndexModel : PageModel
     {
-        [BindProperty]
-        public InputModel Input { get; set; }
-
         private readonly GwenaelDbContext _context;
 
         public TutorielIndexModel(GwenaelDbContext context)
@@ -40,10 +37,6 @@ namespace Gwenael.Web.Pages
             _context = context;
         }
 
-        public class InputModel
-        {
-
-        }
         public async Task<IActionResult> OnGetAsync()
         {
             return Page();

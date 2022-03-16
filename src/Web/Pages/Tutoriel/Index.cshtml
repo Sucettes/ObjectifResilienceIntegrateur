@@ -10,8 +10,16 @@
 <div class="container-fluid">
     <h1>Home tutoriel</h1>
     <hr />
-    <form asp-controller="Tutoriel" asp-action="GoToCreationTuto" method="post">
+    <form asp-controller="Tutoriel" asp-action="CreationTuto" method="post">
         <button type="submit" class="btn btn-primary">Créé un tutoriel</button>
     </form>
+
+    <form asp-controller="Tutoriel" asp-action="CreationCategorie" method="post">
+        <input class="form-control" id="formNom" name="formNom">
+        <input class="form-control" id="formDesc" name="formDesc">
+        <button type="submit" class="btn btn-primary">Créé une categorie</button>
+    </form>
+
+
 </div>
 
