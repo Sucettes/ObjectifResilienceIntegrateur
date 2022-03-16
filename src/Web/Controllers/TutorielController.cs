@@ -77,6 +77,8 @@ namespace Gwenael.Web.Controllers
         // GET: TutorielController/Delete/5
         public ActionResult Delete(int id)
         {
+            // Tutoriel -> tutoriel/hometuto
+            //return RedirectToAction("HomeTuto");
             return View();
         }
 
@@ -88,7 +90,7 @@ namespace Gwenael.Web.Controllers
             try
             {
                 return RedirectToAction(nameof(Index));
-            }
+        }
             catch
             {
                 return View();
@@ -131,7 +133,7 @@ namespace Gwenael.Web.Controllers
                 //return RedirectToAction(nameof(Index));
             }
             catch
-            {
+        {
                 //return View();
             }
             return RedirectToAction(nameof(Index));
