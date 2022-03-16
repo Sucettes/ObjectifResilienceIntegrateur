@@ -1,0 +1,31 @@
+﻿@page
+@using Web.Pages
+@model Web.Pages.PoadcastFormModel
+@using Domain.Entities
+@{
+    ViewData["Title"] = "Formulaire de création d'un poadcast";
+}
+
+
+<div>
+    <label for="titre">Titre <em>*</em></label>
+
+    <input id="titre" placeholder="titre du formulaire" autofocus="" required=""><br>
+
+    <label for="description">Description</label>
+
+    <textarea id="description"></textarea><br>
+
+    <label for="categorie">Catégorie <em>*</em></label>
+    <select id="categorie">
+        <option value="F" name="categorie">Lowtech</option>
+        <option value="H" name="categorie">Recyclage</option>
+    </select><br><br>
+
+    <input multiple="multiple" asp-for="Input.FormFile" class="form-control" type="file" id="formFile"><br />
+
+    <input class="btn" type="submit" value="Upload" /><br /><br />
+
+
+
+</div>
