@@ -13,6 +13,8 @@ namespace Gwenael.Domain
         }
 
         public DbSet<Formation> Formations { get; set; }
+        public DbSet<Article> Articles { get; set; }
+        public DbSet<Media> Medias { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

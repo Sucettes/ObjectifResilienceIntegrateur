@@ -23,7 +23,6 @@
     <ItemGroup>
       <Content Remove="appsettings.local.Development.json" />
       <Content Remove="appsettings.local.json" />
-      <Content Remove="wwwroot\images\avengers-lere-dultron-banniere23.jpg" />
     </ItemGroup>
 
     <ItemGroup>
@@ -67,16 +66,13 @@
 
     <ItemGroup>
       <Folder Include="Scripts\modules\" />
-      <Folder Include="wwwroot\fichiers\uploadsExcel\" />
-      <Folder Include="wwwroot\fichiers\uploadsExcel\" />
       <Folder Include="wwwroot\js\" />
     </ItemGroup>
 
     <ItemGroup>
-      <None Include="wwwroot\images\avengers-lere-dultron-banniere23.jpg" />
-      <None Include="wwwroot\images\slide1.jpg" />
-      <None Include="wwwroot\images\slide2.jpg" />
-      <None Include="wwwroot\images\slide3.png" />
+      <Compile Update="Pages\CreationArticle - Copier.cshtml.cs">
+        <DependentUpon>CreationArticle.cshtml.cs</DependentUpon>
+      </Compile>
     </ItemGroup>
 
 </Project>
