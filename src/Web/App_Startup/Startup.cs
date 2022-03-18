@@ -180,10 +180,13 @@ namespace Gwenael.Web.App_Startup
             app.Map("/api", api => ApiPipeline.Configure(api, _hostingEnvironment));
 
             app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
             app.UseStaticFiles();
             app.UseEndpoints(razorPages =>
             {
                 razorPages.MapRazorPages();
+                razorPages.MapDefaultControllerRoute();
             });
 
             app.UseIdentityServer();

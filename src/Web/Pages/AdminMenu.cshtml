@@ -9,9 +9,9 @@
 
 <div>
     <h1>Panel Admin</h1>
-    <ul class="adminMenuUl">
-        <li class="adminMenuLi table1Em"><a href="?tab=utilisateurs">Utilisateurs</a></li>
-        <li class="adminMenuLi table1Em"><a href="?tab=formations">Formation</a></li>
+    <ul class="">
+        <li class=""><a href="?tab=utilisateurs">Utilisateurs</a></li>
+        <li class=""><a href="?tab=formations">Formation</a></li>
 
     </ul>
     <table border="1">
@@ -21,25 +21,25 @@
             @if (@ViewData["Tab"].ToString() == "formations")
             {
                 <tr>
-                    <td class="center">Id</td>
-                    <td class="center">Nom</td>
-                    <td class="center">Description</td>
-                    <td><a asp-page="formation" asp-route-id="" class="btn btn-success btn-sm text-white">Ajouter une formation</a></td>
+                    <td class="">Id</td>
+                    <td class="">Nom</td>
+                    <td class="">Description</td>
+                    <td><a asp-page="formation" asp-route-id="" class="btn btn-success btn-sm">Ajouter une formation</a></td>
                 </tr>
                 @foreach (var formation in ViewData["lstFormations"] as IList<Formation>)
                 {
                     <tr>
-                        <td class="center table1Em">
+                        <td class="">
                             @formation.Id
                         </td>
-                        <td class="center table1Em">
+                        <td class="">
                             @formation.Name
                         </td>
-                        <td class="center table1Em">
+                        <td class="">
                             @formation.Description
                         </td>
-                        <td class="center table1Em">
-                            <a asp-page="formation" asp-route-id="@formation.Id" class="btn btn-success btn-sm text-white">Modifier</a>
+                        <td class="">
+                            <a asp-page="formation" asp-route-id="@formation.Id" class="btn btn-success btn-sm">Modifier</a>
                         </td>
                     </tr>
                 }
@@ -47,37 +47,37 @@
             @if (@ViewData["Tab"].ToString() == "utilisateurs")
             {
                 <tr>
-                    <td class="center">Id</td>
-                    <td class="center">Prénom</td>
-                    <td class="center">Nom de Famille</td>
-                    <td class="center">Email</td>
-                    <td class="center">Username</td>
-                    <td class="center">Date de création</td>
-                    <td><a asp-page="user" asp-route-id="" class="btn btn-success btn-sm text-white">Ajouter un utilisateur</a></td>
+                    <td class="">Id</td>
+                    <td class="">Prénom</td>
+                    <td class="">Nom de Famille</td>
+                    <td class="">Email</td>
+                    <td class="">Username</td>
+                    <td class="">Date de création</td>
+                    <td><a asp-page="user" asp-route-id="" class="btn btn-success btn-sm">Ajouter un utilisateur</a></td>
                 </tr>
                 @foreach (var user in ViewData["lstUsers"] as IList<User>)
                 {
                     <tr>
-                        <td class="center table1Em">
+                        <td class="">
                             @user.Id
                         </td>
-                        <td class="center table1Em">
+                        <td class="">
                             @user.FirstName
                         </td>
-                        <td class="center table1Em">
+                        <td class="">
                             @user.LastName
                         </td>
-                        <td class="center table1Em">
+                        <td class="">
                             @user.Email
                         </td>
-                        <td class="center table1Em">
+                        <td class="">
                             @user.UserName
                         </td>
-                        <td class="center table1Em">
+                        <td class="">
                             @user.CreationDate
                         </td>
-                        <td class="center table1Em">
-                            <a asp-page="user" asp-route-id="@user.Id" class="btn btn-success btn-sm text-white">Modifier</a>
+                        <td class="">
+                            <a asp-page="user" asp-route-id="@user.Id" class="btn btn-success btn-sm">Modifier</a>
                         </td>
                     </tr>
                 }
@@ -88,37 +88,3 @@
 
     </table>
 </div>
-
-<style>
-    .center {
-        text-align: center;
-    }
-
-    .table1Em {
-        padding: 1em;
-    }
-
-    .adminMenuUl {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-        background-color: #333;
-    }
-
-    .adminMenuLi {
-        float: left;
-    }
-
-    .adminMenuA {
-        display: block;
-        color: white;
-        text-align: center;
-        padding: 14px 16px;
-        text-decoration: none;
-    }
-
-    .adminMenuLi a:hover {
-        background-color: #111;
-    }
-</style>
