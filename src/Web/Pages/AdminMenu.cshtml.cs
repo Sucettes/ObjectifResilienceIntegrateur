@@ -11,15 +11,13 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Identity;
 using System.Linq.Dynamic.Core;
 using System.Linq;
-
+using Gwenael.Web.FctUtils;
 namespace Gwenael.Web.Pages
 {
     public class AdminMenuModel : PageModel
     {
         private UserManager<User> _userManager;
         private readonly GwenaelDbContext _context;
-        // Curent User
-        //Guid _selectedUserId = _userManager.FindByEmailAsync(_userManager.GetUserName(User)).Result.Id;
         public AdminMenuModel(GwenaelDbContext context, UserManager<User> pUserManager)
         {
             _context = context;
@@ -27,40 +25,43 @@ namespace Gwenael.Web.Pages
 
         }
         public IList<User> Users { get; set; }
-        [BindProperty(SupportsGet = true)]
-        public Role Role { get; set; }
         [BindProperty]
         public IList<Formation> Formations { get; set; }
         public String Tab { get; set; }
-        [BindProperty]
-        public User user { get; set; }
         public async Task<IActionResult> OnGetAsync()
         {
-            if (Request.Query.Count == 1)
+            Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
+            if (Permission.EstAdministrateur(idConnectedUser, _context))
             {
-                Tab = Request.Query["tab"];
-                ViewData["Tab"] = Tab;
-            }
-            else if (Request.Query.Count == 2)
-            {
-                Tab = Request.Query["tab"];
-                ViewData["Tab"] = Tab;
-                if (Tab == "roles")
+                if (Request.Query.Count == 1)
                 {
-                    Guid selectedUserId = Guid.Parse(Request.Query["guid"]);
-                    if (DynamicQueryableExtensions.Any(_context.Roles))
+                    Tab = Request.Query["tab"];
+                    ViewData["Tab"] = Tab;
+                }
+                else if (Request.Query.Count == 2)
+                {
+                    Tab = Request.Query["tab"];
+                    ViewData["Tab"] = Tab;
+                    if (Tab == "roles")
                     {
-                        List<Role> lstRolesUser = ObtenirLstRolesUser(selectedUserId);
-                        ViewData["userRoles"] = lstRolesUser;
-                        ViewData["selectRoles"] = ObtenirLstRolesSelect(lstRolesUser);
+                        Guid selectedUserId = Guid.Parse(Request.Query["guid"]);
+                        if (DynamicQueryableExtensions.Any(_context.Roles))
+                        {
+                            List<Role> lstRolesUser = Permission.ObtenirLstRolesUser(selectedUserId,_context);
+                            ViewData["userRoles"] = lstRolesUser;
+                            ViewData["selectRoles"] = ObtenirLstRolesSelect(lstRolesUser);
+                        }
                     }
                 }
+                Users = await _context.Users.ToListAsync();
+                ViewData["lstUsers"] = Users;
+                Formations = await _context.Formations.ToListAsync();
+                ViewData["lstFormations"] = Formations;
+                return Page();
             }
-            Users = await _context.Users.ToListAsync();
-            ViewData["lstUsers"] = Users;
-            Formations = await _context.Formations.ToListAsync();
-            ViewData["lstFormations"] = Formations;
-            return Page();
+            return Redirect("/");
+
+
         }
         public async Task<IActionResult> OnPostAsync(string btnDeleteRole, string name, string selectRole)
         {
@@ -74,15 +75,6 @@ namespace Gwenael.Web.Pages
                 {
                     if (name == "Administrateur")
                     {
-
-                    }
-                    else if (name == "Gestionnaire de contenu")
-                    {
-
-                    }
-                    else if (name == "Utilisateur")
-                    {
-
                     }
                     _context.UserRoles.Remove(userRole);
                 }
@@ -122,6 +114,24 @@ namespace Gwenael.Web.Pages
             //    role.Id));
 
             return Page();
+        }
+        //public bool estAdministrateur(Guid userId)
+        //{
+        //    List<Role> lstRole = ObtenirLstRolesUser(userId);
+        //    bool contientAdmin = false;
+        //    foreach (var role in lstRole)
+        //    {
+        //        if (role.Name == "Administrateur")
+        //        {
+        //            contientAdmin = true;
+        //        }
+        //    }
+        //    return contientAdmin;
+        //}
+        public Guid ObtenirIdDuUserSelonEmail(string email)
+        {
+            User user = (User)_context.Users.Where(u => u.UserName == email).First();
+            return user.Id;
         }
         public UserRole ObtenirUserRole(Guid userId, Guid roleId)
         {
@@ -175,32 +185,32 @@ namespace Gwenael.Web.Pages
             lstRoleSelect.Add((Role)_context.Roles.Where(r => r.Name == "Utilisateur").First());
             return lstRoleSelect;
         }
-        public List<Role> ObtenirLstRolesUser(Guid userId)
-        {
-            List<UserRole> lstUserRolesBd = new List<UserRole>();
-            List<Role> lstRolesBd = new List<Role>();
+        //public List<Role> ObtenirLstRolesUser(Guid userId)
+        //{
+        //    List<UserRole> lstUserRolesBd = new List<UserRole>();
+        //    List<Role> lstRolesBd = new List<Role>();
 
-            List<UserRole> lstUserRoleDuUser = new List<UserRole>();
-            List<Role> lstRolesDuUser = new List<Role>();
+        //    List<UserRole> lstUserRoleDuUser = new List<UserRole>();
+        //    List<Role> lstRolesDuUser = new List<Role>();
 
-            lstRolesBd = _context.Roles.ToList();
-            lstUserRolesBd = _context.UserRoles.ToList();
-            foreach (var roleInUserRole in lstUserRolesBd)
-            {
-                if (roleInUserRole.UserId == userId)
-                    lstUserRoleDuUser.Add(roleInUserRole);
-            }
-            foreach (var rolee in lstUserRoleDuUser)
-            {
-                foreach (var roleId in lstRolesBd)
-                {
-                    if (rolee.RoleId == roleId.Id)
-                    {
-                        lstRolesDuUser.Add(roleId);
-                    }
-                }
-            }
-            return lstRolesDuUser;
-        }
+        //    lstRolesBd = _context.Roles.ToList();
+        //    lstUserRolesBd = _context.UserRoles.ToList();
+        //    foreach (var roleInUserRole in lstUserRolesBd)
+        //    {
+        //        if (roleInUserRole.UserId == userId)
+        //            lstUserRoleDuUser.Add(roleInUserRole);
+        //    }
+        //    foreach (var rolee in lstUserRoleDuUser)
+        //    {
+        //        foreach (var roleId in lstRolesBd)
+        //        {
+        //            if (rolee.RoleId == roleId.Id)
+        //            {
+        //                lstRolesDuUser.Add(roleId);
+        //            }
+        //        }
+        //    }
+        //    return lstRolesDuUser;
+        //}
     }
 }

@@ -61,8 +61,18 @@
                     </th>
                     <th>
                         @if (ViewData["userRoles"] is not null)
-                         {
+                        {
                             <div class="list-group">
+                                @if (ViewData["msgErreur"] is not null)
+                                {
+                                    <div class="list-group-item alert-danger">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <p>@ViewData["msgErreur"]</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
                                 @foreach (var roleUser in ViewData["userRoles"] as List<Role>)
                                 {
                                     <div class="list-group-item ">
@@ -89,7 +99,7 @@
                                                 <select class="form-control" name="selectRole">
                                                     @foreach (var roleSelect in ViewData["selectRoles"] as List<Role>)
                                                     {
-                                                    <option value="@roleSelect.Name">@roleSelect.Name</option>
+                                                        <option value="@roleSelect.Name">@roleSelect.Name</option>
                                                     }
                                                 </select>
                                             </div>
@@ -101,7 +111,7 @@
 
                                 </div>
                             </div>
-                         }
+                        }
                     </th>
 
                 </tr>
