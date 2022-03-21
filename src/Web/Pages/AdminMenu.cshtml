@@ -15,29 +15,6 @@
         <li class="nav-item"><a href="?tab=formations" class="nav-link">Formation</a></li>
         <li class="nav-item"><a href="?tab=roles" class="nav-link">Rôles</a></li>
     </ul>
-    @*@if (User.Identity.IsAuthenticated)
-        {
-            <p>All Roles</p>
-            @if (@Model.Roles != null)
-            {
-                @foreach (var role in @Model.Roles)
-                {
-                    <p>Role Name : @role.Name</p>
-                }
-            }
-            <p>User Roles</p>
-            @foreach (var roleDuUser in ViewData["userRoles"] as List<UserRole>)
-            {
-                <p>@roleDuUser.Role</p>
-            }
-        }*@
-    @*<form method="post">
-            <div class="form-group">
-                <label asp-for="Role.Name"></label>
-                <input asp-for="Role.Name" class="form-control" />
-            </div>
-            <button type="submit" class="btn btn-default">Ajouter un rôle</button>
-        </form>*@
     <table class="table">
 
         @if (ViewData["Tab"] is not null)
@@ -60,19 +37,18 @@
                         </div>
                     </th>
                     <th>
+                        @if (ViewData["msgErreur"] is not null)
+                        {
+                            <div class="alert alert-danger" role="alert">
+                                <div class="row">
+                                    @ViewData["msgErreur"]
+                                </div>
+                            </div>
+                        }
                         @if (ViewData["userRoles"] is not null)
                         {
                             <div class="list-group">
-                                @if (ViewData["msgErreur"] is not null)
-                                {
-                                    <div class="list-group-item alert-danger">
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <p>@ViewData["msgErreur"]</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                }
+
                                 @foreach (var roleUser in ViewData["userRoles"] as List<Role>)
                                 {
                                     <div class="list-group-item ">
@@ -90,32 +66,34 @@
                                         </div>
                                     </div>
                                 }
-                                <div class="list-group-item ">
+                                @if ((ViewData["selectRoles"] as List<Role>).Count() > 0)
+                                {
+                                    <div class="list-group-item ">
 
-                                    <form method="post">
-                                        <div class="row">
-                                            <div class="col-6"><p>Sélectionner un rôle à ajouter :</p></div>
-                                            <div class="col-3">
-                                                <select class="form-control" name="selectRole">
-                                                    @foreach (var roleSelect in ViewData["selectRoles"] as List<Role>)
-                                                    {
-                                                        <option value="@roleSelect.Name">@roleSelect.Name</option>
-                                                    }
-                                                </select>
+                                        <form method="post">
+                                            <div class="row">
+                                                <div class="col-6"><p>Sélectionner un rôle à ajouter :</p></div>
+                                                <div class="col-3">
+                                                    <select class="form-control" name="selectRole">
+                                                        @foreach (var roleSelect in ViewData["selectRoles"] as List<Role>)
+                                                        {
+                                                            <option value="@roleSelect.Name">@roleSelect.Name</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                                <div class="col-sm">
+                                                    <input name="btnAjoutRole" type="submit" value="Ajouter" class="btn btn-success form-control" />
+                                                </div>
                                             </div>
-                                            <div class="col-sm">
-                                                <input name="btnAjoutRole" type="submit" value="Ajouter" class="btn btn-success form-control" />
-                                            </div>
-                                        </div>
-                                    </form>
+                                        </form>
+                                    </div>
 
-                                </div>
+                                }
                             </div>
                         }
                     </th>
 
                 </tr>
-
             }
             @if (@ViewData["Tab"].ToString() == "formations")
             {
@@ -165,7 +143,6 @@
                             <td><a asp-page="user" asp-route-id="@user.Id" class="btn btn-success btn-sm">Modifier</a></td>
                         </tr>
                     </tbody>
-
                 }
             }
         }

@@ -9,6 +9,22 @@ namespace Gwenael.Web.FctUtils
 {
     public static class Permission
     {
+        public static bool VerifierAccesUtilisateur(Guid idUser, GwenaelDbContext context)
+        {
+            if (EstUtilisateur(idUser, context) || EstGestionnaireDeContenu(idUser, context) || EstAdministrateur(idUser, context))
+            {
+                return true;
+            }
+            return false;
+        }
+        public static bool VerifierAccesGdC(Guid idUser, GwenaelDbContext context)
+        {
+            if (EstGestionnaireDeContenu(idUser,context) || EstAdministrateur(idUser, context))
+            {
+                return true;
+            }
+            return false;
+        }
         public static bool EstGestionnaireDeContenu(Guid idUser, GwenaelDbContext context)
         {
             List<Role> lstRole = ObtenirLstRolesUser(idUser, context);

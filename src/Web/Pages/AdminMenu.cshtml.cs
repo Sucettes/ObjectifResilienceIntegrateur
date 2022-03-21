@@ -22,7 +22,6 @@ namespace Gwenael.Web.Pages
         {
             _context = context;
             _userManager = pUserManager;
-
         }
         public IList<User> Users { get; set; }
         [BindProperty]
@@ -38,7 +37,7 @@ namespace Gwenael.Web.Pages
                     Tab = Request.Query["tab"];
                     ViewData["Tab"] = Tab;
                 }
-                else if (Request.Query.Count == 2)
+                else if (Request.Query.Count > 1)
                 {
                     Tab = Request.Query["tab"];
                     ViewData["Tab"] = Tab;
@@ -52,6 +51,11 @@ namespace Gwenael.Web.Pages
                             ViewData["selectRoles"] = ObtenirLstRolesSelect(lstRolesUser);
                         }
                     }
+                    string erreur = Request.Query["error"];
+                    if (erreur != null)
+                    {
+                        ViewData["msgErreur"] = "Vous ne pouvez pas retirer votre accès administrateur";
+                    }
                 }
                 Users = await _context.Users.ToListAsync();
                 ViewData["lstUsers"] = Users;
@@ -60,8 +64,6 @@ namespace Gwenael.Web.Pages
                 return Page();
             }
             return Redirect("/");
-
-
         }
         public async Task<IActionResult> OnPostAsync(string btnDeleteRole, string name, string selectRole)
         {
@@ -73,8 +75,9 @@ namespace Gwenael.Web.Pages
                 UserRole userRole = ObtenirUserRole(selectedUserId, idRole);
                 if (userRole != null)
                 {
-                    if (name == "Administrateur")
+                    if (name == "Administrateur" && selectedUserId == ObtenirIdDuUserSelonEmail(User.Identity.Name))
                     {
+                        return Redirect("/AdminMenu/?tab=roles&guid=" + selectedUserId + "&error=true");
                     }
                     _context.UserRoles.Remove(userRole);
                 }
@@ -111,7 +114,7 @@ namespace Gwenael.Web.Pages
 
             //Console.WriteLine(User.Identity.Name);
             //_context.UserRoles.Add(new UserRole(_userManager.FindByEmailAsync(_userManager.GetUserName(User)).Result.Id,
-            //    role.Id));
+            //    _context.Roles.Where(r => r.Name == "Administrateur").First().Id));
 
             return Page();
         }
@@ -185,32 +188,5 @@ namespace Gwenael.Web.Pages
             lstRoleSelect.Add((Role)_context.Roles.Where(r => r.Name == "Utilisateur").First());
             return lstRoleSelect;
         }
-        //public List<Role> ObtenirLstRolesUser(Guid userId)
-        //{
-        //    List<UserRole> lstUserRolesBd = new List<UserRole>();
-        //    List<Role> lstRolesBd = new List<Role>();
-
-        //    List<UserRole> lstUserRoleDuUser = new List<UserRole>();
-        //    List<Role> lstRolesDuUser = new List<Role>();
-
-        //    lstRolesBd = _context.Roles.ToList();
-        //    lstUserRolesBd = _context.UserRoles.ToList();
-        //    foreach (var roleInUserRole in lstUserRolesBd)
-        //    {
-        //        if (roleInUserRole.UserId == userId)
-        //            lstUserRoleDuUser.Add(roleInUserRole);
-        //    }
-        //    foreach (var rolee in lstUserRoleDuUser)
-        //    {
-        //        foreach (var roleId in lstRolesBd)
-        //        {
-        //            if (rolee.RoleId == roleId.Id)
-        //            {
-        //                lstRolesDuUser.Add(roleId);
-        //            }
-        //        }
-        //    }
-        //    return lstRolesDuUser;
-        //}
     }
 }
