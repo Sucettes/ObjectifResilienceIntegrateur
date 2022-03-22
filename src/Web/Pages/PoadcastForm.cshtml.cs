@@ -40,6 +40,10 @@ namespace Gwenael.Web.Pages
         [HttpPost("FileUpload")]
         public async Task<IActionResult> OnPost(string titre, string description, string categorie)
         {
+            if(description == null)
+            {
+                description = "aucune description disponible pour ce poadcast";
+            }
             // Upload de l'article et sont titre 
             //int idNewPoadcast = 0;
             //Poadcast newPoadcast = new Poadcast

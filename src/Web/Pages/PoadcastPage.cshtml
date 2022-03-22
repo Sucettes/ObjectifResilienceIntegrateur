@@ -1,6 +1,7 @@
 ﻿@page
 @using Web.Pages
 @model Web.Pages.PoadcastPageModel
+@using Domain.Entities
 @{
     ViewData["Title"] = "Home page";
 }
@@ -9,10 +10,30 @@
 <div>
     <table>
         <tr>
-            <td class="">Id</td>
             <td class="">titre</td>
+            <td class="">description</td>
             <td class="">catégorie</td>
-            <td><a asp-page="formation" asp-route-id="" class="btn btn-success btn-sm">Ajouter une formation</a></td>
+            <td class="">Audio</td>
         </tr>
+
+        @foreach (var poadcast in ViewData["lstPoadcasts"] as IList<Poadcast>)
+        {
+    <tr>
+        <td class="">
+            @poadcast.titre
+        </td>
+        <td class="">
+            @poadcast.description
+        </td>
+        <td class="">
+            @poadcast.categorie
+        </td>
+        <td class="">
+            <audio controls
+                   src="https://mediafileobjectifresiliance.s3.ca-central-1.amazonaws.com/gens-qui-marchent.mp3">
+            </audio>
+        </td>
+    </tr>
+        }
     </table>
 </div>
