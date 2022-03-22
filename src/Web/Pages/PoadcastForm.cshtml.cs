@@ -26,6 +26,10 @@ namespace Gwenael.Web.Pages
 
         [BindProperty]
         public InputModel Input { get; set; }
+        public void OnGet()
+        {
+            Input = new InputModel();
+        }
 
         public class InputModel
         {
@@ -37,16 +41,16 @@ namespace Gwenael.Web.Pages
         public async Task<IActionResult> OnPost(string titre, string description, string categorie)
         {
             // Upload de l'article et sont titre 
-            int idNewPoadcast = 0;
-            Poadcast newPoadcast = new Poadcast
-            {
-                titre = titre,
-                description = description,
-                categorie = categorie
-            };
+            //int idNewPoadcast = 0;
+            //Poadcast newPoadcast = new Poadcast
+            //{
+                //titre = titre,
+                //description = description,
+                //categorie = categorie
+            //};
             //_context.Articles.Add(newArticle);
-            _context.Poadcasts.Add(newPoadcast);
-            await _context.SaveChangesAsync();
+            //_context.Poadcasts.Add(newPoadcast);
+            //await _context.SaveChangesAsync();
             //idNewPoadcast = newPoadcast.ID;
 
             // mettre dans app setting
@@ -76,17 +80,17 @@ namespace Gwenael.Web.Pages
                         ID = File.FileName,
                         titre = titre,
                         url = "s3/mediafileobjectifresiliance/" + File.FileName,
+                        description = description,
                         categorie = categorie
                     };
 
 
-                    _context.Poadcasts.Add(newPoadcast);
+                    _context.Poadcasts.Add(poadcast);
                     await _context.SaveChangesAsync();
+                    
                 }
+                return RedirectToPage("index");
             }
-
-
-            return Page();
         }
     }
 }

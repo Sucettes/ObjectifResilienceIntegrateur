@@ -8,24 +8,23 @@
 
 
 <div>
-    <label for="titre">Titre <em>*</em></label>
+    <form method="post" enctype="multipart/form-data">
+        <label for="titre">Titre <em>*</em></label>
 
-    <input id="titre" placeholder="titre du formulaire" autofocus="" required=""><br>
+        <input name="titre" id="titre" placeholder="titre du formulaire" autofocus="" required=""><br>
 
-    <label for="description">Description</label>
+        <label for="description">Description</label>
 
-    <textarea id="description"></textarea><br>
+        <textarea name="description" id="description"></textarea><br>
 
-    <label for="categorie">Catégorie <em>*</em></label>
-    <select id="categorie">
-        <option value="F" name="categorie">Lowtech</option>
-        <option value="H" name="categorie">Recyclage</option>
-    </select><br><br>
+        <label for="categorie">Catégorie <em>*</em></label>
+        <select name="categorie" id="categorie">
+            <option value="F" name="categorie">Lowtech</option>
+            <option value="H" name="categorie">Recyclage</option>
+        </select><br><br>
 
-    <input multiple="multiple" asp-for="Input.FormFile" class="form-control" type="file" id="formFile"><br />
+        <input multiple="multiple" asp-for="Input.FormFile" class="form-control" type="file" id="formFile" /><br />
 
-    <input class="btn" type="submit" value="Upload" /><br /><br />
-
-
-
+        <input class="btn" type="submit" value="valider" /><br /><br />
+    </form>
 </div>
