@@ -236,7 +236,7 @@ namespace Gwenael.Web.Pages
             catch (Exception)
             {
                 UpdateInputData();
-                return Redirect("/tutoriel/CreationTuto?handler=TutoChanger);
+                return Redirect("/tutoriel/CreationTuto?handler=TutoChanger");
             }
         }
 
