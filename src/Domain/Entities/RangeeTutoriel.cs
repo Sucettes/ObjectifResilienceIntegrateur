@@ -6,14 +6,15 @@ namespace Gwenael.Domain.Entities
 {
     public class RangeeTutoriel
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Texte { get; set; }
         [MaxLength(50)] public string LienImg { get; set; }
-        [Required] [MaxLength(2)] public int Ordre { get; set; }
+        //[Required] [MaxLength(2)] public int Ordre { get; set; }
+        [Required] public string PositionImg { get; set; }
+        [Required] public Guid TutorielId { get; set; }
 
         public RangeeTutoriel()
         {
-
         }
     }
 }

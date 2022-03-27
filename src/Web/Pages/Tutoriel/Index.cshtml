@@ -8,18 +8,79 @@
 }
 
 <div class="container-fluid">
-    <h1>Home tutoriel</h1>
-    <hr />
-    <form asp-controller="Tutoriel" asp-action="CreationTuto" method="post">
-        <button type="submit" class="btn btn-primary">Créé un tutoriel</button>
-    </form>
+    <row class="row">
+        <div class="col-md-6">
+            <h1>Home tutoriel</h1>
+        </div>
+        <div class="col-md-6">
+            <form method="post" asp-page="Index" style="float: right;">
+                <button type="submit" class="btn btn-outline-primary" asp-page-handler="RedirectCreationTuto">Créé un tutoriel</button>
+            </form>
+        </div>
+    </row>
+    <br />
 
-    <form asp-controller="Tutoriel" asp-action="CreationCategorie" method="post">
-        <input class="form-control" id="formNom" name="formNom">
-        <input class="form-control" id="formDesc" name="formDesc">
-        <button type="submit" class="btn btn-primary">Créé une categorie</button>
-    </form>
+    <div class="row">
+        @if (!(@Model.Input.lstTutoriels.IsNullOrEmpty()))
+        {
+            @foreach (var tuto in @Model.Input.lstTutoriels)
+            {
+                @if (tuto.EstPublier == true)
+                {
+                    <a href="Tutoriel/Consultation?id=@tuto.Id" style="width: 18rem;" class=" card list-group-item list-group-item-action">
+                        <img src="~/images/imgplaceholder.jpg" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">@tuto.Titre</h5>
+                            <ul>
+                                <li>Durée (h): @tuto.Duree</li>
+                                <li>Coût: @tuto.Cout</li>
+                                <li>Difficulte: @tuto.Difficulte</li>
+                                <li>Catégorie: @tuto.Categorie</li>
+                            </ul>
+                            @*<p class="card-text">
+                                    @tuto.Introduction
 
+                                </p>*@
+                        </div>
+                    </a>
+                }
+            }
+        }
 
+    </div>
 </div>
 
+<div id="toastTutoDeleteDiv" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11" hidden>
+    <div id="toastTutoDelete" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-animation="true" data-bs-delay="8000">
+        <div class="toast-header">
+            <img style="max-width:1.5rem;max-height:1.5rem;" src="/icons/valide.svg" class="rounded me-2" alt="...">
+            <strong class="me-auto">Confirmation suppression</strong>
+            <small>Nouveau!</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            Le tutoriel a bien été supprimée!
+        </div>
+    </div>
+</div>
+
+<div id="toastTutoUnPublishDiv" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11" hidden>
+    <div id="toastTutoUnPublish" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-animation="true" data-bs-delay="8000">
+        <div class="toast-header">
+            <img style="max-width:1.5rem;max-height:1.5rem;" src="/icons/valide.svg" class="rounded me-2" alt="...">
+            <strong class="me-auto">Confirmation de changement de visibilité</strong>
+            <small>Nouveau!</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            Le tutoriel a bien été retiré du mode public!
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.js" integrity="sha512-n/4gHW3atM3QqRcbCn6ewmpxcLAHGaDjpEBu4xZd47N0W2oQ+6q7oc3PXstrJYXcbNU1OHdQ1T7pAP+gi5Yu8g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.6.0/umd/popper.min.js" integrity="sha512-BmM0/BQlqh02wuK5Gz9yrbe7VyIVwOzD1o40yi1IsTjriX/NGF37NyXHfmFzIlMmoSIBXgqDiG1VNU6kB5dBbA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+@*<script src="~/js/tutoAddRow.js" asp-append-version="true"></script>*@
+
+<script src="~/js/tutorielToastSupprimer.js" asp-append-version="true"></script>
+<script src="~/js/tutorielToastUnPublish.js" asp-append-version="true"></script>

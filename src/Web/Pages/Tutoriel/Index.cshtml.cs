@@ -30,21 +30,31 @@ namespace Gwenael.Web.Pages
 {
     public class TutorielIndexModel : PageModel
     {
-        private readonly GwenaelDbContext _context;
+        [BindProperty(SupportsGet = true)]
+        public InputModel Input { get; set; }
 
-        public TutorielIndexModel(GwenaelDbContext context)
+        private readonly GwenaelDbContext _db;
+
+        public class InputModel
         {
-            _context = context;
+            public List<Domain.Entities.Tutoriel> lstTutoriels { get; set; }
+
         }
+        public TutorielIndexModel(GwenaelDbContext pDb) => _db = pDb;
 
         public async Task<IActionResult> OnGetAsync()
         {
+            Input = new InputModel();
+            Input.lstTutoriels = _db.Tutoriels.ToList<Domain.Entities.Tutoriel>();
+
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync() => Page();
+
+        public IActionResult OnPostRedirectCreationTuto()
         {
-            return Page();
+            return RedirectToPage("CreationTuto");
         }
     }
 }

@@ -12,42 +12,35 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gwenael.Persistence.Migrations
 {
     [DbContext(typeof(GwenaelDbContext))]
-    [Migration("20220307194811_Tutoriel_RangeeTutoriel_Categorie")]
-    partial class Tutoriel_RangeeTutoriel_Categorie
+    [Migration("20220321170159_AjoutsDesTrucsDeTuto12")]
+    partial class AjoutsDesTrucsDeTuto12
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.1")
+                .HasAnnotation("ProductVersion", "6.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
             modelBuilder.Entity("Gwenael.Domain.Entities.Categorie", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Nom")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int?>("TutorielId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("TutorielId");
 
                     b.ToTable("Categories");
                 });
@@ -76,25 +69,23 @@ namespace Gwenael.Persistence.Migrations
 
             modelBuilder.Entity("Gwenael.Domain.Entities.RangeeTutoriel", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("LienImg")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("Ordre")
-                        .HasMaxLength(2)
-                        .HasColumnType("int");
+                    b.Property<string>("PositionImg")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Texte")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("TutorielId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("TutorielId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -160,18 +151,22 @@ namespace Gwenael.Persistence.Migrations
 
             modelBuilder.Entity("Gwenael.Domain.Entities.Tutoriel", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<Guid>("AuteurUserIdId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<decimal>("Cout")
+                    b.Property<Guid?>("AuteurUserIdId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CategorieId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<double>("Cout")
                         .HasMaxLength(7)
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("DateCreation")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("Difficulte")
                         .HasMaxLength(2)
@@ -181,33 +176,27 @@ namespace Gwenael.Persistence.Migrations
                         .HasMaxLength(4)
                         .HasColumnType("int");
 
+                    b.Property<bool>("EstPublier")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Introduction")
                         .IsRequired()
-                        .HasMaxLength(2000)
-                        .HasColumnType("nvarchar(2000)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
+                    b.Property<string>("LienImgBanniere")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("References")
-                        .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("Titre")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("lienImgBanniere")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AuteurUserIdId");
+
+                    b.HasIndex("CategorieId");
 
                     b.ToTable("Tutoriels");
                 });
@@ -382,13 +371,6 @@ namespace Gwenael.Persistence.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Gwenael.Domain.Entities.Categorie", b =>
-                {
-                    b.HasOne("Gwenael.Domain.Entities.Tutoriel", null)
-                        .WithMany("Categories")
-                        .HasForeignKey("TutorielId");
-                });
-
             modelBuilder.Entity("Gwenael.Domain.Entities.RangeeTutoriel", b =>
                 {
                     b.HasOne("Gwenael.Domain.Entities.Tutoriel", null)
@@ -409,11 +391,17 @@ namespace Gwenael.Persistence.Migrations
                 {
                     b.HasOne("Gwenael.Domain.Entities.User", "AuteurUserId")
                         .WithMany()
-                        .HasForeignKey("AuteurUserIdId")
+                        .HasForeignKey("AuteurUserIdId");
+
+                    b.HasOne("Gwenael.Domain.Entities.Categorie", "Categorie")
+                        .WithMany()
+                        .HasForeignKey("CategorieId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("AuteurUserId");
+
+                    b.Navigation("Categorie");
                 });
 
             modelBuilder.Entity("Gwenael.Domain.Entities.UserRole", b =>
@@ -471,8 +459,6 @@ namespace Gwenael.Persistence.Migrations
 
             modelBuilder.Entity("Gwenael.Domain.Entities.Tutoriel", b =>
                 {
-                    b.Navigation("Categories");
-
                     b.Navigation("RangeeTutoriels");
                 });
 
