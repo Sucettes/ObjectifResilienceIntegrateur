@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -13,9 +13,6 @@ namespace Gwenael.Domain
         }
 
         public DbSet<Formation> Formations { get; set; }
-        public DbSet<Categorie> Categories { get; set; }
-        public DbSet<RangeeTutoriel> RangeeTutoriels { get; set; }
-        public DbSet<Tutoriel> Tutoriels { get; set; }
         public DbSet<Poadcast> Poadcasts { get; set; }
         public DbSet<Article> Articles { get; set; }
         public DbSet<Media> Medias { get; set; }
