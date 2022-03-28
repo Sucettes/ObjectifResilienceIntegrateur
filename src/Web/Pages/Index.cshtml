@@ -43,25 +43,26 @@
                 {
                     if (i == 0)
                     {
-                        <div class="div-article1" style=" display:flex">
-                            <a href="/Article?id=@article.Id">
-                                <img src="/images/fondBois.jpg" alt="" style="height: 300px;">
-                                <p>@article.Titre</p>
-                            </a>
-                        </div> 
-                       }
+        <div class="div-article1" style=" display:flex">
 
-                    else if(i < 3)
-                    {
-                        <div class="div-article" style="  display: flex" >
-                            <a href="/Article?id=@article.Id">
-                                <img src="/images/fondBois.jpg" alt="" style="height: 150px;">
-                                <p>@article.Titre</p>
-                            </a>
-                        </div>
-                    }
-                    i++;
-                } }
+            <a href="/Article?id=@article.Id">
+                <h4>@article.Titre</h4>
+                <img src="/images/fondBois.jpg" alt="" style="height: 300px;">
+
+            </a>
+        </div> }
+
+                        else if (i < 3)
+                        {
+        <div class="div-article" style="  display: flex">
+            <a href="/Article?id=@article.Id">
+                <h4>@article.Titre</h4>
+                <img src="/images/fondBois.jpg" alt="" style="height: 150px;">
+
+            </a>
+        </div> }
+                        i++;
+                    } }
 
 
         </div>
