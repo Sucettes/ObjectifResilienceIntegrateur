@@ -19,13 +19,14 @@
 
         <label for="categorie">Catégorie <em>*</em></label>
         <select name="categorie" id="categorie">
-            <option value="lowtech" >Lowtech</option>
-            <option value="recyclage" >Recyclage</option>
-            <option value="autCat" >Autre catégorie</option>
+            <option value="lowtech">Lowtech</option>
+            <option value="recyclage">Recyclage</option>
+            <option value="autCat">Autre catégorie</option>
         </select><br><br>
 
-        <input accept="audio/*" asp-for="Input.FormFile" class="form-control" type="file" id="formFile" /><br />
+        <input accept="audio/*" asp-for="Input.FormFile" class="form-control" type="file" id="formFile" required="" /><br />
 
-        <input class="btn" type="submit" value="valider" /><br /><br />
+        <input class="btn btn-success btn-sm" type="submit" value="valider" /><br /><br />
+        <a name="btnAnnuler" class="btn btn-danger form-control" asp-page="poadcastPage">Annuler</a>
     </form>
 </div>

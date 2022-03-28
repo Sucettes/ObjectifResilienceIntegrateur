@@ -3,6 +3,7 @@ using Amazon.S3;
 using Amazon.S3.Transfer;
 using Gwenael.Domain;
 using Gwenael.Domain.Entities;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -26,9 +27,11 @@ namespace Gwenael.Web.Pages
 
         [BindProperty]
         public InputModel Input { get; set; }
+        //public IHostingEnvironment env { get; set; }
         public void OnGet()
         {
             Input = new InputModel();
+            
         }
 
         public class InputModel
@@ -37,25 +40,16 @@ namespace Gwenael.Web.Pages
 
         }
 
+
+
+        
         [HttpPost("FileUpload")]
-        public async Task<IActionResult> OnPost(string titre, string description, string categorie)
+        public async Task<IActionResult> OnPost(string titre, string description, string categorie/*,[FromServices] IHostingEnvironment env*/)
         {
             if(description == null)
             {
                 description = "aucune description disponible pour ce poadcast";
             }
-            // Upload de l'article et sont titre 
-            //int idNewPoadcast = 0;
-            //Poadcast newPoadcast = new Poadcast
-            //{
-                //titre = titre,
-                //description = description,
-                //categorie = categorie
-            //};
-            //_context.Articles.Add(newArticle);
-            //_context.Poadcasts.Add(newPoadcast);
-            //await _context.SaveChangesAsync();
-            //idNewPoadcast = newPoadcast.ID;
 
             // mettre dans app setting
             using (var client = new AmazonS3Client("AKIAVDH3AEDD6PUJMKGG", "kKV5WKu0tFe8Svl2QdTIMIydLc7CGSMiy2h+KOvV", RegionEndpoint.CACentral1))
@@ -71,7 +65,8 @@ namespace Gwenael.Web.Pages
                         {
                             InputStream = newMemoryStream,
                             Key = File.FileName, // filename
-                            BucketName = "mediafileobjectifresiliance" // bucket name of S3
+                            BucketName = "mediafileobjectifresiliance", // bucket name of S3
+                            CannedACL = S3CannedACL.PublicRead,
                         };
 
                         var fileTransferUtil = new TransferUtility(client);
@@ -83,7 +78,7 @@ namespace Gwenael.Web.Pages
 
                         ID = File.FileName,
                         titre = titre,
-                        url = "s3/mediafileobjectifresiliance/" + File.FileName,
+                        url = "https://mediafileobjectifresiliance.s3.ca-central-1.amazonaws.com/" + File.FileName,
                         description = description,
                         categorie = categorie
                     };
@@ -91,10 +86,36 @@ namespace Gwenael.Web.Pages
 
                     _context.Poadcasts.Add(poadcast);
                     await _context.SaveChangesAsync();
-                    
+
                 }
-                return RedirectToPage("index");
+                return RedirectToPage("poadcastPage");
             }
         }
     }
+    //[HttpPost]
+        //public IActionResult Upload(IFormFile file, [FromServices] IHostingEnvironment oHostingEnvironment)
+        //{
+        //    string fileName = $"{oHostingEnvironment.WebRootPath}\\images\\{file.FileName}";
+
+        //    using (FileStream fileStream = System.IO.File.Create(fileName))
+        //    {
+        //        file.CopyTo(fileStream);
+        //        fileStream.Flush();
+        //    }
+
+        //    //ViewData["message"] = $"File uploaded Successful. File"
+        //    return RedirectToPage("index");
+        //}
+        
+    //foreach (IFormFile file in Input.FormFile)
+            //{
+            //    string fileName = $"{env.WebRootPath}\\images\\{file.FileName}";
+
+            //    using (FileStream fileStream = System.IO.File.Create(fileName))
+            //    {
+            //        file.CopyTo(fileStream);
+            //        fileStream.Flush();
+            //    }
+            //}
+            //return RedirectToPage("index");
 }
