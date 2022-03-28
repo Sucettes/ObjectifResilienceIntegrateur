@@ -1,4 +1,5 @@
-﻿@page 
+﻿@page
+
 @using Web.Pages
 @model Web.Pages.AdminMenuModel
 @using Domain.Entities
@@ -6,85 +7,140 @@
 @{
     ViewData["Title"] = "Admin menu";
 }
-
 <div>
     <h1>Panel Admin</h1>
-    <ul class="">
-        <li class=""><a href="?tab=utilisateurs">Utilisateurs</a></li>
-        <li class=""><a href="?tab=formations">Formation</a></li>
-
+    <ul class="nav nav-tabs">
+        <li class="nav-item"><a href="?tab=utilisateurs" class="nav-link">Utilisateurs</a></li>
+        <li class="nav-item"><a href="?tab=roles" class="nav-link">Rôles</a></li>
+        <li class="nav-item"><a href="?tab=demandes" class="nav-link">Demandes</a></li>
     </ul>
-    <table border="1">
+    <table class="table">
 
         @if (ViewData["Tab"] is not null)
         {
-            @if (@ViewData["Tab"].ToString() == "formations")
+            @if (@ViewData["Tab"].ToString() == "roles")
             {
-                <tr>
-                    <td class="">Id</td>
-                    <td class="">Nom</td>
-                    <td class="">Description</td>
-                    <td><a asp-page="formation" asp-route-id="" class="btn btn-success btn-sm">Ajouter une formation</a></td>
-                </tr>
-                @foreach (var formation in ViewData["lstFormations"] as IList<Formation>)
-                {
+                <thead>
                     <tr>
-                        <td class="">
-                            @formation.Id
-                        </td>
-                        <td class="">
-                            @formation.Name
-                        </td>
-                        <td class="">
-                            @formation.Description
-                        </td>
-                        <td class="">
-                            <a asp-page="formation" asp-route-id="@formation.Id" class="btn btn-success btn-sm">Modifier</a>
-                        </td>
+                        <th scope="col">Utilisateurs</th>
+                        <th scope="col">Rôles</th>
                     </tr>
-                }
+                </thead>
+                <tr>
+                    <th>
+                        <div class="list-group" id="myList" role="tablist">
+                            <a href="#" class="list-group-item list-group-item-action active">
+
+                            </a>
+                            @foreach (var user in ViewData["lstUsers"] as IList<User>)
+                            {
+                                <a href="?tab=roles&guid=@user.Id" class="list-group-item list-group-item-action">@user.Email</a>
+                            }
+                        </div>
+                    </th>
+                    <th>
+                        @if (ViewData["msgErreur"] is not null)
+                        {
+                            <div class="alert alert-danger" role="alert">
+                                <div class="row">
+                                    @ViewData["msgErreur"]
+                                </div>
+                            </div>
+                        }
+                        @if (ViewData["userRoles"] is not null)
+                        {
+                            <div class="list-group">
+
+                                @foreach (var roleUser in ViewData["userRoles"] as List<Role>)
+                                {
+                                    <div class="list-group-item ">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <p>@roleUser.Name</p>
+                                            </div>
+                                            <div class="col-3"></div>
+                                            <div class="col-sm">
+                                                <form method="post">
+                                                    <input type="hidden" name="name" asp-for="@roleUser.Name" />
+                                                    <input name="btnDeleteRole" type="submit" value="Retirer" class="btn btn-danger form-control" />
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                @if ((ViewData["selectRoles"] as List<Role>).Count() > 0)
+                                {
+                                    <div class="list-group-item ">
+
+                                        <form method="post">
+                                            <div class="row">
+                                                <div class="col-6"><p>Sélectionner un rôle à ajouter :</p></div>
+                                                <div class="col-3">
+                                                    <select class="form-control" name="selectRole">
+                                                        @foreach (var roleSelect in ViewData["selectRoles"] as List<Role>)
+                                                        {
+                                                            <option value="@roleSelect.Name">@roleSelect.Name</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                                <div class="col-sm">
+                                                    <input name="btnAjoutRole" type="submit" value="Ajouter" class="btn btn-success form-control" />
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                }
+                            </div>
+                        }
+                    </th>
+
+                </tr>
             }
             @if (@ViewData["Tab"].ToString() == "utilisateurs")
             {
-                <tr>
-                    <td class="">Id</td>
-                    <td class="">Prénom</td>
-                    <td class="">Nom de Famille</td>
-                    <td class="">Email</td>
-                    <td class="">Username</td>
-                    <td class="">Date de création</td>
-                    <td><a asp-page="user" asp-route-id="" class="btn btn-success btn-sm">Ajouter un utilisateur</a></td>
-                </tr>
+                <thead>
+                    <tr>
+                        <th scope="col">Email</th>
+                        <th scope="col">Date de création</th>
+                        <th scope="col"><a asp-page="user" asp-route-id="" class="btn btn-success btn-sm">Ajouter un utilisateur</a></th>
+                    </tr>
+                </thead>
                 @foreach (var user in ViewData["lstUsers"] as IList<User>)
                 {
-                    <tr>
-                        <td class="">
-                            @user.Id
-                        </td>
-                        <td class="">
-                            @user.FirstName
-                        </td>
-                        <td class="">
-                            @user.LastName
-                        </td>
-                        <td class="">
-                            @user.Email
-                        </td>
-                        <td class="">
-                            @user.UserName
-                        </td>
-                        <td class="">
-                            @user.CreationDate
-                        </td>
-                        <td class="">
-                            <a asp-page="user" asp-route-id="@user.Id" class="btn btn-success btn-sm">Modifier</a>
-                        </td>
-                    </tr>
+                    <tbody>
+                        <tr>
+                            <td>@user.Email</td>
+                            <td>@user.CreationDate</td>
+                            <td><a asp-page="user" asp-route-id="@user.Id" class="btn btn-success btn-sm">Modifier</a></td>
+                        </tr>
+                    </tbody>
                 }
             }
+            @if (ViewData["Tab"].ToString() == "demandes")
+            {
+                @if (ViewData["lstNonActiver"] is not null)
+                {
+                    @foreach (var user in ViewData["lstNonActiver"] as List<User>)
+                    {
+                        <div class="list-group-item ">
+                            <div class="row">
+                                <div class="col-6">
+                                    <p>@user.UserName</p>
+                                </div>
+                                <div class="col-3"></div>
+                                <div class="col-sm">
+                                    <form method="post">
+                                        <input type="hidden" name="name" value="@user.Id" />
+                                        <input name="btnAccepter" type="submit" value="Accepter" class="btn btn-success form-control" />
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            }
+
         }
-
-
-
     </table>
 </div>
