@@ -1,0 +1,348 @@
+﻿@page
+@using Web.Pages
+@using Microsoft.AspNetCore.Components.Forms
+@using IdentityServer4.Extensions
+@using Gwenael.Domain.Entities;
+@using System.Globalization
+@model Web.Pages.CreationTutoModel
+@{
+    ViewData["Title"] = "Création tutoriel";
+    string id = Model.Input.id;
+    string handler = Model.Input.handler;
+
+    if (String.IsNullOrEmpty(Model.Input.handler))
+    {
+        handler = "CreeTutorielDetails";
+    }
+}
+
+<div class="container">
+    <div class="page-header">
+        <row class="row">
+            <div class="col">
+                <h1 style="display:inline-block;">Création et modification tutoriel</h1>
+                <form method="post" asp-page="CreationTuto" style="float: right;">
+                    <button type="submit" class="btn btn-outline-primary" asp-page-handler="RedirectHomeTuto">Retour</button>
+                </form>
+            </div>
+        </row>
+    </div>
+    <br />
+    <hr />
+
+    <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <button class="@(handler == "CreeTutorielDetails" ? "nav-link active" : "nav-link")" id="nav-detail-tab" data-bs-toggle="tab" data-bs-target="#nav-detail" type="button" role="tab" aria-controls="nav-detail" aria-selected="true">Détail</button>
+            <button class="@(handler == "AjoutRangee" || handler == "TutoChanger" ? "nav-link active" : handler == "EditRange" || handler == "DeleteRange" ? "nav-link active" : "nav-link ")" id="nav-contenue-tab" data-bs-toggle="tab" data-bs-target="#nav-contenue" type="button" role="tab" aria-controls="nav-contenue" aria-selected="false">Contenue</button>
+            <button class="@(handler == "CreationCategorie" ? "nav-link active" : "nav-link")" id="nav-createCategorie-tab" data-bs-toggle="tab" data-bs-target="#nav-createCategorie" type="button" role="tab" aria-controls="nav-createCategorie" aria-selected="false">Créé catégorie</button>
+            <button class="nav-link" id="nav-information-tab" data-bs-toggle="tab" data-bs-target="#nav-information" type="button" role="tab" aria-controls="nav-information" aria-selected="false">Information</button>
+        </div>
+    </nav>
+    <div class="tab-content" id="nav-tabContent">
+        <div class="@(handler == "CreeTutorielDetails" ? "tab-pane show active" : "tab-pane ")" style="background-color:white;" id="nav-detail" role="tabpanel" aria-labelledby="nav-detail-tab">
+            <h3>Détails du tutoriel</h3>
+            <form method="post" asp-page="CreationTuto" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-md-6">
+                        <img src="~/images/imgplaceholder.jpg" style="width:100%; height:100%;" id="imgBanierre" />
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="input-group input-group-sm mb-3">
+                            <span class="input-group-text" id="inputTitre">Titre</span>
+                            <input type="text" class="form-control" aria-label="Titre" aria-describedby="Titre" asp-for="@Model.Input.titre">
+                        </div>
+
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="input-group input-group-sm mb-3">
+                                    <span class="input-group-text" id="inputDuree">Durée (heures)</span>
+                                    <input type="number" class="form-control" aria-label="Durée" aria-describedby="Durée" asp-for="@Model.Input.duree">
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="input-group input-group-sm mb-3">
+                                    <span class="input-group-text" id="inputCout">Cout</span>
+                                    <input type="number" class="form-control" aria-label="Cout" aria-describedby="Cout" asp-for="@Model.Input.cout">
+                                    <span class="input-group-text">$</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="input-group input-group-sm mb-3">
+                            <label for="DifficulteRange" style="width: 100%;">Difficulté 1 à 10</label>
+                            <input type="range" class="form-range" min="1" max="10" id="DifficulteRange" asp-for="@Model.Input.difficulte">
+                        </div>
+
+                        <div class="input-group input-group-sm mb-3">
+                            <input type="file" class="form-control form-control-sm" id="inputImgBanierre" asp-for="@Model.Input.imageBanierFile">
+                        </div>
+
+                        <div class="input-group input-group-sm mb-3">
+                            <label for="categorieDataList" style="width: 100%;">Sélectionner une catégorie</label>
+                            <input class="form-control" list="categorieDatalistOptions" id="categorieDataList" placeholder="Écrire pour rechercher..." asp-for="@Model.Input.cat">
+                            <datalist id="categorieDatalistOptions">
+                                @if (!(@Model.Input.lstCategories.IsNullOrEmpty()))
+                                {
+                                    @foreach (var cat in @Model.Input.lstCategories)
+                                    {
+                                        if (@cat.Nom == @Model.Input.cat)
+                                        {
+                                            <option id="@cat.Id" value="@cat.Nom" selected />
+                                        }
+                                        else
+                                        {
+                                            <option id="@cat.Id" value="@cat.Nom" />
+                                        }
+                                    }
+                                }
+                            </datalist>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <hr />
+                        <h2>Introduction</h2>
+
+                        <div class="input-group">
+                            @if (!String.IsNullOrEmpty(@Model.Input.intro))
+                            {
+                                <textarea class="form-control" rows="6" name="intro">@Model.Input.intro</textarea>
+                            }
+                            else
+                            {
+                                <textarea class="form-control" rows="6" name="intro"></textarea>
+
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <br />
+                <button type="submit" class="@(String.IsNullOrEmpty(Model.Input.id) ? "btn btn-outline-primary" : "btn disabled btn-primary")" asp-route-id="@id" asp-page-handler="CreeTutorielDetails">Créé tutoriel</button>
+                <button type="submit" class="@(String.IsNullOrEmpty(Model.Input.id) ? "btn disabled btn-primary" : "btn btn-outline-primary")" asp-route-id="@id" asp-page-handler="ModifieTutorielDetails">Modifié tutoriel</button>
+                <button type="submit" class="btn btn-outline-primary" asp-page-handler="NettoyerTutorielDetails">Nettoyé</button>
+            </form>
+        </div>
+        <div class="@(handler == "AjoutRangee" || handler == "TutoChanger" ? "tab-pane show active" : handler == "EditRange" || handler == "DeleteRange" ? "tab-pane show active" : "tab-pane ")" id="nav-contenue" style="background-color:white;" role="tabpanel" aria-labelledby="nav-contenue-tab">
+            <h3>Contenue du tutoriel</h3>
+            <form method="post" asp-page="CreationTuto">
+                <div class="row">
+                    <label for="tutoId" style="width: 100%;">Sélectionner un tutoriel</label>
+                    <div class="col-10">
+                        <select class="form-select" aria-label="Sélectionner un tutoriel" name="tutoId">
+                            @if (!(@Model.Input.lstTutoriels.IsNullOrEmpty()))
+                            {
+                                <option value="@id" selected disabled>Choisir un tutoriel</option>
+                                @foreach (var tuto in @Model.Input.lstTutoriels)
+                                {
+                                    if (!String.IsNullOrEmpty(@id) && tuto.Id.ToString() == @id)
+                                    {
+                                        <option value="@tuto.Id" selected>@tuto.Titre</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@tuto.Id">@tuto.Titre</option>
+                                    }
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="col-2">
+                        <button type="submit" class="btn btn-outline-primary" asp-page-handler="TutoChanger">Choisir</button>
+                    </div>
+                </div>
+            </form>
+
+            <h4>rangee</h4>
+            <section>
+                <div id="toastRangeeDeleteDiv" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11" hidden>
+                    <div id="toastRangeeDelete" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-animation="true" data-bs-delay="5000">
+                        <div class="toast-header">
+                            <img style="max-width:1.5rem;max-height:1.5rem;" src="/icons/valide.svg" class="rounded me-2" alt="...">
+                            <strong class="me-auto">Confirmation suppression</strong>
+                            <small>Nouveau!</small>
+                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                        <div class="toast-body">
+                            La rangée de contenue a bien été supprimée!
+                        </div>
+                    </div>
+                </div>
+            </section>
+            @if (!(@Model.Input.lstRangeeTutoriels.IsNullOrEmpty()))
+            {
+                @foreach (var rangee in @Model.Input.lstRangeeTutoriels)
+                {
+                    <form method="post" asp-page="CreationTuto">
+
+                        <input name="idRangeeVal" type="text" value="@rangee.Id" hidden />
+                        <input name="idtutoVal" type="text" value="@id" hidden />
+
+                        <div class="card">
+                            <div class="row">
+                                @if (rangee.PositionImg == "left")
+                                {
+                                    <div class="col-md-4">
+                                        <img src="~/images/imgplaceholder.jpg" class="img-fluid rounded-start" alt="...">
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="card-body row">
+                                            <p class="card-text col-9">@rangee.Texte</p>
+                                            <div class="col-3" style="display:inline-block;">
+                                                <button type="submit" class="btn btn-primary" asp-route-id="@id" asp-page-handler="EditRange"><img src="~/icons/editIcon.svg" /></button>
+                                                <button type="submit" class="btn btn-danger" @*asp-route-id="@id" asp-page-handler="DeleteRange"*@ data-supprimer data-bs-toggle="modal" data-bs-target="#modalValideDelete"><img src="~/icons/deleteIcon.svg" /></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="col-md-8">
+                                        <div class="card-body row">
+                                            <p class="card-text col-9">@rangee.Texte</p>
+                                            <div class="col-3" style="display:inline-block;">
+                                                <button type="submit" class="btn btn-primary" asp-route-id="@id" asp-page-handler="EditRange"><img src="~/icons/editIcon.svg" /></button>
+                                                <button type="submit" class="btn btn-danger" data-supprimer data-bs-toggle="modal" data-bs-target="#modalValideDelete"><img src="~/icons/deleteIcon.svg" /></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <img src="~/images/imgplaceholder.jpg" class="img-fluid rounded-start" alt="...">
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </form>
+                }
+            }
+
+            <br />
+
+            <form method="post" asp-page="CreationTuto">
+                <div class="row">
+                    <div class="col-md-9">
+                        <textarea class="form-control" aria-label="Texte de la rangee" rows="6" name="rangeeTexte"></textarea>
+                        <input type="file" class="form-control form-control-sm" id="inputImgBanierre">
+                    </div>
+                    <div class="col-md-3">
+                        <div class="row">
+                            <p style="margin-bottom:0;">Position de l'image</p>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="left" name="positionImage" id="imageLeft" checked />
+                                <label class="form-check-label" for="imageLeft" style="margin:0;">Gauche</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="right" name="positionImage" id="imageRight" />
+                                <label class="form-check-label" for="imageRight" style="margin:0;">Droite</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div>
+                                <button type="submit" class="btn btn-primary" asp-route-id="@id" asp-page-handler="AjoutRangee"><img src="~/icons/addIcon.svg" /></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <form method="post" asp-page="CreationTuto">
+                <button type="submit" class="btn btn-outline-primary" asp-route-id="@id" asp-page-handler="PublieTuto">Publié</button>
+            </form>
+        </div>
+        <div class="@(handler == "CreationCategorie" ? "tab-pane show active" : "tab-pane ")" id="nav-createCategorie" style="background-color:white;" role="tabpanel" aria-labelledby="nav-createCategorie-tab">
+            <h3>Création d'une noubelle catégorie</h3>
+            <form method="post" asp-page="CreationTuto">
+
+                <div class="input-group input-group-sm mb-3">
+                    <span class="input-group-text" id="inputNomCategorie">Nom</span>
+                    <input required type="text" class="form-control" aria-label="Nom catégorie" aria-describedby="Nom catégorie" asp-for="@Model.Input.nomCategorie">
+                </div>
+                <div class="input-group input-group-sm mb-3">
+                    <span class="input-group-text" id="inputDescriptionCategorie">Description</span>
+                    <input required type="text" class="form-control" aria-label="Description catégorie" aria-describedby="Description catégorie" asp-for="@Model.Input.descriptionCategorie">
+                </div>
+
+                <br />
+                <button type="submit" class="btn btn-outline-primary" asp-route-id="@id" asp-page-handler="CreationCategorie">Créé la catégorie</button>
+            </form>
+        </div>
+        <div class="tab-pane " id="nav-information" style="background-color:white;" role="tabpanel" aria-labelledby="nav-information-tab">
+            <h3>informations</h3>
+            <p>Est-ce que besoin d'un onglet informations???</p>
+        </div>
+    </div>
+
+</div>
+
+<!-- Modal -->
+<div class="modal" id="modalValideDelete" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalValideDeleteLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalValideDeleteLabel">Confirmation!</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Cette action n’est pas réversible, est-ce que vous voulez vraiment supprimer cette rangée?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Non</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="btnConfirmDelete">Oui</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="toastTutoCreeDiv" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11" hidden>
+    <div id="toastTutoCree" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-animation="true" data-bs-delay="5000">
+        <div class="toast-header">
+            <img style="max-width:1.5rem;max-height:1.5rem;" src="/icons/valide.svg" class="rounded me-2" alt="...">
+            <strong class="me-auto">Confirmation de création</strong>
+            <small>Nouveau!</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            Le tutoriel a bien été créé!
+        </div>
+    </div>
+</div>
+
+<div id="toastTutoModifieDiv" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11" hidden>
+    <div id="toastTutoModifie" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-animation="true" data-bs-delay="5000">
+        <div class="toast-header">
+            <img style="max-width:1.5rem;max-height:1.5rem;" src="/icons/valide.svg" class="rounded me-2" alt="...">
+            <strong class="me-auto">Confirmation de modification</strong>
+            <small>Nouveau!</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            Le tutoriel a bien été modifié!
+        </div>
+    </div>
+</div>
+
+<div id="toastCategorieCreeDiv" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11" hidden>
+    <div id="CategorieCree" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-animation="true" data-bs-delay="5000">
+        <div class="toast-header">
+            <img style="max-width:1.5rem;max-height:1.5rem;" src="/icons/valide.svg" class="rounded me-2" alt="...">
+            <strong class="me-auto">Confirmation de création</strong>
+            <small>Nouveau!</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            La catégorie a bien été créée!
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.js" integrity="sha512-n/4gHW3atM3QqRcbCn6ewmpxcLAHGaDjpEBu4xZd47N0W2oQ+6q7oc3PXstrJYXcbNU1OHdQ1T7pAP+gi5Yu8g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.6.0/umd/popper.min.js" integrity="sha512-BmM0/BQlqh02wuK5Gz9yrbe7VyIVwOzD1o40yi1IsTjriX/NGF37NyXHfmFzIlMmoSIBXgqDiG1VNU6kB5dBbA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="~/js/tutorielSupprimerRangee.js" asp-append-version="true"></script>
+<script src="~/js/tutorielToast.js" asp-append-version="true"></script>
+<script src="~/js/tutorielCreeToast.js" asp-append-version="true"></script>
+<script src="~/js/tutorielModificationToast.js" asp-append-version="true"></script>
+<script src="~/js/tutorielCategorieCreeToast.js" asp-append-version="true"></script>
+
