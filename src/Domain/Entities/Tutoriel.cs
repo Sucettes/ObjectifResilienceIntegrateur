@@ -50,11 +50,5 @@ namespace Gwenael.Domain.Entities
             }
             return false;
         }
-
-        //public List<RangeeTutoriel> AddRangee(Guid pId, GwenaelDbContext db)
-        //{
-        //    RangeeTutoriels.Append(db.RangeeTutoriels.Where(r => r.Id == pId).First());
-        //    return RangeeTutoriels.ToList();
-        //}
     }
 }

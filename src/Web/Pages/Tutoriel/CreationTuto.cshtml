@@ -20,7 +20,7 @@
     <div class="page-header">
         <row class="row">
             <div class="col">
-                <h1 style="display:inline-block;">Création Tutoriel</h1>
+                <h1 style="display:inline-block;">Création et modification tutoriel</h1>
                 <form method="post" asp-page="CreationTuto" style="float: right;">
                     <button type="submit" class="btn btn-outline-primary" asp-page-handler="RedirectHomeTuto">Retour</button>
                 </form>
@@ -41,10 +41,10 @@
     <div class="tab-content" id="nav-tabContent">
         <div class="@(handler == "CreeTutorielDetails" ? "tab-pane show active" : "tab-pane ")" style="background-color:white;" id="nav-detail" role="tabpanel" aria-labelledby="nav-detail-tab">
             <h3>Détails du tutoriel</h3>
-            <form method="post" asp-page="CreationTuto">
+            <form method="post" asp-page="CreationTuto" enctype="multipart/form-data">
                 <div class="row">
                     <div class="col-md-6">
-                        <img src="~/images/imgplaceholder.jpg" width="100%" height="100%" id="imgBanierre" />
+                        <img src="~/images/imgplaceholder.jpg" style="width:100%; height:100%;" id="imgBanierre" />
                     </div>
 
                     <div class="col-md-6">
@@ -75,7 +75,7 @@
                         </div>
 
                         <div class="input-group input-group-sm mb-3">
-                            <input type="file" class="form-control form-control-sm" id="inputImgBanierre">
+                            <input type="file" class="form-control form-control-sm" id="inputImgBanierre" asp-for="@Model.Input.imageBanierFile">
                         </div>
 
                         <div class="input-group input-group-sm mb-3">
@@ -86,7 +86,14 @@
                                 {
                                     @foreach (var cat in @Model.Input.lstCategories)
                                     {
-                                        <option id="@cat.Id" value="@cat.Nom" />
+                                        if (@cat.Nom == @Model.Input.cat)
+                                        {
+                                            <option id="@cat.Id" value="@cat.Nom" selected />
+                                        }
+                                        else
+                                        {
+                                            <option id="@cat.Id" value="@cat.Nom" />
+                                        }
                                     }
                                 }
                             </datalist>
@@ -100,13 +107,23 @@
                         <h2>Introduction</h2>
 
                         <div class="input-group">
-                            <textarea class="form-control" aria-label="Introduction du tuto" rows="6" name="intro"></textarea>
+                            @if (!String.IsNullOrEmpty(@Model.Input.intro))
+                            {
+                                <textarea class="form-control" rows="6" name="intro">@Model.Input.intro</textarea>
+                            }
+                            else
+                            {
+                                <textarea class="form-control" rows="6" name="intro"></textarea>
+
+                            }
                         </div>
                     </div>
                 </div>
 
                 <br />
                 <button type="submit" class="@(String.IsNullOrEmpty(Model.Input.id) ? "btn btn-outline-primary" : "btn disabled btn-primary")" asp-route-id="@id" asp-page-handler="CreeTutorielDetails">Créé tutoriel</button>
+                <button type="submit" class="@(String.IsNullOrEmpty(Model.Input.id) ? "btn disabled btn-primary" : "btn btn-outline-primary")" asp-route-id="@id" asp-page-handler="ModifieTutorielDetails">Modifié tutoriel</button>
+                <button type="submit" class="btn btn-outline-primary" asp-page-handler="NettoyerTutorielDetails">Nettoyé</button>
             </form>
         </div>
         <div class="@(handler == "AjoutRangee" || handler == "TutoChanger" ? "tab-pane show active" : handler == "EditRange" || handler == "DeleteRange" ? "tab-pane show active" : "tab-pane ")" id="nav-contenue" style="background-color:white;" role="tabpanel" aria-labelledby="nav-contenue-tab">
@@ -142,7 +159,7 @@
             <h4>rangee</h4>
             <section>
                 <div id="toastRangeeDeleteDiv" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11" hidden>
-                    <div id="toastRangeeDelete" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-animation="true" data-bs-delay="8000">
+                    <div id="toastRangeeDelete" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-animation="true" data-bs-delay="5000">
                         <div class="toast-header">
                             <img style="max-width:1.5rem;max-height:1.5rem;" src="/icons/valide.svg" class="rounded me-2" alt="...">
                             <strong class="me-auto">Confirmation suppression</strong>
@@ -188,7 +205,7 @@
                                             <p class="card-text col-9">@rangee.Texte</p>
                                             <div class="col-3" style="display:inline-block;">
                                                 <button type="submit" class="btn btn-primary" asp-route-id="@id" asp-page-handler="EditRange"><img src="~/icons/editIcon.svg" /></button>
-                                                <button type="submit" class="btn btn-danger" @*asp-route-id="@id" asp-page-handler="DeleteRange"*@ data-supprimer data-bs-toggle="modal" data-bs-target="#modalValideDelete"><img src="~/icons/deleteIcon.svg" /></button>
+                                                <button type="submit" class="btn btn-danger" data-supprimer data-bs-toggle="modal" data-bs-target="#modalValideDelete"><img src="~/icons/deleteIcon.svg" /></button>
                                             </div>
                                         </div>
                                     </div>
@@ -201,7 +218,6 @@
                     </form>
                 }
             }
-            </section>
 
             <br />
 
@@ -233,7 +249,7 @@
             </form>
 
             <form method="post" asp-page="CreationTuto">
-                <button type="submit" class="btn btn-primary" asp-route-id="@id" asp-page-handler="PublieTuto">Publié</button>
+                <button type="submit" class="btn btn-outline-primary" asp-route-id="@id" asp-page-handler="PublieTuto">Publié</button>
             </form>
         </div>
         <div class="@(handler == "CreationCategorie" ? "tab-pane show active" : "tab-pane ")" id="nav-createCategorie" style="background-color:white;" role="tabpanel" aria-labelledby="nav-createCategorie-tab">
@@ -255,15 +271,7 @@
         </div>
         <div class="tab-pane " id="nav-information" style="background-color:white;" role="tabpanel" aria-labelledby="nav-information-tab">
             <h3>informations</h3>
-            <p>
-                Mettre ici de l'information sur le fonctionnement pour aider l'utilisateur./p>
-                <ul>
-                    <li>Faire en sorte d'ajouté une rangé a la formation</li>
-                    <li>Afficher les autres rangéé et donner la possibilité de les supprimer ou les modifiers voir les déplacers</li>
-                    <li>Faire en sorte d'upload les images</li>
-                    <li>Faire des validations sur les champs</li>
-                    <li>Faire en sorte de devoir ce connecter</li>
-                </ul>
+            <p>Est-ce que besoin d'un onglet informations???</p>
         </div>
     </div>
 
@@ -288,8 +296,53 @@
     </div>
 </div>
 
+<div id="toastTutoCreeDiv" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11" hidden>
+    <div id="toastTutoCree" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-animation="true" data-bs-delay="5000">
+        <div class="toast-header">
+            <img style="max-width:1.5rem;max-height:1.5rem;" src="/icons/valide.svg" class="rounded me-2" alt="...">
+            <strong class="me-auto">Confirmation de création</strong>
+            <small>Nouveau!</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            Le tutoriel a bien été créé!
+        </div>
+    </div>
+</div>
+
+<div id="toastTutoModifieDiv" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11" hidden>
+    <div id="toastTutoModifie" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-animation="true" data-bs-delay="5000">
+        <div class="toast-header">
+            <img style="max-width:1.5rem;max-height:1.5rem;" src="/icons/valide.svg" class="rounded me-2" alt="...">
+            <strong class="me-auto">Confirmation de modification</strong>
+            <small>Nouveau!</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            Le tutoriel a bien été modifié!
+        </div>
+    </div>
+</div>
+
+<div id="toastCategorieCreeDiv" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11" hidden>
+    <div id="CategorieCree" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-animation="true" data-bs-delay="5000">
+        <div class="toast-header">
+            <img style="max-width:1.5rem;max-height:1.5rem;" src="/icons/valide.svg" class="rounded me-2" alt="...">
+            <strong class="me-auto">Confirmation de création</strong>
+            <small>Nouveau!</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            La catégorie a bien été créée!
+        </div>
+    </div>
+</div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.js" integrity="sha512-n/4gHW3atM3QqRcbCn6ewmpxcLAHGaDjpEBu4xZd47N0W2oQ+6q7oc3PXstrJYXcbNU1OHdQ1T7pAP+gi5Yu8g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.6.0/umd/popper.min.js" integrity="sha512-BmM0/BQlqh02wuK5Gz9yrbe7VyIVwOzD1o40yi1IsTjriX/NGF37NyXHfmFzIlMmoSIBXgqDiG1VNU6kB5dBbA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>@*<script src="~/js/tutoAddRow.js" asp-append-version="true"></script>*@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.6.0/umd/popper.min.js" integrity="sha512-BmM0/BQlqh02wuK5Gz9yrbe7VyIVwOzD1o40yi1IsTjriX/NGF37NyXHfmFzIlMmoSIBXgqDiG1VNU6kB5dBbA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="~/js/tutorielSupprimerRangee.js" asp-append-version="true"></script>
 <script src="~/js/tutorielToast.js" asp-append-version="true"></script>
+<script src="~/js/tutorielCreeToast.js" asp-append-version="true"></script>
+<script src="~/js/tutorielModificationToast.js" asp-append-version="true"></script>
+<script src="~/js/tutorielCategorieCreeToast.js" asp-append-version="true"></script>
 

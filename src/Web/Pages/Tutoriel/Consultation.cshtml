@@ -127,5 +127,18 @@
     </div>
 </div>
 
+<div id="toastTutoPublishDiv" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11" hidden>
+    <div id="toastTutoPublish" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-animation="true" data-bs-delay="5000">
+        <div class="toast-header">
+            <img style="max-width:1.5rem;max-height:1.5rem;" src="/icons/valide.svg" class="rounded me-2" alt="...">
+            <strong class="me-auto">Confirmation publication</strong>
+            <small>Nouveau!</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">Le tutoriel a bien été publié!</div>
+    </div>
+</div>
+
 <script src="~/js/tutorielSupprimer.js" asp-append-version="true"></script>
 <script src="~/js/tutorielUnpublish.js" asp-append-version="true"></script>
+<script src="~/js/tutorielToastPublish.js" asp-append-version="true"></script>

@@ -22,7 +22,6 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using NuGet.Packaging;
 using NuGet.Protocol;
-using OfficeOpenXml;
 using Spk.Common.Helpers.String;
 
 
@@ -42,7 +41,7 @@ namespace Gwenael.Web.Pages
         }
         public TutorielIndexModel(GwenaelDbContext pDb) => _db = pDb;
 
-        public async Task<IActionResult> OnGetAsync()
+        public IActionResult OnGet()
         {
             Input = new InputModel();
             Input.lstTutoriels = _db.Tutoriels.ToList<Domain.Entities.Tutoriel>();
@@ -50,7 +49,7 @@ namespace Gwenael.Web.Pages
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync() => Page();
+        public IActionResult OnPost() => Page();
 
         public IActionResult OnPostRedirectCreationTuto()
         {

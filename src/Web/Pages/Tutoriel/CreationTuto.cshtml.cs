@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Text;
 using System.Reflection;
 using System.Threading.Tasks;
-using OfficeOpenXml;
 using System.Linq;
 using CsvHelper;
 using CsvHelper.Configuration;
@@ -22,7 +21,6 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using NuGet.Packaging;
 using NuGet.Protocol;
-using OfficeOpenXml;
 using Spk.Common.Helpers.String;
 using Microsoft.AspNetCore.Components;
 
@@ -59,6 +57,9 @@ namespace Gwenael.Web.Pages
             //[BindProperty(SupportsGet = true)]
             [DataType(DataType.Text)]
             public string cat { get; set; }
+            [Required]
+            [DataType(DataType.Text)]
+            public string intro { get; set; }
 
             [Required]
             [DataType(DataType.Text)]
@@ -70,9 +71,10 @@ namespace Gwenael.Web.Pages
 
             public List<RangeeTutoriel> lstRangeeTutoriels { get; set; }
             public List<Domain.Entities.Tutoriel> lstTutoriels { get; set; }
+            public IFormFile imageBanierFile { get; set; }
         }
 
-        public async Task<IActionResult> OnGetAsync()
+        public IActionResult OnGet()
         {
             Input = new InputModel();
 
@@ -90,21 +92,20 @@ namespace Gwenael.Web.Pages
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public IActionResult OnPostAsync()
         {
             UpdateInputData();
             return Page();
         }
 
-        public IActionResult OnPostRedirectHomeTuto()
-        {
-            return RedirectToPage("Index");
-        }
+        public IActionResult OnPostRedirectHomeTuto() => RedirectToPage("Index");
 
-        public IActionResult OnPostCreeTutorielDetails(string intro, string id, string handler)
+        //[HttpPost("FileUpload")]
+        public async Task<IActionResult> OnPostCreeTutorielDetails(string intro, string id, string handler)
         {
             try
             {
+                string creationTutoStatus = "false";
                 Input.id = id;
                 Input.handler = handler;
                 if (!(_db.Categories.Where(c => c.Nom == Input.cat).Count() == 0))
@@ -124,14 +125,15 @@ namespace Gwenael.Web.Pages
                         if (tuto.EstValide())
                         {
                             _db.Tutoriels.Add(tuto);
-                            _db.SaveChanges();
+                            await _db.SaveChangesAsync();
 
                             Input.id = _db.Tutoriels.Where(t => t.Titre == tuto.Titre).First().Id.ToString();
+                            creationTutoStatus = "true";
                         }
                     }
                 }
                 UpdateInputData();
-                return Page();
+                return Redirect("/tutoriel/CreationTuto?handler=CreeTutorielDetails&id=" + Input.id + "&creationTutoStatus=" + creationTutoStatus);
             }
             catch (Exception)
             {
@@ -140,10 +142,55 @@ namespace Gwenael.Web.Pages
             }
         }
 
-        public IActionResult OnPostCreationCategorie(string id, string handler)
+        public async Task<IActionResult> OnPostModifieTutorielDetails(string intro, string id)
         {
             try
             {
+                string modificationTutoStatus = "false";
+                Input.id = id;
+                Input.handler = "CreeTutorielDetails";
+                if (!(_db.Categories.Where(c => c.Nom == Input.cat).Count() == 0))
+                {
+                    Categorie cat = _db.Categories.Where(c => c.Nom == Input.cat).First();
+                    Domain.Entities.Tutoriel tuto = _db.Tutoriels.Where(t => t.Id == Guid.Parse(id)).First();
+                    if (cat != null && tuto != null)
+                    {
+                        tuto.Titre = Input.titre;
+                        tuto.Duree = Input.duree;
+                        tuto.Cout = Input.cout;
+                        tuto.Difficulte = Input.difficulte;
+                        tuto.Categorie = cat;
+                        tuto.Introduction = intro;
+
+
+                        if (tuto.EstValide())
+                        {
+                            Input.id = tuto.Id.ToString();
+
+                            _db.Tutoriels.Update(tuto);
+                            await _db.SaveChangesAsync();
+
+                            modificationTutoStatus = "true";
+                        }
+                    }
+                }
+                UpdateInputData();
+                return Redirect("/tutoriel/CreationTuto?handler=CreeTutorielDetails&id=" + Input.id + "&modificationTutoStatus=" + modificationTutoStatus);
+            }
+            catch (Exception)
+            {
+                UpdateInputData();
+                return Page();
+            }
+        }
+
+        public IActionResult OnPostNettoyerTutorielDetails() => Redirect("/tutoriel/CreationTuto");
+
+        public async Task<IActionResult> OnPostCreationCategorie(string id, string handler)
+        {
+            try
+            {
+                string creationCategorieStatus = "false";
                 if (_db.Categories.Where(c => c.Nom == Input.nomCategorie).Count() == 0)
                 {
                     Categorie cat = new Categorie();
@@ -153,16 +200,18 @@ namespace Gwenael.Web.Pages
                     if (cat.EstValide())
                     {
                         _db.Categories.Add(cat);
-                        _db.SaveChanges();
+                        await _db.SaveChangesAsync();
 
                         Input.descriptionCategorie = "";
                         Input.nomCategorie = "";
+                        creationCategorieStatus = "true";
                     }
                 }
                 Input.id = id;
                 Input.handler = handler;
                 UpdateInputData();
-                return Page();
+                return Redirect("/Tutoriel/CreationTuto?handler=CreationCategorie&id=" + Input.id + "&creationCategorieStatus=" + creationCategorieStatus);
+
             }
             catch (Exception)
             {
@@ -171,7 +220,7 @@ namespace Gwenael.Web.Pages
             }
         }
 
-        public IActionResult OnPostAjoutRangee(string rangeeTexte, string positionImage, string id, string handler)
+        public async Task<IActionResult> OnPostAjoutRangee(string rangeeTexte, string positionImage, string id, string handler)
         {
             try
             {
@@ -188,7 +237,7 @@ namespace Gwenael.Web.Pages
                     // Mettre l'url de l'image
 
                     _db.RangeeTutoriels.Add(rangee);
-                    _db.SaveChanges();
+                    await _db.SaveChangesAsync();
                     Guid rId = _db.RangeeTutoriels.Where(r => r == rangee).First().Id;
 
                     Input.lstRangeeTutoriels = _db.RangeeTutoriels.Where(r => r.TutorielId == Guid.Parse(id)).ToList<RangeeTutoriel>();
@@ -199,7 +248,6 @@ namespace Gwenael.Web.Pages
             }
             catch (Exception)
             {
-
                 UpdateInputData();
                 return Page();
             }
@@ -221,7 +269,6 @@ namespace Gwenael.Web.Pages
                 return Page();
             }
         }
-
 
         public IActionResult OnPostTutoChanger(string tutoId, string handler)
         {
@@ -262,7 +309,7 @@ namespace Gwenael.Web.Pages
             public string idRangeeVal { get; set; }
         }
 
-        public IActionResult OnPostDeleteRange(string id, string handler, [FromBody] Rangee rangee)
+        public async Task<IActionResult> OnPostDeleteRange(string id, string handler, [FromBody] Rangee rangee)
         {
             try
             {
@@ -277,7 +324,7 @@ namespace Gwenael.Web.Pages
                     {
 
                         _db.RangeeTutoriels.Remove(rt);
-                        _db.SaveChanges();
+                        await _db.SaveChangesAsync();
                     }
                 }
 
@@ -291,7 +338,7 @@ namespace Gwenael.Web.Pages
             }
         }
 
-        public IActionResult OnPostPublieTuto(string id, string handler)
+        public async Task<IActionResult> OnPostPublieTuto(string id, string handler)
         {
             try
             {
@@ -303,11 +350,11 @@ namespace Gwenael.Web.Pages
                 {
                     t.EstPublier = true;
                     _db.Tutoriels.Update(t);
-                    _db.SaveChanges();
+                    await _db.SaveChangesAsync();
                 }
 
                 UpdateInputData();
-                return Page();
+                return Redirect("/Tutoriel/Consultation?id=" + id + "&estPublie=true");
             }
             catch (Exception)
             {
@@ -324,6 +371,20 @@ namespace Gwenael.Web.Pages
                 Input.lstRangeeTutoriels = _db.RangeeTutoriels.Where(r => r.TutorielId == Guid.Parse(Input.id)).ToList<RangeeTutoriel>();
             }
             Input.lstTutoriels = _db.Tutoriels.Where(t => t.EstPublier == false).ToList<Domain.Entities.Tutoriel>();
+
+            if (!String.IsNullOrEmpty(Input.id))
+            {
+                Domain.Entities.Tutoriel tuto = _db.Tutoriels.Where(t => t.Id == Guid.Parse(Input.id)).First();
+                if (tuto != null)
+                {
+                    Input.titre = tuto.Titre;
+                    Input.duree = tuto.Duree;
+                    Input.cout = tuto.Cout;
+                    Input.difficulte = tuto.Difficulte;
+                    Input.intro = tuto.Introduction;
+                    Input.cat = tuto.Categorie.Nom;
+                }
+            }
         }
     }
 }

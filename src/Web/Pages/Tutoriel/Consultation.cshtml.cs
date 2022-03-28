@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Text;
 using System.Reflection;
 using System.Threading.Tasks;
-using OfficeOpenXml;
 using System.Linq;
 using CsvHelper;
 using CsvHelper.Configuration;
@@ -22,7 +21,6 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using NuGet.Packaging;
 using NuGet.Protocol;
-using OfficeOpenXml;
 using Spk.Common.Helpers.String;
 
 
@@ -44,7 +42,7 @@ namespace Gwenael.Web.Pages
         }
         public ConsultationModel(GwenaelDbContext pDb) => _db = pDb;
 
-        public async Task<IActionResult> OnGetAsync()
+        public IActionResult OnGet()
         {
             bool estValide = false;
             Input = new InputModel();
@@ -59,7 +57,7 @@ namespace Gwenael.Web.Pages
             else return Redirect("/tutoriel");
         }
 
-        public async Task<IActionResult> OnPostAsync() => Page();
+        public IActionResult OnPost() => Page();
 
         public IActionResult OnPostRedirectHomeTuto() => RedirectToPage("Index");
 
