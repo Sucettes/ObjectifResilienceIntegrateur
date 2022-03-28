@@ -7,7 +7,7 @@
     ViewData["Title"] = "Home tutoriel";
 }
 
-<div class="container-fluid">
+<div class="container">
     <row class="row">
         <div class="col-md-6">
             <h1>Home tutoriel</h1>
@@ -28,7 +28,7 @@
                 @if (tuto.EstPublier == true)
                 {
                     <a href="Tutoriel/Consultation?id=@tuto.Id" style="width: 18rem;" class=" card list-group-item list-group-item-action">
-                        <img src="~/images/imgplaceholder.jpg" class="card-img-top" alt="...">
+                        <img src="~/images/imgplaceholder.png" class="card-img-top" alt="...">
                         <div class="card-body">
                             <h5 class="card-title">@tuto.Titre</h5>
                             <ul>
