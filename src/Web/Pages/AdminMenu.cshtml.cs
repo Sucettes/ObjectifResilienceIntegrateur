@@ -49,6 +49,13 @@ namespace Gwenael.Web.Pages
                             List<Role> lstRolesUser = Permission.ObtenirLstRolesUser(selectedUserId,_context);
                             ViewData["userRoles"] = lstRolesUser;
                             ViewData["selectRoles"] = ObtenirLstRolesSelect(lstRolesUser);
+                            var role = new Role("Administrateur", new[] { "Administrateur" });
+                            var role3 = new Role("Gestionnaire de contenu", new[] { "Gestionnaire de contenu" });
+                            var role4 = new Role("Utilisateur", new[] { "Utilisateur" });
+                            _context.Roles.Add(role);
+                            _context.Roles.Add(role3);
+                            _context.Roles.Add(role4);
+                            _context.SaveChanges();
                         }
                     }
                     string erreur = Request.Query["error"];
@@ -113,21 +120,7 @@ namespace Gwenael.Web.Pages
 
 
             }
-            //var role = new Role("Administrateur", new[] { "Administrateur" });
-            //var role2 = new Role("Modérateur", new[] { "Modérateur" });
-            //var role3 = new Role("Gestionnaire de contenu", new[] { "Gestionnaire de contenu" });
-            //var role4 = new Role("Utilisateur", new[] { "Utilisateur" });
-
-
-            //_context.Roles.Add(role);
-            //_context.Roles.Add(role2);
-            //_context.Roles.Add(role3);
-            //_context.Roles.Add(role4);
-
-            //Console.WriteLine(User.Identity.Name);
-            //_context.UserRoles.Add(new UserRole(_userManager.FindByEmailAsync(_userManager.GetUserName(User)).Result.Id,
-            //    _context.Roles.Where(r => r.Name == "Administrateur").First().Id));
-
+           
             return Page();
         }
         public Guid ObtenirIdDuUserSelonEmail(string email)
