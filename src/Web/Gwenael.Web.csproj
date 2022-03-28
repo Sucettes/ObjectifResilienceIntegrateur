@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
@@ -23,6 +23,17 @@
     <ItemGroup>
       <Content Remove="appsettings.local.Development.json" />
       <Content Remove="appsettings.local.json" />
+      <Content Remove="wwwroot\images\avengers-lere-dultron-banniere23.jpg" />
+      <Content Remove="wwwroot\js\tutorielCategorieCreeToast.js" />
+      <Content Remove="wwwroot\js\tutorielCreeToast.js" />
+      <Content Remove="wwwroot\js\tutorielModificationToast.js" />
+      <Content Remove="wwwroot\js\tutorielSupprimer.js" />
+      <Content Remove="wwwroot\js\tutorielSupprimerRangee.js" />
+      <Content Remove="wwwroot\js\tutorielToast.js" />
+      <Content Remove="wwwroot\js\tutorielToastPublish.js" />
+      <Content Remove="wwwroot\js\tutorielToastSupprimer.js" />
+      <Content Remove="wwwroot\js\tutorielToastUnPublish.js" />
+      <Content Remove="wwwroot\js\tutorielUnpublish.js" />
     </ItemGroup>
 
     <ItemGroup>
@@ -45,7 +56,7 @@
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="5.0.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.1" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.1" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.1" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.2" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.1" />
         <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
         <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="2.2.0" />
@@ -67,6 +78,25 @@
 
     <ItemGroup>
       <Folder Include="Scripts\modules\" />
+      <Folder Include="wwwroot\fichiers\uploadsExcel\" />
+      <Folder Include="wwwroot\fichiers\uploadsExcel\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="wwwroot\images\avengers-lere-dultron-banniere23.jpg" />
+      <None Include="wwwroot\images\slide1.jpg" />
+      <None Include="wwwroot\images\slide2.jpg" />
+      <None Include="wwwroot\images\slide3.png" />
+      <None Include="wwwroot\js\tutorielCategorieCreeToast.js" />
+      <None Include="wwwroot\js\tutorielCreeToast.js" />
+      <None Include="wwwroot\js\tutorielModificationToast.js" />
+      <None Include="wwwroot\js\tutorielSupprimer.js" />
+      <None Include="wwwroot\js\tutorielSupprimerRangee.js" />
+      <None Include="wwwroot\js\tutorielToast.js" />
+      <None Include="wwwroot\js\tutorielToastPublish.js" />
+      <None Include="wwwroot\js\tutorielToastSupprimer.js" />
+      <None Include="wwwroot\js\tutorielToastUnPublish.js" />
+      <None Include="wwwroot\js\tutorielUnpublish.js" />
       <Folder Include="wwwroot\js\" />
     </ItemGroup>
 
