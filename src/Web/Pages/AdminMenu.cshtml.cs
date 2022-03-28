@@ -30,18 +30,8 @@ namespace Gwenael.Web.Pages
         public async Task<IActionResult> OnGetAsync()
         {
             Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-            if (idConnectedUser != Guid.Empty)
+            if (Permission.EstAdministrateur(idConnectedUser, _context))
             {
-                var role = new Role("Administrateur", new[] { "Administrateur" });
-                var role3 = new Role("Gestionnaire de contenu", new[] { "Gestionnaire de contenu" });
-                var role4 = new Role("Utilisateur", new[] { "Utilisateur" });
-                _context.Roles.Add(role);
-                _context.Roles.Add(role3);
-                _context.Roles.Add(role4);
-                _context.SaveChanges();
-            }
-            //if (Permission.EstAdministrateur(idConnectedUser, _context))
-            //{
                 if (Request.Query.Count == 1)
                 {
                     Tab = Request.Query["tab"];
@@ -72,8 +62,8 @@ namespace Gwenael.Web.Pages
                 UsersNonActivated = _context.Users.Where(u => u.Active == false).ToList();
                 ViewData["lstNonActiver"] = UsersNonActivated;
                 return Page();
-            //}
-            //return Redirect("/");
+            }
+            return Redirect("/");
         }
     
         public async Task<IActionResult> OnPostAsync(string btnDeleteRole, string name, string selectRole, string btnAccepter)
