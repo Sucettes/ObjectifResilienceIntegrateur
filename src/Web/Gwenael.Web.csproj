@@ -71,6 +71,12 @@
     </ItemGroup>
 
     <ItemGroup>
+      <None Include="Pages\Tutoriel\Consultation.cshtml" />
+      <None Include="Pages\Tutoriel\CreationTuto.cshtml" />
+      <None Include="Pages\Tutoriel\Index.cshtml" />
+    </ItemGroup>
+
+    <ItemGroup>
       <Compile Update="Pages\CreationArticle - Copier.cshtml.cs">
         <DependentUpon>CreationArticle.cshtml.cs</DependentUpon>
       </Compile>
