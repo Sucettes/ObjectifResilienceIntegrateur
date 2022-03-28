@@ -30,6 +30,16 @@ namespace Gwenael.Web.Pages
         public async Task<IActionResult> OnGetAsync()
         {
             Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
+            if (idConnectedUser != Guid.Empty)
+            {
+                var role = new Role("Administrateur", new[] { "Administrateur" });
+                var role3 = new Role("Gestionnaire de contenu", new[] { "Gestionnaire de contenu" });
+                var role4 = new Role("Utilisateur", new[] { "Utilisateur" });
+                _context.Roles.Add(role);
+                _context.Roles.Add(role3);
+                _context.Roles.Add(role4);
+                _context.SaveChanges();
+            }
             //if (Permission.EstAdministrateur(idConnectedUser, _context))
             //{
                 if (Request.Query.Count == 1)
@@ -50,13 +60,6 @@ namespace Gwenael.Web.Pages
                             ViewData["userRoles"] = lstRolesUser;
                             ViewData["selectRoles"] = ObtenirLstRolesSelect(lstRolesUser);
                         }
-                        var role = new Role("Administrateur", new[] { "Administrateur" });
-                        var role3 = new Role("Gestionnaire de contenu", new[] { "Gestionnaire de contenu" });
-                        var role4 = new Role("Utilisateur", new[] { "Utilisateur" });
-                        _context.Roles.Add(role);
-                        _context.Roles.Add(role3);
-                        _context.Roles.Add(role4);
-                        _context.SaveChanges();
                 }
                     string erreur = Request.Query["error"];
                     if (erreur != null)
