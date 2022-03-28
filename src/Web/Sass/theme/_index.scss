@@ -1,0 +1,50 @@
+.main-container{
+    background-color:green;
+    display:flex;
+    flex-direction:column
+}
+.first-alf-container {
+    background-color:white;
+}
+
+.pageBox {
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+    background-color: rgba(255, 164, 89,0.6);
+}
+
+
+.second-alf-container {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.major-theme {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 2rem;
+    flex-wrap: wrap;
+    background-color: white;
+}
+.theme-box {
+    display: flex;
+}
+.containerArticleIndex {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.div-article1 {
+    background-color: rgba(255, 164, 89,0.6);
+}
+.div-article {
+    background-color: rgba(255, 164, 89,0.6);
+}
+
+a:link {
+    text-decoration: none;
+}
