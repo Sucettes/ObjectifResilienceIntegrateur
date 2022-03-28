@@ -22,7 +22,7 @@ namespace Gwenael.Domain.Entities
         public User()
         {
             CreationDate = DateTime.UtcNow;
-            Active = true;
+            Active = false;
         }
 
         public void Updated()
