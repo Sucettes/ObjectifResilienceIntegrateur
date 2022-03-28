@@ -6,12 +6,12 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
 using Gwenael.Domain;
-using Microsoft.AspNetCore.Razor.TagHelpers;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Identity;
 using System.Linq.Dynamic.Core;
 using System.Linq;
 using Gwenael.Web.FctUtils;
+using Gwenael.Application.Mailing;
+
 namespace Gwenael.Web.Pages
 {
     public class AdminMenuModel : PageModel
@@ -25,13 +25,13 @@ namespace Gwenael.Web.Pages
         }
         public IList<User> Users { get; set; }
         [BindProperty]
-        public IList<Formation> Formations { get; set; }
+        public IList<User> UsersNonActivated { get; set; }
         public String Tab { get; set; }
         public async Task<IActionResult> OnGetAsync()
         {
             Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-            if (Permission.EstAdministrateur(idConnectedUser, _context))
-            {
+            //if (Permission.EstAdministrateur(idConnectedUser, _context))
+            //{
                 if (Request.Query.Count == 1)
                 {
                     Tab = Request.Query["tab"];
@@ -59,13 +59,14 @@ namespace Gwenael.Web.Pages
                 }
                 Users = await _context.Users.ToListAsync();
                 ViewData["lstUsers"] = Users;
-                Formations = await _context.Formations.ToListAsync();
-                ViewData["lstFormations"] = Formations;
+                UsersNonActivated = _context.Users.Where(u => u.Active == false).ToList();
+                ViewData["lstNonActiver"] = UsersNonActivated;
                 return Page();
-            }
-            return Redirect("/");
+            //}
+            //return Redirect("/");
         }
-        public async Task<IActionResult> OnPostAsync(string btnDeleteRole, string name, string selectRole)
+    
+        public async Task<IActionResult> OnPostAsync(string btnDeleteRole, string name, string selectRole, string btnAccepter)
         {
             if(btnDeleteRole is not null)
             {
@@ -101,6 +102,17 @@ namespace Gwenael.Web.Pages
                 await _context.SaveChangesAsync();
                 return Redirect("/AdminMenu/?tab=roles&guid=" + selectedUserId);
             }
+            else if (btnAccepter is not null)
+            {
+                //// Modification Active à true
+                User userBd = (User)_context.Users.Where(u => u.Id == Guid.Parse(name)).First();
+                userBd.Active = true;
+                await _context.SaveChangesAsync();
+
+                return Page();
+
+
+            }
             //var role = new Role("Administrateur", new[] { "Administrateur" });
             //var role2 = new Role("Modérateur", new[] { "Modérateur" });
             //var role3 = new Role("Gestionnaire de contenu", new[] { "Gestionnaire de contenu" });
@@ -118,19 +130,6 @@ namespace Gwenael.Web.Pages
 
             return Page();
         }
-        //public bool estAdministrateur(Guid userId)
-        //{
-        //    List<Role> lstRole = ObtenirLstRolesUser(userId);
-        //    bool contientAdmin = false;
-        //    foreach (var role in lstRole)
-        //    {
-        //        if (role.Name == "Administrateur")
-        //        {
-        //            contientAdmin = true;
-        //        }
-        //    }
-        //    return contientAdmin;
-        //}
         public Guid ObtenirIdDuUserSelonEmail(string email)
         {
             User user = (User)_context.Users.Where(u => u.UserName == email).First();
