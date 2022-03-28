@@ -9,7 +9,7 @@
     var rangee = Model.Input.lstRangeeTuto;
 }
 
-<div class="container-fluid">
+<div class="container">
     <row class="row">
         <div class="col-md-6">
             <h1>consultation tutoriel</h1>
@@ -22,6 +22,7 @@
     </row>
     <br />
 
+
     @if (@Model.Input.tutoriel != null)
     {
         @if (@tuto.EstPublier == true)
@@ -30,7 +31,7 @@
                 <div class="col-md-12">
                     <div class="row">
                         <div class="col-md-6">
-                            <img src="~/images/imgplaceholder.jpg" class="card-img-top" alt="...">
+                            <img src="~/images/imgplaceholder.png" class="card-img-top" alt="...">
                         </div>
                         <div class="col-md-6">
                             <h2>@tuto.Titre</h2>
@@ -71,16 +72,18 @@
                     {
                         @foreach (var row in rangee)
                         {
+                            <br />
+
                             <div class="row">
                                 @if (row.PositionImg == "left")
                                 {
-                                    <div class="col-md-4"><img src="~/images/imgplaceholder.jpg" class="img-fluid rounded-start" alt="..."></div>
+                                    <div class="col-md-4"><img src="~/images/imgplaceholder.png" class="img-fluid rounded-start" alt="..."></div>
                                     <div class="col-md-8">@row.Texte</div>
                                 }
                                 else
                                 {
                                     <div class="col-md-8">@row.Texte</div>
-                                    <div class="col-md-4"><img src="~/images/imgplaceholder.jpg" class="img-fluid rounded-start" alt="..."></div>
+                                    <div class="col-md-4"><img src="~/images/imgplaceholder.png" class="img-fluid rounded-start" alt="..."></div>
                                 }
                             </div>
                         }
@@ -138,6 +141,7 @@
         <div class="toast-body">Le tutoriel a bien été publié!</div>
     </div>
 </div>
+<p>@*efesfs*@</p>
 
 <script src="~/js/tutorielSupprimer.js" asp-append-version="true"></script>
 <script src="~/js/tutorielUnpublish.js" asp-append-version="true"></script>

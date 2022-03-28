@@ -10,90 +10,91 @@
     <environment exclude="Development">
         <link rel="stylesheet" href="~/lib/css/bootstrap.min.css" />
     </environment>
+
     <link rel="stylesheet" href="~/css/site.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css"
           integrity="sha384-ejwKkLla8gPP8t2u0eQyL0Q/4ItcnyveF505U0NIobD/SMsNyXrLti6CWaD0L52l" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.js" integrity="sha512-n/4gHW3atM3QqRcbCn6ewmpxcLAHGaDjpEBu4xZd47N0W2oQ+6q7oc3PXstrJYXcbNU1OHdQ1T7pAP+gi5Yu8g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
     <environment exclude="Production">
         <meta name="robots" content="noindex">
     </environment>
 </head>
+
 <body>
 
     <div class="globalContainer page">
-        <!-- En-tête de la page, avec la bannière -->
 
-        <header class="affichageEtendu">
-            <!-- div pour le flexbox row (en ligne) -->
-            <!-- <h1>Équipe AAAG</h1> -->
-        </header>
+        <nav class="navbar-expand-lg ">
 
 
+            <div class="div-nav-firstrow">
+                <a asp-page="/Index" class="navbar-brand borderCancell"><img src="../images/CJC-ObjectifResilience-Mangue.png" alt="image du site" title="image du site" /></a>
 
-        <nav class="navbar navbar-expand-lg navbar-dark affichageEtendu z-index 1" id="containerNav">
-            <div class="containerNavLv2">
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-main" aria-controls="navbar-main" aria-expanded="false" aria-label="Toggle navigation" style="">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div><a asp-page="/Index" class="navbar-brand borderCancell"><img src="../images/CJC-ObjectifResilience-Mangue.png" alt="image du site" title="image du site" /></a></div>
-                <div class="collapse navbar-collapse containerNavLv3" id="navbar-main">
-
-                    <ul>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Menu 1</a>
-                        </li>
-                        <li class="nav-item main-nav-item">
-                            <a class="nav-link" href="#">Menu 2</a>
-                        </li>
-                        <li class="nav-item main-nav-item">
-                            <a class="nav-link" href="#">Menu 3</a>
-                        </li>
-                        <li class="nav-item main-nav-item">
-                            <a class="nav-link" href="#">Menu 4</a>
-                        </li>
-                        <li class="nav-item main-nav-item">
-                            <a class="nav-link" href="#">Menu 5</a>
-                        </li>
-
-                    </ul>
-
-                </div>
-                <div> @await Html.PartialAsync("_LoginPartial") </div>
             </div>
-        </nav>
 
+            <div class="div-nav-secondrow">
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Link</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Dropdown
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="#">Action</a></li>
+                                <li><a class="dropdown-item" href="#">Another action</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div>
+                        @await Html.PartialAsync("_LoginPartial")
+                    </div>
+                </div>
+            </div>
+
+        </nav>
 
         <div class="body-content main affichageEtendu containerMain z-index -2">
             @RenderBody()
             <footer>
-                <hr />
-                <p>&copy; @DateTime.Now.Year - Gwenael</p>
+                <div class="footer">
+                    <div class="footer-part1">
+                        <p>Mauris eleifend scelerisque neque, in blandit nibh vehicula at. Phasellus dolor lorem, tincidunt at ante tempus, placerat convallis sapien. Aliquam in blandit arcu, ultricies bibendum mauris. Vestibulum sed libero nibh. Aenean sit amet ex quis nulla facilisis tincidunt. Nam in felis ante. Nunc cursus odio at congue pretium. Vestibulum quis nisi lacus. Aenean placerat, augue eu dictum mollis, odio leo cursus ligula, scelerisque tempus velit urna at arcu. Ut viverra id tellus ac faucibus. </p>
+                    </div>
+
+                    <div class="footer-part2">
+                        <p>&copy; @DateTime.Now.Year - Gwenael</p>
+                    </div>
+                </div>
+
+                
             </footer>
         </div>
 
 
     </div>
-    @* Useless? delete this? *@
-    @*    <environment include="Development">
-            <script src="~/js/jquery.slim.js"></script>
-            <script src="~/js/bootstrap.js"></script>
-            <script src="~/js/fontawesome-all.js"></script>
-        </environment>*@
+
 
     <environment exclude="Development">
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.slim.min.js"
-                asp-fallback-src="~/js/jquery.slim.min.js"
-                asp-fallback-test="window.jQuery"
-                integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g="
-                crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js"
-                asp-fallback-src="~/js/bootstrap.min.js"
-                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
-                integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4"
-                crossorigin="anonymous"></script>
+
 
         <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js"
                 asp-fallback-src="~/js/fontawesome-all.min.js"
@@ -101,28 +102,16 @@
                 integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl"
                 crossorigin="anonymous"></script>
 
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-                integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-                crossorigin="anonymous"></script>
-
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-                integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-                crossorigin="anonymous"></script>
     </environment>
     <script src="~/js/site.js" asp-append-version="true"></script>
 
     @RenderSection("Scripts", required: false)
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 
-    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-            integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-            crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
             crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-            crossorigin="anonymous"></script>
+
 
 </body>
 </html>

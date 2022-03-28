@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System;
 using Gwenael.Domain;
 
+
 namespace Gwenael.Web.Pages
 {
     public class IndexModel : PageModel
@@ -23,6 +24,7 @@ namespace Gwenael.Web.Pages
         public async Task<IActionResult> OnGetAsync()
         {
             Articles = await _context.Articles.ToListAsync();
+
             ViewData["lstArticles"] = Articles;
             return Page();
         }

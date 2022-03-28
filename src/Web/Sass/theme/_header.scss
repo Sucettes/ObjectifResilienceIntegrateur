@@ -1,0 +1,32 @@
+.navbar-expand-lg {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    flex-direction: column;
+}
+
+.div-nav-firstrow {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: flex-start;
+    background-color: white;
+}
+.div-nav-secondrow {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    background: #ff7733;
+}
+
+
+.left-div {
+    display: flex;
+    flex-direction: row;
+    list-style:none;
+}
+
+.right-div {
+    display: flex;
+}
+
+
