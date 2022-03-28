@@ -25,7 +25,7 @@ namespace Gwenael.Web.Pages
         public Article article { get; set; }
 
         [BindProperty(SupportsGet = true)]
-        public Media media { get; set; } 
+        public Media media { get; set; }
 
         [BindProperty]
         public InputModel Input { get; set; }
@@ -62,21 +62,24 @@ namespace Gwenael.Web.Pages
             using (var client = new AmazonS3Client("AKIAVDH3AEDD6PUJMKGG", "kKV5WKu0tFe8Svl2QdTIMIydLc7CGSMiy2h+KOvV", RegionEndpoint.CACentral1))
             {
 
-                foreach (IFormFile File in Input.FormFile) {
-                        using (var newMemoryStream = new MemoryStream())
+                foreach (IFormFile File in Input.FormFile)
+                {
+                    using (var newMemoryStream = new MemoryStream())
+                    {
+                        File.CopyTo(newMemoryStream);
+                        Debug.WriteLine("My debug string here");
+                        var uploadRequest = new TransferUtilityUploadRequest
                         {
-                            File.CopyTo(newMemoryStream);
-                            Debug.WriteLine("My debug string here");
-                            var uploadRequest = new TransferUtilityUploadRequest
-                            {
-                                InputStream = newMemoryStream,
-                                Key = File.FileName, // filename
-                                BucketName = "mediafileobjectifresiliance" // bucket name of S3
-                            };
+                            InputStream = newMemoryStream,
+                            Key = File.FileName, // filename
+                            BucketName = "mediafileobjectifresiliance", // bucket name of S3
+                            CannedACL = S3CannedACL.PublicRead,
+                        };
 
-                            var fileTransferUtility = new TransferUtility(client);
-                            await fileTransferUtility.UploadAsync(uploadRequest);
-                        }
+                        var fileTransferUtility = new TransferUtility(client);
+                        await fileTransferUtility.UploadAsync(uploadRequest);
+                    }
+
 
                     Media newMedia = new Media
                     {
@@ -95,4 +98,3 @@ namespace Gwenael.Web.Pages
 
     }
 }
-//s3://mediafileobjectifresiliance/burger.jpg
