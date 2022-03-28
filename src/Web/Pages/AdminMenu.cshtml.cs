@@ -29,42 +29,48 @@ namespace Gwenael.Web.Pages
         public String Tab { get; set; }
         public async Task<IActionResult> OnGetAsync()
         {
-            if (User.Identity.IsAuthenticated)
-            {
-                Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-                if (Permission.EstAdministrateur(idConnectedUser, _context))
+            try {
+                if (User.Identity.IsAuthenticated)
                 {
-                    if (Request.Query.Count == 1)
+                    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
+                    if (Permission.EstAdministrateur(idConnectedUser, _context))
                     {
-                        Tab = Request.Query["tab"];
-                        ViewData["Tab"] = Tab;
-                    }
-                    else if (Request.Query.Count > 1)
-                    {
-                        Tab = Request.Query["tab"];
-                        ViewData["Tab"] = Tab;
-                        if (Tab == "roles")
+                        if (Request.Query.Count == 1)
                         {
-                            Guid selectedUserId = Guid.Parse(Request.Query["guid"]);
-                            if (DynamicQueryableExtensions.Any(_context.Roles))
+                            Tab = Request.Query["tab"];
+                            ViewData["Tab"] = Tab;
+                        }
+                        else if (Request.Query.Count > 1)
+                        {
+                            Tab = Request.Query["tab"];
+                            ViewData["Tab"] = Tab;
+                            if (Tab == "roles")
                             {
-                                List<Role> lstRolesUser = Permission.ObtenirLstRolesUser(selectedUserId, _context);
-                                ViewData["userRoles"] = lstRolesUser;
-                                ViewData["selectRoles"] = ObtenirLstRolesSelect(lstRolesUser);
+                                Guid selectedUserId = Guid.Parse(Request.Query["guid"]);
+                                if (DynamicQueryableExtensions.Any(_context.Roles))
+                                {
+                                    List<Role> lstRolesUser = Permission.ObtenirLstRolesUser(selectedUserId, _context);
+                                    ViewData["userRoles"] = lstRolesUser;
+                                    ViewData["selectRoles"] = ObtenirLstRolesSelect(lstRolesUser);
+                                }
+                            }
+                            string erreur = Request.Query["error"];
+                            if (erreur != null)
+                            {
+                                ViewData["msgErreur"] = "Vous ne pouvez pas retirer votre accès administrateur";
                             }
                         }
-                        string erreur = Request.Query["error"];
-                        if (erreur != null)
-                        {
-                            ViewData["msgErreur"] = "Vous ne pouvez pas retirer votre accès administrateur";
-                        }
+                        Users = await _context.Users.ToListAsync();
+                        ViewData["lstUsers"] = Users;
+                        UsersNonActivated = _context.Users.Where(u => u.Active == false).ToList();
+                        ViewData["lstNonActiver"] = UsersNonActivated;
+                        return Page();
                     }
-                    Users = await _context.Users.ToListAsync();
-                    ViewData["lstUsers"] = Users;
-                    UsersNonActivated = _context.Users.Where(u => u.Active == false).ToList();
-                    ViewData["lstNonActiver"] = UsersNonActivated;
-                    return Page();
                 }
+                return Redirect("/");
+            }
+            catch { 
+                return Redirect("/");
             }
             return Redirect("/");
         }
