@@ -43,9 +43,6 @@ namespace Gwenael.Web.Pages
             catch
             {
             }
-            //if (ModelState.IsValid)
-            //{
-            //}
             if (btnSave != null)
             {
                 userBd.UserName = user.UserName;
@@ -77,9 +74,6 @@ namespace Gwenael.Web.Pages
                 return RedirectToPage("adminMenu");
             }
             return RedirectToPage("index");
-
-
-
         }
 
     }

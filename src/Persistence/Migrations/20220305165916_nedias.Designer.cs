@@ -4,6 +4,7 @@ using Gwenael.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gwenael.Persistence.Migrations
 {
     [DbContext(typeof(GwenaelDbContext))]
-    partial class GwenaelDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220305165916_nedias")]
+    partial class nedias
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -66,30 +68,26 @@ namespace Gwenael.Persistence.Migrations
                     b.ToTable("Formations");
                 });
 
-            modelBuilder.Entity("Gwenael.Domain.Entities.Poadcast", b =>
+            modelBuilder.Entity("Gwenael.Domain.Entities.Media", b =>
                 {
-                    b.Property<string>("ID")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<string>("Id")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("categorie")
+                    b.Property<int>("Idreference")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LinkS3")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("OrderInThePage")
+                        .HasColumnType("int");
 
-                    b.Property<string>("titre")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.HasKey("Id");
 
-                    b.Property<string>("url")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Poadcasts");
+                    b.ToTable("Medias");
                 });
 
             modelBuilder.Entity("Gwenael.Domain.Entities.Role", b =>
