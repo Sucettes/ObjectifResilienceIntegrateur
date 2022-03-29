@@ -28,8 +28,10 @@ $green:   #18BC9C !default;
 $teal:    #20c997 !default;
 $cyan:    #3498DB !default;
 $deeporange: #ff7733 !default;
+$greenPrimary: #38b000 !default;
+$orangeLight: RGB(255, 119, 51,0.4) !default;
 
-$primary:       $orange !default;
+$primary: $greenPrimary !default;
 $secondary:     $gray-600 !default;
 $success:       $green !default;
 $info:          $cyan !default;
@@ -40,7 +42,7 @@ $dark:          $white !default;
 
 // Links
 
-$link-color:                $black !default;
+$link-color:                $greenPrimary !default;
 
 // Fonts
 
@@ -58,7 +60,7 @@ $table-accent-bg:             $gray-200 !default;
 
 // Dropdowns
 
-$dropdown-link-color:               $gray-700 !default;
+$dropdown-link-color:           $greenPrimary !default;
 $dropdown-link-hover-color:         $white !default;
 $dropdown-link-hover-bg:            $primary !default;
 
@@ -67,7 +69,7 @@ $dropdown-link-hover-bg:            $primary !default;
 $nav-link-padding-y:                .5rem !default !default;
 $nav-link-padding-x:                2rem !default;
 $nav-link-disabled-color:           $gray-600 !default !default;
-
+$nav-link:                          $greenPrimary !default;
 $nav-tabs-border-color:             $gray-200 !default;
 
 // Navbar

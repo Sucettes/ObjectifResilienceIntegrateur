@@ -5,26 +5,30 @@
 // Variables ===================================================================
 
 $web-font-path: "https://fonts.googleapis.com/css?family=Lato:400,700,400italic" !default;
-@import url($web-font-path);
+@import url('https://fonts.googleapis.com/css2?family=Cabin+Sketch:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cabin+Sketch&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200&display=swap');
 @import '_variables.scss';
 
 // Navbar =======================================================================
 
 .bg-primary {
-  .navbar-nav .active > .nav-link {
-    color: $success !important;
-  }
+    .navbar-nav .active > .nav-link {
+        color: $greenPrimary !important;
+    }
 }
 
 .bg-dark {
-  background-color: $success !important;
-  &.navbar-dark .navbar-nav {
-    .nav-link:focus,
-    .nav-link:hover,
-    .active > .nav-link {
-      color: $primary !important;
+    background-color: $success !important;
+
+    &.navbar-dark .navbar-nav {
+        .nav-link:focus,
+        .nav-link:hover,
+        .active > .nav-link {
+            color: $greenPrimary !important;
+        }
     }
-  }
 }
 
 // Buttons =====================================================================
@@ -113,20 +117,23 @@ $web-font-path: "https://fonts.googleapis.com/css?family=Lato:400,700,400italic"
 // Navs ========================================================================
 
 .nav-tabs {
-  .nav-link.active,
-  .nav-link.active:focus,
-  .nav-link.active:hover,
-  .nav-item.open .nav-link,
-  .nav-item.open .nav-link:focus,
-  .nav-item.open .nav-link:hover {
-    color: $primary;
-  }
+    .nav-link.active,
+    .nav-link.active:focus,
+    .nav-link.active:hover,
+    .nav-item.open .nav-link,
+    .nav-item.open .nav-link:focus,
+    .nav-item.open .nav-link:hover {
+        color: black;
+        
+    }
 }
-
+.nav-link{
+    color: $greenPrimary
+}
 .pagination {
-  a:hover {
-    text-decoration: none;
-  }
+    a:hover {
+        text-decoration: none;
+    }
 }
 
 // Indicators ==================================================================
@@ -171,4 +178,14 @@ $web-font-path: "https://fonts.googleapis.com/css?family=Lato:400,700,400italic"
 // Containers ==================================================================
 .modal .close{
   color: $black;
+}
+h1 {
+    font-family: 'Cabin Sketch', cursive !important;
+}
+h2, h3 {
+    font-family: 'Cabin Sketch', cursive !important;
+}
+
+p {
+    font-family: 'Nunito', sans-serif !important;
 }
