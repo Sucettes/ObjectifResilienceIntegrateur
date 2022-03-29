@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Gwenael.Domain.Entities
 {
-    public class Tutoriel
+    public class Tutos
     {
         public Guid Id { get; set; }
         [Required] [MaxLength(50)] public string Titre { get; set; }
@@ -14,7 +14,7 @@ namespace Gwenael.Domain.Entities
         [Required] [MaxLength(2)] public int Difficulte { get; set; }
         [Required] [MaxLength(7)] public double Cout { get; set; }
         [Required] [MaxLength(4)] public int Duree { get; set; }
-        [Required] public Categorie Categorie { get; set; }
+        [Required] public CategoriesTutos Categorie { get; set; }
         // TODO : Faire en sorte que nous devons être connecter...
         [Required] public string Introduction { get; set; }
         public bool EstPublier { get; set; }
@@ -23,7 +23,7 @@ namespace Gwenael.Domain.Entities
 
         //public IEnumerable<RangeeTutoriel> RangeeTutoriels { get; set; }
 
-        public Tutoriel()
+        public Tutos()
         {
             DateCreation = DateTime.UtcNow;
             EstPublier = false;
