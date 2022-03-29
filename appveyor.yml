@@ -37,9 +37,9 @@ build_script:
 
 after_build:
   - ps: docker-compose -f "docker-compose.yml" -f "docker-compose.appveyor.yml" up -d --build
-  - ps: Start-Sleep -s 120
+  - ps: Start-Sleep -s 30
   - ps: npm install -s -g --unicode=false newman
-  #- newman run --disable-unicode tests/Postman/WebAppTemplate.postman_collection.json --insecure
+  - newman run --disable-unicode tests/Postman/WebAppTemplate.postman_collection.json --insecure
 
 test_script:
   - dotnet build Gwenael.sln   
