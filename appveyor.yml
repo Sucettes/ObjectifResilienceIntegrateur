@@ -43,7 +43,6 @@ after_build:
 
 test_script:
   - dotnet build Gwenael.sln   
-  - Update-Database
   - dotnet test --no-build ./tests/Application -l "console;verbosity=detailed"
   - dotnet test --no-build ./tests/Domain -l "console;verbosity=detailed"
   - dotnet test --no-build ./tests/Web -l "console;verbosity=detailed"
