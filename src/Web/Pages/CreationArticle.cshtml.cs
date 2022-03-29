@@ -42,7 +42,6 @@ namespace Gwenael.Web.Pages
         }
 
 
-        [HttpPost("FileUpload")]
         public async Task<IActionResult> OnPost(string titre, string inerText)
         {
 

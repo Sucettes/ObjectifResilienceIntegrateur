@@ -39,12 +39,8 @@ namespace Gwenael.Web.Pages
             public IFormFile[] FormFile { get; set; }
 
         }
-
-
-
         
-        [HttpPost("FileUpload")]
-        public async Task<IActionResult> OnPost(string titre, string description, string categorie/*,[FromServices] IHostingEnvironment env*/)
+        public async Task<IActionResult> OnPost(string titre, string description, string categorie)
         {
             if(description == null)
             {
