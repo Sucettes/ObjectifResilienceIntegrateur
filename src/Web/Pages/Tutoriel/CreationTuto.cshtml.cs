@@ -57,10 +57,10 @@ namespace Gwenael.Web.Pages
             [Required]
             [DataType(DataType.Text)]
             public string descriptionCategorie { get; set; }
-            public List<Categorie> lstCategories { get; set; }
+            public List<CategoriesTutos> lstCategories { get; set; }
 
-            public List<RangeeTutoriel> lstRangeeTutoriels { get; set; }
-            public List<Domain.Entities.Tutoriel> lstTutoriels { get; set; }
+            public List<RangeeTutos> lstRangeeTutoriels { get; set; }
+            public List<Domain.Entities.Tutos> lstTutoriels { get; set; }
             public IFormFile imageRangeeFile { get; set; }
             public IFormFile imageBanierFile { get; set; }
             public string imgBannierUrl { get; set; }
@@ -101,11 +101,11 @@ namespace Gwenael.Web.Pages
                 string creationTutoStatus = "false";
                 Input.id = id;
                 Input.handler = handler;
-                if (!(_db.Categories.Where(c => c.Nom == Input.cat).Count() == 0))
+                if (!(_db.CategoriesTutos.Where(c => c.Nom == Input.cat).Count() == 0))
                 {
-                    Categorie cat = _db.Categories.Where(c => c.Nom == Input.cat).First();
+                    CategoriesTutos cat = _db.CategoriesTutos.Where(c => c.Nom == Input.cat).First();
 
-                    if (cat != null && _db.Tutoriels.Where(t => t.Titre == Input.titre).Count() == 0)
+                    if (cat != null && _db.Tutos.Where(t => t.Titre == Input.titre).Count() == 0)
                     {
                         Console.WriteLine(Input.imageBanierFile);
                         if (Input.imageBanierFile != null)
@@ -130,7 +130,7 @@ namespace Gwenael.Web.Pages
                             }
                         }
                         Input.imgBannierUrl = imgUrl;
-                        Domain.Entities.Tutoriel tuto = new Domain.Entities.Tutoriel();
+                        Domain.Entities.Tutos tuto = new Domain.Entities.Tutos();
                         tuto.Titre = Input.titre;
                         tuto.Duree = Input.duree;
                         tuto.Cout = Input.cout;
@@ -141,10 +141,10 @@ namespace Gwenael.Web.Pages
 
                         if (tuto.EstValide())
                         {
-                            _db.Tutoriels.Add(tuto);
+                            _db.Tutos.Add(tuto);
                             _db.SaveChanges();
 
-                            Input.id = _db.Tutoriels.Where(t => t.Titre == tuto.Titre).First().Id.ToString();
+                            Input.id = _db.Tutos.Where(t => t.Titre == tuto.Titre).First().Id.ToString();
                             creationTutoStatus = "true";
                         }
                     }
@@ -166,10 +166,10 @@ namespace Gwenael.Web.Pages
                 string modificationTutoStatus = "false";
                 Input.id = id;
                 Input.handler = "CreeTutorielDetails";
-                if (!(_db.Categories.Where(c => c.Nom == Input.cat).Count() == 0))
+                if (!(_db.CategoriesTutos.Where(c => c.Nom == Input.cat).Count() == 0))
                 {
-                    Categorie cat = _db.Categories.Where(c => c.Nom == Input.cat).First();
-                    Domain.Entities.Tutoriel tuto = _db.Tutoriels.Where(t => t.Id == Guid.Parse(id)).First();
+                    CategoriesTutos cat = _db.CategoriesTutos.Where(c => c.Nom == Input.cat).First();
+                    Domain.Entities.Tutos tuto = _db.Tutos.Where(t => t.Id == Guid.Parse(id)).First();
                     if (cat != null && tuto != null)
                     {
                         tuto.Titre = Input.titre;
@@ -184,7 +184,7 @@ namespace Gwenael.Web.Pages
                         {
                             Input.id = tuto.Id.ToString();
 
-                            _db.Tutoriels.Update(tuto);
+                            _db.Tutos.Update(tuto);
                             _db.SaveChanges();
 
                             modificationTutoStatus = "true";
@@ -208,15 +208,15 @@ namespace Gwenael.Web.Pages
             try
             {
                 string creationCategorieStatus = "false";
-                if (_db.Categories.Where(c => c.Nom == Input.nomCategorie).Count() == 0)
+                if (_db.CategoriesTutos.Where(c => c.Nom == Input.nomCategorie).Count() == 0)
                 {
-                    Categorie cat = new Categorie();
+                    CategoriesTutos cat = new CategoriesTutos();
                     cat.Nom = Input.nomCategorie;
                     cat.Description = Input.descriptionCategorie;
 
                     if (cat.EstValide())
                     {
-                        _db.Categories.Add(cat);
+                        _db.CategoriesTutos.Add(cat);
                         _db.SaveChanges();
 
                         Input.descriptionCategorie = "";
@@ -269,17 +269,17 @@ namespace Gwenael.Web.Pages
                         }
                     }
 
-                    RangeeTutoriel rangee = new RangeeTutoriel();
+                    RangeeTutos rangee = new RangeeTutos();
                     rangee.TutorielId = Guid.Parse(id);
                     rangee.Texte = rangeeTexte;
                     rangee.PositionImg = positionImage;
                     rangee.LienImg = imgUrl;
 
-                    _db.RangeeTutoriels.Add(rangee);
+                    _db.RangeeTutos.Add(rangee);
                     _db.SaveChanges();
-                    Guid rId = _db.RangeeTutoriels.Where(r => r == rangee).First().Id;
+                    Guid rId = _db.RangeeTutos.Where(r => r == rangee).First().Id;
 
-                    Input.lstRangeeTutoriels = _db.RangeeTutoriels.Where(r => r.TutorielId == Guid.Parse(id)).ToList<RangeeTutoriel>();
+                    Input.lstRangeeTutoriels = _db.RangeeTutos.Where(r => r.TutorielId == Guid.Parse(id)).ToList<RangeeTutos>();
                 }
 
                 UpdateInputData();
@@ -355,14 +355,14 @@ namespace Gwenael.Web.Pages
                 Input.handler = "AjoutRangee";
                 Input.id = id;
 
-                Domain.Entities.Tutoriel t = _db.Tutoriels.Where(t => t.Id == Guid.Parse(id) && t.EstPublier == false).First();
+                Domain.Entities.Tutos t = _db.Tutos.Where(t => t.Id == Guid.Parse(id) && t.EstPublier == false).First();
                 if (t != null)
                 {
-                    RangeeTutoriel rt = _db.RangeeTutoriels.Where(r => r.TutorielId == Guid.Parse(id) && r.Id == Guid.Parse(rangee.idRangeeVal)).First();
+                    RangeeTutos rt = _db.RangeeTutos.Where(r => r.TutorielId == Guid.Parse(id) && r.Id == Guid.Parse(rangee.idRangeeVal)).First();
                     if (rt != null)
                     {
 
-                        _db.RangeeTutoriels.Remove(rt);
+                        _db.RangeeTutos.Remove(rt);
                         _db.SaveChanges();
                     }
                 }
@@ -384,11 +384,11 @@ namespace Gwenael.Web.Pages
                 Input.handler = "AjoutRangee";
                 Input.id = id;
 
-                Domain.Entities.Tutoriel t = _db.Tutoriels.Where(t => t.Id == Guid.Parse(id) && t.EstPublier == false).First();
+                Domain.Entities.Tutos t = _db.Tutos.Where(t => t.Id == Guid.Parse(id) && t.EstPublier == false).First();
                 if (t != null)
                 {
                     t.EstPublier = true;
-                    _db.Tutoriels.Update(t);
+                    _db.Tutos.Update(t);
                     _db.SaveChanges();
                 }
 
@@ -404,16 +404,16 @@ namespace Gwenael.Web.Pages
 
         public void UpdateInputData()
         {
-            Input.lstCategories = _db.Categories.ToList<Categorie>();
+            Input.lstCategories = _db.CategoriesTutos.ToList<CategoriesTutos>();
             if (!String.IsNullOrEmpty(Input.id))
             {
-                Input.lstRangeeTutoriels = _db.RangeeTutoriels.Where(r => r.TutorielId == Guid.Parse(Input.id)).ToList<RangeeTutoriel>();
+                Input.lstRangeeTutoriels = _db.RangeeTutos.Where(r => r.TutorielId == Guid.Parse(Input.id)).ToList<RangeeTutos>();
             }
-            Input.lstTutoriels = _db.Tutoriels.Where(t => t.EstPublier == false).ToList<Domain.Entities.Tutoriel>();
+            Input.lstTutoriels = _db.Tutos.Where(t => t.EstPublier == false).ToList<Domain.Entities.Tutos>();
 
             if (!String.IsNullOrEmpty(Input.id))
             {
-                Domain.Entities.Tutoriel tuto = _db.Tutoriels.Where(t => t.Id == Guid.Parse(Input.id)).First();
+                Domain.Entities.Tutos tuto = _db.Tutos.Where(t => t.Id == Guid.Parse(Input.id)).First();
                 if (tuto != null)
                 {
                     Input.titre = tuto.Titre;

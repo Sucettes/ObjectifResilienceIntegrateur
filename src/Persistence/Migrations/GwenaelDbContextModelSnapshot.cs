@@ -44,7 +44,7 @@ namespace Gwenael.Persistence.Migrations
                     b.ToTable("Articles");
                 });
 
-            modelBuilder.Entity("Gwenael.Domain.Entities.Categorie", b =>
+            modelBuilder.Entity("Gwenael.Domain.Entities.CategoriesTutos", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -62,7 +62,7 @@ namespace Gwenael.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("CategoriesTutos");
                 });
 
             modelBuilder.Entity("Gwenael.Domain.Entities.Formation", b =>
@@ -135,7 +135,7 @@ namespace Gwenael.Persistence.Migrations
                     b.ToTable("Poadcasts");
                 });
 
-            modelBuilder.Entity("Gwenael.Domain.Entities.RangeeTutoriel", b =>
+            modelBuilder.Entity("Gwenael.Domain.Entities.RangeeTutos", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -156,7 +156,7 @@ namespace Gwenael.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("RangeeTutoriels");
+                    b.ToTable("RangeeTutos");
                 });
 
             modelBuilder.Entity("Gwenael.Domain.Entities.Role", b =>
@@ -214,7 +214,7 @@ namespace Gwenael.Persistence.Migrations
                     b.ToTable("AspNetRoleClaims", (string)null);
                 });
 
-            modelBuilder.Entity("Gwenael.Domain.Entities.Tutoriel", b =>
+            modelBuilder.Entity("Gwenael.Domain.Entities.Tutos", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -262,7 +262,7 @@ namespace Gwenael.Persistence.Migrations
 
                     b.HasIndex("CategorieId");
 
-                    b.ToTable("Tutoriels");
+                    b.ToTable("Tutos");
                 });
 
             modelBuilder.Entity("Gwenael.Domain.Entities.User", b =>
@@ -444,13 +444,13 @@ namespace Gwenael.Persistence.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Gwenael.Domain.Entities.Tutoriel", b =>
+            modelBuilder.Entity("Gwenael.Domain.Entities.Tutos", b =>
                 {
                     b.HasOne("Gwenael.Domain.Entities.User", "AuteurUserId")
                         .WithMany()
                         .HasForeignKey("AuteurUserIdId");
 
-                    b.HasOne("Gwenael.Domain.Entities.Categorie", "Categorie")
+                    b.HasOne("Gwenael.Domain.Entities.CategoriesTutos", "Categorie")
                         .WithMany()
                         .HasForeignKey("CategorieId")
                         .OnDelete(DeleteBehavior.Cascade)

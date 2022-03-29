@@ -36,7 +36,7 @@ namespace Gwenael.Web.Pages
 
         public class InputModel
         {
-            public List<Domain.Entities.Tutoriel> lstTutoriels { get; set; }
+            public List<Domain.Entities.Tutos> lstTutoriels { get; set; }
 
         }
         public TutorielIndexModel(GwenaelDbContext pDb) => _db = pDb;
@@ -44,7 +44,7 @@ namespace Gwenael.Web.Pages
         public IActionResult OnGet()
         {
             Input = new InputModel();
-            Input.lstTutoriels = _db.Tutoriels.ToList<Domain.Entities.Tutoriel>();
+            Input.lstTutoriels = _db.Tutos.ToList<Domain.Entities.Tutos>();
 
             return Page();
         }

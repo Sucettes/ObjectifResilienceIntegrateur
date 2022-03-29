@@ -12,9 +12,9 @@ namespace Gwenael.Domain
         {
         }
 
-        public DbSet<Categorie> Categories { get; set; }
-        public DbSet<RangeeTutoriel> RangeeTutoriels { get; set; }
-        public DbSet<Tutoriel> Tutoriels { get; set; }
+        public DbSet<CategoriesTutos> CategoriesTutos { get; set; }
+        public DbSet<RangeeTutos> RangeeTutos { get; set; }
+        public DbSet<Tutos> Tutos { get; set; }
         public DbSet<Formation> Formations { get; set; }
         public DbSet<Poadcast> Poadcasts { get; set; }
         public DbSet<Article> Articles { get; set; }

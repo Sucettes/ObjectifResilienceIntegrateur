@@ -20,8 +20,8 @@ namespace Gwenael.Web.Pages
 
         public class InputModel
         {
-            public Domain.Entities.Tutoriel tutoriel { get; set; }
-            public List<RangeeTutoriel> lstRangeeTuto { get; set; }
+            public Domain.Entities.Tutos tutoriel { get; set; }
+            public List<RangeeTutos> lstRangeeTuto { get; set; }
             public string id { get; set; }
 
         }
@@ -50,8 +50,8 @@ namespace Gwenael.Web.Pages
         {
             try
             {
-                Domain.Entities.Tutoriel tuto = _db.Tutoriels.Where(t => t.Id == Guid.Parse(tutoVal.tutorielIdVal)).First();
-                _db.Tutoriels.Remove(tuto);
+                Domain.Entities.Tutos tuto = _db.Tutos.Where(t => t.Id == Guid.Parse(tutoVal.tutorielIdVal)).First();
+                _db.Tutos.Remove(tuto);
                 _db.SaveChanges();
 
                 return Redirect("/tutoriel?deleteStatus=true");
@@ -66,7 +66,7 @@ namespace Gwenael.Web.Pages
         {
             try
             {
-                Domain.Entities.Tutoriel tuto = _db.Tutoriels.Where(t => t.Id == Guid.Parse(tutoVal.tutorielIdVal)).First();
+                Domain.Entities.Tutos tuto = _db.Tutos.Where(t => t.Id == Guid.Parse(tutoVal.tutorielIdVal)).First();
                 tuto.EstPublier = false;
                 _db.SaveChanges();
 
@@ -89,7 +89,7 @@ namespace Gwenael.Web.Pages
 
             if (!Input.id.IsNullOrEmpty())
             {
-                Input.tutoriel = _db.Tutoriels.Where(t => t.Id == Guid.Parse(Input.id) && t.EstPublier == true).First();
+                Input.tutoriel = _db.Tutos.Where(t => t.Id == Guid.Parse(Input.id) && t.EstPublier == true).First();
                 if (Input.tutoriel != null)
                 {
                     GetContenue();
@@ -100,6 +100,6 @@ namespace Gwenael.Web.Pages
             return estValide;
         }
 
-        private void GetContenue() => Input.lstRangeeTuto = _db.RangeeTutoriels.Where(r => r.TutorielId == Guid.Parse(Input.id)).ToList();
+        private void GetContenue() => Input.lstRangeeTuto = _db.RangeeTutos.Where(r => r.TutorielId == Guid.Parse(Input.id)).ToList();
     }
 }

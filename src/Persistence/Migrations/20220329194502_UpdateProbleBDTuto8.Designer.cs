@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gwenael.Persistence.Migrations
 {
     [DbContext(typeof(GwenaelDbContext))]
-    [Migration("20220305165916_nedias")]
-    partial class nedias
+    [Migration("20220329194502_UpdateProbleBDTuto8")]
+    partial class UpdateProbleBDTuto8
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -44,6 +44,27 @@ namespace Gwenael.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Articles");
+                });
+
+            modelBuilder.Entity("Gwenael.Domain.Entities.CategoriesTutos", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Nom")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CategoriesTutos");
                 });
 
             modelBuilder.Entity("Gwenael.Domain.Entities.Formation", b =>
@@ -88,6 +109,56 @@ namespace Gwenael.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Medias");
+                });
+
+            modelBuilder.Entity("Gwenael.Domain.Entities.Poadcast", b =>
+                {
+                    b.Property<string>("ID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("categorie")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("titre")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("url")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Poadcasts");
+                });
+
+            modelBuilder.Entity("Gwenael.Domain.Entities.RangeeTutos", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("LienImg")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PositionImg")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Texte")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("TutorielId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RangeeTutos");
                 });
 
             modelBuilder.Entity("Gwenael.Domain.Entities.Role", b =>
@@ -143,6 +214,57 @@ namespace Gwenael.Persistence.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetRoleClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Gwenael.Domain.Entities.Tutos", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("AuteurUserIdId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CategorieId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<double>("Cout")
+                        .HasMaxLength(7)
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("DateCreation")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Difficulte")
+                        .HasMaxLength(2)
+                        .HasColumnType("int");
+
+                    b.Property<int>("Duree")
+                        .HasMaxLength(4)
+                        .HasColumnType("int");
+
+                    b.Property<bool>("EstPublier")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Introduction")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LienImgBanniere")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Titre")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuteurUserIdId");
+
+                    b.HasIndex("CategorieId");
+
+                    b.ToTable("Tutos");
                 });
 
             modelBuilder.Entity("Gwenael.Domain.Entities.User", b =>
@@ -322,6 +444,23 @@ namespace Gwenael.Persistence.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Gwenael.Domain.Entities.Tutos", b =>
+                {
+                    b.HasOne("Gwenael.Domain.Entities.User", "AuteurUserId")
+                        .WithMany()
+                        .HasForeignKey("AuteurUserIdId");
+
+                    b.HasOne("Gwenael.Domain.Entities.CategoriesTutos", "Categorie")
+                        .WithMany()
+                        .HasForeignKey("CategorieId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AuteurUserId");
+
+                    b.Navigation("Categorie");
                 });
 
             modelBuilder.Entity("Gwenael.Domain.Entities.UserRole", b =>
