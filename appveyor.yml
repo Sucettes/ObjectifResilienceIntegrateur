@@ -37,16 +37,15 @@ build_script:
 
 after_build:
   - ps: docker-compose -f "docker-compose.yml" -f "docker-compose.appveyor.yml" up -d --build
-  - ps: Start-Sleep -s 1
+  - ps: Start-Sleep -s 120
   #- ps: npm install -s -g --unicode=false newman
   #- newman run --disable-unicode tests/Postman/WebAppTemplate.postman_collection.json --insecure
 
-test_script:
+#test_script:
   - dotnet build Gwenael.sln   
   - dotnet test --no-build ./tests/Application -l "console;verbosity=detailed"
   - dotnet test --no-build ./tests/Domain -l "console;verbosity=detailed"
   - dotnet test --no-build ./tests/Web -l "console;verbosity=detailed"
-  - dotnet watch run
 
 artifacts:
 - path: ./src/Web/__publish
