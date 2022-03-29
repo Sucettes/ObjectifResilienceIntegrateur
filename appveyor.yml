@@ -46,7 +46,6 @@ after_build:
   - dotnet test --no-build ./tests/Application -l "console;verbosity=detailed"
   - dotnet test --no-build ./tests/Domain -l "console;verbosity=detailed"
   - dotnet test --no-build ./tests/Web -l "console;verbosity=detailed"
-  - dotnet watch run
 
 artifacts:
 - path: ./src/Web/__publish
