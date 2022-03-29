@@ -132,7 +132,7 @@
                     <tbody>
                         <tr>
                             <td>@user.Email</td>
-                            <td>@user.CreationDate</td>
+                            <td>@user.CreationDate.ToString("dd/MM/yyyy")</td>
                             <td><a asp-page="user" asp-route-id="@user.Id" class="btn btn-success btn-sm">Modifier</a></td>
                         </tr>
                     </tbody>
