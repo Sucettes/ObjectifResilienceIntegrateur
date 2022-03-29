@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
@@ -24,6 +26,7 @@ namespace Gwenael.Web.Pages
         }
         [BindProperty(SupportsGet = true)]
         public Poadcast poadcast { get; set; }
+        public IList<Poadcast> poadcasts { get; set; }
 
         [BindProperty]
         public InputModel Input { get; set; }
@@ -46,10 +49,12 @@ namespace Gwenael.Web.Pages
         [HttpPost("FileUpload")]
         public async Task<IActionResult> OnPost(string titre, string description, string categorie/*,[FromServices] IHostingEnvironment env*/)
         {
-            if(description == null)
-            {
+           
+
+                if (description == null)
+                {
                 description = "aucune description disponible pour ce poadcast";
-            }
+                }
 
             // mettre dans app setting
             using (var client = new AmazonS3Client("AKIAVDH3AEDD6PUJMKGG", "kKV5WKu0tFe8Svl2QdTIMIydLc7CGSMiy2h+KOvV", RegionEndpoint.CACentral1))

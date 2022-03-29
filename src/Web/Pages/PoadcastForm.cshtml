@@ -8,25 +8,32 @@
 
 
 <div>
-    <form method="post" enctype="multipart/form-data">
-        <label for="titre">Titre <em>*</em></label>
+    <form method="post" enctype="multipart/form-data" id="centerForm">
+        
+        <div class="form-group row">
+            <label for="titre">Titre <em>*</em></label>
+            <input name="titre" id="titre" placeholder="titre du formulaire" autofocus="" required=""><br>
+        </div>
 
-        <input name="titre" id="titre" placeholder="titre du formulaire" autofocus="" required=""><br>
+        <div class="form-group row">
+            <label for="description">Description</label>
+            <textarea name="description" id="description"></textarea><br>
+        </div>
 
-        <label for="description">Description</label>
+        <div class="form-group row">
+            <label for="categorie">Catégorie <em>*</em></label>
+            <select name="categorie" id="categorie">
+                <option value="lowtech">Lowtech</option>
+                <option value="recyclage">Recyclage</option>
+                <option value="autCat">Autre catégorie</option>
+            </select><br><br>
+        </div>
 
-        <textarea name="description" id="description"></textarea><br>
+        <div class="form-group row">
+            <input accept="audio/*" asp-for="Input.FormFile" class="form-control" type="file" id="formFile" required="" /><br />
 
-        <label for="categorie">Catégorie <em>*</em></label>
-        <select name="categorie" id="categorie">
-            <option value="lowtech">Lowtech</option>
-            <option value="recyclage">Recyclage</option>
-            <option value="autCat">Autre catégorie</option>
-        </select><br><br>
-
-        <input accept="audio/*" asp-for="Input.FormFile" class="form-control" type="file" id="formFile" required="" /><br />
-
-        <input class="btn btn-success btn-sm" type="submit" value="valider" /><br /><br />
-        <a name="btnAnnuler" class="btn btn-danger form-control" asp-page="poadcastPage">Annuler</a>
+            <input class="btn btn-success btn-sm" type="submit" value="valider" /><br /><br />
+            <a name="btnAnnuler" class="btn btn-danger form-control" asp-page="poadcastPage">Annuler</a>
+        </div>
     </form>
 </div>
