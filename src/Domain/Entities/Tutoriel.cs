@@ -18,7 +18,7 @@ namespace Gwenael.Domain.Entities
         // TODO : Faire en sorte que nous devons être connecter...
         [Required] public string Introduction { get; set; }
         public bool EstPublier { get; set; }
-        [MaxLength(50)] public string LienImgBanniere { get; set; }
+        public string LienImgBanniere { get; set; }
         public User AuteurUserId { get; set; }
 
         //public IEnumerable<RangeeTutoriel> RangeeTutoriels { get; set; }
