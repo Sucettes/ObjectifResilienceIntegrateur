@@ -64,6 +64,12 @@ namespace Gwenael.Web.Pages
                         ViewData["lstUsers"] = Users;
                         UsersNonActivated = _context.Users.Where(u => u.Active == false).ToList();
                         ViewData["lstNonActiver"] = UsersNonActivated;
+                        if (Tab == null || Tab == "")
+                        {
+                            ViewData["Tab"] = "utilisateurs";
+                            return Page();
+
+                        }
                         return Page();
                     }
                 }
@@ -72,7 +78,6 @@ namespace Gwenael.Web.Pages
             catch { 
                 return Redirect("/");
             }
-            return Redirect("/");
         }
 
         public async Task<IActionResult> OnPostAsync(string btnDeleteRole, string name, string selectRole, string btnAccepter)
