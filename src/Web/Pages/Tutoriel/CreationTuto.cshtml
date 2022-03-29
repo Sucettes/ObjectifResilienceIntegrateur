@@ -44,7 +44,14 @@
             <form method="post" asp-page="CreationTuto" enctype="multipart/form-data">
                 <div class="row">
                     <div class="col-md-6">
-                        <img src="~/images/imgplaceholder.png" style="width:100%; height:100%;" id="imgBanierre" />
+                        @if (Model.Input.imgBannierUrl != null)
+                        {
+                            <img src="@Model.Input.imgBannierUrl" style="width:100%; height:100%;" id="imgBanierre" />
+                        }
+                        else
+                        {
+                            <img src="~/images/imgplaceholder.png" style="width:100%; height:100%;" id="imgBanierre" />
+                        }
                     </div>
 
                     <div class="col-md-6">
@@ -71,7 +78,7 @@
 
                         <div class="input-group input-group-sm mb-3">
                             <label for="DifficulteRange" style="width: 100%;">Difficulté 1 à 10</label>
-                            <input type="range" class="form-range" min="1" max="10" id="DifficulteRange" asp-for="@Model.Input.difficulte">
+                            <input type="range" class="form-range" min="1" max="10" id="DifficulteRange" asp-for="@Model.Input.difficulte" required>
                         </div>
 
                         <div class="input-group input-group-sm mb-3">
@@ -155,7 +162,7 @@
                     </div>
                 </div>
             </form>
-
+            <br />
             <h4>rangee</h4>
             <section>
                 <div id="toastRangeeDeleteDiv" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11" hidden>
@@ -182,36 +189,95 @@
                         <input name="idtutoVal" type="text" value="@id" hidden />
 
                         <div class="card">
-                            <div class="row">
+                            <div class="row card-body">
                                 @if (rangee.PositionImg == "left")
                                 {
-                                    <div class="col-md-4">
-                                        <img src="~/images/imgplaceholder.png" class="img-fluid rounded-start" alt="...">
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="card-body row">
-                                            <p class="card-text col-9">@rangee.Texte</p>
-                                            <div class="col-3" style="display:inline-block;">
-                                                <button type="submit" class="btn btn-primary" asp-route-id="@id" asp-page-handler="EditRange"><img src="~/icons/editIcon.svg" /></button>
-                                                <button type="submit" class="btn btn-danger" @*asp-route-id="@id" asp-page-handler="DeleteRange"*@ data-supprimer data-bs-toggle="modal" data-bs-target="#modalValideDelete"><img src="~/icons/deleteIcon.svg" /></button>
+                                    @if (!rangee.LienImg.IsNullOrEmpty())
+                                    {
+                                        if (!rangee.Texte.IsNullOrEmpty())
+                                        {
+                                            <div class="col-md-4">
+                                                <img src="@rangee.LienImg" class="img-fluid rounded-start" alt="...">
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div @*class="card-body"*@>
+                                                    <p class="card-text" style="text-align:justify;">@rangee.Texte</p>
+                                                    <div style="display: inline-block; float: right;">
+                                                        <button type="submit" class="btn btn-primary" asp-route-id="@id" asp-page-handler="EditRange"><img src="~/icons/editIcon.svg" /></button>
+                                                        <button type="submit" class="btn btn-danger" data-supprimer data-bs-toggle="modal" data-bs-target="#modalValideDelete"><img src="~/icons/deleteIcon.svg" /></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="col-md-12">
+                                                <img src="@rangee.LienImg" class="img-fluid rounded-start" alt="...">
+                                                <div style="display: inline-block; float: right;">
+                                                    <button type="submit" class="btn btn-primary" asp-route-id="@id" asp-page-handler="EditRange"><img src="~/icons/editIcon.svg" /></button>
+                                                    <button type="submit" class="btn btn-danger" data-supprimer data-bs-toggle="modal" data-bs-target="#modalValideDelete"><img src="~/icons/deleteIcon.svg" /></button>
+                                                </div>
+                                            </div>
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        <div class="col-md-12">
+                                            <div @*class="card-body"*@>
+                                                <p class="card-text" style="text-align:justify;">@rangee.Texte</p>
+                                                <div style="display: inline-block; float: right;">
+                                                    <button type="submit" class="btn btn-primary" asp-route-id="@id" asp-page-handler="EditRange"><img src="~/icons/editIcon.svg" /></button>
+                                                    <button type="submit" class="btn btn-danger" data-supprimer data-bs-toggle="modal" data-bs-target="#modalValideDelete"><img src="~/icons/deleteIcon.svg" /></button>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    }
+
                                 }
                                 else
                                 {
-                                    <div class="col-md-8">
-                                        <div class="card-body row">
-                                            <p class="card-text col-9">@rangee.Texte</p>
-                                            <div class="col-3" style="display:inline-block;">
-                                                <button type="submit" class="btn btn-primary" asp-route-id="@id" asp-page-handler="EditRange"><img src="~/icons/editIcon.svg" /></button>
-                                                <button type="submit" class="btn btn-danger" data-supprimer data-bs-toggle="modal" data-bs-target="#modalValideDelete"><img src="~/icons/deleteIcon.svg" /></button>
+                                    @if (!rangee.LienImg.IsNullOrEmpty())
+                                    {
+                                        if (!rangee.Texte.IsNullOrEmpty())
+                                        {
+                                            <div class="col-md-8">
+                                                <div @*class="card-body"*@>
+                                                    <p class="card-text" style="text-align:justify;">@rangee.Texte</p>
+                                                    <div style="display: inline-block; float: left;">
+                                                        <button type="submit" class="btn btn-primary" asp-route-id="@id" asp-page-handler="EditRange"><img src="~/icons/editIcon.svg" /></button>
+                                                        <button type="submit" class="btn btn-danger" data-supprimer data-bs-toggle="modal" data-bs-target="#modalValideDelete"><img src="~/icons/deleteIcon.svg" /></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <img src="@rangee.LienImg" class="img-fluid rounded-start" alt="...">
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="col-md-12">
+                                                <img src="@rangee.LienImg" class="img-fluid rounded-start" alt="...">
+                                                <div style="display: inline-block; float: left;">
+                                                    <button type="submit" class="btn btn-primary" asp-route-id="@id" asp-page-handler="EditRange"><img src="~/icons/editIcon.svg" /></button>
+                                                    <button type="submit" class="btn btn-danger" data-supprimer data-bs-toggle="modal" data-bs-target="#modalValideDelete"><img src="~/icons/deleteIcon.svg" /></button>
+                                                </div>
+                                            </div>
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        <div class="col-md-12">
+                                            <div @*class="card-body"*@>
+                                                <p class="card-text" style="text-align:justify;">@rangee.Texte</p>
+                                                <div style="display: inline-block; float: left; ">
+                                                    <button type="submit" class="btn btn-primary" asp-route-id="@id" asp-page-handler="EditRange"><img src="~/icons/editIcon.svg" /></button>
+                                                    <button type="submit" class="btn btn-danger" data-supprimer data-bs-toggle="modal" data-bs-target="#modalValideDelete"><img src="~/icons/deleteIcon.svg" /></button>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <img src="~/images/imgplaceholder.png" class="img-fluid rounded-start" alt="...">
-                                    </div>
+                                    }
                                 }
                             </div>
                         </div>
@@ -221,11 +287,11 @@
 
             <br />
 
-            <form method="post" asp-page="CreationTuto">
+            <form method="post" asp-page="CreationTuto" enctype="multipart/form-data">
                 <div class="row">
                     <div class="col-md-9">
                         <textarea class="form-control" aria-label="Texte de la rangee" rows="6" name="rangeeTexte"></textarea>
-                        <input type="file" class="form-control form-control-sm" id="inputImgBanierre">
+                        <input type="file" class="form-control form-control-sm" id="inputImgBanierre" asp-for="@Model.Input.imageRangeeFile">
                     </div>
                     <div class="col-md-3">
                         <div class="row">
