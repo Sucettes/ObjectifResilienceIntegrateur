@@ -23,10 +23,17 @@ namespace Gwenael.Web.Pages
 
         public async Task<IActionResult> OnGetAsync()
         {
-            Articles = await _context.Articles.ToListAsync();
+            try
+            {
+                Articles = await _context.Articles.ToListAsync();
 
-            ViewData["lstArticles"] = Articles;
-            return Page();
+                ViewData["lstArticles"] = Articles;
+                return Page();
+            }
+            catch (Exception)
+            {
+                return Page();
+            }
         }
 
     }
