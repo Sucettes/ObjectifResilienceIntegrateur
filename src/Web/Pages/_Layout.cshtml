@@ -19,29 +19,12 @@
 <body>
 
     <div class="globalContainer page">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#">Navbar</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                    <div class="navbar-nav">
-                        <a class="nav-link active" aria-current="page" href="#">Home</a>
-                        <a class="nav-link" href="#">Features</a>
-                        <a class="nav-link" href="#">Pricing</a>
-                        <a class="nav-link disabled">Disabled</a>
-                    </div>
-                </div>
-            </div>
-        </nav>
-        <nav class="navbar-expand-lg ">
 
-
-            <div class="div-nav-firstrow">
+        <nav class="navbar-expand-lg  navbar-light bg-light">
+            <div class="div-nav-firstrow container-fluid">
                 <a asp-page="/Index" class="navbar-brand borderCancell"><img src="../images/CJC-ObjectifResilience-Mangue.png" alt="image du site" title="image du site" /></a>
 
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" style="margin-top:1rem">
                     <span class="navbar-toggler-icon"></span>
                 </button>
             </div>
@@ -80,8 +63,16 @@
             @RenderBody()
             <footer>
                 <div class="footer">
-                    <div class="footer-part1">
-                        <p>Mauris eleifend scelerisque neque, in blandit nibh vehicula at. Phasellus dolor lorem, tincidunt at ante tempus, placerat convallis sapien. Aliquam in blandit arcu, ultricies bibendum mauris. Vestibulum sed libero nibh. Aenean sit amet ex quis nulla facilisis tincidunt. Nam in felis ante. Nunc cursus odio at congue pretium. Vestibulum quis nisi lacus. Aenean placerat, augue eu dictum mollis, odio leo cursus ligula, scelerisque tempus velit urna at arcu. Ut viverra id tellus ac faucibus. </p>
+                    <div class="footer-part1" style="display:flex;flex-direction:column;">
+                        <div style="display:flex;justify-content:space-between">
+                            <div><p>Ou nous trouver : </p></div>
+                            
+                            <div><p>Nos informations : </p></div>
+                        </div>
+                        <div>
+                            <p>Nos coordonnees : </p>
+                        </div>
+
                     </div>
 
                     <div class="footer-part2">
