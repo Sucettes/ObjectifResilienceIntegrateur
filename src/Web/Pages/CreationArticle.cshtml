@@ -3,22 +3,25 @@
 @using Domain.Entities
 
 
-<div>
+<div class="container">
+    <h2 style="text-align:center">Creatioon d'un article</h2>
+    <div style="margin:3rem;">
 
-    <form method="post" enctype="multipart/form-data">
-        <label for="titre">Titre de l'article :</label><br />
+        <form method="post" enctype="multipart/form-data">
+            <label for="titre" style="margin-top:3rem;" >Titre de l'article :</label><br />
 
-        <input type="text" id="titre" name="titre" value=""><br><br />
+            <input type="text" id="titre" name="titre" value=""  style="margin-bottom:2rem;"><br><br />
 
-        <textarea name="inerText"></textarea><br/><br/>
+            <textarea name="inerText"></textarea><br /><br />
 
-        <input multiple="multiple" asp-for="Input.FormFile" class="form-control" type="file" id="formFile"><br =/>
+            <input multiple="multiple" asp-for="Input.FormFile" class="form-control" type="file" id="formFile"><br = />
 
-        <input class="btn" type="submit" value="Upload"/><br /><br />
-    </form>
+            <input class="btn" type="submit" value="Upload" /><br /><br />
+        </form>
 
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.0.20/tinymce.min.js"></script>
-    <script type="text/javascript">
-        tinymce.init({ selector: 'textarea' });
-    </script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.0.20/tinymce.min.js"></script>
+        <script type="text/javascript">
+            tinymce.init({ selector: 'textarea' });
+        </script>
+    </div>
 </div>
