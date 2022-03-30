@@ -1,16 +1,17 @@
-.main-container{
-    background-color:green;
-    display:flex;
-    flex-direction:column
+.main-container {
+    background-color: green;
+    display: flex;
+    flex-direction: column
 }
+
 .first-alf-container {
-    background-color:white;
+    background-color: white;
 }
 
 .pageBox {
     margin-top: 3rem;
     margin-bottom: 3rem;
-    background-color: rgba(255, 164, 89,0.6);
+    background-color: #ffa733;
 }
 
 
@@ -28,6 +29,7 @@
     padding: 2rem;
     flex-wrap: wrap;
 }
+
 .theme-box {
     display: flex;
     width: 200px;
@@ -36,20 +38,51 @@
 }
 
 
-.containerArticleIndex {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-}
-
-.div-article1 {
-    background-color: rgba(255, 164, 89,0.6);
-}
-.div-article {
-    background-color: rgba(255, 164, 89,0.6);
-}
-
 a:link {
     text-decoration: none;
     /*color:black;*/
+}
+
+.container {
+    min-height: 1000px;
+}
+
+.rowContainer{
+    max-width:100%;
+}
+
+.articleContainer {
+    display: flex;
+}
+
+.articleBigContainer {
+    flex-basis: 66%;
+    margin:1rem
+}
+
+.articleSmallContainer {
+    flex-basis: 29.5%;
+    display: flex; 
+    margin:1rem;
+    flex-direction: column;
+}
+
+
+.div-article {
+    background-color: #ffa733;
+    flex: 1;
+    margin-bottom: 1rem;
+}
+
+.div-article1 {
+    background-color: #ffa733;
+}
+
+h3, h4 {
+    text-align: center;
+    text-vertical-align: middle;
+}
+
+h3 {
+    vertical-align: middle;
 }
