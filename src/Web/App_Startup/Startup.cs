@@ -162,7 +162,7 @@ namespace Gwenael.Web.App_Startup
                 }); 
                 config.AddPolicy("Production", builder =>
                 {
-                    builder.WithOrigins("https://Gwenael.com")
+                    builder.WithOrigins("https://gwenael.azurewebsites.net")
                         .AllowAnyHeader()
                         .AllowAnyMethod();
                 });
