@@ -7,8 +7,13 @@
 @{
     ViewData["Title"] = "Admin menu";
 }
+<!-- Entête de la page (Titre + btn retour) -->
+<nav class="navbar navbar-light shadow-sm">
+    <div class="container-fluid">
+        <h1>Panel Admin</h1>
+    </div>
+</nav>
 <div class="container">
-    <h1>Panel Admin</h1>
     <nav>
         <div class="nav nav-tabs">
             @if (ViewData["Tab"] is not null)
@@ -104,8 +109,9 @@
                                     </form>
                                 </div>
                             </div>
-                        }   
-                        else {
+                        }
+                        else
+                        {
                             <div class="container">
                                 <div class="row alert-info">
                                     <div class="col-12">
