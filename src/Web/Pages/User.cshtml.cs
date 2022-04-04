@@ -28,7 +28,6 @@ namespace Gwenael.Web.Pages
         {
             if (Guid.Empty == id)
             {
-                Console.WriteLine("Yo big");
                 return Page();
             }
             else
@@ -40,7 +39,7 @@ namespace Gwenael.Web.Pages
             }
 
         }
-        public async Task<IActionResult> OnPost(string btnSave, string btnDelete, string btnAdd, string NewPassword)
+        public async Task<IActionResult> OnPost(string btnSave, string btnDelete, string btnAdd, string NewPassword, string ConfPassword)
         {
             User userBd = null;
             try
@@ -52,16 +51,30 @@ namespace Gwenael.Web.Pages
             }
             if (btnSave != null)
             {
+                Console.WriteLine(NewPassword);
+                Console.WriteLine(ConfPassword);
+
+                if (NewPassword is not null)
+                {
+                    string hashedPassword = _passHasher.HashPassword(userBd, NewPassword);
+                    if (ConfPassword is not null)
+                    {
+                        PasswordVerificationResult result = _passHasher.VerifyHashedPassword(userBd, hashedPassword, ConfPassword);
+                        if (result is PasswordVerificationResult.Success)
+                        {
+                            Console.WriteLine("Success");
+                            userBd.PasswordHash = hashedPassword;
+                        }
+                        else
+                        {
+                            return Page();
+                        }
+                    }
+                }
                 userBd.UserName = user.UserName;
                 userBd.Email = user.Email;
                 userBd.LastName = user.LastName;
                 userBd.FirstName = user.FirstName;
-                if (NewPassword is not null)
-                {
-                    string hashedPassword = _passHasher.HashPassword(userBd, NewPassword);
-                    userBd.PasswordHash = hashedPassword;
-
-                }
                 await _context.SaveChangesAsync();
                 return RedirectToPage("adminMenu");
             }
@@ -76,7 +89,18 @@ namespace Gwenael.Web.Pages
                 if (NewPassword is not null)
                 {
                     string hashedPassword = _passHasher.HashPassword(userBd, NewPassword);
-                    user.PasswordHash = hashedPassword;
+                    if (ConfPassword is not null)
+                    {
+                        PasswordVerificationResult result = _passHasher.VerifyHashedPassword(userBd, hashedPassword, ConfPassword);
+                        if(result is PasswordVerificationResult.Success)
+                        {
+                            user.PasswordHash = hashedPassword;
+                        }
+                        else
+                        {
+                            return Page();
+                        }
+                    }
                 }
                 User newUser = new User
                 {
@@ -84,8 +108,8 @@ namespace Gwenael.Web.Pages
                     LastName = user.LastName,
                     Email = user.Email,
                     UserName = user.UserName,
-                    PasswordHash = user.PasswordHash
-
+                    PasswordHash = user.PasswordHash,
+                    Active = true
                 };
                 _context.Users.Add(newUser);
                 _context.SaveChanges();

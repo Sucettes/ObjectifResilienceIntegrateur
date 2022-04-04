@@ -28,48 +28,65 @@
     <form method="post">
         <input type="hidden" asp-for="user.Id" />
         <div class="row">
-            <div class="col-4">
+            <div class="col-3">
             </div>
-            <div class="col-4">
+            <div class="col-6">
                 <br />
-                <label asp-for="user.FirstName">Prénom</label>
-                <input asp-for="user.FirstName" required style="width:100% !important" />
+                <div class="input-group input-group-sm mb-3">
+                    <span class="input-group-text">Prénom</span>
+                    <input type="text" class="form-control" aria-label="Prénom" aria-describedby="Prénom" asp-for="user.FirstName" required>
+                </div>
             </div>
-            <div class="col-4"></div>
+            <div class="col-3"></div>
         </div>
         <div class="row">
-            <div class="col-4"></div>
-            <div class="col-4">
-                <label asp-for="user.LastName">Nom de Famille</label>
-                <input asp-for="user.LastName" required style="width:100% !important" />
+            <div class="col-3"></div>
+            <div class="col-6">
+                <div class="input-group input-group-sm mb-3">
+                    <span class="input-group-text">Nom de famille</span>
+                    <input type="text" class="form-control" aria-label="Nom de famille" aria-describedby="Nom de famille" asp-for="user.LastName" required>
+                </div>
             </div>
-            <div class="col-4"></div>
+            <div class="col-3"></div>
         </div>
         <div class="row">
-            <div class="col-4"></div>
-            <div class="col-4">
-                <label asp-for="user.Email">Courriel</label>
-                <input asp-for="user.Email" required style="width:100% !important" />
+            <div class="col-3"></div>
+            <div class="col-6">
+                <div class="input-group input-group-sm mb-3">
+                    <span class="input-group-text">Courriel</span>
+                    <input type="text" class="form-control" aria-label="Courriel" aria-describedby="Courriel" asp-for="user.Email" required>
+                </div>
             </div>
-            <div class="col-4"></div>
+            <div class="col-3"></div>
         </div>
         <div class="row">
-            <div class="col-4"></div>
-            <div class="col-4">
-                @if (ViewData["passwordUser"] is null)
+            <div class="col-3"></div>
+            <div class="col-6">
+                @if (@ViewContext.RouteData.Values["id"] is null)
                 {
-                    <label for="NewPassword">Mot de passe</label>
-                    <input for="NewPassword" name="NewPassword" required style="width:100% !important" />
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text">Mot de passe</span>
+                        <input type="password" class="form-control" aria-label="NewPassword" aria-describedby="NewPassword" name="NewPassword" required>
+                    </div>
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text">Confirmation du mot de passe</span>
+                        <input type="password" class="form-control" aria-label="ConfPassword" aria-describedby="ConfPassword" name="ConfPassword" required>
+                    </div>
                 }
                 else
                 {
-                    <label for="oldPassword">Mot de passe courant</label>
-                    <input for="oldPassword" style="width:100% !important" type="password" value="@ViewData["passwordUser"]" disabled/>
-                    <label for="newPassword">Nouveau mot de passe</label>
-                    <input form="newPassword" name="NewPassword" style="width:100% !important" type="password" required>
+                    <br /><h4>Modification du mot de passe</h4>
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text">Nouveau mot de passe</span>
+                        <input type="password" class="form-control" aria-label="NewPassword" aria-describedby="NewPassword" name="NewPassword">
+                    </div>
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text">Confirmation du mot de passe</span>
+                        <input type="password" class="form-control" aria-label="ConfPassword" aria-describedby="ConfPassword" name="ConfPassword">
+                    </div>
                 }
             </div>
-            <div class="col-4"></div>
+            <div class="col-3"></div>
         </div>
         <br />
         @if (@ViewContext.RouteData.Values["id"] is not null)
