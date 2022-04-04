@@ -26,9 +26,10 @@ namespace Gwenael.Web.Pages
         public User user { get; set; }
         public async Task<IActionResult> OnGetAsync(Guid id)
         {
-            if (id.ToString() is null or "")
+            if (Guid.Empty == id)
             {
-                return RedirectToPage("User");
+                Console.WriteLine("Yo big");
+                return Page();
             }
             else
             {
