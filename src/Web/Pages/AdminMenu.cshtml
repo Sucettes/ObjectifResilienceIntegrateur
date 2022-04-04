@@ -7,13 +7,34 @@
 @{
     ViewData["Title"] = "Admin menu";
 }
-<div>
+<div class="container">
     <h1>Panel Admin</h1>
-    <ul class="nav nav-tabs">
-        <li class="nav-item"><a href="?tab=utilisateurs" class="nav-link">Utilisateurs</a></li>
-        <li class="nav-item"><a href="?tab=roles" class="nav-link">Rôles</a></li>
-        <li class="nav-item"><a href="?tab=demandes" class="nav-link">Demandes</a></li>
-    </ul>
+    <nav>
+        <div class="nav nav-tabs">
+            @if (ViewData["Tab"] is not null)
+            {
+                @if (ViewData["Tab"].ToString() == "utilisateurs")
+                {
+                    <a href="?tab=utilisateurs" class="nav-link active">Utilisateurs</a>
+                    <a href="?tab=roles" class="nav-link">Rôles</a>
+                    <a href="?tab=demandes" class="nav-link">Demandes</a>
+                }
+                @if (ViewData["Tab"].ToString() == "roles")
+                {
+                    <a href="?tab=utilisateurs" class="nav-link">Utilisateurs</a>
+                    <a href="?tab=roles" class="nav-link active">Rôles</a>
+                    <a href="?tab=demandes" class="nav-link">Demandes</a>
+                }
+                @if (ViewData["Tab"].ToString() == "demandes")
+                {
+                    <a href="?tab=utilisateurs" class="nav-link">Utilisateurs</a>
+                    <a href="?tab=roles" class="nav-link">Rôles</a>
+                    <a href="?tab=demandes" class="nav-link active">Demandes</a>
+                }
+            }
+
+        </div>
+    </nav>
     <table class="table">
 
         @if (ViewData["Tab"] is not null)
@@ -29,9 +50,6 @@
                 <tr>
                     <th>
                         <div class="list-group" id="myList" role="tablist">
-                            <a href="#" class="list-group-item list-group-item-action active">
-
-                            </a>
                             @foreach (var user in ViewData["lstUsers"] as IList<User>)
                             {
                                 <a href="?tab=roles&guid=@user.Id" class="list-group-item list-group-item-action">@user.Email</a>
@@ -49,17 +67,16 @@
                         }
                         @if (ViewData["userRoles"] is not null)
                         {
-                            <div class="list-group">
+                            <div class="container">
 
                                 @foreach (var roleUser in ViewData["userRoles"] as List<Role>)
                                 {
-                                    <div class="list-group-item ">
+                                    <div class="list-group-item">
                                         <div class="row">
-                                            <div class="col-6">
+                                            <div class="col-8">
                                                 <p>@roleUser.Name</p>
                                             </div>
-                                            <div class="col-3"></div>
-                                            <div class="col-sm">
+                                            <div class="col-4">
                                                 <form method="post">
                                                     <input type="hidden" name="name" asp-for="@roleUser.Name" />
                                                     <input name="btnDeleteRole" type="submit" value="Retirer" class="btn btn-danger form-control" />
@@ -68,29 +85,33 @@
                                         </div>
                                     </div>
                                 }
-                                @if ((ViewData["selectRoles"] as List<Role>).Count() > 0)
-                                {
-                                    <div class="list-group-item ">
-
-                                        <form method="post">
-                                            <div class="row">
-                                                <div class="col-6"><p>Sélectionner un rôle à ajouter :</p></div>
-                                                <div class="col-3">
-                                                    <select class="form-control" name="selectRole">
-                                                        @foreach (var roleSelect in ViewData["selectRoles"] as List<Role>)
-                                                        {
-                                                            <option value="@roleSelect.Name">@roleSelect.Name</option>
-                                                        }
-                                                    </select>
-                                                </div>
-                                                <div class="col-sm">
-                                                    <input name="btnAjoutRole" type="submit" value="Ajouter" class="btn btn-success form-control" />
-                                                </div>
+                                <div class="list-group-item">
+                                    <form method="post">
+                                        <div class="row">
+                                            <div class="col-8">
+                                                <p>Sélectionner un rôle à ajouter :</p>
+                                                <select class="form-control" name="selectRole">
+                                                    @foreach (var roleSelect in ViewData["selectRoles"] as List<Role>)
+                                                    {
+                                                        <option value="@roleSelect.Name">@roleSelect.Name</option>
+                                                    }
+                                                </select>
                                             </div>
-                                        </form>
+                                            <div class="col-4" style="align-self:end;">
+                                                <input name="btnAjoutRole" type="submit" value="Ajouter" class="btn btn-success form-control" />
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        }   
+                        else {
+                            <div class="container">
+                                <div class="row alert-info">
+                                    <div class="col-12">
+                                        <p style="text-align:center;">Sélectionner un utilisateur afin d'afficher ces rôles.</p>
                                     </div>
-
-                                }
+                                </div>
                             </div>
                         }
                     </th>
@@ -101,7 +122,7 @@
             {
                 <thead>
                     <tr>
-                        <th scope="col">Email</th>
+                        <th scope="col">Courriel</th>
                         <th scope="col">Date de création</th>
                         <th scope="col"><a asp-page="user" asp-route-id="" class="btn btn-success btn-sm">Ajouter un utilisateur</a></th>
                     </tr>
@@ -111,7 +132,7 @@
                     <tbody>
                         <tr>
                             <td>@user.Email</td>
-                            <td>@user.CreationDate</td>
+                            <td>@user.CreationDate.ToString("dd/MM/yyyy")</td>
                             <td><a asp-page="user" asp-route-id="@user.Id" class="btn btn-success btn-sm">Modifier</a></td>
                         </tr>
                     </tbody>

@@ -9,40 +9,39 @@
     var rangee = Model.Input.lstRangeeTuto;
 }
 
-<div class="container">
-    <row class="row">
-        <div class="col-md-6">
-            <h1>Consultation tutoriel</h1>
-        </div>
-        <div class="col-md-6">
-            <form method="post" asp-page="Consultation" style="float: right;">
-                <button type="submit" class="btn btn-outline-primary" asp-page-handler="RedirectHomeTuto">Retour</button>
-            </form>
-        </div>
-    </row>
-    <br />
-
-
-    @if (@Model.Input.tutoriel != null)
+@if (@Model.Input.tutoriel != null)
+{
+    @if (@tuto.EstPublier == true)
     {
-        @if (@tuto.EstPublier == true)
-        {
+        <!-- Entête de la page (Titre + btn retour) -->
+        <nav class="navbar navbar-light shadow-sm">
+            <div class="container-fluid">
+                <h1>Consultation tutoriel</h1>
+                <div class="d-flex">
+                    <form method="post" asp-page="CreationTuto" style="margin-right:0.4rem;">
+                        <button type="submit" class="btn btn-outline-primary" asp-page-handler="RedirectHomeTuto">Retour</button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+        <div class="container">
+            <br>
             <div class="row">
                 <div class="col-md-12">
                     <div class="row">
                         <div class="col-md-6">
                             @if (!@tuto.LienImgBanniere.IsNullOrEmpty())
                             {
-                                <img src="@tuto.LienImgBanniere" class="card-img-top" alt="...">
+                                <img src="@tuto.LienImgBanniere" class="card-img-top shadow-lg" alt="...">
                             }
                             else
                             {
-                                <img src="~/images/imgplaceholder.png" class="card-img-top" alt="...">
+                                <img src="~/images/imgplaceholder.png" class="card-img-top shadow-lg" alt="...">
                             }
                         </div>
                         <div class="col-md-6">
                             <h2>@tuto.Titre</h2>
-                            <p>@tuto.DateCreation</p>
+                            <p>Par @tuto.AuteurUserId le @tuto.DateCreation</p>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputDuree">Durée (heures)</span>
                                 <input type="number" class="form-control" aria-label="Durée" aria-describedby="Durée" value="@tuto.Duree" disabled>
@@ -70,9 +69,13 @@
                         </div>
                     </div>
                     <br />
+                    <br />
                     <div class="row">
-                        <div class="col-md-12">
-                            <p style="text-align:justify;">@tuto.Introduction</p>
+                        <div class="shadow-sm rounded col-md-12" style="background-color:#f1f9ee; padding:0.7rem; margin-bottom:1.2rem; margin-top:0.7rem;">
+                            <h2 class="col-6" style="display:inline; text-align:left;">Introduction</h2>
+                            <div class="card-body row">
+                                <p style="text-align:justify;">@tuto.Introduction</p>
+                            </div>
                         </div>
                     </div>
 
@@ -80,58 +83,57 @@
                     {
                         @foreach (var row in rangee)
                         {
-                            <br />
+                            <div class="shadow-sm rounded" style="background-color:#f1f9ee; padding:0.7rem; margin-bottom:1.2rem; margin-top:0.7rem;">
 
-                            <div class="row">
-                                @if (row.PositionImg == "left")
-                                {
+                                <h3 class="col-6" style="display:inline; text-align:left;">Un titre....</h3>
+
+                                <div class="card-body row">
+                                    <!-- Contenue de la rangéé. -->
                                     @if (!row.LienImg.IsNullOrEmpty())
                                     {
                                         @if (!row.Texte.IsNullOrEmpty())
                                         {
-                                            <div class="col-md-4"><img src="@row.LienImg" class="img-fluid rounded-start" alt="..."></div>
-                                            <div class="col-md-8"><p style="text-align:justify;">@row.Texte</p></div>
+                                            @if (row.PositionImg == "left")
+                                            {
+                                                <div class="col-md-4">
+                                                    <img src="@row.LienImg" class="card-img-top" style="max-height:20rem; max-width:30rem;" alt="...">
+
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <p class="card-text" style="text-align:justify;">@row.Texte</p>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="col-md-8">
+                                                    <p class="card-text" style="text-align:justify;">@row.Texte</p>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <img src="@row.LienImg" class="card-img-top" style="max-height:20rem; max-width:30rem;" alt="...">
+                                                </div>
+                                            }
                                         }
                                         else
                                         {
-                                            <div class="col-md-12"><img src="@row.LienImg" class="img-fluid rounded-start" alt="..."></div>
-                                        }
-
-                                    }
-                                    else
-                                    {
-                                        <div class="col-md-12"><p style="text-align:justify;">@row.Texte</p></div>
-                                    }
-                                }
-                                else
-                                {
-
-                                    @if (!row.LienImg.IsNullOrEmpty())
-                                    {
-
-                                        @if (!row.Texte.IsNullOrEmpty())
-                                        {
-                                            <div class="col-md-8"><p style="text-align:justify;">@row.Texte</p></div>
-                                            <div class="col-md-4"><img src="@row.LienImg" class="img-fluid rounded-start" alt="..."></div>
-                                        }
-                                        else
-                                        {
-                                            <div class="col-md-12"><img src="@row.LienImg" class="img-fluid rounded-start" alt="..."></div>
+                                            <img src="@row.LienImg" class="card-img-top" style="max-height:20rem; max-width:30rem;" alt="...">
                                         }
                                     }
                                     else
                                     {
-                                        <div class="col-md-12"><p style="text-align:justify;">@row.Texte</p></div>
+                                        <p class="card-text" style="text-align:justify;">@row.Texte</p>
                                     }
-                                }
+                                </div>
                             </div>
+                            <br />
                         }
                     }
+
                 </div>
             </div>
-        }
+        </div>
     }
-</div>
+}
+
 
 <div class="modal" id="modalValideDeleteTuto" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalValideDeleteTutoLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -180,8 +182,7 @@
         <div class="toast-body">Le tutoriel a bien été publié!</div>
     </div>
 </div>
-<p>@*efesfs*@</p>
 
-<script src="~/js/tutorielSupprimer.js" asp-append-version="true"></script>
-<script src="~/js/tutorielUnpublish.js" asp-append-version="true"></script>
-<script src="~/js/tutorielToastPublish.js" asp-append-version="true"></script>
+<script src="~/javascript/tutorielSupprimer.js" asp-append-version="true"></script>
+<script src="~/javascript/tutorielUnpublish.js" asp-append-version="true"></script>
+<script src="~/javascript/tutorielToastPublish.js" asp-append-version="true"></script>

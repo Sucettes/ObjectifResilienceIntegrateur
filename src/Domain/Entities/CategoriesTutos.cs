@@ -4,13 +4,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Gwenael.Domain.Entities
 {
-    public class Categorie
+    public class CategoriesTutos
     {
         public Guid Id { get; set; }
         [Required] [MaxLength(50)] public string Nom { get; set; }
         [Required] [MaxLength(100)] public string Description { get; set; }
 
-        public Categorie()
+        public CategoriesTutos()
         {
 
         }

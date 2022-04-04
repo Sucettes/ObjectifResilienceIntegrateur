@@ -7,52 +7,113 @@
     ViewData["Title"] = "Home tutoriel";
 }
 
-<div class="container">
-    <row class="row">
-        <div class="col-md-6">
-            <h1>Home tutoriel</h1>
-        </div>
-        <div class="col-md-6">
-            <form method="post" asp-page="Index" style="float: right;">
-                <button type="submit" class="btn btn-outline-primary" asp-page-handler="RedirectCreationTuto">Créé un tutoriel</button>
+<!-- Entête de la page (Titre + barre de recherche) -->
+<nav class="navbar navbar-light shadow-sm">
+    <div class="container-fluid">
+        <h1>Les tutoriels</h1>
+        <form class="d-flex">
+            <input class="form-control me-2" type="search" placeholder="Recherche">
+            <button class="btn btn-outline-primary" type="submit">Recherche</button>
+        </form>
+    </div>
+</nav>
+<div class="container-fluid">
+    <br />
+    <div class="row">
+        <!-- Contenue du menu (Ou les filtres de recherche ce trouve) -->
+        <div class="col-3">
+            <h4>Filtre de recherches</h4>
+            <hr />
+
+            <!-- Btn Radio pour le mode de filtre. -->
+            <div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="radioFiltre" id="radioFiltreAuteur">
+                    <label class="form-check-label" for="radioFiltreAuteur" style="margin:0;">Par auteur</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="radioFiltre" id="radioFiltreMesTuto" checked>
+                    <label class="form-check-label" for="radioFiltreMesTuto" style="margin:0;">Mes tutoriels</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="radioFiltre" id="radioFiltreTitre" checked>
+                    <label class="form-check-label" for="radioFiltreTitre" style="margin:0;">Par titre</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="radioFiltre" id="radioFiltreCategorie" checked>
+                    <label class="form-check-label" for="radioFiltreCategorie" style="margin:0;">Par catégorie</label>
+                </div>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="radioFiltreEstPublie">
+                    <label class="form-check-label" for="radioFiltreEstPublie" style="margin:0;">Est pubié</label>
+                </div>
+            </div>
+
+            <br />
+            <br />
+
+            <form method="post" asp-page="Index" style="display:flex; justify-content: center;">
+                <button type="submit" class="btn btn-outline-secondary" asp-page-handler="RedirectCreationTuto">Ajouté un tutoriel</button>
             </form>
         </div>
-    </row>
-    <br />
 
-    <div class="row">
-        @if (!(@Model.Input.lstTutoriels.IsNullOrEmpty()))
-        {
-            @foreach (var tuto in @Model.Input.lstTutoriels)
-            {
-                @if (tuto.EstPublier == true)
+        <!-- Contenue de la page (ou les articles ce trouve) -->
+        <div class="col-9">
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+                @if (!(@Model.Input.lstTutoriels.IsNullOrEmpty()))
                 {
-                    <a href="Tutoriel/Consultation?id=@tuto.Id" style="width: 18rem;" class=" card list-group-item list-group-item-action">
-                        @if (!tuto.LienImgBanniere.IsNullOrEmpty())
+                    @foreach (var tuto in @Model.Input.lstTutoriels)
+                    {
+                        @if (@tuto.EstPublier == true)
                         {
-                            <img src="@tuto.LienImgBanniere" class="card-img-top" alt="...">
+                            <a href="Tutoriel/Consultation?id=@tuto.Id" class="col">
+                                <div class="shadow-lg rounded" style="background-color:#f1f9ee;">
+                                    <div>
+                                        @if (!tuto.LienImgBanniere.IsNullOrEmpty())
+                                        {
+                                            <img src="@tuto.LienImgBanniere" class="card-img-top shadow-lg" alt="...">
+                                        }
+                                        else
+                                        {
+                                            <img src="~/images/imgplaceholder.png" class="card-img-top shadow-lg" alt="...">
+                                        }
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="card-title">@tuto.Titre</h5>
+                                        <ul>
+                                            <li>Durée (h): @tuto.Duree</li>
+                                            <li>Coût: @tuto.Cout</li>
+                                            <li>Difficulte: @tuto.Difficulte</li>
+                                            <li>Catégorie: @tuto.Categorie</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </a>
                         }
-                        else
-                        {
-                            <img src="~/images/imgplaceholder.png" class="card-img-top" alt="...">
-                        }
-                        <div class="card-body">
-                            <h5 class="card-title">@tuto.Titre</h5>
-                            <ul>
-                                <li>Durée (h): @tuto.Duree</li>
-                                <li>Coût: @tuto.Cout</li>
-                                <li>Difficulte: @tuto.Difficulte</li>
-                                <li>Catégorie: @tuto.Categorie</li>
-                            </ul>
-                            @*<p class="card-text">
-                                    @tuto.Introduction
-
-                                </p>*@
-                        </div>
-                    </a>
+                    }
                 }
-            }
-        }
+            </div>
+
+            <!-- Navigation de pagination -->
+            <nav>
+                <ul class="pagination justify-content-center">
+                    <li class="page-item">
+                        <a class="page-link" href="#">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+        </div>
 
     </div>
 </div>
@@ -89,5 +150,5 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.6.0/umd/popper.min.js" integrity="sha512-BmM0/BQlqh02wuK5Gz9yrbe7VyIVwOzD1o40yi1IsTjriX/NGF37NyXHfmFzIlMmoSIBXgqDiG1VNU6kB5dBbA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 @*<script src="~/js/tutoAddRow.js" asp-append-version="true"></script>*@
 
-<script src="~/js/tutorielToastSupprimer.js" asp-append-version="true"></script>
-<script src="~/js/tutorielToastUnPublish.js" asp-append-version="true"></script>
+<script src="~/javascript/tutorielToastSupprimer.js" asp-append-version="true"></script>
+<script src="~/javascript/tutorielToastUnPublish.js" asp-append-version="true"></script>

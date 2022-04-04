@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Gwenael.Domain.Entities
 {
-    public class RangeeTutoriel
+    public class RangeeTutos
     {
         public Guid Id { get; set; }
         public string Texte { get; set; }
@@ -13,7 +13,7 @@ namespace Gwenael.Domain.Entities
         [Required] public string PositionImg { get; set; }
         [Required] public Guid TutorielId { get; set; }
 
-        public RangeeTutoriel()
+        public RangeeTutos()
         {
         }
     }
