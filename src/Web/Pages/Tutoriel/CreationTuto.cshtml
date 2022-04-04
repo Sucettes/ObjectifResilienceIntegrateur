@@ -51,7 +51,8 @@
                 <div class="@(handler == "CreeTutorielDetails" ? "tab-pane show active" : "tab-pane ")" style="background-color:white;" id="nav-detail" role="tabpanel" aria-labelledby="nav-detail-tab">
                     <h3 style="text-align:left;">Détails du tutoriel</h3>
 
-                    <form method="post" asp-page="CreationTuto" enctype="multipart/form-data">
+                    <form method="post" asp-page="CreationTuto" enctype="multipart/form-data" id="formCreationTuto">
+                        <input id="idTutoP" value="@id" hidden name="idTutoP"/>
                         <div class="row">
                             <div class="col-md-6">
                                 @if (Model.Input.imgBannierUrl != null)
@@ -67,20 +68,20 @@
                             <div class="col-md-6">
                                 <div class="input-group input-group-sm mb-3">
                                     <span class="input-group-text" id="inputTitre">Titre</span>
-                                    <input type="text" class="form-control" aria-label="Titre" aria-describedby="Titre" asp-for="@Model.Input.titre">
+                                    <input type="text" class="form-control" aria-label="Titre" aria-describedby="Titre" asp-for="@Model.Input.titre" name="titre">
                                 </div>
 
                                 <div class="row">
                                     <div class="col-6">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputDuree">Durée (heures)</span>
-                                            <input type="number" class="form-control" aria-label="Durée" aria-describedby="Durée" asp-for="@Model.Input.duree">
+                                            <input type="number" class="form-control" aria-label="Durée" aria-describedby="Durée" asp-for="@Model.Input.duree" name="duree">
                                         </div>
                                     </div>
                                     <div class="col-6">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputCout">Cout</span>
-                                            <input type="number" class="form-control" aria-label="Cout" aria-describedby="Cout" asp-for="@Model.Input.cout">
+                                            <input type="number" class="form-control" aria-label="Cout" aria-describedby="Cout" asp-for="@Model.Input.cout" name="cout">
                                             <span class="input-group-text">$</span>
                                         </div>
                                     </div>
@@ -88,16 +89,16 @@
 
                                 <div class="input-group input-group-sm mb-3">
                                     <label for="DifficulteRange" style="width: 100%;">Difficulté 1 à 10</label>
-                                    <input type="range" class="form-range" min="1" max="10" id="DifficulteRange" asp-for="@Model.Input.difficulte" required>
+                                    <input type="range" class="form-range" min="1" max="10" id="DifficulteRange" asp-for="@Model.Input.difficulte" required name="difficulte">
                                 </div>
 
                                 <div class="input-group input-group-sm mb-3">
-                                    <input type="file" class="form-control form-control-sm" id="inputImgBanierre" asp-for="@Model.Input.imageBanierFile">
+                                    <input type="file" class="form-control form-control-sm" id="inputImgBanierre" asp-for="@Model.Input.imageBanierFile" name="imageBanierFile">
                                 </div>
 
                                 <div class="input-group input-group-sm mb-3">
                                     <label for="categorieDataList" style="width: 100%;">Sélectionner une catégorie</label>
-                                    <input class="form-control shadow-sm" list="categorieDatalistOptions" id="categorieDataList" placeholder="Écrire pour rechercher..." asp-for="@Model.Input.cat">
+                                    <input class="form-control shadow-sm" list="categorieDatalistOptions" id="categorieDataList" placeholder="Écrire pour rechercher..." asp-for="@Model.Input.cat" name="cat">
                                     <datalist id="categorieDatalistOptions">
                                         @if (!(@Model.Input.lstCategories.IsNullOrEmpty()))
                                         {
@@ -123,14 +124,15 @@
                                 <br />
                                 <h2>Introduction</h2>
 
-                                <div class="input-group">
+                               @*<div class="input-group">*@
+                                <div>
                                     @if (!String.IsNullOrEmpty(@Model.Input.intro))
                                     {
-                                        <textarea class="form-control shadow-sm" rows="7" name="intro">@Model.Input.intro</textarea>
+                                        <textarea class="form-control shadow-sm" rows="7" name="intro" id="intro">@Model.Input.intro</textarea>
                                     }
                                     else
                                     {
-                                        <textarea class="form-control shadow-sm" rows="7" name="intro"></textarea>
+                                        <textarea class="form-control shadow-sm" rows="7" name="intro" id="intro"></textarea>
 
                                     }
                                 </div>
@@ -138,8 +140,8 @@
                         </div>
 
                         <br />
-                        <button type="submit" class="@(String.IsNullOrEmpty(Model.Input.id) ? "btn btn-outline-primary" : "btn disabled btn-primary")" asp-route-id="@id" asp-page-handler="CreeTutorielDetails">Créé tutoriel</button>
-                        <button type="submit" class="@(String.IsNullOrEmpty(Model.Input.id) ? "btn disabled btn-primary" : "btn btn-outline-primary")" asp-route-id="@id" asp-page-handler="ModifieTutorielDetails">Modifié tutoriel</button>
+                        <button id="btnCreeTuto" data-creationTuto type="submit" class="@(String.IsNullOrEmpty(Model.Input.id) ? "btn btn-outline-primary" : "btn disabled btn-primary")">Créé tutoriel</button>
+                        <button id="btnModifierTuto" data-modificationTuto type="submit" class="@(String.IsNullOrEmpty(Model.Input.id) ? "btn disabled btn-primary" : "btn btn-outline-primary")">Modifié tutoriel</button>
                         <button type="submit" class="btn btn-outline-primary" asp-page-handler="NettoyerTutorielDetails">Nettoyé</button>
                     </form>
                 </div>
@@ -389,9 +391,14 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.js" integrity="sha512-n/4gHW3atM3QqRcbCn6ewmpxcLAHGaDjpEBu4xZd47N0W2oQ+6q7oc3PXstrJYXcbNU1OHdQ1T7pAP+gi5Yu8g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.6.0/umd/popper.min.js" integrity="sha512-BmM0/BQlqh02wuK5Gz9yrbe7VyIVwOzD1o40yi1IsTjriX/NGF37NyXHfmFzIlMmoSIBXgqDiG1VNU6kB5dBbA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="~/javascript/tutorielSupprimerRangee.js" asp-append-version="true"></script>
-<script src="~/javascript/tutorielToast.js" asp-append-version="true"></script>
-<script src="~/javascript/tutorielCreeToast.js" asp-append-version="true"></script>
-<script src="~/javascript/tutorielModificationToast.js" asp-append-version="true"></script>
-<script src="~/javascript/tutorielCategorieCreeToast.js" asp-append-version="true"></script>
+<script src="~/javascript/Tutoriel/tutorielSupprimerRangee.js" asp-append-version="true"></script>
+<script src="~/javascript/Tutoriel/tutorielToast.js" asp-append-version="true"></script>
+<script src="~/javascript/Tutoriel/tutorielCategorieCreeToast.js" asp-append-version="true"></script>
 
+<script src="~/javascript/Tutoriel/creation/CreationTutoPageAction.js" asp-append-version="true"></script>
+<script src="~/javascript/Tutoriel/creation/ModificationTutoPageAction.js" asp-append-version="true"></script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.0.20/tinymce.min.js"></script>
+<script type="text/javascript">
+    tinymce.init({ selector: 'textarea' });
+</script>

@@ -92,93 +92,139 @@ namespace Gwenael.Web.Pages
 
         public IActionResult OnPostRedirectHomeTuto() => RedirectToPage("Index");
 
+        public class CreationTutoFormData
+        {
+            public string idTutoP { get; set; }
+            public string titre { get; set; }
+            public int duree { get; set; }
+            public double cout { get; set; }
+            public int difficulte { get; set; }
+            public IFormFile imageBanierFile { get; set; }
+            public string imgUrl { get; set; }
+            public string cat { get; set; }
+            public string intro { get; set; }
+        }
 
-        public IActionResult OnPostCreeTutorielDetails(string intro, string id, string handler)
+        public IActionResult OnPostCreeTutorielDetails([FromForm] CreationTutoFormData formData)
         {
             try
             {
-                string imgUrl = null;
+                formData.imgUrl = null;
                 string creationTutoStatus = "false";
-                Input.id = id;
-                Input.handler = handler;
-                if (!(_db.CategoriesTutos.Where(c => c.Nom == Input.cat).Count() == 0))
+                Input.id = formData.idTutoP;
+                Input.handler = "CreeTutorielDetails";
+                if (!(_db.CategoriesTutos.Where(c => c.Nom == formData.cat).Count() == 0))
                 {
-                    CategoriesTutos cat = _db.CategoriesTutos.Where(c => c.Nom == Input.cat).First();
+                    CategoriesTutos cat = _db.CategoriesTutos.Where(c => c.Nom == formData.cat).First();
 
-                    if (cat != null && _db.Tutos.Where(t => t.Titre == Input.titre).Count() == 0)
+                    if (cat != null && _db.Tutos.Where(t => t.Titre == formData.titre).Count() == 0)
                     {
-                        Console.WriteLine(Input.imageBanierFile);
-                        if (Input.imageBanierFile != null)
+                        if (formData.imageBanierFile != null)
                         {
                             using (var client = new AmazonS3Client("AKIAVDH3AEDD6PUJMKGG", "kKV5WKu0tFe8Svl2QdTIMIydLc7CGSMiy2h+KOvV", RegionEndpoint.CACentral1))
                             {
                                 using (var newMemoryStream = new MemoryStream())
                                 {
-                                    Input.imageBanierFile.CopyTo(newMemoryStream);
+                                    formData.imageBanierFile.CopyTo(newMemoryStream);
                                     var uploadRequest = new TransferUtilityUploadRequest
                                     {
                                         InputStream = newMemoryStream,
-                                        Key = (DateTime.Now.Ticks + Input.imageBanierFile.FileName).ToString(), // filename
+                                        Key = (DateTime.Now.Ticks + formData.imageBanierFile.FileName).ToString(), // filename
                                         BucketName = "mediafileobjectifresiliance", // bucket name of S3
                                         CannedACL = S3CannedACL.PublicRead,
                                     };
 
                                     var fileTransferUtility = new TransferUtility(client);
                                     fileTransferUtility.Upload(uploadRequest);
-                                    imgUrl = ("https://mediafileobjectifresiliance.s3.ca-central-1.amazonaws.com/" + uploadRequest.Key).ToString();
+                                    formData.imgUrl = ("https://mediafileobjectifresiliance.s3.ca-central-1.amazonaws.com/" + uploadRequest.Key).ToString();
                                 }
                             }
                         }
-                        Input.imgBannierUrl = imgUrl;
+                        Input.imgBannierUrl = formData.imgUrl;
                         Domain.Entities.Tutos tuto = new Domain.Entities.Tutos();
-                        tuto.Titre = Input.titre;
-                        tuto.Duree = Input.duree;
-                        tuto.Cout = Input.cout;
-                        tuto.Difficulte = Input.difficulte;
+                        tuto.Titre = formData.titre;
+                        tuto.Duree = formData.duree;
+                        tuto.Cout = formData.cout;
+                        tuto.Difficulte = formData.difficulte;
                         tuto.Categorie = cat;
-                        tuto.Introduction = intro;
-                        tuto.LienImgBanniere = imgUrl;
+                        tuto.Introduction = formData.intro;
+                        tuto.LienImgBanniere = formData.imgUrl;
 
                         if (tuto.EstValide())
                         {
                             _db.Tutos.Add(tuto);
                             _db.SaveChanges();
 
-                            Input.id = _db.Tutos.Where(t => t.Titre == tuto.Titre).First().Id.ToString();
+                            formData.idTutoP = _db.Tutos.Where(t => t.Titre == tuto.Titre).First().Id.ToString();
                             creationTutoStatus = "true";
                         }
                     }
                 }
+
                 UpdateInputData();
-                return Redirect("/tutoriel/CreationTuto?handler=CreeTutorielDetails&id=" + Input.id + "&creationTutoStatus=" + creationTutoStatus);
+                if (creationTutoStatus == "true")
+                {
+                    return StatusCode(201, new JsonResult(formData));
+                }
+                else
+                {
+                    return StatusCode(400, new JsonResult(formData));
+                }
+
             }
             catch (Exception)
             {
                 UpdateInputData();
-                return Page();
+                return StatusCode(400, new JsonResult(formData));
             }
         }
 
-        public IActionResult OnPostModifieTutorielDetails(string intro, string id)
+        public IActionResult OnPostModifieTutorielDetails([FromForm] CreationTutoFormData formData)
         {
             try
             {
                 string modificationTutoStatus = "false";
-                Input.id = id;
+                Input.id = formData.idTutoP;
                 Input.handler = "CreeTutorielDetails";
-                if (!(_db.CategoriesTutos.Where(c => c.Nom == Input.cat).Count() == 0))
+                if (!(_db.CategoriesTutos.Where(c => c.Nom == formData.cat).Count() == 0))
                 {
-                    CategoriesTutos cat = _db.CategoriesTutos.Where(c => c.Nom == Input.cat).First();
-                    Domain.Entities.Tutos tuto = _db.Tutos.Where(t => t.Id == Guid.Parse(id)).First();
+                    CategoriesTutos cat = _db.CategoriesTutos.Where(c => c.Nom == formData.cat).First();
+                    Domain.Entities.Tutos tuto = _db.Tutos.Where(t => t.Id == Guid.Parse(formData.idTutoP)).First();
+                    if (formData.imageBanierFile != null)
+                    {
+                        using (var client = new AmazonS3Client("AKIAVDH3AEDD6PUJMKGG", "kKV5WKu0tFe8Svl2QdTIMIydLc7CGSMiy2h+KOvV", RegionEndpoint.CACentral1))
+                        {
+                            using (var newMemoryStream = new MemoryStream())
+                            {
+                                formData.imageBanierFile.CopyTo(newMemoryStream);
+                                var uploadRequest = new TransferUtilityUploadRequest
+                                {
+                                    InputStream = newMemoryStream,
+                                    Key = (DateTime.Now.Ticks + formData.imageBanierFile.FileName).ToString(), // filename
+                                    BucketName = "mediafileobjectifresiliance", // bucket name of S3
+                                    CannedACL = S3CannedACL.PublicRead,
+                                };
+
+                                var fileTransferUtility = new TransferUtility(client);
+                                fileTransferUtility.Upload(uploadRequest);
+                                formData.imgUrl = ("https://mediafileobjectifresiliance.s3.ca-central-1.amazonaws.com/" + uploadRequest.Key).ToString();
+                            }
+                        }
+                        Input.imgBannierUrl = formData.imgUrl;
+                    } else
+                    {
+                        formData.imgUrl = tuto.LienImgBanniere;
+                        Input.imgBannierUrl = tuto.LienImgBanniere;
+                    }
+                    
                     if (cat != null && tuto != null)
                     {
-                        tuto.Titre = Input.titre;
-                        tuto.Duree = Input.duree;
-                        tuto.Cout = Input.cout;
-                        tuto.Difficulte = Input.difficulte;
+                        tuto.Titre = formData.titre;
+                        tuto.Duree = formData.duree;
+                        tuto.Cout = formData.cout;
+                        tuto.Difficulte = formData.difficulte;
                         tuto.Categorie = cat;
-                        tuto.Introduction = intro;
-
+                        tuto.Introduction = formData.intro;
 
                         if (tuto.EstValide())
                         {
@@ -191,13 +237,21 @@ namespace Gwenael.Web.Pages
                         }
                     }
                 }
+
                 UpdateInputData();
-                return Redirect("/tutoriel/CreationTuto?handler=CreeTutorielDetails&id=" + Input.id + "&modificationTutoStatus=" + modificationTutoStatus);
+                if (modificationTutoStatus == "true")
+                {
+                    return StatusCode(201, new JsonResult(formData));
+                }
+                else
+                {
+                    return StatusCode(400, new JsonResult(formData));
+                }
             }
             catch (Exception)
             {
                 UpdateInputData();
-                return Page();
+                return StatusCode(400, new JsonResult(formData));
             }
         }
 
