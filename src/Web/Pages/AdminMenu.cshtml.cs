@@ -29,12 +29,11 @@ namespace Gwenael.Web.Pages
         public String Tab { get; set; }
         public async Task<IActionResult> OnGetAsync()
         {
-            try {
-                if (User.Identity.IsAuthenticated)
-                {
-                    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-                    if (Permission.EstAdministrateur(idConnectedUser, _context))
-                    {
+                //if (User.Identity.IsAuthenticated)
+                //{
+                //    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
+                //    if (Permission.EstAdministrateur(idConnectedUser, _context))
+                //    {
                         if (Request.Query.Count == 1)
                         {
                             Tab = Request.Query["tab"];
@@ -71,22 +70,19 @@ namespace Gwenael.Web.Pages
 
                         }
                         return Page();
-                    }
-                }
-                return Redirect("/");
-            }
-            catch { 
-                return Redirect("/");
-            }
+                    //}
+            //    }
+            //    return Redirect("/");
+            //}
         }
 
         public async Task<IActionResult> OnPostAsync(string btnDeleteRole, string name, string selectRole, string btnAccepter)
         {
-            if (User.Identity.IsAuthenticated)
-            {
-                Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-                if (Permission.EstAdministrateur(idConnectedUser, _context))
-                {
+            //if (User.Identity.IsAuthenticated)
+            //{
+            //    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
+                //if (Permission.EstAdministrateur(idConnectedUser, _context))
+                //{
                     if (btnDeleteRole is not null)
                     {
                         Guid selectedUserId = Guid.Parse(Request.Query["guid"]);
@@ -130,9 +126,9 @@ namespace Gwenael.Web.Pages
                         return Redirect("/AdminMenu/?tab=demandes");
                     }
                     return Page();
-                }
-            }
-            return Redirect("/");
+                //}
+            //}
+            //return Redirect("/");
         }
         public Guid ObtenirIdDuUserSelonEmail(string email)
         {
