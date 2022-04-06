@@ -1,0 +1,26 @@
+﻿@page
+@using Web.Pages
+@using Domain.Entities
+@model Web.Pages.PoadcastDetailModel
+@{ 
+    ViewData["Title"] = "Détail d'un poadcast";
+     var audio = ViewData["Audio"] as Audio;
+ }
+
+
+<div>
+    <div>
+        <p>titre : @audio.titre</p>
+        
+    </div>
+    <div>
+        <div><img src="@audio.urlImage"></div>
+    </div>
+
+    <div>
+        <audio controls
+               src="@audio.urlAudio">
+        </audio>
+
+    </div>
+</div>

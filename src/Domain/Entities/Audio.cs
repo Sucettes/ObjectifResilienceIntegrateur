@@ -7,16 +7,20 @@ using System.Threading.Tasks;
 
 namespace Gwenael.Domain.Entities
 {
-    public class Poadcast
+    public class Audio
     {
-        [Required] public string ID { get; set; }
+        [Required] public Guid ID { get; set; }
 
         [Required] public string titre { get; set; }
 
         [Required] public string description { get; set; }
 
-        [Required] public string categorie { get; set; }
+        [Required] public CategoriesTutos categorie { get; set; }
 
-        [Required] public string url { get; set; }
+        [Required] public string urlImage { get; set; }
+
+        [Required] public string urlAudio { get; set; }
+
+        public bool EstPublier { get; set; }
     }
 }

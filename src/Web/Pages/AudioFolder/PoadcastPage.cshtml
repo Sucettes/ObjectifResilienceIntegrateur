@@ -26,22 +26,16 @@
     </form>
     
 
-    <table>
+    
 
-        @foreach (var poadcast in ViewData["lstPoadcasts"] as IList<Poadcast>)
+        @foreach (var audio in ViewData["lstAudios"] as IList<Audio>)
         {
-            <tr>
-                <td class="">
-                    <div><p>titre : @poadcast.titre</p></div>
-                    <div><p>Catéogrie : @poadcast.categorie</p></div>
-                    <audio controls
-                           src="@poadcast.url">
-                    </audio>
-                </td>
-                <td class="">
-                    @poadcast.description
-                </td>
-            </tr>
+            
+                    <a asp-page="./PoadcastDetail" asp-route-id="@audio.ID">
+                        <div><p>titre : @audio.titre</p></div>
+                    <div><img src="@audio.urlImage"></div>
+
+                    </a>           
         }
-    </table>
+    
 </div>

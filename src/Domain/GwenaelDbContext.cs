@@ -16,7 +16,8 @@ namespace Gwenael.Domain
         public DbSet<RangeeTutos> RangeeTutos { get; set; }
         public DbSet<Tutos> Tutos { get; set; }
         public DbSet<Formation> Formations { get; set; }
-        public DbSet<Poadcast> Poadcasts { get; set; }
+        //public DbSet<Poadcast> Poadcasts { get; set; }
+        public DbSet<Audio> Audios { get; set; }
         public DbSet<Article> Articles { get; set; }
         public DbSet<Media> Medias { get; set; }
 
