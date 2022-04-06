@@ -21,9 +21,6 @@ $(document).ready(function () {
 
         var href = window.location.pathname + "?handler=CreeTutorielDetails";
 
-        let a = document.getElementById('tinymce')
-
-        console.log(a);
         $.ajax({
             type: 'POST',
             url: href,

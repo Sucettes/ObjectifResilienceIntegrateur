@@ -40,7 +40,7 @@
             <nav>
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
                     <button class="@(handler == "CreeTutorielDetails" ? "nav-link active" : "nav-link")" id="nav-detail-tab" data-bs-toggle="tab" data-bs-target="#nav-detail" type="button" role="tab" aria-controls="nav-detail" aria-selected="true">Détail</button>
-                    <button class="@(handler == "AjoutRangee" || handler == "TutoChanger" ? "nav-link active" : handler == "EditRange" || handler == "DeleteRange" ? "nav-link active" : "nav-link ")" id="nav-contenue-tab" data-bs-toggle="tab" data-bs-target="#nav-contenue" type="button" role="tab" aria-controls="nav-contenue" aria-selected="false">Contenue</button>
+                    <button class="@(handler == "TutoRangee" ? "nav-link active" : "nav-link ")" id="nav-contenue-tab" data-bs-toggle="tab" data-bs-target="#nav-contenue" type="button" role="tab" aria-controls="nav-contenue" aria-selected="false">Contenue</button>
                     <button class="@(handler == "CreationCategorie" ? "nav-link active" : "nav-link")" id="nav-createCategorie-tab" data-bs-toggle="tab" data-bs-target="#nav-createCategorie" type="button" role="tab" aria-controls="nav-createCategorie" aria-selected="false">Créé catégorie</button>
                 </div>
             </nav>
@@ -147,7 +147,7 @@
                 </div>
 
                 <!-- Contenue page contenue tuto-->
-                <div class="@(handler == "AjoutRangee" || handler == "TutoChanger" ? "tab-pane show active" : handler == "EditRange" || handler == "DeleteRange" ? "tab-pane show active" : "tab-pane ")" id="nav-contenue" style="background-color:white;" role="tabpanel" aria-labelledby="nav-contenue-tab">
+                <div class="@(handler == "TutoRangee" ? "tab-pane show active" : "tab-pane ")" id="nav-contenue" style="background-color:white;" role="tabpanel" aria-labelledby="nav-contenue-tab">
                     
                     <h3 style="text-align:left;">Étapes du tutoriel</h3>
                         <form method="post" asp-page="CreationTuto">
@@ -184,69 +184,78 @@
 
                     <br />
 
-                    <!-- Boucle sur toute les étapes et valide si elle ne sont pas null.-->
-                    @if (!(@Model.Input.lstRangeeTutoriels.IsNullOrEmpty()))
-                    {
-                        @foreach (var rangee in @Model.Input.lstRangeeTutoriels)
+                    <section id="rangeeTutoSection">
+                        <!-- Boucle sur toute les étapes et valide si elle ne sont pas null.-->
+                        @if (!(@Model.Input.lstRangeeTutoriels.IsNullOrEmpty()))
                         {
-                            <form method="post" asp-page="CreationTuto" class="shadow-sm rounded" style="background-color:#f1f9ee; padding:0.7rem; margin-bottom:1.2rem; margin-top:0.7rem;">
-                                <!-- Data invisible pour les requêtes. -->
-                                <input name="idRangeeVal" type="text" value="@rangee.Id" hidden />
-                                <input name="idtutoVal" type="text" value="@id" hidden />
+                            @foreach (var rangee in @Model.Input.lstRangeeTutoriels)
+                            {
+                                <form method="post" asp-page="CreationTuto" class="shadow-sm rounded" style="background-color:#f1f9ee; padding:0.7rem; margin-bottom:1.2rem; margin-top:0.7rem;">
+                                    <!-- Data invisible pour les requêtes. -->
+                                    <input name="idRangeeVal" type="text" value="@rangee.Id" hidden />
+                                    <input name="idtutoVal" type="text" value="@id" hidden />
 
-                                <div class="row" style="display:flex; justify-content:space-between">
-                                    <h3 class="col-6" style="display:inline; text-align:left;">Un titre....</h3>
-                                    <div class="col-6" style="display:inline; text-align:right;">
-                                        <button type="submit" class="btn btn-secondary" style="margin-right:0.2rem;"><img src="~/icons/up-arrow.svg" /></button>
-                                        <button asp-route-id="@id" asp-page-handler="EditRange" type="submit" class="btn btn-primary" style="margin-right:0.2rem;"><img src="~/icons/editIcon.svg" /></button>
-                                        <button data-supprimer data-bs-toggle="modal" data-bs-target="#modalValideDelete" type="submit" class="btn btn-danger" style="margin-right:0.2rem;"><img src="~/icons/deleteIcon.svg" /></button>
-                                        <button type="submit" class="btn btn-secondary" style="margin-right:0.2rem;"><img src="~/icons/down-arrow.svg" /></button>
+                                    <div class="row" style="display:flex; justify-content:space-between">
+                                        <h3 class="col-6" style="display:inline; text-align:left;">@rangee.Titre</h3>
+                                        <div class="col-6" style="display:inline; text-align:right;">
+                                            <button data-upTuto type="submit" class="btn btn-secondary" style="margin-right:0.2rem;"><img src="~/icons/up-arrow.svg" /></button>
+                                            <button data-modifierTuto type="submit" class="btn btn-primary" style="margin-right:0.2rem;"><img src="~/icons/editIcon.svg" /></button>
+                                            <button data-supprimer data-bs-toggle="modal" data-bs-target="#modalValideDelete" type="submit" class="btn btn-danger" style="margin-right:0.2rem;"><img src="~/icons/deleteIcon.svg" /></button>
+                                            <button data-downTuto type="submit" class="btn btn-secondary" style="margin-right:0.2rem;"><img src="~/icons/down-arrow.svg" /></button>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="card-body row">
-                                    <!-- Contenue de la rangéé. -->
-                                    @if (!rangee.LienImg.IsNullOrEmpty())
-                                    {
-                                        @if (!rangee.Texte.IsNullOrEmpty())
+                                    <div class="card-body row">
+                                        <!-- Contenue de la rangéé. -->
+                                        @if (!rangee.LienImg.IsNullOrEmpty())
                                         {
-                                            @if (rangee.PositionImg == "left")
+                                            @if (!rangee.Texte.IsNullOrEmpty())
                                             {
-                                                <div class="col-md-4">
-                                                    <img src="@rangee.LienImg" class="card-img-top" style="max-height:20rem; max-width:30rem;" alt="...">
+                                                @if (rangee.PositionImg == "left")
+                                                {
+                                                    <div class="col-md-4">
+                                                        <img src="@rangee.LienImg" class="card-img-top" style="max-height:20rem; max-width:30rem;" alt="...">
 
-                                                </div>
-                                                <div class="col-md-8">
-                                                    <p class="card-text" style="text-align:justify;">@rangee.Texte</p>
-                                                </div>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <p class="card-text" style="text-align:justify;">@rangee.Texte</p>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="col-md-8">
+                                                        <p class="card-text" style="text-align:justify;">@rangee.Texte</p>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <img src="@rangee.LienImg" class="card-img-top" style="max-height:20rem; max-width:30rem;" alt="...">
+                                                    </div>
+                                                }
                                             }
                                             else
                                             {
-                                                <div class="col-md-8">
-                                                    <p class="card-text" style="text-align:justify;">@rangee.Texte</p>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <img src="@rangee.LienImg" class="card-img-top" style="max-height:20rem; max-width:30rem;" alt="...">
-                                                </div>
+                                                <img src="@rangee.LienImg" class="card-img-top" style="max-height:20rem; max-width:30rem;" alt="...">
                                             }
                                         }
                                         else
                                         {
-                                            <img src="@rangee.LienImg" class="card-img-top" style="max-height:20rem; max-width:30rem;" alt="...">
+                                            <p class="card-text" style="text-align:justify;">@rangee.Texte</p>
                                         }
-                                    }
-                                    else
-                                    {
-                                        <p class="card-text" style="text-align:justify;">@rangee.Texte</p>
-                                    }
-                                </div>
-                            </form>
+                                    </div>
+                                </form>
+                            }
                         }
-                    }
+                    </section>
+                    
 
                     <br />
 
                     <form method="post" asp-page="CreationTuto" enctype="multipart/form-data">
+                        <input id="idTutoP" value="@id" hidden name="idTutoP"/>
+                        <div class="input-group input-group-sm mb-3">
+                            <span class="input-group-text" id="inputTitreEtape">Titre Étape</span>
+                            <input type="text" class="form-control" name="inputTitreEtape">
+                        </div>
+
                         <div class="row">
                             <div class="col-md-9">
                                 <textarea class="form-control" aria-label="Texte de la rangee" rows="6" name="rangeeTexte"></textarea>
@@ -266,7 +275,8 @@
                                 </div>
                                 <div class="row">
                                     <div>
-                                        <button type="submit" class="btn btn-primary" asp-route-id="@id" asp-page-handler="AjoutRangee"><img src="~/icons/addIcon.svg" /></button>
+                                        <!--AjoutRangee-->
+                                        <button type="submit" class="btn btn-primary" data-addRangee><img src="~/icons/addIcon.svg" /></button>
                                     </div>
                                 </div>
                             </div>
@@ -391,14 +401,15 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.js" integrity="sha512-n/4gHW3atM3QqRcbCn6ewmpxcLAHGaDjpEBu4xZd47N0W2oQ+6q7oc3PXstrJYXcbNU1OHdQ1T7pAP+gi5Yu8g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.6.0/umd/popper.min.js" integrity="sha512-BmM0/BQlqh02wuK5Gz9yrbe7VyIVwOzD1o40yi1IsTjriX/NGF37NyXHfmFzIlMmoSIBXgqDiG1VNU6kB5dBbA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="~/javascript/Tutoriel/tutorielSupprimerRangee.js" asp-append-version="true"></script>
 <script src="~/javascript/Tutoriel/tutorielToast.js" asp-append-version="true"></script>
 <script src="~/javascript/Tutoriel/tutorielCategorieCreeToast.js" asp-append-version="true"></script>
 
 <script src="~/javascript/Tutoriel/creation/CreationTutoPageAction.js" asp-append-version="true"></script>
 <script src="~/javascript/Tutoriel/creation/ModificationTutoPageAction.js" asp-append-version="true"></script>
+<script src="~/javascript/Tutoriel/creation/CreationTutoRangee.js" asp-append-version="true"></script>
+<script src="~/javascript/Tutoriel/creation/tutorielSupprimerRangee.js" asp-append-version="true"></script>
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.0.20/tinymce.min.js"></script>
-<script type="text/javascript">
+@*<script type="text/javascript">
     tinymce.init({ selector: 'textarea' });
-</script>
+</script>*@

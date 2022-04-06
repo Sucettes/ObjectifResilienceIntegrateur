@@ -31,7 +31,6 @@ namespace Gwenael.Web.Pages
             [DataType(DataType.Text)]
             public string id { get; set; }
             public string handler { get; set; }
-
             [Required]
             [DataType(DataType.Text)]
             public string titre { get; set; }
@@ -50,7 +49,6 @@ namespace Gwenael.Web.Pages
             [Required]
             [DataType(DataType.Text)]
             public string intro { get; set; }
-
             [Required]
             [DataType(DataType.Text)]
             public string nomCategorie { get; set; }
@@ -58,7 +56,6 @@ namespace Gwenael.Web.Pages
             [DataType(DataType.Text)]
             public string descriptionCategorie { get; set; }
             public List<CategoriesTutos> lstCategories { get; set; }
-
             public List<RangeeTutos> lstRangeeTutoriels { get; set; }
             public List<Domain.Entities.Tutos> lstTutoriels { get; set; }
             public IFormFile imageRangeeFile { get; set; }
@@ -141,7 +138,7 @@ namespace Gwenael.Web.Pages
                             }
                         }
                         Input.imgBannierUrl = formData.imgUrl;
-                        Domain.Entities.Tutos tuto = new Domain.Entities.Tutos();
+                        Tutos tuto = new Tutos();
                         tuto.Titre = formData.titre;
                         tuto.Duree = formData.duree;
                         tuto.Cout = formData.cout;
@@ -189,7 +186,7 @@ namespace Gwenael.Web.Pages
                 if (!(_db.CategoriesTutos.Where(c => c.Nom == formData.cat).Count() == 0))
                 {
                     CategoriesTutos cat = _db.CategoriesTutos.Where(c => c.Nom == formData.cat).First();
-                    Domain.Entities.Tutos tuto = _db.Tutos.Where(t => t.Id == Guid.Parse(formData.idTutoP)).First();
+                    Tutos tuto = _db.Tutos.Where(t => t.Id == Guid.Parse(formData.idTutoP)).First();
                     if (formData.imageBanierFile != null)
                     {
                         using (var client = new AmazonS3Client("AKIAVDH3AEDD6PUJMKGG", "kKV5WKu0tFe8Svl2QdTIMIydLc7CGSMiy2h+KOvV", RegionEndpoint.CACentral1))
@@ -211,12 +208,14 @@ namespace Gwenael.Web.Pages
                             }
                         }
                         Input.imgBannierUrl = formData.imgUrl;
-                    } else
+                        tuto.LienImgBanniere = formData.imgUrl;
+                    }
+                    else
                     {
                         formData.imgUrl = tuto.LienImgBanniere;
                         Input.imgBannierUrl = tuto.LienImgBanniere;
                     }
-                    
+
                     if (cat != null && tuto != null)
                     {
                         tuto.Titre = formData.titre;
@@ -291,15 +290,28 @@ namespace Gwenael.Web.Pages
             }
         }
 
-        public IActionResult OnPostAjoutRangee(string rangeeTexte, string positionImage, string id, string handler)
+        public class CreationTutoRangeeFormData
+        {
+            public string idRangee { get; set; }
+            public string idTutoP { get; set; }
+            public string inputTitreEtape { get; set; }
+            public string rangeeTexte { get; set; }
+            public string positionImage { get; set; }
+            public string imageUrl { get; set; }
+            public IFormFile imageRangeeFile { get; set; }
+
+        }
+        public IActionResult OnPostAjoutRangee([FromForm] CreationTutoRangeeFormData formData)
         {
             try
             {
-                Input.id = id;
-                Input.handler = handler;
+                bool estAjoutee = false;
+                Input.id = formData.idTutoP;
+                Input.handler = "TutoRangee";
+                //Input.handler = "AjoutRangee";
                 string imgUrl = null;
                 // TODO : Faire en sorte de validé si c'est une rangé d'image ou de texte ou les deux........
-                if (positionImage == "right" || positionImage == "left")
+                if (formData.positionImage == "right" || formData.positionImage == "left")
                 {
                     if (Input.imageRangeeFile != null)
                     {
@@ -322,27 +334,38 @@ namespace Gwenael.Web.Pages
                             }
                         }
                     }
+                    formData.imageUrl = imgUrl;
 
                     RangeeTutos rangee = new RangeeTutos();
-                    rangee.TutorielId = Guid.Parse(id);
-                    rangee.Texte = rangeeTexte;
-                    rangee.PositionImg = positionImage;
+                    rangee.TutorielId = Guid.Parse(formData.idTutoP);
+                    rangee.Titre = formData.inputTitreEtape;
+                    rangee.Texte = formData.rangeeTexte;
+                    rangee.PositionImg = formData.positionImage;
                     rangee.LienImg = imgUrl;
 
                     _db.RangeeTutos.Add(rangee);
                     _db.SaveChanges();
                     Guid rId = _db.RangeeTutos.Where(r => r == rangee).First().Id;
 
-                    Input.lstRangeeTutoriels = _db.RangeeTutos.Where(r => r.TutorielId == Guid.Parse(id)).ToList<RangeeTutos>();
+                    Input.lstRangeeTutoriels = _db.RangeeTutos.Where(r => r.TutorielId == Guid.Parse(formData.idTutoP)).ToList<RangeeTutos>();
+                    estAjoutee = true;
+                    formData.idRangee = rId.ToString();
                 }
 
                 UpdateInputData();
-                return Page();
+                if (estAjoutee)
+                {
+                    return StatusCode(201, new JsonResult(formData));
+                }
+                else
+                {
+                    return StatusCode(401, new JsonResult(formData));
+                }
             }
             catch (Exception)
             {
                 UpdateInputData();
-                return Page();
+                return StatusCode(401, new JsonResult(formData));
             }
         }
 
@@ -367,16 +390,17 @@ namespace Gwenael.Web.Pages
         {
             try
             {
-                Input.handler = "AjoutRangee";
+                Input.handler = "TutoRangee";
+                //Input.handler = "AjoutRangee";
                 Input.id = tutoId;
                 Input.handler = handler;
                 UpdateInputData();
-                return Redirect("/tutoriel/CreationTuto?handler=TutoChanger&id=" + tutoId);
+                return Redirect("/tutoriel/CreationTuto?handler=TutoRangee&id=" + tutoId);
             }
             catch (Exception)
             {
                 UpdateInputData();
-                return Redirect("/tutoriel/CreationTuto?handler=TutoChanger");
+                return Redirect("/tutoriel/CreationTuto?handler=TutoRangee");
             }
         }
 
@@ -384,7 +408,8 @@ namespace Gwenael.Web.Pages
         {
             try
             {
-                Input.handler = "AjoutRangee";
+                Input.handler = "TutoRangee";
+                //Input.handler = "AjoutRangee";
                 Input.id = id;
 
                 UpdateInputData();
@@ -400,34 +425,43 @@ namespace Gwenael.Web.Pages
         public class Rangee
         {
             public string idRangeeVal { get; set; }
+            public string idtutoVal { get; set; }
         }
 
-        public IActionResult OnPostDeleteRange(string id, string handler, [FromBody] Rangee rangee)
+        public IActionResult OnPostDeleteRange([FromForm] Rangee rangee)
         {
             try
             {
-                Input.handler = "AjoutRangee";
-                Input.id = id;
 
-                Domain.Entities.Tutos t = _db.Tutos.Where(t => t.Id == Guid.Parse(id) && t.EstPublier == false).First();
+                Input.handler = "TutoRangee";
+                Input.id = rangee.idtutoVal;
+                bool estSupprimer = false;
+                Tutos t = _db.Tutos.Where(t => t.Id == Guid.Parse(rangee.idtutoVal) && t.EstPublier == false).First();
                 if (t != null)
                 {
-                    RangeeTutos rt = _db.RangeeTutos.Where(r => r.TutorielId == Guid.Parse(id) && r.Id == Guid.Parse(rangee.idRangeeVal)).First();
+                    RangeeTutos rt = _db.RangeeTutos.Where(r => r.TutorielId == Guid.Parse(rangee.idtutoVal) && r.Id == Guid.Parse(rangee.idRangeeVal)).First();
                     if (rt != null)
                     {
-
                         _db.RangeeTutos.Remove(rt);
                         _db.SaveChanges();
+                        estSupprimer = true;
                     }
                 }
 
                 UpdateInputData();
-                return Page();
+                if (estSupprimer)
+                {
+                    return StatusCode(201, new JsonResult(rangee));
+                }
+                else
+                {
+                    return StatusCode(400, new JsonResult(rangee));
+                }
             }
             catch (Exception)
             {
                 UpdateInputData();
-                return Page();
+                return StatusCode(400, new JsonResult(rangee));
             }
         }
 
@@ -435,10 +469,10 @@ namespace Gwenael.Web.Pages
         {
             try
             {
-                Input.handler = "AjoutRangee";
+                //Input.handler = "AjoutRangee";
                 Input.id = id;
 
-                Domain.Entities.Tutos t = _db.Tutos.Where(t => t.Id == Guid.Parse(id) && t.EstPublier == false).First();
+                Tutos t = _db.Tutos.Where(t => t.Id == Guid.Parse(id) && t.EstPublier == false).First();
                 if (t != null)
                 {
                     t.EstPublier = true;
@@ -458,16 +492,16 @@ namespace Gwenael.Web.Pages
 
         public void UpdateInputData()
         {
-            Input.lstCategories = _db.CategoriesTutos.ToList<CategoriesTutos>();
+            Input.lstCategories = _db.CategoriesTutos.ToList();
             if (!String.IsNullOrEmpty(Input.id))
             {
-                Input.lstRangeeTutoriels = _db.RangeeTutos.Where(r => r.TutorielId == Guid.Parse(Input.id)).ToList<RangeeTutos>();
+                Input.lstRangeeTutoriels = _db.RangeeTutos.Where(r => r.TutorielId == Guid.Parse(Input.id)).ToList();
             }
-            Input.lstTutoriels = _db.Tutos.Where(t => t.EstPublier == false).ToList<Domain.Entities.Tutos>();
+            Input.lstTutoriels = _db.Tutos.Where(t => t.EstPublier == false).ToList();
 
             if (!String.IsNullOrEmpty(Input.id))
             {
-                Domain.Entities.Tutos tuto = _db.Tutos.Where(t => t.Id == Guid.Parse(Input.id)).First();
+                Tutos tuto = _db.Tutos.Where(t => t.Id == Guid.Parse(Input.id)).First();
                 if (tuto != null)
                 {
                     Input.titre = tuto.Titre;

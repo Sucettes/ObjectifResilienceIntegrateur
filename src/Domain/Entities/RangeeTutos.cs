@@ -7,6 +7,7 @@ namespace Gwenael.Domain.Entities
     public class RangeeTutos
     {
         public Guid Id { get; set; }
+        public string Titre { get; set; }
         public string Texte { get; set; }
         public string LienImg { get; set; }
         //[Required] [MaxLength(2)] public int Ordre { get; set; }
