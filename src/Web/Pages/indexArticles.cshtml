@@ -1,0 +1,88 @@
+﻿@page
+@using Web.Pages
+@using Microsoft.AspNetCore.Components.Forms
+@using IdentityServer4.Extensions
+@model Web.Pages.ArticleIndexModel
+@{
+    ViewData["Title"] = "Home Article";
+}
+
+<!-- Entête de la page (Titre + barre de recherche) -->
+<nav class="navbar navbar-light shadow-sm">
+    <div class="container-fluid">
+        <h1>Les Articles</h1>
+        <form class="d-flex">
+            <input class="form-control me-2" type="search" placeholder="Recherche">
+            <button class="btn btn-outline-primary" type="submit">Recherche</button>
+        </form>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <br />
+    <div class="row">
+
+        <div class="col-3" style="padding-right:1.5rem;padding-left:1.5rem;">
+            <h4>Filtre de recherches</h4>
+            <hr />
+            <div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="radioFiltre" id="radioFiltreAuteur">
+                    <label class="form-check-label" for="radioFiltreAuteur" style="margin:0;">Par auteur</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="radioFiltre" id="radioFiltreMesTuto" checked>
+                    <label class="form-check-label" for="radioFiltreMesTuto" style="margin:0;">Mes Articles</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="radioFiltre" id="radioFiltreTitre" checked>
+                    <label class="form-check-label" for="radioFiltreTitre" style="margin:0;">Par titre</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="radioFiltre" id="radioFiltreCategorie" checked>
+                    <label class="form-check-label" for="radioFiltreCategorie" style="margin:0;">Par catégorie</label>
+                </div>
+                 @*<div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="radioFiltreEstPublie">
+                        <label class="form-check-label" for="radioFiltreEstPublie" style="margin:0;">Est pubié</label>
+                    </div>*@
+            </div>
+
+            <br />
+            <br />
+
+             @*<form method="post" asp-page="Index" style="display:flex; justify-content: center;">
+                    <button type="submit" class="btn btn-outline-secondary" asp-page-handler="RedirectCreationArticle">Ajouté un Article</button>
+                </form>*@
+        </div>
+
+        <div class="col-9">
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+
+@if (!(@Model.Input.lstArticles.IsNullOrEmpty()))
+                {
+@foreach (var article in @Model.Input.lstArticles)
+                        {
+                <a href="Article?id=@article.Id" class="col">
+                    <div class="shadow-lg rounded" style="background-color:#f1f9ee;">
+                        <div>
+                            <img src="~/images/imgplaceholder.png" class="card-img-top shadow-lg" alt="...">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">e</h5>
+                        </div>
+                    </div>
+                    </a>
+}
+            }
+
+    </div>
+</div>
+
+</div>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.js" integrity="sha512-n/4gHW3atM3QqRcbCn6ewmpxcLAHGaDjpEBu4xZd47N0W2oQ+6q7oc3PXstrJYXcbNU1OHdQ1T7pAP+gi5Yu8g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.6.0/umd/popper.min.js" integrity="sha512-BmM0/BQlqh02wuK5Gz9yrbe7VyIVwOzD1o40yi1IsTjriX/NGF37NyXHfmFzIlMmoSIBXgqDiG1VNU6kB5dBbA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
