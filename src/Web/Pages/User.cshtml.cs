@@ -14,8 +14,6 @@ namespace Gwenael.Web.Pages
     {
         private readonly GwenaelDbContext _context;
         private readonly UserManager<User> _userManager;
-        private readonly PasswordHasher<User> _passHasher = new PasswordHasher<User>();
-
 
         public UserModel(GwenaelDbContext context, UserManager<User> userManager)
         {
@@ -34,7 +32,6 @@ namespace Gwenael.Web.Pages
             {
                 user = await _context.Users.FindAsync(id);
                 ViewData["user"] = user;
-                ViewData["passwordUser"] = user.PasswordHash;
                 return Page();
             }
 
@@ -51,31 +48,31 @@ namespace Gwenael.Web.Pages
             }
             if (btnSave != null)
             {
-                Console.WriteLine(NewPassword);
-                Console.WriteLine(ConfPassword);
+                //Console.WriteLine(NewPassword);
+                //Console.WriteLine(ConfPassword);
 
-                if (NewPassword is not null)
-                {
-                    string hashedPassword = _passHasher.HashPassword(userBd, NewPassword);
-                    if (ConfPassword is not null)
-                    {
-                        PasswordVerificationResult result = _passHasher.VerifyHashedPassword(userBd, hashedPassword, ConfPassword);
-                        if (result is PasswordVerificationResult.Success)
-                        {
-                            Console.WriteLine("Success");
-                            userBd.PasswordHash = hashedPassword;
-                        }
-                        else
-                        {
-                            return Page();
-                        }
-                    }
-                }
-                userBd.UserName = user.UserName;
-                userBd.Email = user.Email;
-                userBd.LastName = user.LastName;
-                userBd.FirstName = user.FirstName;
-                await _context.SaveChangesAsync();
+                //if (NewPassword is not null)
+                //{
+                //    string hashedPassword = _passHasher.HashPassword(userBd, NewPassword);
+                //    if (ConfPassword is not null)
+                //    {
+                //        PasswordVerificationResult result = _passHasher.VerifyHashedPassword(userBd, hashedPassword, ConfPassword);
+                //        if (result is PasswordVerificationResult.Success)
+                //        {
+                //            Console.WriteLine("Success");
+                //            userBd.PasswordHash = hashedPassword;
+                //        }
+                //        else
+                //        {
+                //            return Page();
+                //        }
+                //    }
+                //}
+                //userBd.UserName = user.UserName;
+                //userBd.Email = user.Email;
+                //userBd.LastName = user.LastName;
+                //userBd.FirstName = user.FirstName;
+                //await _context.SaveChangesAsync();
                 return RedirectToPage("adminMenu");
             }
             else if (btnDelete != null)
@@ -86,33 +83,55 @@ namespace Gwenael.Web.Pages
             }
             else if (btnAdd != null)
             {
-                if (NewPassword is not null)
+                bool mdpSontPareille = NewPassword == ConfPassword;
+                if (NewPassword is not null && ConfPassword != null)
                 {
-                    string hashedPassword = _passHasher.HashPassword(userBd, NewPassword);
-                    if (ConfPassword is not null)
+                    if (mdpSontPareille)
                     {
-                        PasswordVerificationResult result = _passHasher.VerifyHashedPassword(userBd, hashedPassword, ConfPassword);
-                        if(result is PasswordVerificationResult.Success)
+                        User newUser = new User
                         {
-                            user.PasswordHash = hashedPassword;
+                            FirstName = user.FirstName,
+                            LastName = user.LastName,
+                            Email = user.Email,
+                            UserName = user.Email,
+                            Active = true
+                        };
+                        var result = await _userManager.CreateAsync(newUser, NewPassword);
+                        if (result.Succeeded)
+                        {
+                            Console.WriteLine("Yo big c'est sensé avoir marché");
+                            _context.SaveChanges();
+                            return RedirectToPage("adminMenu");
                         }
                         else
                         {
-                            return Page();
+                            Console.WriteLine("Wtf");
+                            Console.WriteLine(result);
+                            return RedirectToPage("user");
                         }
+
                     }
+                    else
+                    {
+                        Console.WriteLine("SONT Pas Pareille");
+
+                    }
+                    //string hashedPassword = _passHasher.HashPassword(userBd, NewPassword);
+                    //if (ConfPassword is not null)
+                    //{
+                    //    PasswordVerificationResult result = _passHasher.VerifyHashedPassword(userBd, hashedPassword, ConfPassword);
+                    //    if(result is PasswordVerificationResult.Success)
+                    //    {
+                    //        user.PasswordHash = hashedPassword;
+                    //        succeed = true;
+                    //    }
+                    //    else
+                    //    {
+                    //        return Page();
+                    //    }
+                    //}
                 }
-                User newUser = new User
-                {
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    Email = user.Email,
-                    UserName = user.UserName,
-                    PasswordHash = user.PasswordHash,
-                    Active = true
-                };
-                _context.Users.Add(newUser);
-                _context.SaveChanges();
+                //_context.SaveChanges();
                 return RedirectToPage("adminMenu");
             }
             return RedirectToPage("index");
