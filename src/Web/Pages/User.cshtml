@@ -6,53 +6,102 @@
 @{
     ViewData["Title"] = "Utilisateur";
 }
-
-
-<div class="container">
-    @if (@ViewContext.RouteData.Values["id"] is not null)
-    {
-        <h1>Modification d'un utilisateur</h1>
-    }
-    else
-    {
-        <h1>Ajout d'un utilisateur</h1>
-    }
-    <a class="link" asp-page="adminMenu">Retour Panneau Admin</a>
-    <form method="post" id="centerForm">
-        <input type="hidden" asp-for="user.Id" />
-        <div class="form-group row">
-            <div class="col-4">
-                <label asp-for="user.UserName">Pseudonyme</label>
-                <input asp-for="user.UserName" />
-            </div>
-        </div>
-        <div class="form-group row">
-            <div class="col-4">
-                <label asp-for="user.Email">Courriel</label>
-                <input asp-for="user.Email" />
-            </div>
-        </div>
-        <div class="form-group row">
-            <div class="col-4">
-                <label asp-for="user.FirstName">Prénom</label>
-                <input asp-for="user.FirstName" />
-            </div>
-        </div>
-        <div class="form-group row">
-            <div class="col-4">
-                <label asp-for="user.LastName">Nom de Famille</label>
-                <input asp-for="user.LastName" />
-            </div>
-        </div>
+<!-- Entête de la page (Titre + btn retour) -->
+<nav class="navbar navbar-light shadow-sm">
+    <div class="container-fluid">
         @if (@ViewContext.RouteData.Values["id"] is not null)
         {
-            <input name="btnSave" type="submit" value="Sauvegarder les changements" class="btn btn-success form-control" />
-            <input name="btnDelete" type="submit" value="Supprimer l'utilisateur" class="btn btn-danger form-control" />
+            <h1>Modification d'un utilisateur</h1>
         }
         else
         {
-            <input name="btnAdd" type="submit" value="Ajouter l'utilisateur" class="btn btn-success form-control" />
-            <a name="btnAnnuler" class="btn btn-danger form-control" asp-page="adminMenu">Annuler</a>
+            <h1>Ajout d'un utilisateur</h1>
+        }
+        <div class="d-flex">
+            <form method="post" asp-page="AdminMenu" style="margin-right:0.4rem;">
+                <button type="submit" class="btn btn-outline-primary" asp-page-handler="AdminMenu">Retour</button>
+            </form>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <form method="post">
+        <input type="hidden" asp-for="user.Id" />
+        <div class="row">
+            <div class="col-3">
+            </div>
+            <div class="col-6">
+                <br />
+                <div class="input-group input-group-sm mb-3">
+                    <span class="input-group-text">Prénom</span>
+                    <input type="text" class="form-control" aria-label="Prénom" aria-describedby="Prénom" asp-for="user.FirstName" required>
+                </div>
+            </div>
+            <div class="col-3"></div>
+        </div>
+        <div class="row">
+            <div class="col-3"></div>
+            <div class="col-6">
+                <div class="input-group input-group-sm mb-3">
+                    <span class="input-group-text">Nom de famille</span>
+                    <input type="text" class="form-control" aria-label="Nom de famille" aria-describedby="Nom de famille" asp-for="user.LastName" required>
+                </div>
+            </div>
+            <div class="col-3"></div>
+        </div>
+        <div class="row">
+            <div class="col-3"></div>
+            <div class="col-6">
+                <div class="input-group input-group-sm mb-3">
+                    <span class="input-group-text">Courriel</span>
+                    <input type="text" class="form-control" aria-label="Courriel" aria-describedby="Courriel" asp-for="user.Email" required>
+                </div>
+            </div>
+            <div class="col-3"></div>
+        </div>
+        <div class="row">
+            <div class="col-3"></div>
+            <div class="col-6">
+                @if (@ViewContext.RouteData.Values["id"] is null)
+                {
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text">Mot de passe</span>
+                        <input type="password" class="form-control" aria-label="NewPassword" aria-describedby="NewPassword" name="NewPassword" required>
+                    </div>
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text">Confirmation du mot de passe</span>
+                        <input type="password" class="form-control" aria-label="ConfPassword" aria-describedby="ConfPassword" name="ConfPassword" required>
+                    </div>
+                }
+                else
+                {
+                    <br /><h4>Modification du mot de passe</h4>
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text">Nouveau mot de passe</span>
+                        <input type="password" class="form-control" aria-label="NewPassword" aria-describedby="NewPassword" name="NewPassword">
+                    </div>
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text">Confirmation du mot de passe</span>
+                        <input type="password" class="form-control" aria-label="ConfPassword" aria-describedby="ConfPassword" name="ConfPassword">
+                    </div>
+                }
+            </div>
+            <div class="col-3"></div>
+        </div>
+        <br />
+        @if (@ViewContext.RouteData.Values["id"] is not null)
+        {
+            <div class="row" style="justify-content:center">
+                <input name="btnSave" type="submit" value="Sauvegarder les changements" class="btn btn-success form-control" style="width:15em !important; margin:1em;" />
+                <input name="btnDelete" type="submit" value="Supprimer l'utilisateur" class="btn btn-danger form-control" style="width:15em !important; margin:1em;" />
+            </div>
+        }
+        else
+        {
+            <div class="row" style="justify-content:center">
+                <input name="btnAdd" type="submit" value="Ajouter l'utilisateur" class="btn btn-success form-control" style="width:15em !important; margin:1em;" />
+                <a name="btnAnnuler" class="btn btn-danger form-control" style="width:15em !important; margin:1em;" asp-page="AdminMenu">Annuler</a>
+            </div>
         }
     </form>
 </div>

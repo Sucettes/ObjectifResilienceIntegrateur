@@ -29,110 +29,118 @@ namespace Gwenael.Web.Pages
         public String Tab { get; set; }
         public async Task<IActionResult> OnGetAsync()
         {
-            try {
-                if (User.Identity.IsAuthenticated)
+            //if (User.Identity.IsAuthenticated)
+            //{
+            //    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
+            //    if (Permission.EstAdministrateur(idConnectedUser, _context))
+            //    {
+            if (Request.Query.Count == 1)
+            {
+                Tab = Request.Query["tab"];
+                ViewData["Tab"] = Tab;
+            }
+            else if (Request.Query.Count > 1)
+            {
+                Tab = Request.Query["tab"];
+                ViewData["Tab"] = Tab;
+                if (Tab == "roles")
                 {
-                    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-                    if (Permission.EstAdministrateur(idConnectedUser, _context))
+                    Guid selectedUserId = Guid.Parse(Request.Query["guid"]);
+                    if (DynamicQueryableExtensions.Any(_context.Roles))
                     {
-                        if (Request.Query.Count == 1)
-                        {
-                            Tab = Request.Query["tab"];
-                            ViewData["Tab"] = Tab;
-                        }
-                        else if (Request.Query.Count > 1)
-                        {
-                            Tab = Request.Query["tab"];
-                            ViewData["Tab"] = Tab;
-                            if (Tab == "roles")
-                            {
-                                Guid selectedUserId = Guid.Parse(Request.Query["guid"]);
-                                if (DynamicQueryableExtensions.Any(_context.Roles))
-                                {
-                                    List<Role> lstRolesUser = Permission.ObtenirLstRolesUser(selectedUserId, _context);
-                                    ViewData["userRoles"] = lstRolesUser;
-                                    ViewData["selectRoles"] = ObtenirLstRolesSelect(lstRolesUser);
-                                }
-                            }
-                            string erreur = Request.Query["error"];
-                            if (erreur != null)
-                            {
-                                ViewData["msgErreur"] = "Vous ne pouvez pas retirer votre accès administrateur";
-                            }
-                        }
-                        Users = await _context.Users.ToListAsync();
-                        ViewData["lstUsers"] = Users;
-                        UsersNonActivated = _context.Users.Where(u => u.Active == false).ToList();
-                        ViewData["lstNonActiver"] = UsersNonActivated;
-                        if (Tab == null || Tab == "")
-                        {
-                            ViewData["Tab"] = "utilisateurs";
-                            return Page();
+                        List<Role> lstRolesUser = Permission.ObtenirLstRolesUser(selectedUserId, _context);
+                        ViewData["userRoles"] = lstRolesUser;
+                        ViewData["selectRoles"] = ObtenirLstRolesSelect(lstRolesUser);
+                    }
+                    else
+                    {
 
-                        }
-                        return Page();
+                        string[] jjj = { "" };
+                        Role roleAdmin = new("Administrateur", jjj, true);
+                        Role roleGDC = new("Gestionnaire de contenu", jjj, true);
+                        Role roleUser = new("Utilisateur", jjj, true);
+                        _context.Add(roleAdmin);
+                        _context.Add(roleGDC);
+                        _context.Add(roleUser);
+                        _context.SaveChanges();
                     }
                 }
-                return Redirect("/");
+                string erreur = Request.Query["error"];
+                if (erreur != null)
+                {
+                    ViewData["msgErreur"] = "Vous ne pouvez pas retirer votre accès administrateur";
+                }
             }
-            catch { 
-                return Redirect("/");
+            Users = await _context.Users.ToListAsync();
+            ViewData["lstUsers"] = Users;
+            UsersNonActivated = _context.Users.Where(u => u.Active == false).ToList();
+            ViewData["lstNonActiver"] = UsersNonActivated;
+            if (Tab == null || Tab == "")
+            {
+                ViewData["Tab"] = "utilisateurs";
+                return Page();
+
             }
+            return Page();
+            //}
+            //    }
+            //    return Redirect("/");
+            //}
         }
 
         public async Task<IActionResult> OnPostAsync(string btnDeleteRole, string name, string selectRole, string btnAccepter)
         {
-            if (User.Identity.IsAuthenticated)
+            //if (User.Identity.IsAuthenticated)
+            //{
+            //    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
+            //if (Permission.EstAdministrateur(idConnectedUser, _context))
+            //{
+            if (btnDeleteRole is not null)
             {
-                Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-                if (Permission.EstAdministrateur(idConnectedUser, _context))
+                Guid selectedUserId = Guid.Parse(Request.Query["guid"]);
+                Guid idRole = ObtenirIdDuRoleSelonNom(name);
+
+                UserRole userRole = ObtenirUserRole(selectedUserId, idRole);
+                if (userRole != null)
                 {
-                    if (btnDeleteRole is not null)
+                    if (name == "Administrateur" && selectedUserId == ObtenirIdDuUserSelonEmail(User.Identity.Name))
                     {
-                        Guid selectedUserId = Guid.Parse(Request.Query["guid"]);
-                        Guid idRole = ObtenirIdDuRoleSelonNom(name);
-
-                        UserRole userRole = ObtenirUserRole(selectedUserId, idRole);
-                        if (userRole != null)
-                        {
-                            if (name == "Administrateur" && selectedUserId == ObtenirIdDuUserSelonEmail(User.Identity.Name))
-                            {
-                                return Redirect("/AdminMenu/?tab=roles&guid=" + selectedUserId + "&error=true");
-                            }
-                            _context.UserRoles.Remove(userRole);
-                        }
-                        await _context.SaveChangesAsync();
-                        return Redirect("/AdminMenu/?tab=roles&guid=" + selectedUserId);
+                        return Redirect("/AdminMenu/?tab=roles&guid=" + selectedUserId + "&error=true");
                     }
-                    else if (selectRole is not null)
-                    {
-                        Guid selectedUserId = Guid.Parse(Request.Query["guid"]);
-
-                        Role selectedRole = null;
-                        if (selectRole == "Administrateur")
-                            selectedRole = _context.Roles.Where(r => r.Name == "Administrateur").First();
-                        else if (selectRole == "Gestionnaire de contenu")
-                            selectedRole = _context.Roles.Where(r => r.Name == "Gestionnaire de contenu").First();
-                        else if (selectRole == "Utilisateur")
-                            selectedRole = _context.Roles.Where(r => r.Name == "Utilisateur").First();
-                        else
-                            return Redirect("/AdminMenu/?tab=roles&guid=" + selectedUserId);
-                        _context.UserRoles.Add(new UserRole(selectedUserId, selectedRole.Id));
-                        await _context.SaveChangesAsync();
-                        return Redirect("/AdminMenu/?tab=roles&guid=" + selectedUserId);
-                    }
-                    else if (btnAccepter is not null)
-                    {
-                        //// Modification Active à true
-                        User userBd = (User)_context.Users.Where(u => u.Id == Guid.Parse(name)).First();
-                        userBd.Active = true;
-                        await _context.SaveChangesAsync();
-                        return Redirect("/AdminMenu/?tab=demandes");
-                    }
-                    return Page();
+                    _context.UserRoles.Remove(userRole);
                 }
+                await _context.SaveChangesAsync();
+                return Redirect("/AdminMenu/?tab=roles&guid=" + selectedUserId);
             }
-            return Redirect("/");
+            else if (selectRole is not null)
+            {
+                Guid selectedUserId = Guid.Parse(Request.Query["guid"]);
+
+                Role selectedRole = null;
+                if (selectRole == "Administrateur")
+                    selectedRole = _context.Roles.Where(r => r.Name == "Administrateur").First();
+                else if (selectRole == "Gestionnaire de contenu")
+                    selectedRole = _context.Roles.Where(r => r.Name == "Gestionnaire de contenu").First();
+                else if (selectRole == "Utilisateur")
+                    selectedRole = _context.Roles.Where(r => r.Name == "Utilisateur").First();
+                else
+                    return Redirect("/AdminMenu/?tab=roles&guid=" + selectedUserId);
+                _context.UserRoles.Add(new UserRole(selectedUserId, selectedRole.Id));
+                await _context.SaveChangesAsync();
+                return Redirect("/AdminMenu/?tab=roles&guid=" + selectedUserId);
+            }
+            else if (btnAccepter is not null)
+            {
+                //// Modification Active à true
+                User userBd = (User)_context.Users.Where(u => u.Id == Guid.Parse(name)).First();
+                userBd.Active = true;
+                await _context.SaveChangesAsync();
+                return Redirect("/AdminMenu/?tab=demandes");
+            }
+            return Page();
+            //}
+            //}
+            //return Redirect("/");
         }
         public Guid ObtenirIdDuUserSelonEmail(string email)
         {

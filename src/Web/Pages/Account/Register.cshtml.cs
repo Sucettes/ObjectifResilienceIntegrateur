@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Gwenael.Application.Mailing;
 using Gwenael.Domain.Entities;
 using Gwenael.Web.Extensions;
+using System;
 
 namespace Gwenael.Web.Pages.Account
 {
@@ -63,17 +64,15 @@ namespace Gwenael.Web.Pages.Account
             ReturnUrl = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new User { UserName = Input.Email, Email = Input.Email };
+                User user = new User { UserName = Input.Email, Email = Input.Email, FirstName = "", LastName = "" };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User created a new account with password.");
+                    //_logger.LogInformation("User created a new account with password.");
+                    //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    //var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
+                    //await _emailFactory.SendEmailConfirmationAsync(Input.Email, callbackUrl);
 
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
-                    await _emailFactory.SendEmailConfirmationAsync(Input.Email, callbackUrl);
-
-                    await _signInManager.SignInAsync(user, isPersistent: false);
                     return LocalRedirect(Url.GetLocalUrl(returnUrl));
                 }
                 foreach (var error in result.Errors)
