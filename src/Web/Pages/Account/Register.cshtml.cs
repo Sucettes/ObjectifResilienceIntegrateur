@@ -72,8 +72,8 @@ namespace Gwenael.Web.Pages.Account
                     //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     //var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
                     //await _emailFactory.SendEmailConfirmationAsync(Input.Email, callbackUrl);
-
-                    return LocalRedirect(Url.GetLocalUrl(returnUrl));
+                    ViewData["msgSucceeded"] = "Nous avons bien reçu votre demande. Elle sera traité dans les plus bref délais par notre équipe.";
+                    return Page();
                 }
                 foreach (var error in result.Errors)
                 {
