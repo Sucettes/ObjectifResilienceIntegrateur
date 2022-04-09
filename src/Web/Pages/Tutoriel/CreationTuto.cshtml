@@ -198,10 +198,10 @@
                                     <div class="row" style="display:flex; justify-content:space-between">
                                         <h3 class="col-6" style="display:inline; text-align:left;">@rangee.Titre</h3>
                                         <div class="col-6" style="display:inline; text-align:right;">
-                                            <button data-upTuto type="submit" class="btn btn-secondary" style="margin-right:0.2rem;"><img src="~/icons/up-arrow.svg" /></button>
-                                            <button data-modifierTuto type="submit" class="btn btn-primary" style="margin-right:0.2rem;"><img src="~/icons/editIcon.svg" /></button>
-                                            <button data-supprimer data-bs-toggle="modal" data-bs-target="#modalValideDelete" type="submit" class="btn btn-danger" style="margin-right:0.2rem;"><img src="~/icons/deleteIcon.svg" /></button>
-                                            <button data-downTuto type="submit" class="btn btn-secondary" style="margin-right:0.2rem;"><img src="~/icons/down-arrow.svg" /></button>
+                                            <button data-up-tuto class="btn btn-secondary" style="margin-right:0.2rem;"><img src="~/icons/up-arrow.svg" /></button>
+                                            <button data-modifierTuto class="btn btn-primary" style="margin-right:0.2rem;"><img src="~/icons/editIcon.svg" /></button>
+                                            <button data-supprimer data-bs-toggle="modal" data-bs-target="#modalValideDelete" class="btn btn-danger" style="margin-right:0.2rem;"><img src="~/icons/deleteIcon.svg" /></button>
+                                            <button data-down-tuto class="btn btn-secondary" style="margin-right:0.2rem;"><img src="~/icons/down-arrow.svg" /></button>
                                         </div>
                                     </div>
 
@@ -406,8 +406,10 @@
 
 <script src="~/javascript/Tutoriel/creation/CreationTutoPageAction.js" asp-append-version="true"></script>
 <script src="~/javascript/Tutoriel/creation/ModificationTutoPageAction.js" asp-append-version="true"></script>
-<script src="~/javascript/Tutoriel/creation/CreationTutoRangee.js" asp-append-version="true"></script>
-<script src="~/javascript/Tutoriel/creation/tutorielSupprimerRangee.js" asp-append-version="true"></script>
+@*<script src="~/javascript/Tutoriel/creation/CreationTutoRangee.js" asp-append-version="true"></script>*@
+@*<script src="~/javascript/Tutoriel/creation/tutorielSupprimerRangee.js" asp-append-version="true"></script>*@
+<script src="~/javascript/Tutoriel/creation/script-rangee-utils.js" asp-append-version="true"></script>
+<script src="~/javascript/Tutoriel/creation/script-rangee-init.js" asp-append-version="true"></script>
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.0.20/tinymce.min.js"></script>
 @*<script type="text/javascript">

@@ -87,6 +87,28 @@ namespace Gwenael.Web.Pages
             return Page();
         }
 
+        public IActionResult OnGetRangeeById(string idRangee)
+        {
+            try
+            {
+                Input.handler = "TutoRangee";
+                RangeeTutos rt = _db.RangeeTutos.Where(r => r.Id == Guid.Parse(idRangee)).First();
+                if (rt != null)
+                {
+                    return StatusCode(200, new JsonResult(rt));
+                }
+                else
+                {
+                    return StatusCode(400);
+                }
+            }
+            catch (Exception)
+            {
+                return StatusCode(400); ;
+            }
+
+        }
+
         public IActionResult OnPostRedirectHomeTuto() => RedirectToPage("Index");
 
         public class CreationTutoFormData
@@ -298,6 +320,7 @@ namespace Gwenael.Web.Pages
             public string rangeeTexte { get; set; }
             public string positionImage { get; set; }
             public string imageUrl { get; set; }
+            public bool cbRetirerImage { get; set; }
             public IFormFile imageRangeeFile { get; set; }
 
         }
@@ -404,21 +427,74 @@ namespace Gwenael.Web.Pages
             }
         }
 
-        public IActionResult OnPostEditRange(string idRangeeVal, string id, string handler)
+        public IActionResult OnPutEditRangee([FromForm] CreationTutoRangeeFormData formData)
         {
             try
             {
+                bool estAjoutee = false;
+                Input.id = formData.idTutoP;
                 Input.handler = "TutoRangee";
-                //Input.handler = "AjoutRangee";
-                Input.id = id;
+                string imgUrl = null;
+                // TODO : Faire en sorte de validé si c'est une rangé d'image ou de texte ou les deux........
+                if (formData.positionImage == "right" || formData.positionImage == "left")
+                {
+                    RangeeTutos rangee = _db.RangeeTutos.Where(r => r.Id == Guid.Parse(formData.idRangee)).First();
+                    if (Input.imageRangeeFile != null && formData.cbRetirerImage != true)
+                    {
+                        using (var client = new AmazonS3Client("AKIAVDH3AEDD6PUJMKGG", "kKV5WKu0tFe8Svl2QdTIMIydLc7CGSMiy2h+KOvV", RegionEndpoint.CACentral1))
+                        {
+                            using (var newMemoryStream = new MemoryStream())
+                            {
+                                Input.imageRangeeFile.CopyTo(newMemoryStream);
+                                var uploadRequest = new TransferUtilityUploadRequest
+                                {
+                                    InputStream = newMemoryStream,
+                                    Key = (DateTime.Now.Ticks + Input.imageRangeeFile.FileName).ToString(), // filename
+                                    BucketName = "mediafileobjectifresiliance", // bucket name of S3
+                                    CannedACL = S3CannedACL.PublicRead,
+                                };
+
+                                var fileTransferUtility = new TransferUtility(client);
+                                fileTransferUtility.Upload(uploadRequest);
+                                imgUrl = ("https://mediafileobjectifresiliance.s3.ca-central-1.amazonaws.com/" + uploadRequest.Key).ToString();
+                                rangee.LienImg = imgUrl;
+                            }
+                        }
+                    }
+                    if (formData.cbRetirerImage == true)
+                    {
+                        rangee.LienImg = null;
+                    }
+                    formData.imageUrl = rangee.LienImg;
+
+                    rangee.Titre = formData.inputTitreEtape;
+                    rangee.Texte = formData.rangeeTexte;
+                    rangee.PositionImg = formData.positionImage;
+
+                    _db.RangeeTutos.Update(rangee);
+                    _db.SaveChanges();
+
+                    Guid rId = _db.RangeeTutos.Where(r => r == rangee).First().Id;
+
+                    Input.lstRangeeTutoriels = _db.RangeeTutos.Where(r => r.TutorielId == Guid.Parse(formData.idTutoP)).ToList();
+                    estAjoutee = true;
+                    formData.idRangee = rId.ToString();
+                }
 
                 UpdateInputData();
-                return Page();
+                if (estAjoutee)
+                {
+                    return StatusCode(201, new JsonResult(formData));
+                }
+                else
+                {
+                    return StatusCode(401, new JsonResult(formData));
+                }
             }
             catch (Exception)
             {
                 UpdateInputData();
-                return Page();
+                return StatusCode(401, new JsonResult(formData));
             }
         }
 
@@ -428,7 +504,8 @@ namespace Gwenael.Web.Pages
             public string idtutoVal { get; set; }
         }
 
-        public IActionResult OnPostDeleteRange([FromForm] Rangee rangee)
+        //public IActionResult OnPostDeleteRange([FromForm] Rangee rangee)
+        public IActionResult OnDeleteDeleteRange([FromForm] Rangee rangee)
         {
             try
             {
@@ -451,7 +528,7 @@ namespace Gwenael.Web.Pages
                 UpdateInputData();
                 if (estSupprimer)
                 {
-                    return StatusCode(201, new JsonResult(rangee));
+                    return StatusCode(202, new JsonResult(rangee));
                 }
                 else
                 {
