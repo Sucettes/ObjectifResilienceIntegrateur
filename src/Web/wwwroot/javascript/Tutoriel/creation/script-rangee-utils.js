@@ -392,7 +392,7 @@
 
                     scriptRangeeUtils.currTargetToModifier.form.appendChild(formRangeeModifier)
                 },
-                error: function (error) {
+                error: function () {
                     alert("un problème est survenu");
                 }
             });

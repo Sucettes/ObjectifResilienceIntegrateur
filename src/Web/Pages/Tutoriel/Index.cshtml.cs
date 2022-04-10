@@ -36,24 +36,20 @@ namespace Gwenael.Web.Pages
 
         public class InputModel
         {
-            public List<Domain.Entities.Tutos> lstTutoriels { get; set; }
-
+            public List<Tutos> lstTutoriels { get; set; }
         }
         public TutorielIndexModel(GwenaelDbContext pDb) => _db = pDb;
 
         public IActionResult OnGet()
         {
             Input = new InputModel();
-            Input.lstTutoriels = _db.Tutos.ToList<Domain.Entities.Tutos>();
+            Input.lstTutoriels = _db.Tutos.ToList();
 
             return Page();
         }
 
         public IActionResult OnPost() => Page();
 
-        public IActionResult OnPostRedirectCreationTuto()
-        {
-            return RedirectToPage("CreationTuto");
-        }
+        public IActionResult OnPostRedirectCreationTuto() => RedirectToPage("CreationTuto");
     }
 }

@@ -43,7 +43,6 @@ namespace Gwenael.Web.Pages
             [Required]
             [DataType(DataType.Text)]
             public int duree { get; set; }
-            //[BindProperty(SupportsGet = true)]
             [DataType(DataType.Text)]
             public string cat { get; set; }
             [Required]
@@ -67,25 +66,15 @@ namespace Gwenael.Web.Pages
         {
             Input = new InputModel();
 
-            if (Request.Query.Count == 1)
-            {
-                Input.handler = Request.Query["handler"];
-            }
+            if (Request.Query.Count == 1) Input.handler = Request.Query["handler"];
             else if (Request.Query.Count > 1)
-            {
-                Input.handler = Request.Query["handler"];
-                Input.id = Request.Query["id"];
-            }
-            UpdateInputData();
+                Input.handler = Request.Query["handler"]; Input.id = Request.Query["id"];
 
-            return Page();
-        }
-
-        public IActionResult OnPostAsync()
-        {
             UpdateInputData();
             return Page();
         }
+
+        public IActionResult OnPostAsync() { UpdateInputData(); return Page(); }
 
         public IActionResult OnGetRangeeById(string idRangee)
         {
@@ -93,20 +82,12 @@ namespace Gwenael.Web.Pages
             {
                 Input.handler = "TutoRangee";
                 RangeeTutos rt = _db.RangeeTutos.Where(r => r.Id == Guid.Parse(idRangee)).First();
-                if (rt != null)
-                {
-                    return StatusCode(200, new JsonResult(rt));
-                }
-                else
-                {
-                    return StatusCode(400);
-                }
+                return rt != null ? StatusCode(200, new JsonResult(rt)) : StatusCode(400);
             }
             catch (Exception)
             {
                 return StatusCode(400); ;
             }
-
         }
 
         public IActionResult OnPostRedirectHomeTuto() => RedirectToPage("Index");
@@ -129,10 +110,10 @@ namespace Gwenael.Web.Pages
             try
             {
                 formData.imgUrl = null;
-                string creationTutoStatus = "false";
+                bool creationTutoStatus = false;
                 Input.id = formData.idTutoP;
                 Input.handler = "CreeTutorielDetails";
-                if (!(_db.CategoriesTutos.Where(c => c.Nom == formData.cat).Count() == 0))
+                if (!(!_db.CategoriesTutos.Where(c => c.Nom == formData.cat).Any()))
                 {
                     CategoriesTutos cat = _db.CategoriesTutos.Where(c => c.Nom == formData.cat).First();
 
@@ -140,27 +121,26 @@ namespace Gwenael.Web.Pages
                     {
                         if (formData.imageBanierFile != null)
                         {
-                            using (var client = new AmazonS3Client("AKIAVDH3AEDD6PUJMKGG", "kKV5WKu0tFe8Svl2QdTIMIydLc7CGSMiy2h+KOvV", RegionEndpoint.CACentral1))
+                            using (AmazonS3Client client = new("AKIAVDH3AEDD6PUJMKGG", "kKV5WKu0tFe8Svl2QdTIMIydLc7CGSMiy2h+KOvV", RegionEndpoint.CACentral1))
                             {
-                                using (var newMemoryStream = new MemoryStream())
+                                using MemoryStream newMemoryStream = new();
+                                formData.imageBanierFile.CopyTo(newMemoryStream);
+                                var uploadRequest = new TransferUtilityUploadRequest
                                 {
-                                    formData.imageBanierFile.CopyTo(newMemoryStream);
-                                    var uploadRequest = new TransferUtilityUploadRequest
-                                    {
-                                        InputStream = newMemoryStream,
-                                        Key = (DateTime.Now.Ticks + formData.imageBanierFile.FileName).ToString(), // filename
-                                        BucketName = "mediafileobjectifresiliance", // bucket name of S3
-                                        CannedACL = S3CannedACL.PublicRead,
-                                    };
+                                    InputStream = newMemoryStream,
+                                    Key = (DateTime.Now.Ticks + formData.imageBanierFile.FileName).ToString(), // filename
+                                    BucketName = "mediafileobjectifresiliance", // bucket name of S3
+                                    CannedACL = S3CannedACL.PublicRead,
+                                };
 
-                                    var fileTransferUtility = new TransferUtility(client);
-                                    fileTransferUtility.Upload(uploadRequest);
-                                    formData.imgUrl = ("https://mediafileobjectifresiliance.s3.ca-central-1.amazonaws.com/" + uploadRequest.Key).ToString();
-                                }
+                                TransferUtility fileTransferUtility = new(client);
+                                fileTransferUtility.Upload(uploadRequest);
+                                formData.imgUrl = $"https://mediafileobjectifresiliance.s3.ca-central-1.amazonaws.com/{uploadRequest.Key}";
                             }
                         }
                         Input.imgBannierUrl = formData.imgUrl;
-                        Tutos tuto = new Tutos();
+
+                        Tutos tuto = new();
                         tuto.Titre = formData.titre;
                         tuto.Duree = formData.duree;
                         tuto.Cout = formData.cout;
@@ -175,21 +155,13 @@ namespace Gwenael.Web.Pages
                             _db.SaveChanges();
 
                             formData.idTutoP = _db.Tutos.Where(t => t.Titre == tuto.Titre).First().Id.ToString();
-                            creationTutoStatus = "true";
+                            creationTutoStatus = true;
                         }
                     }
                 }
 
                 UpdateInputData();
-                if (creationTutoStatus == "true")
-                {
-                    return StatusCode(201, new JsonResult(formData));
-                }
-                else
-                {
-                    return StatusCode(400, new JsonResult(formData));
-                }
-
+                return creationTutoStatus ? StatusCode(201, new JsonResult(formData)) : StatusCode(400, new JsonResult(formData));
             }
             catch (Exception)
             {
@@ -202,32 +174,31 @@ namespace Gwenael.Web.Pages
         {
             try
             {
-                string modificationTutoStatus = "false";
+                bool modificationTutoStatus = false;
                 Input.id = formData.idTutoP;
                 Input.handler = "CreeTutorielDetails";
-                if (!(_db.CategoriesTutos.Where(c => c.Nom == formData.cat).Count() == 0))
+                if (!(!_db.CategoriesTutos.Where(c => c.Nom == formData.cat).Any()))
                 {
                     CategoriesTutos cat = _db.CategoriesTutos.Where(c => c.Nom == formData.cat).First();
                     Tutos tuto = _db.Tutos.Where(t => t.Id == Guid.Parse(formData.idTutoP)).First();
                     if (formData.imageBanierFile != null)
                     {
-                        using (var client = new AmazonS3Client("AKIAVDH3AEDD6PUJMKGG", "kKV5WKu0tFe8Svl2QdTIMIydLc7CGSMiy2h+KOvV", RegionEndpoint.CACentral1))
+                        if (tuto.LienImgBanniere != null) RemoveImgS3Amazone(tuto.LienImgBanniere);
+                        using (AmazonS3Client client = new("AKIAVDH3AEDD6PUJMKGG", "kKV5WKu0tFe8Svl2QdTIMIydLc7CGSMiy2h+KOvV", RegionEndpoint.CACentral1))
                         {
-                            using (var newMemoryStream = new MemoryStream())
+                            using MemoryStream newMemoryStream = new();
+                            formData.imageBanierFile.CopyTo(newMemoryStream);
+                            var uploadRequest = new TransferUtilityUploadRequest
                             {
-                                formData.imageBanierFile.CopyTo(newMemoryStream);
-                                var uploadRequest = new TransferUtilityUploadRequest
-                                {
-                                    InputStream = newMemoryStream,
-                                    Key = (DateTime.Now.Ticks + formData.imageBanierFile.FileName).ToString(), // filename
-                                    BucketName = "mediafileobjectifresiliance", // bucket name of S3
-                                    CannedACL = S3CannedACL.PublicRead,
-                                };
+                                InputStream = newMemoryStream,
+                                Key = (DateTime.Now.Ticks + formData.imageBanierFile.FileName).ToString(), // filename
+                                BucketName = "mediafileobjectifresiliance", // bucket name of S3
+                                CannedACL = S3CannedACL.PublicRead,
+                            };
 
-                                var fileTransferUtility = new TransferUtility(client);
-                                fileTransferUtility.Upload(uploadRequest);
-                                formData.imgUrl = ("https://mediafileobjectifresiliance.s3.ca-central-1.amazonaws.com/" + uploadRequest.Key).ToString();
-                            }
+                            TransferUtility fileTransferUtility = new(client);
+                            fileTransferUtility.Upload(uploadRequest);
+                            formData.imgUrl = $"https://mediafileobjectifresiliance.s3.ca-central-1.amazonaws.com/{uploadRequest.Key}";
                         }
                         Input.imgBannierUrl = formData.imgUrl;
                         tuto.LienImgBanniere = formData.imgUrl;
@@ -254,20 +225,13 @@ namespace Gwenael.Web.Pages
                             _db.Tutos.Update(tuto);
                             _db.SaveChanges();
 
-                            modificationTutoStatus = "true";
+                            modificationTutoStatus = true;
                         }
                     }
                 }
 
                 UpdateInputData();
-                if (modificationTutoStatus == "true")
-                {
-                    return StatusCode(201, new JsonResult(formData));
-                }
-                else
-                {
-                    return StatusCode(400, new JsonResult(formData));
-                }
+                return modificationTutoStatus ? StatusCode(201, new JsonResult(formData)) : StatusCode(400, new JsonResult(formData));
             }
             catch (Exception)
             {
@@ -282,10 +246,10 @@ namespace Gwenael.Web.Pages
         {
             try
             {
-                string creationCategorieStatus = "false";
-                if (_db.CategoriesTutos.Where(c => c.Nom == Input.nomCategorie).Count() == 0)
+                string status = "false";
+                if (!_db.CategoriesTutos.Where(c => c.Nom == Input.nomCategorie).Any())
                 {
-                    CategoriesTutos cat = new CategoriesTutos();
+                    CategoriesTutos cat = new();
                     cat.Nom = Input.nomCategorie;
                     cat.Description = Input.descriptionCategorie;
 
@@ -296,14 +260,14 @@ namespace Gwenael.Web.Pages
 
                         Input.descriptionCategorie = "";
                         Input.nomCategorie = "";
-                        creationCategorieStatus = "true";
+                        status = "true";
                     }
                 }
                 Input.id = id;
                 Input.handler = handler;
-                UpdateInputData();
-                return Redirect("/Tutoriel/CreationTuto?handler=CreationCategorie&id=" + Input.id + "&creationCategorieStatus=" + creationCategorieStatus);
 
+                UpdateInputData();
+                return Redirect($"/Tutoriel/CreationTuto?handler=CreationCategorie&id={Input.id}&creationCategorieStatus={status}");
             }
             catch (Exception)
             {
@@ -322,8 +286,8 @@ namespace Gwenael.Web.Pages
             public string imageUrl { get; set; }
             public bool cbRetirerImage { get; set; }
             public IFormFile imageRangeeFile { get; set; }
-
         }
+
         public IActionResult OnPostAjoutRangee([FromForm] CreationTutoRangeeFormData formData)
         {
             try
@@ -331,64 +295,50 @@ namespace Gwenael.Web.Pages
                 bool estAjoutee = false;
                 Input.id = formData.idTutoP;
                 Input.handler = "TutoRangee";
-                //Input.handler = "AjoutRangee";
                 string imgUrl = null;
-                // TODO : Faire en sorte de validé si c'est une rangé d'image ou de texte ou les deux........
-                if (formData.positionImage == "right" || formData.positionImage == "left")
-                {
-                    if (Input.imageRangeeFile != null)
+
+                if (formData.positionImage != "right" && formData.positionImage != "left") formData.positionImage = "left";
+
+                if (Input.imageRangeeFile != null)
+                    using (AmazonS3Client client = new("AKIAVDH3AEDD6PUJMKGG", "kKV5WKu0tFe8Svl2QdTIMIydLc7CGSMiy2h+KOvV", RegionEndpoint.CACentral1))
                     {
-                        using (var client = new AmazonS3Client("AKIAVDH3AEDD6PUJMKGG", "kKV5WKu0tFe8Svl2QdTIMIydLc7CGSMiy2h+KOvV", RegionEndpoint.CACentral1))
+                        using MemoryStream newMemoryStream = new();
+                        Input.imageRangeeFile.CopyTo(newMemoryStream);
+                        TransferUtilityUploadRequest uploadRequest = new()
                         {
-                            using (var newMemoryStream = new MemoryStream())
-                            {
-                                Input.imageRangeeFile.CopyTo(newMemoryStream);
-                                var uploadRequest = new TransferUtilityUploadRequest
-                                {
-                                    InputStream = newMemoryStream,
-                                    Key = (DateTime.Now.Ticks + Input.imageRangeeFile.FileName).ToString(), // filename
-                                    BucketName = "mediafileobjectifresiliance", // bucket name of S3
-                                    CannedACL = S3CannedACL.PublicRead,
-                                };
+                            InputStream = newMemoryStream,
+                            Key = (DateTime.Now.Ticks + Input.imageRangeeFile.FileName).ToString(), // filename
+                            BucketName = "mediafileobjectifresiliance", // bucket name of S3
+                            CannedACL = S3CannedACL.PublicRead,
+                        };
 
-                                var fileTransferUtility = new TransferUtility(client);
-                                fileTransferUtility.Upload(uploadRequest);
-                                imgUrl = ("https://mediafileobjectifresiliance.s3.ca-central-1.amazonaws.com/" + uploadRequest.Key).ToString();
-                            }
-                        }
+                        TransferUtility fileTransferUtility = new(client);
+                        fileTransferUtility.Upload(uploadRequest);
+                        imgUrl = $"https://mediafileobjectifresiliance.s3.ca-central-1.amazonaws.com/{uploadRequest.Key}";
                     }
-                    formData.imageUrl = imgUrl;
 
-                    RangeeTutos rangee = new RangeeTutos();
-                    rangee.TutorielId = Guid.Parse(formData.idTutoP);
-                    rangee.Titre = formData.inputTitreEtape;
-                    rangee.Texte = formData.rangeeTexte;
-                    rangee.PositionImg = formData.positionImage;
-                    rangee.LienImg = imgUrl;
+                RangeeTutos rangee = new();
+                rangee.TutorielId = Guid.Parse(formData.idTutoP);
+                rangee.Titre = formData.inputTitreEtape;
+                rangee.Texte = formData.rangeeTexte;
+                rangee.PositionImg = formData.positionImage;
+                rangee.LienImg = imgUrl;
 
-                    _db.RangeeTutos.Add(rangee);
-                    _db.SaveChanges();
-                    Guid rId = _db.RangeeTutos.Where(r => r == rangee).First().Id;
+                _db.RangeeTutos.Add(rangee);
+                _db.SaveChanges();
+                Guid rId = _db.RangeeTutos.Where(r => r == rangee).First().Id;
 
-                    Input.lstRangeeTutoriels = _db.RangeeTutos.Where(r => r.TutorielId == Guid.Parse(formData.idTutoP)).ToList<RangeeTutos>();
-                    estAjoutee = true;
-                    formData.idRangee = rId.ToString();
-                }
+                Input.lstRangeeTutoriels = _db.RangeeTutos.Where(r => r.TutorielId == Guid.Parse(formData.idTutoP)).ToList();
+                estAjoutee = true;
+                formData.idRangee = rId.ToString();
 
                 UpdateInputData();
-                if (estAjoutee)
-                {
-                    return StatusCode(201, new JsonResult(formData));
-                }
-                else
-                {
-                    return StatusCode(401, new JsonResult(formData));
-                }
+                return estAjoutee ? StatusCode(201, new JsonResult(formData)) : StatusCode(400, new JsonResult(formData));
             }
             catch (Exception)
             {
                 UpdateInputData();
-                return StatusCode(401, new JsonResult(formData));
+                return StatusCode(400, new JsonResult(formData));
             }
         }
 
@@ -409,14 +359,13 @@ namespace Gwenael.Web.Pages
             }
         }
 
-        public IActionResult OnPostTutoChanger(string tutoId, string handler)
+        public IActionResult OnPostTutoChanger(string tutoId)
         {
             try
             {
                 Input.handler = "TutoRangee";
-                //Input.handler = "AjoutRangee";
                 Input.id = tutoId;
-                Input.handler = handler;
+
                 UpdateInputData();
                 return Redirect("/tutoriel/CreationTuto?handler=TutoRangee&id=" + tutoId);
             }
@@ -431,92 +380,79 @@ namespace Gwenael.Web.Pages
         {
             try
             {
-                bool estAjoutee = false;
+                bool estEdit = false;
                 Input.id = formData.idTutoP;
                 Input.handler = "TutoRangee";
-                string imgUrl = null;
-                // TODO : Faire en sorte de validé si c'est une rangé d'image ou de texte ou les deux........
-                if (formData.positionImage == "right" || formData.positionImage == "left")
+
+                if (formData.positionImage != "right" && formData.positionImage != "left") formData.positionImage = "left";
+
+                RangeeTutos r = _db.RangeeTutos.Where(r => r.Id == Guid.Parse(formData.idRangee)).First();
+
+                if (formData.cbRetirerImage == true)
+                    if (RemoveImgS3Amazone(r.LienImg)) r.LienImg = null;
+                if (formData.cbRetirerImage != true && Input.imageRangeeFile != null)
                 {
-                    RangeeTutos rangee = _db.RangeeTutos.Where(r => r.Id == Guid.Parse(formData.idRangee)).First();
-                    if (Input.imageRangeeFile != null && formData.cbRetirerImage != true)
+                    if (r.LienImg != null) RemoveImgS3Amazone(r.LienImg);
+                    using AmazonS3Client client = new("AKIAVDH3AEDD6PUJMKGG", "kKV5WKu0tFe8Svl2QdTIMIydLc7CGSMiy2h+KOvV", RegionEndpoint.CACentral1);
+                    using (MemoryStream newMemoryStream = new())
                     {
-                        using (var client = new AmazonS3Client("AKIAVDH3AEDD6PUJMKGG", "kKV5WKu0tFe8Svl2QdTIMIydLc7CGSMiy2h+KOvV", RegionEndpoint.CACentral1))
+                        Input.imageRangeeFile.CopyTo(newMemoryStream);
+                        TransferUtilityUploadRequest uploadRequest = new()
                         {
-                            using (var newMemoryStream = new MemoryStream())
-                            {
-                                Input.imageRangeeFile.CopyTo(newMemoryStream);
-                                var uploadRequest = new TransferUtilityUploadRequest
-                                {
-                                    InputStream = newMemoryStream,
-                                    Key = (DateTime.Now.Ticks + Input.imageRangeeFile.FileName).ToString(), // filename
-                                    BucketName = "mediafileobjectifresiliance", // bucket name of S3
-                                    CannedACL = S3CannedACL.PublicRead,
-                                };
+                            InputStream = newMemoryStream,
+                            Key = (DateTime.Now.Ticks + Input.imageRangeeFile.FileName).ToString(), // filename
+                            BucketName = "mediafileobjectifresiliance", // bucket name of S3
+                            CannedACL = S3CannedACL.PublicRead,
+                        };
 
-                                var fileTransferUtility = new TransferUtility(client);
-                                fileTransferUtility.Upload(uploadRequest);
-                                imgUrl = ("https://mediafileobjectifresiliance.s3.ca-central-1.amazonaws.com/" + uploadRequest.Key).ToString();
-                                rangee.LienImg = imgUrl;
-                            }
-                        }
+                        TransferUtility fileTransferUtility = new(client);
+                        fileTransferUtility.Upload(uploadRequest);
+                        r.LienImg = $"https://mediafileobjectifresiliance.s3.ca-central-1.amazonaws.com/{uploadRequest.Key}";
                     }
-                    if (formData.cbRetirerImage == true)
-                    {
-                        rangee.LienImg = null;
-                    }
-                    formData.imageUrl = rangee.LienImg;
-
-                    rangee.Titre = formData.inputTitreEtape;
-                    rangee.Texte = formData.rangeeTexte;
-                    rangee.PositionImg = formData.positionImage;
-
-                    _db.RangeeTutos.Update(rangee);
-                    _db.SaveChanges();
-
-                    Guid rId = _db.RangeeTutos.Where(r => r == rangee).First().Id;
-
-                    Input.lstRangeeTutoriels = _db.RangeeTutos.Where(r => r.TutorielId == Guid.Parse(formData.idTutoP)).ToList();
-                    estAjoutee = true;
-                    formData.idRangee = rId.ToString();
                 }
+
+                formData.imageUrl = r.LienImg;
+
+                r.Titre = formData.inputTitreEtape;
+                r.Texte = formData.rangeeTexte;
+                r.PositionImg = formData.positionImage;
+
+                _db.RangeeTutos.Update(r);
+                _db.SaveChanges();
+
+                Guid rId = _db.RangeeTutos.Where(rt => rt == r).First().Id;
+
+                Input.lstRangeeTutoriels = _db.RangeeTutos.Where(rt => rt.TutorielId == Guid.Parse(formData.idTutoP)).ToList();
+                estEdit = true;
+                formData.idRangee = rId.ToString();
 
                 UpdateInputData();
-                if (estAjoutee)
-                {
-                    return StatusCode(201, new JsonResult(formData));
-                }
-                else
-                {
-                    return StatusCode(401, new JsonResult(formData));
-                }
+                return estEdit ? StatusCode(201, new JsonResult(formData)) : StatusCode(400, new JsonResult(formData));
             }
             catch (Exception)
             {
                 UpdateInputData();
-                return StatusCode(401, new JsonResult(formData));
+                return StatusCode(400, new JsonResult(formData));
             }
         }
 
         public class Rangee
         {
-            public string idRangeeVal { get; set; }
-            public string idtutoVal { get; set; }
+            public string IdRangeeVal { get; set; }
+            public string IdtutoVal { get; set; }
         }
 
-        //public IActionResult OnPostDeleteRange([FromForm] Rangee rangee)
-        public IActionResult OnDeleteDeleteRange([FromForm] Rangee rangee)
+        public IActionResult OnDeleteDeleteRange([FromForm] Rangee r)
         {
             try
             {
-
                 Input.handler = "TutoRangee";
-                Input.id = rangee.idtutoVal;
+                Input.id = r.IdtutoVal;
                 bool estSupprimer = false;
-                Tutos t = _db.Tutos.Where(t => t.Id == Guid.Parse(rangee.idtutoVal) && t.EstPublier == false).First();
+                Tutos t = _db.Tutos.Where(t => t.Id == Guid.Parse(r.IdtutoVal) && t.EstPublier == false).First();
                 if (t != null)
                 {
-                    RangeeTutos rt = _db.RangeeTutos.Where(r => r.TutorielId == Guid.Parse(rangee.idtutoVal) && r.Id == Guid.Parse(rangee.idRangeeVal)).First();
+                    RangeeTutos rt = _db.RangeeTutos.Where(rt => rt.TutorielId == Guid.Parse(r.IdtutoVal) && rt.Id == Guid.Parse(r.IdRangeeVal)).First();
                     if (rt != null)
                     {
                         _db.RangeeTutos.Remove(rt);
@@ -526,27 +462,19 @@ namespace Gwenael.Web.Pages
                 }
 
                 UpdateInputData();
-                if (estSupprimer)
-                {
-                    return StatusCode(202, new JsonResult(rangee));
-                }
-                else
-                {
-                    return StatusCode(400, new JsonResult(rangee));
-                }
+                return estSupprimer ? StatusCode(202, new JsonResult(r)) : StatusCode(400, new JsonResult(r));
             }
             catch (Exception)
             {
                 UpdateInputData();
-                return StatusCode(400, new JsonResult(rangee));
+                return StatusCode(400, new JsonResult(r));
             }
         }
 
-        public IActionResult OnPostPublieTuto(string id, string handler)
+        public IActionResult OnPostPublieTuto(string id)
         {
             try
             {
-                //Input.handler = "AjoutRangee";
                 Input.id = id;
 
                 Tutos t = _db.Tutos.Where(t => t.Id == Guid.Parse(id) && t.EstPublier == false).First();
@@ -571,9 +499,8 @@ namespace Gwenael.Web.Pages
         {
             Input.lstCategories = _db.CategoriesTutos.ToList();
             if (!String.IsNullOrEmpty(Input.id))
-            {
                 Input.lstRangeeTutoriels = _db.RangeeTutos.Where(r => r.TutorielId == Guid.Parse(Input.id)).ToList();
-            }
+
             Input.lstTutoriels = _db.Tutos.Where(t => t.EstPublier == false).ToList();
 
             if (!String.IsNullOrEmpty(Input.id))
@@ -590,6 +517,21 @@ namespace Gwenael.Web.Pages
                     Input.imgBannierUrl = tuto.LienImgBanniere;
                 }
             }
+        }
+
+        public bool RemoveImgS3Amazone(string pUrl)
+        {
+            // TODO : comment faire pour le supprimer
+            //using (AmazonS3Client client = new("AKIAVDH3AEDD6PUJMKGG", "kKV5WKu0tFe8Svl2QdTIMIydLc7CGSMiy2h+KOvV"))
+            //{
+            //    client.DeleteObjectAsync(new Amazon.S3.Model.DeleteObjectRequest()
+            //    {
+            //        BucketName = "mediafileobjectifresiliance",
+            //        //Key = pUrl.Replace("https://mediafileobjectifresiliance.s3.ca-central-1.amazonaws.com/", "")
+            //        Key = pUrl
+            //    });
+            //}
+            return true;
         }
     }
 }

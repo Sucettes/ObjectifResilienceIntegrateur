@@ -52,7 +52,7 @@
                     <h3 style="text-align:left;">Détails du tutoriel</h3>
 
                     <form method="post" asp-page="CreationTuto" enctype="multipart/form-data" id="formCreationTuto">
-                        <input id="idTutoP" value="@id" hidden name="idTutoP"/>
+                        <input id="idTutoP" value="@id" hidden name="idTutoP" />
                         <div class="row">
                             <div class="col-md-6">
                                 @if (Model.Input.imgBannierUrl != null)
@@ -124,7 +124,7 @@
                                 <br />
                                 <h2>Introduction</h2>
 
-                               @*<div class="input-group">*@
+                                @*<div class="input-group">*@
                                 <div>
                                     @if (!String.IsNullOrEmpty(@Model.Input.intro))
                                     {
@@ -148,35 +148,35 @@
 
                 <!-- Contenue page contenue tuto-->
                 <div class="@(handler == "TutoRangee" ? "tab-pane show active" : "tab-pane ")" id="nav-contenue" style="background-color:white;" role="tabpanel" aria-labelledby="nav-contenue-tab">
-                    
+
                     <h3 style="text-align:left;">Étapes du tutoriel</h3>
-                        <form method="post" asp-page="CreationTuto">
-                            <div class="row">
-                                <label for="tutoId" style="width: 100%;">Sélectionner un tutoriel</label>
-                                <div class="col-10">
-                                    <select class="form-select" aria-label="Sélectionner un tutoriel" name="tutoId">
-                                        @if (!(@Model.Input.lstTutoriels.IsNullOrEmpty()))
+                    <form method="post" asp-page="CreationTuto">
+                        <div class="row">
+                            <label for="tutoId" style="width: 100%;">Sélectionner un tutoriel</label>
+                            <div class="col-10">
+                                <select class="form-select" aria-label="Sélectionner un tutoriel" name="tutoId">
+                                    @if (!(@Model.Input.lstTutoriels.IsNullOrEmpty()))
+                                    {
+                                        <option value="@id" selected disabled>Sélectionner un tutoriel</option>
+                                        @foreach (var tuto in @Model.Input.lstTutoriels)
                                         {
-                                            <option value="@id" selected disabled>Sélectionner un tutoriel</option>
-                                            @foreach (var tuto in @Model.Input.lstTutoriels)
+                                            if (!String.IsNullOrEmpty(@id) && tuto.Id.ToString() == @id)
                                             {
-                                                if (!String.IsNullOrEmpty(@id) && tuto.Id.ToString() == @id)
-                                                {
-                                                    <option value="@tuto.Id" selected>@tuto.Titre</option>
-                                                }
-                                                else
-                                                {
-                                                    <option value="@tuto.Id">@tuto.Titre</option>
-                                                }
+                                                <option value="@tuto.Id" selected>@tuto.Titre</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@tuto.Id">@tuto.Titre</option>
                                             }
                                         }
-                                    </select>
-                                </div>
-                                <div class="col-2">
-                                    <button type="submit" class="btn btn-outline-primary" asp-page-handler="TutoChanger">Sélectionner</button>
-                                </div>
+                                    }
+                                </select>
                             </div>
-                        </form>
+                            <div class="col-2">
+                                <button type="submit" class="btn btn-outline-primary" asp-page-handler="TutoChanger">Sélectionner</button>
+                            </div>
+                        </div>
+                    </form>
 
                     <br />
 
@@ -192,7 +192,7 @@
                             {
                                 <form method="post" asp-page="CreationTuto" class="shadow-sm rounded" style="background-color:#f1f9ee; padding:0.7rem; margin-bottom:1.2rem; margin-top:0.7rem;">
                                     <!-- Data invisible pour les requêtes. -->
-                                    <input name="idRangeeVal" type="text" value="@rangee.Id" hidden />
+                            <input name="idRangeeVal" type="text" value="@rangee.Id" hidden />
                                     <input name="idtutoVal" type="text" value="@id" hidden />
 
                                     <div class="row" style="display:flex; justify-content:space-between">
@@ -245,12 +245,12 @@
                             }
                         }
                     </section>
-                    
+
 
                     <br />
 
                     <form method="post" asp-page="CreationTuto" enctype="multipart/form-data">
-                        <input id="idTutoP" value="@id" hidden name="idTutoP"/>
+                        <input id="idTutoP" value="@id" hidden name="idTutoP" />
                         <div class="input-group input-group-sm mb-3">
                             <span class="input-group-text" id="inputTitreEtape">Titre Étape</span>
                             <input type="text" class="form-control" name="inputTitreEtape">
@@ -406,12 +406,7 @@
 
 <script src="~/javascript/Tutoriel/creation/CreationTutoPageAction.js" asp-append-version="true"></script>
 <script src="~/javascript/Tutoriel/creation/ModificationTutoPageAction.js" asp-append-version="true"></script>
-@*<script src="~/javascript/Tutoriel/creation/CreationTutoRangee.js" asp-append-version="true"></script>*@
-@*<script src="~/javascript/Tutoriel/creation/tutorielSupprimerRangee.js" asp-append-version="true"></script>*@
 <script src="~/javascript/Tutoriel/creation/script-rangee-utils.js" asp-append-version="true"></script>
 <script src="~/javascript/Tutoriel/creation/script-rangee-init.js" asp-append-version="true"></script>
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.0.20/tinymce.min.js"></script>
-@*<script type="text/javascript">
-    tinymce.init({ selector: 'textarea' });
-</script>*@
