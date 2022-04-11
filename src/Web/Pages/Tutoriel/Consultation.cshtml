@@ -21,6 +21,11 @@
                     <form method="post" asp-page="CreationTuto" style="margin-right:0.4rem;">
                         <button type="submit" class="btn btn-outline-primary" asp-page-handler="RedirectHomeTuto">Retour</button>
                     </form>
+                    <form method="post" asp-page="Consultation">
+                        <input name="tutorielIdVal" type="text" value="@tuto.Id" hidden />
+                        <button type="submit" class="btn btn-danger" data-supprimerTuto asp-page-handler="DeleteTuto" data-bs-toggle="modal" data-bs-target="#modalValideDeleteTuto"><img src="~/icons/deleteIcon.svg" /></button>
+                        <button type="submit" class="btn btn-primary" data-UnpublishTuto asp-page-handler="UnpublishTuto" data-bs-toggle="modal" data-bs-target="#modalValideUnpublishTuto">Rendre non public</button>
+                    </form>
                 </div>
             </div>
         </nav>
@@ -41,7 +46,7 @@
                         </div>
                         <div class="col-md-6">
                             <h2>@tuto.Titre</h2>
-                            <p>Par @tuto.AuteurUserId le @tuto.DateCreation</p>
+                            <p>Publié le @tuto.DateCreation</p>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputDuree">Durée (heures)</span>
                                 <input type="number" class="form-control" aria-label="Durée" aria-describedby="Durée" value="@tuto.Duree" disabled>
@@ -59,25 +64,17 @@
                                 <span class="input-group-text">$</span>
                             </div>
                             <div>
-                                <form method="post" asp-page="Consultation">
-                                    <input name="tutorielIdVal" type="text" value="@tuto.Id" hidden />
-                                    <button type="submit" class="btn btn-danger" data-supprimerTuto asp-page-handler="DeleteTuto" data-bs-toggle="modal" data-bs-target="#modalValideDeleteTuto"><img src="~/icons/deleteIcon.svg" /></button>
-                                    <button type="submit" class="btn btn-primary" data-UnpublishTuto asp-page-handler="UnpublishTuto" data-bs-toggle="modal" data-bs-target="#modalValideUnpublishTuto">Rendre non public</button>
-
-                                </form>
                             </div>
                         </div>
                     </div>
                     <br />
                     <br />
-                    <div class="row">
-                        <div class="shadow-sm rounded col-md-12" style="background-color:#f1f9ee; padding:0.7rem; margin-bottom:1.2rem; margin-top:0.7rem;">
+                        <div class="shadow-sm rounded" style="background-color:#f1f9ee; padding:0.7rem; margin-bottom:1.2rem; margin-top:0.7rem;">
                             <h2 class="col-6" style="display:inline; text-align:left;">Introduction</h2>
                             <div class="card-body row">
                                 <p style="text-align:justify;">@tuto.Introduction</p>
                             </div>
                         </div>
-                    </div>
 
                     @if (!@Model.Input.lstRangeeTuto.IsNullOrEmpty())
                     {
