@@ -21,13 +21,29 @@
     flex-direction: column;
 }
 
+@media (min-width: 770px) {
+    .major-theme {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        padding: 2rem;
+        flex-wrap: wrap;
+    }
+}
 
-.major-theme {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    padding: 2rem;
-    flex-wrap: wrap;
+@media (max-width: 770px) {
+    .major-theme {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        flex-shrink:0.1;
+        
+    }
+}
+.themeH3{
+    position:relative;
+    top:5rem;
+    left:2rem;
 }
 
 .theme-box {
@@ -35,8 +51,17 @@
     width: 200px;
     height: 200px;
     background-color: rgba(158, 204, 114,0.6);
+    margin: 0.2rem;
 }
-
+/*@media (max-width: 770px) {
+    .theme-box {
+        display: flex;
+        width: 200px;
+        height: 200px;
+        background-color: rgba(158, 204, 114,0.6);
+        margin:2rem;
+    }
+}*/
 
 a:link {
     text-decoration: none;
@@ -47,35 +72,59 @@ a:link {
     min-height: 1000px;
 }
 
-.rowContainer{
-    max-width:100%;
+.rowContainer {
+    max-width: 100%;
 }
 
 .articleContainer {
     display: flex;
 }
 
-.articleBigContainer {
-    flex-basis: 66%;
-    margin:1rem
+@media (max-width: 770px) {
+    .articleContainer {
+        display: flex;
+        flex-direction:column
+    }
 }
 
-.articleSmallContainer {
-    flex-basis: 29.5%;
-    display: flex; 
-    margin:1rem;
-    flex-direction: column;
+@media (min-width: 770px) {
+    .articleBigContainer {
+        flex-basis: 66%;
+        margin: 1rem
+    }
 }
 
+@media (max-width: 770px) {
+    .articleBigContainer {
+        flex-basis: 1;
+    }
+}
+
+@media (min-width: 770px) {
+    .articleSmallContainer {
+        flex-basis: 29.5%;
+        display: flex;
+        margin: 1rem;
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 770px) {
+    .articleSmallContainer {
+        flex-basis: 1;
+        display: flex;
+    }
+}
 
 .div-article {
-    background-color: #ffa733;
+    //background-color: #ffa733;
     flex: 1;
     margin-bottom: 1rem;
+    margin: 0.2rem;
 }
 
 .div-article1 {
-    background-color: #ffa733;
+    //background-color: #ffa733;
 }
 
 h3, h4 {
@@ -85,4 +134,11 @@ h3, h4 {
 
 h3 {
     vertical-align: middle;
+}
+
+.articleTitle {
+    position: relative;
+    background-color: rgba(255, 167, 51,0.5);
+    z-index: 0;
+    top: 2.2rem;
 }
