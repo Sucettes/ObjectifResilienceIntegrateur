@@ -4,6 +4,7 @@
 @using Domain.Entities
 @{
     ViewData["Title"] = "Home page";
+
 }
 
 
@@ -12,13 +13,14 @@
         <a asp-page="poadcastForm" class="btn btn-success btn-sm">Ajouter un poadcast</a>
     </div>
     <div><p>Trie par catégrie</p></div>
-    <form method="get" enctype="multipart/form-data">
+    <form method="post" enctype="multipart/form-data">
         <div>
-            <select id="categorie" asp-for="cat">
-                <option value="0">Tout</option>
-                <option value="lowtech">Lowtech</option>
-                <option value="recyclage">Recyclage</option>
-                <option value="autCat">Autre catégorie</option>
+            <select id="categorie" name="categorie" asp-for="cat">
+                <option value="tout">Tout</option>
+                @foreach (var cat in @Model.lstCategories)
+                {
+                    <option id="@cat.Id" value="@cat.Nom" selected>@cat.Nom</option>
+                }
 
             </select><br><br>
             <input type="submit" value="filtrer" /><br /><br />
@@ -26,16 +28,22 @@
     </form>
     
 
-    
-
         @foreach (var audio in ViewData["lstAudios"] as IList<Audio>)
         {
-            
-                    <a asp-page="./PoadcastDetail" asp-route-id="@audio.ID">
-                        <div><p>titre : @audio.titre</p></div>
-                    <div><img src="@audio.urlImage"></div>
-
-                    </a>           
-        }
+            if(audio.EstPublier == false)
+            {
+            <a asp-page="./PoadcastDetail" asp-route-id="@audio.ID">
+                <div><p>titre : @audio.titre</p></div>
+                <div><img src="@audio.urlImage"></div>
+                @foreach (var cat in @Model.lstCategories)
+                {
+                    if(audio.categorie == cat)
+                    {
+                        <div>@cat.Nom</div>
+                    }
+                }
+            </a>
+            }                              
+         }
     
 </div>

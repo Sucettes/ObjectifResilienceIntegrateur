@@ -111,7 +111,8 @@ namespace Gwenael.Web.Pages
                     urlAudio = "https://mediafileobjectifresiliance.s3.ca-central-1.amazonaws.com/" + fileAudio.FileName,
                     description = description,
                     categorie = cat,
-                    urlImage = "https://mediafileobjectifresiliance.s3.ca-central-1.amazonaws.com/" +nomFichier
+                    urlImage = "https://mediafileobjectifresiliance.s3.ca-central-1.amazonaws.com/" +nomFichier,
+                    EstPublier = false
                 };
 
                         _context.Audios.Add(audio);

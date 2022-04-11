@@ -20,63 +20,63 @@ namespace Gwenael.Web.Pages
         {
             _context = context;
         }
-        //public IList<Poadcast> poadcasts { get; set; }
+        
         public IList<Audio> audios { get; set; }
         public IList<Audio> lstAudioSort { get; set; }
+        public List<CategoriesTutos> lstCategories { get; set; }
         public String Categorie { get; set; }
-        //Poadcast poadcast { get; set; }
+        
         public IList<Audio> audio { get; set; }
         [BindProperty(SupportsGet = true)]
         public string cat { get; set; }
 
-        //public SelectList Categories { get; set; }
+        
 
         public async Task<IActionResult> OnGetAsync()
         {
-            if (Request.Query.Count == 1)
-            {
-                Categorie = Request.Query["catégorie"];
-                ViewData["Catégorie"] = Categorie;
-            }
+            
             audios = await _context.Audios.ToListAsync();
             ViewData["lstAudios"] = audios;
-            //var poadcastSort = poadcasts;
             
-            var poadcastSort = from p in _context.Audios select p;
-            if (cat == null)
-            {
-                if (Request.Query.Count == 1)
-                {
-                    Categorie = Request.Query["catégorie"];
-                    ViewData["Catégorie"] = Categorie;
-                }
-                audios = await _context.Audios.ToListAsync();
-                ViewData["lstPoadcasts"] = audios;
-            }
-            if(cat =="lowtech" || cat == "recyclage" || cat =="autCat")
-            {
-                foreach (var p in ViewData["lstPoadcasts"] as IList<Audio>)
-                {
-                    //poadcastSort = poadcastSort.Where(p => p.categorie == cat);
-                    //lstPoadcastSort = await poadcastSort.ToListAsync();
-                    //lstPoadcastSort.Add((Poadcast)poadcastSort);
-                }
-                ViewData["lstPoadcasts"] = lstAudioSort;
-            }
-            else
-            {
-                if (Request.Query.Count == 1)
-                {
-                    Categorie = Request.Query["catégorie"];
-                    ViewData["Catégorie"] = Categorie;
-                }
-                audios = await _context.Audios.ToListAsync();
-                ViewData["lstAudios"] = audios;
-            }
-           
+            
+
+            lstCategories = _context.CategoriesTutos.ToList<CategoriesTutos>();
+
             return Page();
         }
 
-        
+        public async Task<IActionResult> OnPost(string categorie)
+        {
+            
+            audios = await _context.Audios.ToListAsync();
+            ViewData["lstAudios"] = audios;
+
+            if (categorie != "tout" && categorie != null)
+            {
+
+                lstCategories = _context.CategoriesTutos.ToList<CategoriesTutos>();
+
+                var audioSort = from p in _context.Audios select p;
+                CategoriesTutos cat = _context.CategoriesTutos.Where(c => c.Nom == categorie).First();
+
+                foreach (var p in ViewData["lstAudios"] as IList<Audio>)
+                {
+                    audioSort = audioSort.Where(p => p.categorie == cat);
+                    lstAudioSort = await audioSort.ToListAsync();
+                    //lstAudioSort.Add((Poadcast)audioSort);
+                }
+                ViewData["lstAudios"] = lstAudioSort;
+
+            }
+            else
+            {
+                
+                audios = await _context.Audios.ToListAsync();
+                ViewData["lstAudios"] = audios;
+            }
+            lstCategories = _context.CategoriesTutos.ToList<CategoriesTutos>();
+            return Page();
+
+        }    
     }
 }
