@@ -23,18 +23,28 @@
                     <a href="?tab=utilisateurs" class="nav-link active">Utilisateurs</a>
                     <a href="?tab=roles" class="nav-link">Rôles</a>
                     <a href="?tab=demandes" class="nav-link">Demandes</a>
+                    <a href="?tab=poadcasts" class="nav-link">Poadcasts</a>
                 }
                 @if (ViewData["Tab"].ToString() == "roles")
                 {
                     <a href="?tab=utilisateurs" class="nav-link">Utilisateurs</a>
                     <a href="?tab=roles" class="nav-link active">Rôles</a>
                     <a href="?tab=demandes" class="nav-link">Demandes</a>
+                    <a href="?tab=poadcasts" class="nav-link">Poadcasts</a>
                 }
                 @if (ViewData["Tab"].ToString() == "demandes")
                 {
                     <a href="?tab=utilisateurs" class="nav-link">Utilisateurs</a>
                     <a href="?tab=roles" class="nav-link">Rôles</a>
                     <a href="?tab=demandes" class="nav-link active">Demandes</a>
+                    <a href="?tab=poadcasts" class="nav-link">Poadcasts</a>
+                }
+                @if (ViewData["Tab"].ToString() == "poadcasts")
+                {
+                    <a href="?tab=utilisateurs" class="nav-link">Utilisateurs</a>
+                    <a href="?tab=roles" class="nav-link">Rôles</a>
+                    <a href="?tab=demandes" class="nav-link">Demandes</a>
+                    <a href="?tab=poadcasts" class="nav-link active">Poadcasts</a>
                 }
             }
         </div>
@@ -166,7 +176,38 @@
                     }
                 }
             }
+            @if (ViewData["Tab"].ToString() == "poadcasts")
+            {
+                @foreach (var audio in ViewData["lstAudios"] as IList<Audio>)
+                {
+                    if (audio.EstPublier == false)
+                    {
 
+                        <div><p>titre : @audio.titre</p></div>
+                        <div><img src="@audio.urlImage"></div>
+                        @*@foreach (var cat in @Model.lstCategories)
+                        {
+                            if (audio.categorie == cat)
+                            {
+                                <div>@cat.Nom</div>
+                            }
+                        }*@
+                        <div>
+                            <audio controls
+                                   src="@audio.urlAudio">
+                            </audio>
+
+                        </div>
+                        <div class="col-sm">
+                            <form method="post">
+                                <input type="hidden" name="name" value="@audio.ID" />
+                                <input name="btnAjouterPoadcast" type="submit" value="Ajouter" class="btn btn-success form-control" />
+                            </form>
+                        </div>
+
+                    }
+                }
+            }
         }
     </table>
 </div>

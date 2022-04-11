@@ -1,0 +1,56 @@
+﻿@page
+@using IdentityServer4.Extensions
+@using Web.Pages
+@model Web.Pages.PoadcastFormModel
+@using Domain.Entities
+@{
+    ViewData["Title"] = "Formulaire de création d'un poadcast";
+
+}
+
+
+<div>
+    <form method="post" enctype="multipart/form-data" id="centerForm">
+
+        <div class="form-group row">
+            <label for="titre">Titre <em>*</em></label>
+            <input name="titre" id="titre" placeholder="titre du formulaire" autofocus="" required=""><br>
+        </div>
+
+        <div class="form-group row">
+            <label for="description">Description</label>
+            <textarea name="description" id="description"></textarea><br>
+        </div>
+
+        <div class="form-group row">
+            <label for="categorie">Catégorie <em>*</em></label>
+            <select name="categorie" id="categorie">
+                
+                    @foreach (var cat in @Model.Input.lstCategories)
+                    {
+
+                        
+                            <option id="@cat.Id" value="@cat.Nom" selected>@cat.Nom</option>
+                        
+                    }
+                
+                
+
+            </select><br><br>
+        </div>
+
+        <div class="form-group row">
+            <input name="fileAudio" accept="audio/*"  class="form-control" type="file" required="" /><br />
+
+            <input name="fileImage" accept="image/*"  class="form-control" type="file"  /><br />
+
+        </div>
+
+        <div class="form-group row">
+
+
+            <input class="btn btn-success btn-sm" type="submit" value="valider" /><br /><br />
+            <a name="btnAnnuler" class="btn btn-danger form-control" asp-page="poadcastPage">Annuler</a>
+        </div>
+    </form>
+</div>

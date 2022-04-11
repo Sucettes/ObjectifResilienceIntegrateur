@@ -1,0 +1,49 @@
+﻿@page
+@using Web.Pages
+@model Web.Pages.PoadcastPageModel
+@using Domain.Entities
+@{
+    ViewData["Title"] = "Home page";
+
+}
+
+
+<div>
+    <div>
+        <a asp-page="poadcastForm" class="btn btn-success btn-sm">Ajouter un poadcast</a>
+    </div>
+    <div><p>Trie par catégrie</p></div>
+    <form method="post" enctype="multipart/form-data">
+        <div>
+            <select id="categorie" name="categorie" asp-for="cat">
+                <option value="tout">Tout</option>
+                @foreach (var cat in @Model.lstCategories)
+                {
+                    <option id="@cat.Id" value="@cat.Nom" selected>@cat.Nom</option>
+                }
+
+            </select><br><br>
+            <input type="submit" value="filtrer" /><br /><br />
+        </div>
+    </form>
+    
+
+        @foreach (var audio in ViewData["lstAudios"] as IList<Audio>)
+        {
+            if(audio.EstPublier == false)
+            {
+            <a asp-page="./PoadcastDetail" asp-route-id="@audio.ID">
+                <div><p>titre : @audio.titre</p></div>
+                <div><img src="@audio.urlImage"></div>
+                @foreach (var cat in @Model.lstCategories)
+                {
+                    if(audio.categorie == cat)
+                    {
+                        <div>@cat.Nom</div>
+                    }
+                }
+            </a>
+            }                              
+         }
+    
+</div>

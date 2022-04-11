@@ -1,0 +1,27 @@
+﻿@page
+@using Web.Pages
+@using Domain.Entities
+@model Web.Pages.AddCategorieModel
+@{ ViewData["Title"] = "Home page"; }
+
+
+<div>
+    <form method="post" enctype="multipart/form-data" id="centerForm">
+
+        <div class="form-group row">
+            <label for="titre">Nom de la catégorie <em>*</em></label>
+            <input name="nom" id="titre" placeholder="titre du formulaire" autofocus="" required=""><br>
+        </div>
+
+        <div class="form-group row">
+            <label for="description">Description</label>
+            <textarea name="description" id="description"></textarea><br>
+        </div>
+
+        
+        <div class="form-group row">
+            <input class="btn btn-success btn-sm" type="submit" value="valider" /><br /><br />
+            <a name="btnAnnuler" class="btn btn-danger form-control" asp-page="poadcastPage">Annuler</a>
+        </div>
+    </form>
+</div>

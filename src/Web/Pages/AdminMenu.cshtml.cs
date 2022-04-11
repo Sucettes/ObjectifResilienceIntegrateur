@@ -26,6 +26,9 @@ namespace Gwenael.Web.Pages
         public IList<User> Users { get; set; }
         [BindProperty]
         public IList<User> UsersNonActivated { get; set; }
+
+        public IList<Audio> audios { get; set; }
+        public List<CategoriesTutos> lstCategories { get; set; }
         public String Tab { get; set; }
         public async Task<IActionResult> OnGetAsync()
         {
@@ -34,6 +37,10 @@ namespace Gwenael.Web.Pages
             //    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
             //    if (Permission.EstAdministrateur(idConnectedUser, _context))
             //    {
+
+            audios = await _context.Audios.ToListAsync();
+            ViewData["lstAudios"] = audios;
+
             if (Request.Query.Count == 1)
             {
                 Tab = Request.Query["tab"];
@@ -88,13 +95,15 @@ namespace Gwenael.Web.Pages
             //}
         }
 
-        public async Task<IActionResult> OnPostAsync(string btnDeleteRole, string name, string selectRole, string btnAccepter)
+        public async Task<IActionResult> OnPostAsync(string btnDeleteRole, string name, string selectRole, string btnAccepter, string btnAjouterPoadcast, string btnSupprimerPoadcast, int? id)
         {
             //if (User.Identity.IsAuthenticated)
             //{
             //    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
             //if (Permission.EstAdministrateur(idConnectedUser, _context))
             //{
+            
+
             if (btnDeleteRole is not null)
             {
                 Guid selectedUserId = Guid.Parse(Request.Query["guid"]);
@@ -136,6 +145,31 @@ namespace Gwenael.Web.Pages
                 userBd.Active = true;
                 await _context.SaveChangesAsync();
                 return Redirect("/AdminMenu/?tab=demandes");
+            }
+            else if(btnAjouterPoadcast is not null)
+            {
+                Audio audioBd = (Audio)_context.Audios.Where(u => u.ID == Guid.Parse(name)).First();
+                audioBd.EstPublier = true;
+                await _context.SaveChangesAsync();
+                return Redirect("/AdminMenu/?tab=poadcasts");
+            }
+            else if (btnSupprimerPoadcast is not null)
+            {
+                if (id == null)
+                {
+                    return NotFound();
+                }
+
+                Audio audioBd =  _context.Audios.Find(id);
+
+                if (audioBd != null)
+                {
+                    _context.Audios.Remove(audioBd);
+                    await _context.SaveChangesAsync();
+                }
+
+                return RedirectToPage("/AdminMenu/?tab=poadcasts");
+
             }
             return Page();
             //}
