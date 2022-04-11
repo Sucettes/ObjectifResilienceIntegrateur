@@ -20,38 +20,34 @@ namespace Gwenael.Web.Pages
 
         public class InputModel
         {
-            public Domain.Entities.Tutos tutoriel { get; set; }
+            public Tutos tutoriel { get; set; }
             public List<RangeeTutos> lstRangeeTuto { get; set; }
             public string id { get; set; }
-
         }
         public ConsultationModel(GwenaelDbContext pDb) => _db = pDb;
 
         public IActionResult OnGet()
         {
-            bool estValide = false;
             Input = new InputModel();
 
             if (Request.Query.Count >= 1)
             {
                 Input.id = Request.Query["id"];
-                if (IdEstValide()) estValide = true;
+                if (IdEstValide()) return Page();
             }
 
-            if (estValide) return Page();
-            else return Redirect("/tutoriel");
+            return Redirect("/tutoriel");
         }
 
         public IActionResult OnPost() => Page();
 
         public IActionResult OnPostRedirectHomeTuto() => RedirectToPage("Index");
 
-        public IActionResult OnPostDeleteTuto(string handler, [FromBody] TutorielIdVal tutoVal)
+        public IActionResult OnPostDeleteTuto([FromBody] TutorielIdVal tutoVal)
         {
             try
             {
-                Domain.Entities.Tutos tuto = _db.Tutos.Where(t => t.Id == Guid.Parse(tutoVal.tutorielIdVal)).First();
-                _db.Tutos.Remove(tuto);
+                _db.Tutos.Remove(entity: _db.Tutos.Where(t => t.Id == Guid.Parse(tutoVal.tutorielIdVal)).First());
                 _db.SaveChanges();
 
                 return Redirect("/tutoriel?deleteStatus=true");
@@ -60,14 +56,13 @@ namespace Gwenael.Web.Pages
             {
                 return Redirect("/tutoriel");
             }
-        } 
+        }
 
-        public IActionResult OnPostUnpublishTuto(string handler, [FromBody] TutorielIdVal tutoVal)
+        public IActionResult OnPostUnpublishTuto([FromBody] TutorielIdVal tutoVal)
         {
             try
             {
-                Domain.Entities.Tutos tuto = _db.Tutos.Where(t => t.Id == Guid.Parse(tutoVal.tutorielIdVal)).First();
-                tuto.EstPublier = false;
+                _db.Tutos.Where(t => t.Id == Guid.Parse(tutoVal.tutorielIdVal)).First().EstPublier = false;
                 _db.SaveChanges();
 
                 return Redirect("/tutoriel?unPublishStatus=true");
@@ -85,19 +80,16 @@ namespace Gwenael.Web.Pages
 
         private bool IdEstValide()
         {
-            bool estValide = false;
-
             if (!Input.id.IsNullOrEmpty())
             {
                 Input.tutoriel = _db.Tutos.Where(t => t.Id == Guid.Parse(Input.id) && t.EstPublier == true).First();
                 if (Input.tutoriel != null)
                 {
                     GetContenue();
-                    estValide = true;
+                    return true;
                 }
             }
-
-            return estValide;
+            return false;
         }
 
         private void GetContenue() => Input.lstRangeeTuto = _db.RangeeTutos.Where(r => r.TutorielId == Guid.Parse(Input.id)).ToList();

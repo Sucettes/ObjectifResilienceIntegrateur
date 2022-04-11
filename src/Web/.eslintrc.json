@@ -8,5 +8,13 @@
 		"new-cap": 0,
 		"no-eval": 0,
 		"semi": 0
+	},
+	"globals": {
+		"$": false,
+		"scriptRangeeInit": false,
+		"scriptRangeeUtils": false,
+		"window": false,
+		"document": false,
+		"localStorage": false
 	}
 }

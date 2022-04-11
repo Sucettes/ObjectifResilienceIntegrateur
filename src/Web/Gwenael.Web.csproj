@@ -69,7 +69,6 @@
 		<Folder Include="Scripts\modules\" />
 		<Folder Include="Scripts\" />
 		<Folder Include="wwwroot\js\" />
-		<Folder Include="wwwroot\javascript\" />
 	</ItemGroup>
 
 	<ItemGroup>

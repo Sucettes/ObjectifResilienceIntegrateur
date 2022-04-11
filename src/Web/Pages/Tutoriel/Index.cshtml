@@ -17,24 +17,17 @@
         </form>
     </div>
 </nav>
+
 <div class="container-fluid">
     <br />
     <div class="row">
         <!-- Contenue du menu (Ou les filtres de recherche ce trouve) -->
-        <div class="col-3">
+        <div class="col-3" style="padding-right:1.5rem;padding-left:1.5rem;">
             <h4>Filtre de recherches</h4>
             <hr />
 
             <!-- Btn Radio pour le mode de filtre. -->
             <div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="radioFiltre" id="radioFiltreAuteur">
-                    <label class="form-check-label" for="radioFiltreAuteur" style="margin:0;">Par auteur</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="radioFiltre" id="radioFiltreMesTuto" checked>
-                    <label class="form-check-label" for="radioFiltreMesTuto" style="margin:0;">Mes tutoriels</label>
-                </div>
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="radioFiltre" id="radioFiltreTitre" checked>
                     <label class="form-check-label" for="radioFiltreTitre" style="margin:0;">Par titre</label>
@@ -95,7 +88,7 @@
             </div>
 
             <!-- Navigation de pagination -->
-            <nav>
+            <!--<nav>
                 <ul class="pagination justify-content-center">
                     <li class="page-item">
                         <a class="page-link" href="#">
@@ -111,7 +104,7 @@
                         </a>
                     </li>
                 </ul>
-            </nav>
+            </nav>-->
 
         </div>
 
@@ -148,7 +141,6 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.js" integrity="sha512-n/4gHW3atM3QqRcbCn6ewmpxcLAHGaDjpEBu4xZd47N0W2oQ+6q7oc3PXstrJYXcbNU1OHdQ1T7pAP+gi5Yu8g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.6.0/umd/popper.min.js" integrity="sha512-BmM0/BQlqh02wuK5Gz9yrbe7VyIVwOzD1o40yi1IsTjriX/NGF37NyXHfmFzIlMmoSIBXgqDiG1VNU6kB5dBbA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-@*<script src="~/js/tutoAddRow.js" asp-append-version="true"></script>*@
 
-<script src="~/javascript/tutorielToastSupprimer.js" asp-append-version="true"></script>
-<script src="~/javascript/tutorielToastUnPublish.js" asp-append-version="true"></script>
+<script src="~/javascript/Tutoriel/tutorielToastSupprimer.js" asp-append-version="true"></script>
+<script src="~/javascript/Tutoriel/tutorielToastUnPublish.js" asp-append-version="true"></script>

@@ -3,7 +3,7 @@
 
     var idTuto = "";
 
-    $('[data-UnpublishTuto]').on('click', event => {
+    $('[data-supprimerTuto]').on('click', event => {
         event.preventDefault();
         event.stopPropagation();
         let boutton = event.currentTarget;
@@ -13,8 +13,9 @@
 
 
 
-    $('#btnConfirmUnpublishTuto').click(function () {
-        var href = window.location.pathname + "?handler=UnpublishTuto";
+    $('#btnConfirmDeleteTuto').click(function () {
+        var href = window.location.pathname + "?handler=DeleteTuto";
+
         var tutoVal = { 'tutorielIdVal': idTuto }
 
         $.ajax({
@@ -27,15 +28,17 @@
                     $('input:hidden[name="__RequestVerificationToken"]').val()
             },
             success: function () {
-                //window.location.replace(window.location + "?unPublishStatus=true");
+                //window.location.replace(window.location + "&deleteStatus=true");
                 //window.location.replace(window.location);
-                window.location.replace('/Tutoriel?unPublishStatus=true')
+                window.location.replace('/Tutoriel?deleteStatus=true');
+
 
             },
             error: function () {
-                //window.location.replace(window.location + "?unPublishStatus=false");
+                //window.location.replace(window.location + "&deleteStatus=false");
                 //window.location.replace(window.location);
-                window.location.replace('/Tutoriel?unPublishStatus=false')
+                window.location.replace('/Tutoriel?deleteStatus=false');
+
 
             }
         });
