@@ -5,6 +5,19 @@
     let scriptRangeeUtils = {
         currTargetToDelete: null,
         currTargetToModifier: null,
+        currTargetToMove: null,
+        setRangeeUpClick: event => {
+            event.preventDefault();
+            event.stopPropagation();
+            scriptRangeeUtils.currTargetToMove = event.currentTarget;
+            scriptRangeeUtils.moveRangeeUp();
+        },
+        setRangeeDownClick: event => {
+            event.preventDefault();
+            event.stopPropagation();
+            scriptRangeeUtils.currTargetToMove = event.currentTarget;
+            scriptRangeeUtils.moveRangeeDown();
+        },
         setDeleteClick: event => {
             event.preventDefault();
             event.stopPropagation();
@@ -62,24 +75,14 @@
             divBtnAction.className = "col-6";
             divBtnAction.style = "display:inline; text-align:right;";
 
-            // bouton action
-            let btnUp = document.createElement('button');
-            btnUp.className = "btn btn-secondary";
-            btnUp.style = "margin-right:0.2rem;";
-            btnUp.innerHTML = '<img src="/icons/up-arrow.svg" />';
-            btnUp.setAttribute('data-up-tuto', '');
-
+            let $btnUp = $('<button data-up-tuto class="btn btn-secondary" style="margin-right:0.2rem;"><img src="/icons/up-arrow.svg" /></button>');
+            $btnUp.on('click', scriptRangeeUtils.setRangeeUpClick);
             let $btnEdit = $('<button class="btn btn-primary" style="margin-right:0.2rem;" data-modifierTuto><img src="/icons/editIcon.svg" /></button>');
             $btnEdit.on('click', scriptRangeeUtils.setModificationClick);
-
             let $btnDelete = $('<button class="btn btn-danger" style="margin-right:0.2rem;" data-bs-toggle="modal" data-bs-target="#modalValideDelete" data-supprimer><img src="/icons/deleteIcon.svg" /></button>');
             $btnDelete.on('click', scriptRangeeUtils.setDeleteClick);
-
-            let btnDown = document.createElement('button');
-            btnDown.className = 'btn btn-secondary';
-            btnDown.style = 'margin-right:0.2rem;';
-            btnDown.innerHTML = '<img src="/icons/down-arrow.svg" />';
-            btnDown.setAttribute('data-down-tuto', '');
+            let $btnDown = $('<button data-down-tuto class="btn btn-secondary" style="margin-right:0.2rem;"><img src="/icons/down-arrow.svg" /></button>');
+            $btnDown.on('click', scriptRangeeUtils.setRangeeDownClick);
 
             let divBody = document.createElement('div');
             divBody.className = 'card-body row';
@@ -150,10 +153,10 @@
             }
 
             // ---- ajouts dans la page ---
-            divBtnAction.appendChild(btnUp);
+            divBtnAction.appendChild($btnUp[0]);
             divBtnAction.appendChild($btnEdit[0]);
             divBtnAction.appendChild($btnDelete[0]);
-            divBtnAction.appendChild(btnDown);
+            divBtnAction.appendChild($btnDown[0]);
 
             divRow.appendChild(titre3);
             divRow.appendChild(divBtnAction);
@@ -568,6 +571,79 @@
             scriptRangeeUtils.currTargetToModifier.form.parentElement[4].className = 'btn btn-danger';
             scriptRangeeUtils.currTargetToModifier.form.parentElement[5].className = 'btn btn-secondary';
             scriptRangeeUtils.currTargetToModifier.form.parentElement.removeChild(scriptRangeeUtils.currTargetToModifier.form);
+        },
+        moveRangeeUp: () => {
+            let curr = scriptRangeeUtils.currTargetToMove;
+            let index = Array.from(curr.form.parentNode.children).indexOf(curr.form);
+
+            let oldEtape = curr.form.parentNode.children[index];
+            if (curr.form.parentNode.children.length > 1 && curr.form.parentNode.children[index - 1] != null) {
+                if (oldEtape[1].value == curr.form.parentNode.children[index - 1][1].value) {
+                    let oldIdRangee = oldEtape[0].value;
+                    let newIdRangee = curr.form.parentNode.children[index - 1][0].value;
+                    let token = oldEtape[6].value;
+
+                    let formData = new FormData();
+                    formData.append('IdOld', oldIdRangee);
+                    formData.append('IdNew', newIdRangee);
+
+                    $.ajax({
+                        type: 'POST',
+                        url: window.location.pathname + "?handler=SwitchRangeeTuto",
+                        data: formData,
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        headers: {
+                            RequestVerificationToken: token
+                        },
+                        success: function () {
+                            oldEtape[0].value = newIdRangee;
+                            curr.form.parentNode.children[index - 1][0].value = oldIdRangee;
+                            curr.form.parentNode.insertBefore(oldEtape, curr.form.parentNode.children[index - 1]);
+                        },
+                        error: function () {
+                            alert("un problème est survenu");
+                        }
+                    });
+                }
+            }
+        },
+        moveRangeeDown: () => {
+            let curr = scriptRangeeUtils.currTargetToMove;
+            let index = Array.from(curr.form.parentNode.children).indexOf(curr.form);
+
+            let oldEtape = curr.form.parentNode.children[index];
+            if (curr.form.parentNode.children[index].nextElementSibling != null) {
+                if (oldEtape[1].value == oldEtape.nextElementSibling[1].value) {
+                    let oldIdRangee = oldEtape[0].value;
+                    let newIdRangee = oldEtape.nextElementSibling[0].value;
+                    let token = oldEtape[6].value;
+
+                    let formData = new FormData();
+                    formData.append('IdOld', oldIdRangee);
+                    formData.append('IdNew', newIdRangee);
+
+                    $.ajax({
+                        type: 'POST',
+                        url: window.location.pathname + "?handler=SwitchRangeeTuto",
+                        data: formData,
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        headers: {
+                            RequestVerificationToken: token
+                        },
+                        success: function () {
+                            oldEtape[0].value = newIdRangee;
+                            oldEtape.nextElementSibling[0].value = oldIdRangee;
+                            curr.form.parentNode.insertBefore(oldEtape, curr.form.parentNode.children[index + 1].nextSibling);                        },
+                        error: function () {
+                            alert("un problème est survenu");
+                        }
+                    });                    
+                }
+            }
         }
     }
 

@@ -494,6 +494,43 @@ namespace Gwenael.Web.Pages
                 return Page();
             }
         }
+        public class rangeeSwitchData {
+            public string IdOld { get; set; }
+            public string IdNew { get; set; }
+        }
+        public IActionResult OnPostSwitchRangeeTuto([FromForm] rangeeSwitchData rangeeSwitchData)
+        {
+            try
+            {
+                RangeeTutos oldRt = _db.RangeeTutos.Where(rt => rt.Id == Guid.Parse(rangeeSwitchData.IdOld)).First();
+                RangeeTutos newRt = _db.RangeeTutos.Where(rt => rt.Id == Guid.Parse(rangeeSwitchData.IdNew)).First();
+
+                string text = oldRt.Texte;
+                string titre = oldRt.Titre;
+                string positionImg = oldRt.PositionImg;
+                string lienImg = oldRt.LienImg;
+
+                oldRt.Texte = newRt.Texte;
+                oldRt.Titre = newRt.Titre;
+                oldRt.PositionImg = newRt.PositionImg;
+                oldRt.LienImg = newRt.LienImg;
+                _db.RangeeTutos.Update(oldRt);
+
+                newRt.Texte = text;
+                newRt.Titre = titre;
+                newRt.PositionImg = positionImg;
+                newRt.LienImg = lienImg;
+                _db.RangeeTutos.Update(newRt);
+
+                _db.SaveChanges();
+
+                return StatusCode(200);
+            }
+            catch (Exception)
+            {
+                return StatusCode(400);
+            }
+        }
 
         public void UpdateInputData()
         {
