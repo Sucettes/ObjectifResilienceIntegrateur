@@ -183,7 +183,6 @@ namespace Gwenael.Web.Pages
                     Tutos tuto = _db.Tutos.Where(t => t.Id == Guid.Parse(formData.idTutoP)).First();
                     if (formData.imageBanierFile != null)
                     {
-                        if (tuto.LienImgBanniere != null) RemoveImgS3Amazone(tuto.LienImgBanniere);
                         using (AmazonS3Client client = new("AKIAVDH3AEDD6PUJMKGG", "kKV5WKu0tFe8Svl2QdTIMIydLc7CGSMiy2h+KOvV", RegionEndpoint.CACentral1))
                         {
                             using MemoryStream newMemoryStream = new();
@@ -389,10 +388,10 @@ namespace Gwenael.Web.Pages
                 RangeeTutos r = _db.RangeeTutos.Where(r => r.Id == Guid.Parse(formData.idRangee)).First();
 
                 if (formData.cbRetirerImage == true)
-                    if (RemoveImgS3Amazone(r.LienImg)) r.LienImg = null;
+                    r.LienImg = null;
                 if (formData.cbRetirerImage != true && Input.imageRangeeFile != null)
                 {
-                    if (r.LienImg != null) RemoveImgS3Amazone(r.LienImg);
+                    //if (r.LienImg != null) RemoveImgS3Amazone(r.LienImg);
                     using AmazonS3Client client = new("AKIAVDH3AEDD6PUJMKGG", "kKV5WKu0tFe8Svl2QdTIMIydLc7CGSMiy2h+KOvV", RegionEndpoint.CACentral1);
                     using (MemoryStream newMemoryStream = new())
                     {
@@ -554,26 +553,6 @@ namespace Gwenael.Web.Pages
                     Input.imgBannierUrl = tuto.LienImgBanniere;
                 }
             }
-        }
-
-        public bool RemoveImgS3Amazone(string pUrl)
-        {
-            String key = pUrl.Replace("https://mediafileobjectifresiliance.s3.ca-central-1.amazonaws.com/", "");
-            var amazonClient = new AmazonS3Client("AKIAVDH3AEDD6PUJMKGG", "kKV5WKu0tFe8Svl2QdTIMIydLc7CGSMiy2h+KOvV");
-            var deleteObjectRequest = new Amazon.S3.Model.DeleteObjectRequest { BucketName = "mediafileobjectifresiliance", Key = key };
-            var response = amazonClient.DeleteObjectAsync(deleteObjectRequest);
-            Console.WriteLine(response);
-            // TODO : comment faire pour le supprimer
-            //using (AmazonS3Client client = new("AKIAVDH3AEDD6PUJMKGG", "kKV5WKu0tFe8Svl2QdTIMIydLc7CGSMiy2h+KOvV"))
-            //{
-            //    client.DeleteObject(new Amazon.S3.Model.DeleteObjectRequest()
-            //    {
-            //        BucketName = "mediafileobjectifresiliance",
-            //        ////Key = pUrl.Replace("https://mediafileobjectifresiliance.s3.ca-central-1.amazonaws.com/", "")
-            //        Key = pUrl
-            //    });
-            //}
-            return true;
         }
     }
 }
