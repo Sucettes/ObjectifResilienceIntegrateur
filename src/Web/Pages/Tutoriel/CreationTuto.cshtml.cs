@@ -130,7 +130,7 @@ namespace Gwenael.Web.Pages
                                     InputStream = newMemoryStream,
                                     Key = (DateTime.Now.Ticks + formData.imageBanierFile.FileName).ToString(), // filename
                                     BucketName = "mediafileobjectifresiliance", // bucket name of S3
-                                    CannedACL = S3CannedACL.PublicRead,
+                                    CannedACL = S3CannedACL.PublicReadWrite
                                 };
 
                                 TransferUtility fileTransferUtility = new(client);
@@ -193,7 +193,7 @@ namespace Gwenael.Web.Pages
                                 InputStream = newMemoryStream,
                                 Key = (DateTime.Now.Ticks + formData.imageBanierFile.FileName).ToString(), // filename
                                 BucketName = "mediafileobjectifresiliance", // bucket name of S3
-                                CannedACL = S3CannedACL.PublicRead,
+                                CannedACL = S3CannedACL.PublicReadWrite
                             };
 
                             TransferUtility fileTransferUtility = new(client);
@@ -309,7 +309,7 @@ namespace Gwenael.Web.Pages
                             InputStream = newMemoryStream,
                             Key = (DateTime.Now.Ticks + Input.imageRangeeFile.FileName).ToString(), // filename
                             BucketName = "mediafileobjectifresiliance", // bucket name of S3
-                            CannedACL = S3CannedACL.PublicRead,
+                            CannedACL = S3CannedACL.PublicReadWrite
                         };
 
                         TransferUtility fileTransferUtility = new(client);
@@ -402,7 +402,7 @@ namespace Gwenael.Web.Pages
                             InputStream = newMemoryStream,
                             Key = (DateTime.Now.Ticks + Input.imageRangeeFile.FileName).ToString(), // filename
                             BucketName = "mediafileobjectifresiliance", // bucket name of S3
-                            CannedACL = S3CannedACL.PublicRead,
+                            CannedACL = S3CannedACL.PublicReadWrite
                         };
 
                         TransferUtility fileTransferUtility = new(client);
@@ -558,13 +558,18 @@ namespace Gwenael.Web.Pages
 
         public bool RemoveImgS3Amazone(string pUrl)
         {
+            String key = pUrl.Replace("https://mediafileobjectifresiliance.s3.ca-central-1.amazonaws.com/", "");
+            var amazonClient = new AmazonS3Client("AKIAVDH3AEDD6PUJMKGG", "kKV5WKu0tFe8Svl2QdTIMIydLc7CGSMiy2h+KOvV");
+            var deleteObjectRequest = new Amazon.S3.Model.DeleteObjectRequest { BucketName = "mediafileobjectifresiliance", Key = key };
+            var response = amazonClient.DeleteObjectAsync(deleteObjectRequest);
+            Console.WriteLine(response);
             // TODO : comment faire pour le supprimer
             //using (AmazonS3Client client = new("AKIAVDH3AEDD6PUJMKGG", "kKV5WKu0tFe8Svl2QdTIMIydLc7CGSMiy2h+KOvV"))
             //{
-            //    client.DeleteObjectAsync(new Amazon.S3.Model.DeleteObjectRequest()
+            //    client.DeleteObject(new Amazon.S3.Model.DeleteObjectRequest()
             //    {
             //        BucketName = "mediafileobjectifresiliance",
-            //        //Key = pUrl.Replace("https://mediafileobjectifresiliance.s3.ca-central-1.amazonaws.com/", "")
+            //        ////Key = pUrl.Replace("https://mediafileobjectifresiliance.s3.ca-central-1.amazonaws.com/", "")
             //        Key = pUrl
             //    });
             //}
