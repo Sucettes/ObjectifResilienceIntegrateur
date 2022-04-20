@@ -17,7 +17,7 @@
             <br />
             <div class="row justify-content-center">
                 <div class="col-lg-12">
-                    <form method="post">
+                    <form method="post" name="demo-test" id="form-register">
                         <h3>Demande d'inscription</h3>
                         <div id="msgSucceeded">
                             @if (ViewData["msgSucceeded"] is not null)
@@ -26,35 +26,107 @@
                             }
                         </div>
                         <p style="text-align:center;">Votre demande sera traitée dans les plus brefs délais.</p>
-                        <div asp-validation-summary="All" class="text-danger"></div>
+                        <div class="text-danger"></div>
                         <div class="form-group">
                             <br />
-                            <input type="text" class="form-control" placeholder="Courriel" aria-label="Courriel" asp-for="Input.Email">
-                            <span asp-validation-for="Input.Email" class="text-danger"></span>
+                            <input type="text" class="form-control" placeholder="Courriel" aria-label="Courriel" name="courriel" id="courriel">
+                            <span class="text-danger" id="msgErreurCourriel"></span>
                         </div>
                         <div class="form-group">
-                            <input class="form-control" placeholder="Mot de passe" aria-label="Mot de passe" asp-for="Input.Password" type="password">
-                            <span asp-validation-for="Input.Password" class="text-danger"></span>
+                            <input class="form-control" placeholder="Mot de passe" aria-label="Mot de passe" type="password" name="password" id="password">
+                            <span class="text-danger" id="msgErreurPassword"></span>
                         </div>
                         <div class="form-group">
-                            <input class="form-control" placeholder="Confirmation du mot de passe" aria-label="Confirmation du mot de passe" asp-for="Input.ConfirmPassword" type="password">
-                            <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                            <input class="form-control" placeholder="Confirmation du mot de passe" aria-label="Confirmation du mot de passe" type="password" name="confPassword" id="confPassword">
+                            <span class="text-danger" id="msgErreurConfPassword"></span>
                             <p>Vous avez déjà un compte ?  <a asp-page="/Account/Login">Connectez-vous !</a></p>
                         </div>
                         <div class="form-group" style="display:flex; justify-content:end;">
                             <button type="submit" class="btn btn-outline-primary">Envoyer la demande d'inscription</button>
                         </div>
-</form>
+                        <button class="g-recaptcha"
+                                data-sitekey="6LfPBWYfAAAAAAGXpazSjwWTSPW_o1zbRahvvHVE"
+                                data-callback='onSubmit'
+                                data-action='submit'
+                                data-registerRequest>
+                            Submit
+                        </button>
+
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script src="https://www.google.com/recaptcha/api.js"></script>
+
+
 <script>
+    function onSubmit(token) {
+        document.getElementById("demo-test").submit();
+    }
     div = document.getElementById("msgSucceeded");
     if (div.childElementCount > 0) {
         setTimeout(function () {
             window.location.href = '/Index';
         }, 10000);
     }
+
+    $('[data-registerRequest]').on('click', event => {
+        document.getElementById('msgErreurPassword').textContent = "";
+        document.getElementById('msgErreurConfPassword').textContent = "";
+        document.getElementById('msgErreurCourriel').textContent = "";
+        if (document.getElementById('password').value != "" && document.getElementById('confPassword').value != "" && document.getElementById('courriel').value != "") {
+            $.ajax({
+                type: 'POST',
+                url: window.location.pathname,
+                async: false,
+                data: new FormData(document.getElementById('form-register')),
+                contentType: "application/json",
+                cache: false,
+                contentType: false,
+                processData: false,
+                headers: {
+                    RequestVerificationToken:
+                        $('input:hidden[name="__RequestVerificationToken"]').val()
+                },
+                success: function (data) {
+                    if (data.msgSuccess != null) {
+                        console.log("Yo big ");
+                    }
+                    else {
+                        if (data.erreurPassword != null) {
+                            document.getElementById('msgErreurPassword').textContent = data.erreurPassword;
+                            document.getElementById('msgErreurConfPassword').textContent = data.erreurPassword;
+                        }
+                        if (data.erreurCourriel != null) 
+                            document.getElementById('msgErreurCourriel').textContent = data.erreurCourriel;
+                        if (data.msgErreurConfPassword != null)
+                            console.log(data.msgErreurConfPassword);
+                        if (data.msgErreurPassword != null)
+                            console.log(data.msgErreurPassword);
+                        if (data.msgErreurCourriel != null)
+                            console.log(data.msgErreurCourriel);
+                    }
+
+
+                },
+                error: function () {
+                    alert("un problème est survenu");
+                }
+            });
+        }
+        else {
+            if (document.getElementById('password').value == "") {
+                document.getElementById('msgErreurPassword').textContent = "Le champ ne peut pas être vide.";
+            }
+            if (document.getElementById('confPassword').value == "") {
+                document.getElementById('msgErreurConfPassword').textContent = "Le champ ne peut pas être vide.";
+            }
+            if (document.getElementById('courriel').value == "") {
+                document.getElementById('msgErreurCourriel').textContent = "Le champ ne peut pas être vide.";
+            }
+        }
+    });
+
 </script>

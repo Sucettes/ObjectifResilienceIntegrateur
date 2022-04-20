@@ -8,6 +8,9 @@ using Gwenael.Application.Mailing;
 using Gwenael.Domain.Entities;
 using Gwenael.Web.Extensions;
 using System;
+using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace Gwenael.Web.Pages.Account
 {
@@ -43,14 +46,15 @@ namespace Gwenael.Web.Pages.Account
             public string Email { get; set; }
 
             [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [StringLength(100, ErrorMessage = "Le mot de passe doit contenir un minimum de 6 caractères et un maximum de 100 caractères.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
             public string Password { get; set; }
-
+            
+            [Required]
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Compare("Password", ErrorMessage = "Vos deux mots de passe entrés ne correspondent pas.")]
             public string ConfirmPassword { get; set; }
         }
 
@@ -58,31 +62,50 @@ namespace Gwenael.Web.Pages.Account
         {
             ReturnUrl = returnUrl;
         }
-
-        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
+        public class RegisterForm
         {
-            ReturnUrl = returnUrl;
-            if (ModelState.IsValid)
+            [Required]
+            [EmailAddress]
+            public string courriel { get; set; }
+            [Required]
+            [StringLength(100, ErrorMessage = "Le mot de passe doit contenir un minimum de 6 caractères et un maximum de 100 caractères.", MinimumLength = 6)]
+            [DataType(DataType.Password)]
+            public string password { get; set; }
+            [Required]
+            [DataType(DataType.Password)]
+            [Compare("Password", ErrorMessage = "Vos deux mots de passe entrés ne correspondent pas.")]
+            public string confPassword { get; set; }
+        }
+        public async Task<IActionResult> OnPostAsync([FromForm] RegisterForm registerForm)
+        {
+            Dictionary<string, string> dictError = new Dictionary<string, string>();
+            if (registerForm.confPassword != registerForm.password && dictError.Count != 3)
+                dictError.Add("erreurPassword", "Les mot de passe entrées ne correspondent pas.");
+            if (!Regex.IsMatch(registerForm.courriel, @"^[^@\s]+@[^@\s]+\.[^@\s]+$")){
+                dictError.Add("erreurCourriel", "Le courriel n'est pas valide.");
+            }
+            if (dictError.Count > 0)
             {
-                User user = new User { UserName = Input.Email, Email = Input.Email, FirstName = "", LastName = "" };
-                var result = await _userManager.CreateAsync(user, Input.Password);
+                return new JsonResult(dictError);
+            }
+            else
+            {
+                User user = new User { UserName = registerForm.courriel, Email = registerForm.courriel, FirstName = "", LastName = "" };
+                var result = await _userManager.CreateAsync(user, registerForm.password);
                 if (result.Succeeded)
                 {
-                    //_logger.LogInformation("User created a new account with password.");
-                    //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    //var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
-                    //await _emailFactory.SendEmailConfirmationAsync(Input.Email, callbackUrl);
-                    ViewData["msgSucceeded"] = "Nous avons bien reçu votre demande. Elle sera traité dans les plus bref délais par notre équipe.";
-                    return Page();
+                    dictError.Add("msgSuccess", "Nous avons bien reçu votre demande. Elle sera traitée dans les plus brefs délais. Vous allez être redirigé dans 10 secondes.");
+                    return new JsonResult(dictError);
                 }
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
+                // If we got this far, something failed, redisplay form
+                return new JsonResult(Response);
             }
+           
 
-            // If we got this far, something failed, redisplay form
-            return Page();
         }
     }
 }
