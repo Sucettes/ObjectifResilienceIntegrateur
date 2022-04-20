@@ -46,7 +46,7 @@
                         </div>
                         <div class="col-md-6">
                             <h2>@tuto.Titre</h2>
-                            <p>Publié le @tuto.DateCreation</p>
+                            <p>Publié le @tuto.DateCreation.ToString("dd/mm/yyyy")</p>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputDuree">Durée (heures)</span>
                                 <input type="number" class="form-control" aria-label="Durée" aria-describedby="Durée" value="@tuto.Duree" disabled>

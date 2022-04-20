@@ -86,11 +86,13 @@ namespace Gwenael.Web.Pages
             }
             catch (Exception)
             {
-                return StatusCode(400); ;
+                return StatusCode(400);
             }
         }
 
         public IActionResult OnPostRedirectHomeTuto() => RedirectToPage("Index");
+
+        public IActionResult OnPostRedirectAdminMenu() => RedirectToPage("../AdminMenu");
 
         public class CreationTutoFormData
         {
@@ -132,7 +134,7 @@ namespace Gwenael.Web.Pages
                                     BucketName = "mediafileobjectifresiliance", // bucket name of S3
                                     CannedACL = S3CannedACL.PublicReadWrite
                                 };
-
+                                
                                 TransferUtility fileTransferUtility = new(client);
                                 fileTransferUtility.Upload(uploadRequest);
                                 formData.imgUrl = $"https://mediafileobjectifresiliance.s3.ca-central-1.amazonaws.com/{uploadRequest.Key}";
@@ -296,7 +298,8 @@ namespace Gwenael.Web.Pages
                 Input.handler = "TutoRangee";
                 string imgUrl = null;
 
-                if (formData.positionImage != "right" && formData.positionImage != "left") formData.positionImage = "left";
+                if (formData.positionImage != "right" && formData.positionImage != "left")
+                    formData.positionImage = "left";
 
                 if (Input.imageRangeeFile != null)
                     using (AmazonS3Client client = new("AKIAVDH3AEDD6PUJMKGG", "kKV5WKu0tFe8Svl2QdTIMIydLc7CGSMiy2h+KOvV", RegionEndpoint.CACentral1))

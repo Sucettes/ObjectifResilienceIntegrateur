@@ -26,7 +26,7 @@
                 <button type="submit" class="btn btn-outline-primary" asp-page-handler="RedirectHomeTuto">Retour</button>
             </form>
             <form method="post" asp-page="CreationTuto" style="margin-left:0.4rem;">
-                <button type="submit" class="btn btn-outline-primary" asp-route-id="@id" asp-page-handler="PublieTuto">Publié</button>
+                <button type="submit" id="btnPublieTuto" class="@(id.IsNullOrEmpty() ? "btn disabled btn-primary": "btn btn-outline-primary")" asp-route-id="@id" asp-page-handler="PublieTuto">Publié</button>
             </form>
         </div>
     </div>
@@ -88,8 +88,8 @@
                                 </div>
 
                                 <div class="input-group input-group-sm mb-3">
-                                    <label for="DifficulteRange" style="width: 100%;">Difficulté 1 à 10</label>
-                                    <input type="range" class="form-range" min="1" max="10" id="DifficulteRange" asp-for="@Model.Input.difficulte" required name="difficulte">
+                                    <label id="difficulteLbl" for="DifficulteRange" style="width: 100%;">Difficulté: 1</label>
+                                    <input type="range" class="form-range" min="1" max="10" id="DifficulteRange" asp-for="@Model.Input.difficulte" required name="difficulte" onchange="updateTextInput(this.value);">
                                 </div>
 
                                 <div class="input-group input-group-sm mb-3">
@@ -124,18 +124,22 @@
                                 <br />
                                 <h2>Introduction</h2>
 
-                                @*<div class="input-group">*@
-                                <div>
-                                    @if (!String.IsNullOrEmpty(@Model.Input.intro))
-                                    {
-                                        <textarea class="form-control shadow-sm" rows="7" name="intro" id="intro">@Model.Input.intro</textarea>
-                                    }
-                                    else
-                                    {
-                                        <textarea class="form-control shadow-sm" rows="7" name="intro" id="intro"></textarea>
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        @if (!String.IsNullOrEmpty(@Model.Input.intro))
+                                        {
+                                            <textarea class="form-control shadow-sm" rows="7" name="intro" id="intro">@Model.Input.intro</textarea>
+                                        }
+                                        else
+                                        {
+                                            <textarea class="form-control shadow-sm" rows="7" name="intro" id="intro"></textarea>
+                                        }
+                                    </div>
+                                    <div class="col-md-4" style="background-color:red;">
 
-                                    }
+                                    </div>
                                 </div>
+                                
                             </div>
                         </div>
 
@@ -276,7 +280,7 @@
                                 <div class="row">
                                     <div>
                                         <!--AjoutRangee-->
-                                        <button type="submit" class="btn btn-primary" data-addRangee><img src="~/icons/addIcon.svg" /></button>
+                                        <button type="submit" class="@(id.IsNullOrEmpty() ? "btn disabled btn-primary": "btn btn-primary")" data-addRangee id="btnAddRangee"><img src="~/icons/addIcon.svg" /></button>
                                     </div>
                                 </div>
                             </div>
@@ -312,8 +316,8 @@
                                 créées ou supprimées via la page administrateur. Vous pouvez y accéder grâce à ce bouton.
                             </p>
                             <br />
-                            <form method="post" asp-page="Index" style="display:flex; justify-content: center;">
-                                <button type="submit" class="btn btn-outline-secondary">Voir page admin</button>
+                            <form method="post" asp-page="CreationTuto" style="display:flex; justify-content: center;">
+                                <button type="submit" class="btn btn-outline-secondary" asp-page-handler="RedirectAdminMenu">Voir page admin</button>
                             </form>
                         </div>
                     </div>
@@ -410,3 +414,8 @@
 <script src="~/javascript/Tutoriel/creation/script-rangee-init.js" asp-append-version="true"></script>
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.0.20/tinymce.min.js"></script>
+<script>
+    function updateTextInput(val) {
+          document.getElementById('difficulteLbl').textContent = ("Difficulte: " + val); 
+        }
+</script>

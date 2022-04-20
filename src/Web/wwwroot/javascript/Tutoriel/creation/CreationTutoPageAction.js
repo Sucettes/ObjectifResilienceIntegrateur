@@ -52,10 +52,13 @@ $(document).ready(function () {
 
         history.pushState(state, '', url);
 
-        $('#btnCreeTuto').removeClass('btn btn-outline-primary')
+        $('#btnCreeTuto').removeClass('btn btn-outline-primary');
         $('#btnCreeTuto').addClass('btn disabled btn-primary');
-        $('#btnModifierTuto').removeClass('btn disabled btn-primary')
+        $('#btnModifierTuto').removeClass('btn disabled btn-primary');
         $('#btnModifierTuto').addClass('btn btn-outline-primary');
+
+        $('#btnPublieTuto').removeClass('btn disabled btn-primary');
+        $('#btnPublieTuto').addClass('btn btn-outline-primary');
 
         $('#idTutoP').val(data.value.idTutoP);
 
