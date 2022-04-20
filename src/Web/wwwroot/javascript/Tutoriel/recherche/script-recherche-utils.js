@@ -100,7 +100,7 @@
             console.log(tutoData)
             // créé la carte
             let $a = $('<a class= "col"></a>');
-            $a.attr('href', 'Tutoriel/Consultation?id="' + tutoData.id);
+            $a.attr('href', 'Tutoriel/Consultation?id=' + tutoData.id);
 
             let $div = $('<div class="shadow-lg rounded" style="background-color:#f1f9ee;"></div>');
             let $div2 = $('<div></div>');
