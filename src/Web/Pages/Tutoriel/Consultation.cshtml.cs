@@ -82,9 +82,10 @@ namespace Gwenael.Web.Pages
         {
             if (!Input.id.IsNullOrEmpty())
             {
-                Input.tutoriel = _db.Tutos.Where(t => t.Id == Guid.Parse(Input.id) && t.EstPublier == true).First();
-                if (Input.tutoriel != null)
+                //Input.tutoriel = _db.Tutos.Where(t => t.Id == Guid.Parse(Input.id) && t.EstPublier == true).Any()();
+                if (_db.Tutos.Where(t => t.Id == Guid.Parse(Input.id) && t.EstPublier).Any())
                 {
+                    Input.tutoriel = _db.Tutos.Where(t => t.Id == Guid.Parse(Input.id) && t.EstPublier).First();
                     GetContenue();
                     return true;
                 }

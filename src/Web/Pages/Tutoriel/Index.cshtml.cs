@@ -51,5 +51,56 @@ namespace Gwenael.Web.Pages
         public IActionResult OnPost() => Page();
 
         public IActionResult OnPostRedirectCreationTuto() => RedirectToPage("CreationTuto");
+
+        public class RechercherFiltre
+        {
+            public bool radioFiltreEstPublie { get; set; }
+            public string radioFiltre { get; set; }
+            public string rechercheValeur { get; set; }
+        }
+        public IActionResult OnPostRecherche([FromForm] RechercherFiltre formData)
+        {
+            try
+            {
+                List<Tutos> t = new();
+                if (formData.radioFiltre == "radioFiltreTitre")
+                {
+                    if (!formData.rechercheValeur.IsNullOrEmpty())
+                    {
+                        t = _db.Tutos.Where(t => t.EstPublier == formData.radioFiltreEstPublie && t.Titre.Contains(formData.rechercheValeur)).ToList();
+                    }
+                    else
+                    {
+                        t = _db.Tutos.Where(t => t.EstPublier == formData.radioFiltreEstPublie).ToList();
+                    }
+                }
+                else if (formData.radioFiltre == "radioFiltreCategorie")
+                {
+                    if (!formData.rechercheValeur.IsNullOrEmpty())
+                    {
+                        List<CategoriesTutos> ct = _db.CategoriesTutos.Where(c => c.Nom.Contains(formData.rechercheValeur)).ToList();
+                        foreach (var i in ct)
+                        {
+                            List<Tutos> iTemp = _db.Tutos.Where(t => t.EstPublier == formData.radioFiltreEstPublie && t.Categorie == i).ToList();
+
+                            foreach (var jTemp in iTemp)
+                            {
+                                t.Add(jTemp);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        t = _db.Tutos.Where(t => t.EstPublier == formData.radioFiltreEstPublie).ToList();
+                    }
+
+                }
+                return t != null ? StatusCode(201, new JsonResult(t)) : StatusCode(400);
+            }
+            catch (Exception)
+            {
+                return StatusCode(400);
+            }
+        }
     }
 }
