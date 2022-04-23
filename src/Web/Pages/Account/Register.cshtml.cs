@@ -1,16 +1,15 @@
-using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
+using Gwenael.Application.Mailing;
+using Gwenael.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using Gwenael.Application.Mailing;
-using Gwenael.Domain.Entities;
-using Gwenael.Web.Extensions;
-using System;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace Gwenael.Web.Pages.Account
 {
@@ -50,7 +49,7 @@ namespace Gwenael.Web.Pages.Account
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
             public string Password { get; set; }
-            
+
             [Required]
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
@@ -79,9 +78,14 @@ namespace Gwenael.Web.Pages.Account
         public async Task<IActionResult> OnPostAsync([FromForm] RegisterForm registerForm)
         {
             Dictionary<string, string> dictError = new Dictionary<string, string>();
-            if (registerForm.confPassword != registerForm.password && dictError.Count != 3)
-                dictError.Add("erreurPassword", "Les mot de passe entrées ne correspondent pas.");
-            if (!Regex.IsMatch(registerForm.courriel, @"^[^@\s]+@[^@\s]+\.[^@\s]+$")){
+            if (registerForm.password.Length < 6 || registerForm.password.Length > 100 || registerForm.confPassword.Length > 100 || registerForm.confPassword.Length < 6 && registerForm.confPassword != registerForm.password)
+            {
+                dictError.Add("erreurPassword", "Le mot de passe doit contenir un minimum de 6 caractères et un maximum de 100 caractères.");
+            }
+            else if (registerForm.confPassword != registerForm.password && dictError.Count != 3)
+                dictError.Add("erreurPassword", "Les mots de passe entrées ne correspondent pas.");
+            if (!Regex.IsMatch(registerForm.courriel, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+            {
                 dictError.Add("erreurCourriel", "Le courriel n'est pas valide.");
             }
             if (dictError.Count > 0)
@@ -95,16 +99,18 @@ namespace Gwenael.Web.Pages.Account
                 if (result.Succeeded)
                 {
                     dictError.Add("msgSuccess", "Nous avons bien reçu votre demande. Elle sera traitée dans les plus brefs délais. Vous allez être redirigé dans 10 secondes.");
+                    Console.WriteLine("Yes");
                     return new JsonResult(dictError);
                 }
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
+                Console.WriteLine("Oups");
                 // If we got this far, something failed, redisplay form
                 return new JsonResult(Response);
             }
-           
+
 
         }
     }
