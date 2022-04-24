@@ -11,12 +11,10 @@
 
 @if (@Model.Input.tutoriel != null)
 {
-    @if (@tuto.EstPublier == true)
-    {
         <!-- Entête de la page (Titre + btn retour) -->
         <nav class="navbar navbar-light shadow-sm">
             <div class="container-fluid">
-                <h1>Consultation tutoriel</h1>
+                <h1>Tutoriel</h1>
                 <div class="d-flex">
                     <form method="post" asp-page="CreationTuto" style="margin-right:0.4rem;">
                         <button type="submit" class="btn btn-outline-primary" asp-page-handler="RedirectHomeTuto">Retour</button>
@@ -48,7 +46,16 @@
                         </div>
                         <div class="col-md-6">
                             <h2>@tuto.Titre</h2>
-                            <p>Publié le @tuto.DateCreation.ToString("dd/mm/yyyy")</p>
+                            @if (@tuto.EstPublier == true)
+                            {
+                                <p style="font-weight: bold;">Publié le @tuto.DateCreation.ToString("dd/mm/yyyy")</p>
+                                <p style="color:#38b000; font-weight: bold;">États: Publié</p>
+                            }
+                            else
+                            {
+                                <p style="font-weight: bold;">Publié le @tuto.DateCreation.ToString("dd/mm/yyyy")</p>
+                                <p style="color:#ff7733;font-weight: bold;">États: Non Publié</p>
+                            }
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputDuree">Durée (heures)</span>
                                 <input type="number" class="form-control" aria-label="Durée" aria-describedby="Durée" value="@tuto.Duree" disabled>
@@ -136,7 +143,6 @@
                 </div>
             </div>
         </div>
-    }
 }
 
 

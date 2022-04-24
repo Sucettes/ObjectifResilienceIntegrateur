@@ -1,16 +1,11 @@
-﻿(function () {
-    'use strict';
-
-    var idTuto = "";
-
+﻿'use strict';
+$(document).ready(function () {
+    let idTuto;
     $('[data-supprimerTuto]').on('click', event => {
         event.preventDefault();
         event.stopPropagation();
-        let boutton = event.currentTarget;
-
-        idTuto = boutton.form[0].value
+        idTuto = event.target.parentElement[0].value;
     });
-
 
     $('#btnConfirmDeleteTuto').click(function () {
         var href = window.location.pathname + "?handler=DeleteTuto";
@@ -25,15 +20,8 @@
             headers: {
                 RequestVerificationToken:
                     $('input:hidden[name="__RequestVerificationToken"]').val()
-            },
-            success: function () {
-                window.location.replace('/Tutoriel?deleteStatus=true');
-            },
-            error: function () {
-
-                window.location.replace('/Tutoriel?deleteStatus=false');
             }
         });
     });
 
-}());
+});

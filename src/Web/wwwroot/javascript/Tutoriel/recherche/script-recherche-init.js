@@ -4,7 +4,7 @@
         event.stopPropagation();
         window.scriptRechercheUtils.rechercherTuto(event);
     });
-    //window.scriptRechercheUtils.rechercherTuto();
+    window.scriptRechercheUtils.rechercherTuto();
 
     window.addEventListener('beforeunload', () => delete window.scriptRechercheUtils);
 });

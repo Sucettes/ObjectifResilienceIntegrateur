@@ -104,14 +104,20 @@
 
             let $div = $('<div class="shadow-lg rounded" style="background-color:#f1f9ee;"></div>');
             let $div2 = $('<div></div>');
-            if (tutoData.lienImgBanniere != "") {
-                $div2.append('<img src="' + tutoData.lienImgBanniere + '" class="card-img-top" alt="...">');
+            if (tutoData.lienImgBanniere !== null) {
+                $div2.append('<img style="max-width:100%;height:13.125rem;" src="' + tutoData.lienImgBanniere + '" class="card-img-top" alt="...">');
             } else {
-                $div2.append('<img src="~/images/imgplaceholder.png" class="card-img-top" alt="...">');
+                $div2.append('<img style="max-width:100%;height:13.125rem;" src="/images/imgplaceholder.png" class="card-img-top" alt="...">');
             }
             let $divBody = $('<div class="card-body"></div>');
 
             $divBody.append($('<h4 class="card-title" style="text-align:center;">' + tutoData.titre + '</h4>'));
+            if (tutoData.estPublier == true) {
+                $divBody.append($('<p style="color:#38b000; font-weight: bold;">États: Publié</p>'));
+            } else {
+                $divBody.append($('<p style="color:#ff7733;font-weight: bold;">États: Non Publié</p>'));
+            }
+
             $div.append($div2);
             $div.append($divBody);
 

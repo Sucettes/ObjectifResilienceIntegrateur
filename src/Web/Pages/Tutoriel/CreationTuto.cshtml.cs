@@ -393,6 +393,42 @@ namespace Gwenael.Web.Pages
             }
         }
 
+        public IActionResult OnPostDeleteTuto(string id, string handler)
+        {
+            try
+            {
+                Input.id = id;
+                Input.handler = handler;
+
+                UpdateInputData();
+                return Page();
+            }
+            catch (Exception)
+            {
+                UpdateInputData();
+                return Page();
+            }
+        }
+
+        public class TutorielIdVal
+        {
+            public string tutorielIdVal { get; set; }
+        }
+        public IActionResult OnPostDeleteTuto([FromBody] TutorielIdVal tutoVal)
+        {
+            try
+            {
+                _db.Tutos.Remove(entity: _db.Tutos.Where(t => t.Id == Guid.Parse(tutoVal.tutorielIdVal)).First());
+                _db.SaveChanges();
+
+                return Redirect("/tutoriel/CreationTuto?handler=TutoRangee&deleteStatus=true");
+            }
+            catch (Exception)
+            {
+                return Redirect("/tutoriel/CreationTuto?handler=TutoRangee");
+            }
+        }
+
         public IActionResult OnPostTutoChanger(string tutoId)
         {
             try

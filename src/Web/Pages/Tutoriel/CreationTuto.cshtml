@@ -25,8 +25,10 @@
             <form method="post" asp-page="CreationTuto" style="margin-right:0.4rem;">
                 <button type="submit" class="btn btn-outline-primary" asp-page-handler="RedirectHomeTuto">Retour</button>
             </form>
-            <form method="post" asp-page="CreationTuto" style="margin-left:0.4rem;">
-                <button type="submit" id="btnPublieTuto" class="@(id.IsNullOrEmpty() ? "btn disabled btn-primary": "btn btn-outline-primary")" asp-route-id="@id" asp-page-handler="PublieTuto">Publié</button>
+            <form asp-page="CreationTuto" style="margin-left:0.4rem;">
+                <input name="tutorielIdVal" type="text" value="@id" hidden />
+                <button id="btnPublieTuto" class="@(id.IsNullOrEmpty() ? "btn disabled btn-primary": "btn btn-outline-primary")" asp-route-id="@id" asp-page-handler="PublieTuto" data-publieTuto data-bs-toggle="modal" data-bs-target="#modalValidepublieTuto">Publié</button>
+                <button id="btnSupprimerTuto" class="@(id.IsNullOrEmpty() ? "btn disabled btn-danger": "btn btn-outline-danger")" data-supprimerTuto data-bs-toggle="modal" data-bs-target="#modalValideDeleteTuto">Supprimer</button>
             </form>
         </div>
     </div>
@@ -57,7 +59,9 @@
                             <div class="col-md-6" style="max-width:33.75rem;max-height:19.063rem;">
                                 @if (Model.Input.imgBannierUrl != null)
                                 {
-                                    <img class="shadow-lg" src="@Model.Input.imgBannierUrl" style="width:100%; height:100%;" id="imgBanierre" />
+                                    <a href="@Model.Input.imgBannierUrl" target="_blank">
+                                        <img class="shadow-lg" src="@Model.Input.imgBannierUrl" style="width:100%; height:100%;" id="imgBanierre" />
+                                    </a>
                                 }
                                 else
                                 {
@@ -175,11 +179,11 @@
                                         {
                                             if (!String.IsNullOrEmpty(@id) && tuto.Id.ToString() == @id)
                                             {
-                                                <option value="@tuto.Id" selected>@tuto.Titre</option>
+                                                <option value="@tuto.Id" selected>@tuto.Titre (Non Publié)</option>
                                             }
                                             else
                                             {
-                                                <option value="@tuto.Id">@tuto.Titre</option>
+                                                <option value="@tuto.Id">@tuto.Titre (Non Publié)</option>
                                             }
                                         }
                                     }
@@ -337,6 +341,24 @@
     </div>
 </div>
 
+<div class="modal" id="modalValideDeleteTuto" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalValideDeleteTutoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalValideDeleteTutoLabel">Confirmation!</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Cette action n’est pas réversible, est-ce que vous voulez vraiment supprimer ce tutoriel?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Non</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="btnConfirmDeleteTuto">Oui</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Modal -->
 <div class="modal" id="modalValideDelete" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalValideDeleteLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -351,6 +373,24 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Non</button>
                 <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="btnConfirmDelete">Oui</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="modalValidepublieTuto" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalValidepublieTuto" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalValidePublieTutoLabel">Confirmation!</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Voulez-vous vraiment publié le tutoriel? Vous allez devoir le rendre non public afin de pouvoir le modifier.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Non</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="btnConfirmPublieTuto">Oui</button>
             </div>
         </div>
     </div>
@@ -419,6 +459,7 @@
 
 <script src="~/javascript/Tutoriel/creation/CreationTutoPageAction.js" asp-append-version="true"></script>
 <script src="~/javascript/Tutoriel/creation/ModificationTutoPageAction.js" asp-append-version="true"></script>
+<script src="~/javascript/Tutoriel/creation/DeleteTutoPageAction.js" asp-append-version="true"></script>
 <script src="~/javascript/Tutoriel/creation/script-rangee-utils.js" asp-append-version="true"></script>
 <script src="~/javascript/Tutoriel/creation/script-rangee-init.js" asp-append-version="true"></script>
 

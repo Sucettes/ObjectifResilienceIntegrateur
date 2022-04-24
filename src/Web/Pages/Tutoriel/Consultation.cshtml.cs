@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
+﻿using Gwenael.Domain;
+using Gwenael.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Linq;
-using Gwenael.Domain;
-using Gwenael.Domain.Entities;
 using Spk.Common.Helpers.String;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 
 
 namespace Gwenael.Web.Pages
@@ -24,7 +24,10 @@ namespace Gwenael.Web.Pages
             public List<RangeeTutos> lstRangeeTuto { get; set; }
             public string id { get; set; }
         }
-        public ConsultationModel(GwenaelDbContext pDb) => _db = pDb;
+        public ConsultationModel(GwenaelDbContext pDb)
+        {
+            _db = pDb;
+        }
 
         public IActionResult OnGet()
         {
@@ -33,15 +36,24 @@ namespace Gwenael.Web.Pages
             if (Request.Query.Count >= 1)
             {
                 Input.id = Request.Query["id"];
-                if (IdEstValide()) return Page();
+                if (IdEstValide())
+                {
+                    return Page();
+                }
             }
 
             return Redirect("/tutoriel");
         }
 
-        public IActionResult OnPost() => Page();
+        public IActionResult OnPost()
+        {
+            return Page();
+        }
 
-        public IActionResult OnPostRedirectHomeTuto() => RedirectToPage("Index");
+        public IActionResult OnPostRedirectHomeTuto()
+        {
+            return RedirectToPage("Index");
+        }
 
         public IActionResult OnPostDeleteTuto([FromBody] TutorielIdVal tutoVal)
         {
@@ -82,10 +94,9 @@ namespace Gwenael.Web.Pages
         {
             if (!Input.id.IsNullOrEmpty())
             {
-                //Input.tutoriel = _db.Tutos.Where(t => t.Id == Guid.Parse(Input.id) && t.EstPublier == true).Any()();
-                if (_db.Tutos.Where(t => t.Id == Guid.Parse(Input.id) && t.EstPublier).Any())
+                if (_db.Tutos.Where(t => t.Id == Guid.Parse(Input.id)).Any())
                 {
-                    Input.tutoriel = _db.Tutos.Where(t => t.Id == Guid.Parse(Input.id) && t.EstPublier).First();
+                    Input.tutoriel = _db.Tutos.Where(t => t.Id == Guid.Parse(Input.id)).First();
                     GetContenue();
                     return true;
                 }
@@ -93,6 +104,9 @@ namespace Gwenael.Web.Pages
             return false;
         }
 
-        private void GetContenue() => Input.lstRangeeTuto = _db.RangeeTutos.Where(r => r.TutorielId == Guid.Parse(Input.id)).ToList();
+        private void GetContenue()
+        {
+            Input.lstRangeeTuto = _db.RangeeTutos.Where(r => r.TutorielId == Guid.Parse(Input.id)).ToList();
+        }
     }
 }
