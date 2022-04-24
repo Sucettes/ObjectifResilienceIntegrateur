@@ -1,33 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
 
 namespace Gwenael.Domain.Entities
 {
     public class Tutos
     {
         public Guid Id { get; set; }
-        [Required] [MaxLength(50)] public string Titre { get; set; }
+        [Required][MaxLength(50)] public string Titre { get; set; }
         public DateTime DateCreation { get; set; }
-        [Required] [MaxLength(2)] public int Difficulte { get; set; }
-        [Required] [MaxLength(7)] public double Cout { get; set; }
-        [Required] [MaxLength(4)] public int Duree { get; set; }
+        [Required][MaxLength(2)] public int Difficulte { get; set; }
+        [Required][MaxLength(7)] public double Cout { get; set; }
+        [Required][MaxLength(4)] public int Duree { get; set; }
         [Required] public CategoriesTutos Categorie { get; set; }
-        // TODO : Faire en sorte que nous devons être connecter...
         [Required] public string Introduction { get; set; }
+        public string Materiels { get; set; }
         public bool EstPublier { get; set; }
         public string LienImgBanniere { get; set; }
         public User AuteurUserId { get; set; }
 
-        //public IEnumerable<RangeeTutoriel> RangeeTutoriels { get; set; }
 
         public Tutos()
         {
             DateCreation = DateTime.UtcNow;
             EstPublier = false;
-            //RangeeTutoriels = new List<RangeeTutoriel>();
         }
 
         public bool EstValide()
