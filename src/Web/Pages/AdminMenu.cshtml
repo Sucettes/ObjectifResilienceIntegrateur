@@ -200,24 +200,28 @@
             }
             @if (ViewData["Tab"].ToString() == "poadcasts")
             {
-                @foreach (var audio in ViewData["lstAudios"] as IList<Audio>)
+                @if (ViewData["lstAudios"] is not null)
                 {
-                    if (audio.EstPublier == false)
+                    @foreach (var audio in ViewData["lstAudios"] as IList<Audio>)
                     {
-                        <a asp-page="./AudioFolder/PoadcastDetail" asp-route-id="@audio.ID">
-                            <div class="searchBar-container borderPoadcast">
+                        if (audio.EstPublier == false)
+                        {
+                            <a asp-page="./AudioFolder/PoadcastDetail" asp-route-id="@audio.ID">
+                                <div class="searchBar-container borderPoadcast">
 
-                                <div>
-                                    <img class="sizeImage" src="@audio.urlImage">
-                                </div>
-                                <div>
-                                    titre : @audio.titre
-                                </div>
+                                    <div>
+                                        <img class="sizeImage" src="@audio.urlImage">
+                                    </div>
+                                    <div>
+                                        titre : @audio.titre
+                                    </div>
 
-                            </div>
-                        </a>
+                                </div>
+                            </a>
+                        }
                     }
                 }
+
             }
         }
     </table>
