@@ -21,8 +21,11 @@
                 </form>
                 <form method="post" asp-page="Consultation">
                     <input name="tutorielIdVal" type="text" value="@tuto.Id" hidden />
-                    <button type="submit" class="btn btn-danger" data-supprimerTuto asp-page-handler="DeleteTuto" data-bs-toggle="modal" data-bs-target="#modalValideDeleteTuto"><img src="~/icons/deleteIcon.svg" /></button>
-                    <button type="submit" class="btn btn-primary" data-UnpublishTuto asp-page-handler="UnpublishTuto" data-bs-toggle="modal" data-bs-target="#modalValideUnpublishTuto">Rendre non public</button>
+                    @if(Model.Input.droitAccess == true)
+                    {
+                        <button type="submit" class="btn btn-danger" data-supprimerTuto asp-page-handler="DeleteTuto" data-bs-toggle="modal" data-bs-target="#modalValideDeleteTuto"><img src="~/icons/deleteIcon.svg" /></button>
+                        <button type="submit" class="btn btn-primary" data-UnpublishTuto asp-page-handler="UnpublishTuto" data-bs-toggle="modal" data-bs-target="#modalValideUnpublishTuto">Rendre non public</button>
+                    }
                 </form>
             </div>
         </div>
