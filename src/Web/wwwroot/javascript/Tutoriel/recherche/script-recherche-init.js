@@ -4,7 +4,13 @@
         event.stopPropagation();
         window.scriptRechercheUtils.rechercherTuto(event);
     });
-    window.scriptRechercheUtils.rechercherTuto();
+    $('[data-paginationBtn]').on('click', event => {
+        //event.preventDefault();
+        //event.stopPropagation();
+        window.scriptRechercheUtils.setPaginationClick;
+    });
+
 
     window.addEventListener('beforeunload', () => delete window.scriptRechercheUtils);
+    window.scriptRechercheUtils.rechercherTuto();
 });

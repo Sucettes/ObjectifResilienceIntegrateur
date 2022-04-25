@@ -3,9 +3,14 @@
 
     var currentDataItemList;
     var currentPosition = 1;
+    var currTargetClick;
     var nbPage;
     let scriptRechercheUtils = {
         rechercherTuto: event => {
+            $('#btn-pagination-before').off('click');
+            $('#btn-pagination-before').on('click', scriptRechercheUtils.setPaginationClick);
+            $('#btn-pagination-after').off('click')
+            $('#btn-pagination-after').on('click', scriptRechercheUtils.setPaginationClick);
             if (event == undefined) {
                 $.ajax({
                     type: 'POST',
@@ -50,8 +55,9 @@
         },
         ajouterItem: () => {
             var nbItem = currentDataItemList.length;
-
+            console.log(currentPosition)
             var zone = document.getElementById('zoneCardTuto');
+            
             while (zone.firstChild) {
                 zone.removeChild(zone.firstChild);
             }
@@ -62,7 +68,6 @@
                 let pagination = document.getElementById("navPagination");
                 if (pagination.children.length > 2) {
                     for (var j = 1; j < pagination.children.length; j++) {
-                        console.log(pagination.children[j])
                         pagination.children[1].remove();
                     }
                 }
@@ -71,25 +76,16 @@
                     let pageLink = document.createElement('li');
                     pageLink.className = 'page-item';
 
-                    let pageLinkBtn = document.createElement('button');
-                    pageLinkBtn.className = "page-link";
-                    pageLinkBtn.textContent = i;
-                    pageLinkBtn.setAttribute('pageNumber', i-1)
-                    pageLink.appendChild(pageLinkBtn);
-
+                    let $pageLinkBtn = $('<button id="test" data-paginationBtn class="page-link" value="' + (i) + '">' + i + '</button>');
+                    $pageLinkBtn.on('click', scriptRechercheUtils.setPaginationClick);
+                    pageLink.appendChild($pageLinkBtn[0]);
                     pagination.insertBefore(pageLink, pagination.children[pagination.children.length -1])
-
-                    //pagination.parentNode.insertBefore($pageLink, pagination.parentNode.children[pagination.count]);
-                    // ajouts page
-                    //$pageLink.on('click', scriptRechercheUtils.setPageChangeClick);
                 }
 
-                for (var i = 0; i < 9; i++) {
+                //for (var i = 0; i < 9; i++) {
+                for (var i = ((9 * currentPosition)-9); i < (currentPosition*9); i++) {
                     scriptRechercheUtils.creationCarteItem(i);
                 }
-                //for (var i in currentDataItemList) {
-                //    scriptRechercheUtils.creationCarteItem(i);
-                //}
             } else {
                 let $msgAucunItem = $('<div class="alert alert-warning" role="alert" style="width:100%;"><p style="color:black">Aucun résultats trouvé!</p></div>');
                 $('#zoneCardTuto').append($msgAucunItem);
@@ -124,13 +120,28 @@
             $a.append($div);
 
             $('#zoneCardTuto').append($a);
+        },
+        setPaginationClick: event => {
+            event.preventDefault();
+            event.stopPropagation();
+            currTargetClick = event.currentTarget;
+            scriptRechercheUtils.changePage();
+        },
+        changePage: () => {
+            if (currTargetClick.id == 'btn-pagination-before') {
+                if (currentPosition > 1) {
+                    currentPosition -= 1;
+                }
+            } else if (currTargetClick.id == 'btn-pagination-after') {
+                if (currentPosition < nbPage) {
+                    currentPosition += 1;
+                }
+            } else {
+                currentPosition = Number(currTargetClick.value);
+            }
+            scriptRechercheUtils.ajouterItem();
+            //console.log(currentDataItemList)
         }
-        //setPageChangeClick: event => {
-        //    event.preventDefault();
-        //    event.stopPropagation();
-
-        //    console.log(event.currentTarget);
-        //}
     }
 
     window.scriptRechercheUtils = scriptRechercheUtils;

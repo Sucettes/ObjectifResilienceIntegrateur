@@ -25,10 +25,8 @@
             <form method="post" asp-page="CreationTuto" style="margin-right:0.4rem;">
                 <button type="submit" class="btn btn-outline-primary" asp-page-handler="RedirectHomeTuto">Retour</button>
             </form>
-            <form asp-page="CreationTuto" style="margin-left:0.4rem;">
-                <input name="tutorielIdVal" type="text" value="@id" hidden />
-                <button id="btnPublieTuto" class="@(id.IsNullOrEmpty() ? "btn disabled btn-primary": "btn btn-outline-primary")" asp-route-id="@id" asp-page-handler="PublieTuto" data-publieTuto data-bs-toggle="modal" data-bs-target="#modalValidepublieTuto">Publié</button>
-                <button id="btnSupprimerTuto" class="@(id.IsNullOrEmpty() ? "btn disabled btn-danger": "btn btn-outline-danger")" data-supprimerTuto data-bs-toggle="modal" data-bs-target="#modalValideDeleteTuto">Supprimer</button>
+            <form method="post" asp-page="CreationTuto" style="margin-left:0.4rem;">
+                <button type="submit" id="btnPublieTuto" class="@(id.IsNullOrEmpty() ? "btn disabled btn-primary": "btn btn-outline-primary")" asp-route-id="@id" asp-page-handler="PublieTuto">Publié</button>
             </form>
         </div>
     </div>
@@ -359,43 +357,6 @@
     </div>
 </div>
 
-<!-- Modal -->
-<div class="modal" id="modalValideDelete" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalValideDeleteLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalValideDeleteLabel">Confirmation!</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Cette action n’est pas réversible, est-ce que vous voulez vraiment supprimer cette rangée?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Non</button>
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="btnConfirmDelete">Oui</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal" id="modalValidepublieTuto" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalValidepublieTuto" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalValidePublieTutoLabel">Confirmation!</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Voulez-vous vraiment publié le tutoriel? Vous allez devoir le rendre non public afin de pouvoir le modifier.
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Non</button>
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="btnConfirmPublieTuto">Oui</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <div id="toastTutoCreeDiv" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11" hidden>
     <div id="toastTutoCree" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-animation="true" data-bs-delay="5000">
         <div class="toast-header">
@@ -459,9 +420,9 @@
 
 <script src="~/javascript/Tutoriel/creation/CreationTutoPageAction.js" asp-append-version="true"></script>
 <script src="~/javascript/Tutoriel/creation/ModificationTutoPageAction.js" asp-append-version="true"></script>
-<script src="~/javascript/Tutoriel/creation/DeleteTutoPageAction.js" asp-append-version="true"></script>
 <script src="~/javascript/Tutoriel/creation/script-rangee-utils.js" asp-append-version="true"></script>
 <script src="~/javascript/Tutoriel/creation/script-rangee-init.js" asp-append-version="true"></script>
+<script src="~/javascript/Tutoriel/creation/DeleteTutoPageAction.js" asp-append-version="true"></script>
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.0.20/tinymce.min.js"></script>
 <script>
