@@ -1,10 +1,13 @@
 using Gwenael.Application.Mailing;
+using Gwenael.Domain;
 using Gwenael.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -13,13 +16,11 @@ namespace Gwenael.Web.Pages.Account
     public class RegisterModel : PageModel
     {
         private readonly UserManager<User> _userManager;
+        private readonly GwenaelDbContext _context;
 
-        public RegisterModel(
-            UserManager<User> userManager,
-            SignInManager<User> signInManager,
-            ILogger<LoginModel> logger,
-            IEmailFactory emailFactory)
+        public RegisterModel(GwenaelDbContext context, UserManager<User> userManager)
         {
+            _context = context;
             _userManager = userManager;
         }
         public string ReturnUrl { get; set; }
@@ -48,7 +49,25 @@ namespace Gwenael.Web.Pages.Account
 
             if (!Regex.IsMatch(registerForm.courriel, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
             {
-                dictError.Add("erreurCourriel", "Le courriel nest pas valide.");
+                dictError.Add("erreurCourriel", "Le courriel n'est pas valide.");
+            }
+            else
+            {
+                User userBd = null;
+                bool erreur = false;
+                try
+                {
+                    userBd = _context.Users.Where(u => u.UserName == registerForm.courriel).First();
+                    Console.WriteLine(userBd);
+                    erreur = true;
+                }
+                catch
+                {
+                }
+                if (erreur)
+                {
+                    dictError.Add("erreurCourriel", "Le courriel n'est pas disponible.");
+                }
             }
             if (dictError.Count > 0)
             {

@@ -38,7 +38,7 @@ $('[data-registerRequest]').on('click', event => {
                 }
             },
             error: function () {
-                document.getElementById('msgErreurCourriel').textContent = "Ce courriel est déjà lié à un compte";
+                document.getElementById('msgErreurPassword').textContent = "Votre mot de passe doit être composé de lettres et de chiffres.";
             }
         });
     }
