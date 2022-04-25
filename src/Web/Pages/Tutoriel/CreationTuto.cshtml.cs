@@ -68,18 +68,18 @@ namespace Gwenael.Web.Pages
             public string imgBannierUrl { get; set; }
         }
 
-        //public Guid ObtenirIdDuUserSelonEmail(string email)
-        //{
-        //    User user = (User)_db.Users.Where(u => u.UserName == email).First();
-        //    return user.Id;
-        //}
+        public Guid ObtenirIdDuUserSelonEmail(string email)
+        {
+            User user = (User)_db.Users.Where(u => u.UserName == email).First();
+            return user.Id;
+        }
         public IActionResult OnGet()
         {
-            //if (User.Identity.IsAuthenticated)
-            //{
-            //    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-            //    if (Permission.VerifierAccesGdC(idConnectedUser, _db))
-            //    {
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
+                if (Permission.VerifierAccesGdC(idConnectedUser, _db))
+                {
                     Input = new InputModel();
 
                     if (Request.Query.Count == 1)
@@ -95,9 +95,9 @@ namespace Gwenael.Web.Pages
 
                     UpdateInputData();
                     return Page();
-            //    }
-            //}
-            //return RedirectToPage("Index");
+                }
+            }
+            return RedirectToPage("Index");
         }
 
         public IActionResult OnPostAsync() { UpdateInputData(); return Page(); }
@@ -106,17 +106,17 @@ namespace Gwenael.Web.Pages
         {
             try
             {
-                //if (User.Identity.IsAuthenticated)
-                //{
-                //    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-                //    if (Permission.VerifierAccesGdC(idConnectedUser, _db))
-                //    {
+                if (User.Identity.IsAuthenticated)
+                {
+                    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
+                    if (Permission.VerifierAccesGdC(idConnectedUser, _db))
+                    {
                         Input.handler = "TutoRangee";
                         RangeeTutos rt = _db.RangeeTutos.Where(r => r.Id == Guid.Parse(idRangee)).First();
                         return rt != null ? StatusCode(200, new JsonResult(rt)) : StatusCode(400);
-                //    }
-                //}
-                //return StatusCode(403);
+                    }
+                }
+                return StatusCode(403);
             }
             catch (Exception)
             {
@@ -131,15 +131,15 @@ namespace Gwenael.Web.Pages
 
         public IActionResult OnPostRedirectAdminMenu()
         {
-            //if (User.Identity.IsAuthenticated)
-            //{
-            //    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-            //    if (Permission.VerifierAccesGdC(idConnectedUser, _db))
-            //    {
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
+                if (Permission.VerifierAccesGdC(idConnectedUser, _db))
+                {
                     return RedirectToPage("../AdminMenu");
-            //    }
-            //}
-            //return StatusCode(403);
+                }
+            }
+            return StatusCode(403);
         }
 
         public class CreationTutoFormData
@@ -160,11 +160,11 @@ namespace Gwenael.Web.Pages
         {
             try
             {
-                //if (User.Identity.IsAuthenticated)
-                //{
-                //    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-                //    if (Permission.VerifierAccesGdC(idConnectedUser, _db))
-                //    {
+                if (User.Identity.IsAuthenticated)
+                {
+                    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
+                    if (Permission.VerifierAccesGdC(idConnectedUser, _db))
+                    {
                         formData.imgUrl = null;
                         bool creationTutoStatus = false;
                         Input.id = formData.idTutoP;
@@ -218,11 +218,11 @@ namespace Gwenael.Web.Pages
                         }
 
                         UpdateInputData();
-                        return creationTutoStatus ? StatusCode(201, new JsonResult(formData)) : 
+                        return creationTutoStatus ? StatusCode(201, new JsonResult(formData)) :
                             StatusCode(400, new JsonResult(formData));
-                //    }
-                //}
-                //return StatusCode(403);
+                    }
+                }
+                return StatusCode(403);
             }
             catch (Exception)
             {
@@ -235,11 +235,11 @@ namespace Gwenael.Web.Pages
         {
             try
             {
-                //if (User.Identity.IsAuthenticated)
-                //{
-                //    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-                //    if (Permission.VerifierAccesGdC(idConnectedUser, _db))
-                //    {
+                if (User.Identity.IsAuthenticated)
+                {
+                    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
+                    if (Permission.VerifierAccesGdC(idConnectedUser, _db))
+                    {
                         bool modificationTutoStatus = false;
                         Input.id = formData.idTutoP;
                         Input.handler = "CreeTutorielDetails";
@@ -297,11 +297,11 @@ namespace Gwenael.Web.Pages
                         }
 
                         UpdateInputData();
-                        return modificationTutoStatus ? StatusCode(201, new JsonResult(formData)) : 
+                        return modificationTutoStatus ? StatusCode(201, new JsonResult(formData)) :
                             StatusCode(400, new JsonResult(formData));
-                //    }
-                //}
-                //return StatusCode(403);
+                    }
+                }
+                return StatusCode(403);
             }
             catch (Exception)
             {
@@ -312,26 +312,26 @@ namespace Gwenael.Web.Pages
 
         public IActionResult OnPostNettoyerTutorielDetails()
         {
-            //if (User.Identity.IsAuthenticated)
-            //{
-            //    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-            //    if (Permission.VerifierAccesGdC(idConnectedUser, _db))
-            //    {
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
+                if (Permission.VerifierAccesGdC(idConnectedUser, _db))
+                {
                     return Redirect("/tutoriel/CreationTuto");
-            //    }
-            //}
-            //return StatusCode(403);
+                }
+            }
+            return StatusCode(403);
         }
 
         public IActionResult OnPostCreationCategorie(string id, string handler)
         {
             try
             {
-                //if (User.Identity.IsAuthenticated)
-                //{
-                //    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-                //    if (Permission.VerifierAccesGdC(idConnectedUser, _db))
-                //    {
+                if (User.Identity.IsAuthenticated)
+                {
+                    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
+                    if (Permission.VerifierAccesGdC(idConnectedUser, _db))
+                    {
                         string status = "false";
                         if (!_db.CategoriesTutos.Where(c => c.Nom == Input.nomCategorie).Any())
                         {
@@ -354,9 +354,9 @@ namespace Gwenael.Web.Pages
 
                         UpdateInputData();
                         return Redirect($"/Tutoriel/CreationTuto?handler=CreationCategorie&id={Input.id}&creationCategorieStatus={status}");
-                //    }
-                //}
-                //return StatusCode(403);
+                    }
+                }
+                return StatusCode(403);
             }
             catch (Exception)
             {
@@ -381,11 +381,11 @@ namespace Gwenael.Web.Pages
         {
             try
             {
-                //if (User.Identity.IsAuthenticated)
-                //{
-                //    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-                //    if (Permission.VerifierAccesGdC(idConnectedUser, _db))
-                //    {
+                if (User.Identity.IsAuthenticated)
+                {
+                    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
+                    if (Permission.VerifierAccesGdC(idConnectedUser, _db))
+                    {
                         bool estAjoutee = false;
                         Input.id = formData.idTutoP;
                         Input.handler = "TutoRangee";
@@ -433,11 +433,11 @@ namespace Gwenael.Web.Pages
                         formData.idRangee = rId.ToString();
 
                         UpdateInputData();
-                        return estAjoutee ? StatusCode(201, new JsonResult(formData)) : 
+                        return estAjoutee ? StatusCode(201, new JsonResult(formData)) :
                             StatusCode(400, new JsonResult(formData));
-                //    }
-                //}
-                //return StatusCode(403);
+                    }
+                }
+                return StatusCode(403);
             }
             catch (Exception)
             {
@@ -450,19 +450,19 @@ namespace Gwenael.Web.Pages
         {
             try
             {
-                //if (User.Identity.IsAuthenticated)
-                //{
-                //    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-                //    if (Permission.VerifierAccesGdC(idConnectedUser, _db))
-                //    {
+                if (User.Identity.IsAuthenticated)
+                {
+                    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
+                    if (Permission.VerifierAccesGdC(idConnectedUser, _db))
+                    {
                         Input.id = id;
                         Input.handler = handler;
 
                         UpdateInputData();
                         return Page();
-                //    }
-                //}
-                //return StatusCode(403);
+                    }
+                }
+                return StatusCode(403);
             }
             catch (Exception)
             {
@@ -476,19 +476,19 @@ namespace Gwenael.Web.Pages
         {
             try
             {
-                //if (User.Identity.IsAuthenticated)
-                //{
-                //    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-                //    if (Permission.VerifierAccesGdC(idConnectedUser, _db))
-                //    {
+                if (User.Identity.IsAuthenticated)
+                {
+                    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
+                    if (Permission.VerifierAccesGdC(idConnectedUser, _db))
+                    {
                         Input.handler = "TutoRangee";
                         Input.id = tutoId;
 
                         UpdateInputData();
                         return Redirect("/tutoriel/CreationTuto?handler=TutoRangee&id=" + tutoId);
-                //    }
-                //}
-                //return StatusCode(403);
+                    }
+                }
+                return StatusCode(403);
             }
             catch (Exception)
             {
@@ -501,11 +501,11 @@ namespace Gwenael.Web.Pages
         {
             try
             {
-                //if (User.Identity.IsAuthenticated)
-                //{
-                //    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-                //    if (Permission.VerifierAccesGdC(idConnectedUser, _db))
-                //    {
+                if (User.Identity.IsAuthenticated)
+                {
+                    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
+                    if (Permission.VerifierAccesGdC(idConnectedUser, _db))
+                    {
                         bool estEdit = false;
                         Input.id = formData.idTutoP;
                         Input.handler = "TutoRangee";
@@ -561,11 +561,11 @@ namespace Gwenael.Web.Pages
                         formData.idRangee = rId.ToString();
 
                         UpdateInputData();
-                        return estEdit ? StatusCode(201, new JsonResult(formData)) : 
+                        return estEdit ? StatusCode(201, new JsonResult(formData)) :
                             StatusCode(400, new JsonResult(formData));
-                //    }
-                //}
-                //return StatusCode(403);
+                    }
+                }
+                return StatusCode(403);
             }
             catch (Exception)
             {
@@ -584,11 +584,11 @@ namespace Gwenael.Web.Pages
         {
             try
             {
-                //if (User.Identity.IsAuthenticated)
-                //{
-                //    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-                //    if (Permission.VerifierAccesGdC(idConnectedUser, _db))
-                //    {
+                if (User.Identity.IsAuthenticated)
+                {
+                    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
+                    if (Permission.VerifierAccesGdC(idConnectedUser, _db))
+                    {
                         Input.handler = "TutoRangee";
                         Input.id = r.IdtutoVal;
                         bool estSupprimer = false;
@@ -607,9 +607,9 @@ namespace Gwenael.Web.Pages
 
                         UpdateInputData();
                         return estSupprimer ? StatusCode(202, new JsonResult(r)) : StatusCode(400, new JsonResult(r));
-                //    }
-                //}
-                //return StatusCode(403);
+                    }
+                }
+                return StatusCode(403);
             }
             catch (Exception)
             {
@@ -622,11 +622,11 @@ namespace Gwenael.Web.Pages
         {
             try
             {
-                //if (User.Identity.IsAuthenticated)
-                //{
-                //    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-                //    if (Permission.VerifierAccesGdC(idConnectedUser, _db))
-                //    {
+                if (User.Identity.IsAuthenticated)
+                {
+                    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
+                    if (Permission.VerifierAccesGdC(idConnectedUser, _db))
+                    {
                         Input.id = id;
 
                         Tutos t = _db.Tutos.Where(t => t.Id == Guid.Parse(id) && t.EstPublier == false).First();
@@ -639,9 +639,9 @@ namespace Gwenael.Web.Pages
 
                         UpdateInputData();
                         return Redirect("/Tutoriel/Consultation?id=" + id + "&estPublie=true");
-                //    }
-                //}
-                //return StatusCode(403);
+                    }
+                }
+                return StatusCode(403);
             }
             catch (Exception)
             {
@@ -658,11 +658,11 @@ namespace Gwenael.Web.Pages
         {
             try
             {
-                //if (User.Identity.IsAuthenticated)
-                //{
-                //    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-                //    if (Permission.VerifierAccesGdC(idConnectedUser, _db))
-                //    {
+                if (User.Identity.IsAuthenticated)
+                {
+                    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
+                    if (Permission.VerifierAccesGdC(idConnectedUser, _db))
+                    {
                         RangeeTutos oldRt = _db.RangeeTutos.Where(
                             rt => rt.Id == Guid.Parse(rangeeSwitchData.IdOld)).First();
                         RangeeTutos newRt = _db.RangeeTutos.Where(
@@ -688,9 +688,9 @@ namespace Gwenael.Web.Pages
                         _db.SaveChanges();
 
                         return StatusCode(200);
-                //    }
-                //}
-                //return StatusCode(403);
+                    }
+                }
+                return StatusCode(403);
             }
             catch (Exception)
             {
