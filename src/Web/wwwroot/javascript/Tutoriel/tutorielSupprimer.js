@@ -12,7 +12,6 @@
     });
 
 
-
     $('#btnConfirmDeleteTuto').click(function () {
         var href = window.location.pathname + "?handler=DeleteTuto";
 
@@ -28,18 +27,11 @@
                     $('input:hidden[name="__RequestVerificationToken"]').val()
             },
             success: function () {
-                //window.location.replace(window.location + "&deleteStatus=true");
-                //window.location.replace(window.location);
                 window.location.replace('/Tutoriel?deleteStatus=true');
-
-
             },
             error: function () {
-                //window.location.replace(window.location + "&deleteStatus=false");
-                //window.location.replace(window.location);
+
                 window.location.replace('/Tutoriel?deleteStatus=false');
-
-
             }
         });
     });

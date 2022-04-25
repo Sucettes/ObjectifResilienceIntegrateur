@@ -54,10 +54,12 @@
                     <form method="post" asp-page="CreationTuto" enctype="multipart/form-data" id="formCreationTuto">
                         <input id="idTutoP" value="@id" hidden name="idTutoP" />
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-6" style="max-width:33.75rem;max-height:19.063rem;">
                                 @if (Model.Input.imgBannierUrl != null)
                                 {
-                                    <img class="shadow-lg" src="@Model.Input.imgBannierUrl" style="width:100%; height:100%;" id="imgBanierre" />
+                                    <a href="@Model.Input.imgBannierUrl" target="_blank">
+                                        <img class="shadow-lg" src="@Model.Input.imgBannierUrl" style="width:100%; height:100%;" id="imgBanierre" />
+                                    </a>
                                 }
                                 else
                                 {
@@ -122,10 +124,10 @@
                         <div class="row">
                             <div class="col-12">
                                 <br />
-                                <h2>Introduction</h2>
 
                                 <div class="row">
                                     <div class="col-md-8">
+                                        <h2>Introduction</h2>
                                         @if (!String.IsNullOrEmpty(@Model.Input.intro))
                                         {
                                             <textarea class="form-control shadow-sm" rows="7" name="intro" id="intro">@Model.Input.intro</textarea>
@@ -135,8 +137,17 @@
                                             <textarea class="form-control shadow-sm" rows="7" name="intro" id="intro"></textarea>
                                         }
                                     </div>
-                                    <div class="col-md-4" style="background-color:red;">
+                                    <div class="col-md-4">
+                                        <h2>Matériels</h2>
 
+                                        @if (!String.IsNullOrEmpty(@Model.Input.materiel))
+                                        {
+                                            <textarea class="form-control shadow-sm" rows="7" name="materiel" id="materiel">@Model.Input.materiel</textarea>
+                                        }
+                                        else
+                                        {
+                                            <textarea class="form-control shadow-sm" rows="7" name="materiel" id="materiel"></textarea>
+                                        }
                                     </div>
                                 </div>
                                 
@@ -166,11 +177,11 @@
                                         {
                                             if (!String.IsNullOrEmpty(@id) && tuto.Id.ToString() == @id)
                                             {
-                                                <option value="@tuto.Id" selected>@tuto.Titre</option>
+                                                <option value="@tuto.Id" selected>@tuto.Titre (Non Publié)</option>
                                             }
                                             else
                                             {
-                                                <option value="@tuto.Id">@tuto.Titre</option>
+                                                <option value="@tuto.Id">@tuto.Titre (Non Publié)</option>
                                             }
                                         }
                                     }
@@ -328,20 +339,19 @@
     </div>
 </div>
 
-<!-- Modal -->
-<div class="modal" id="modalValideDelete" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalValideDeleteLabel" aria-hidden="true">
+<div class="modal" id="modalValideDeleteTuto" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalValideDeleteTutoLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalValideDeleteLabel">Confirmation!</h5>
+                <h5 class="modal-title" id="modalValideDeleteTutoLabel">Confirmation!</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                Cette action n’est pas réversible, est-ce que vous voulez vraiment supprimer cette rangée?
+                Cette action n’est pas réversible, est-ce que vous voulez vraiment supprimer ce tutoriel?
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Non</button>
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="btnConfirmDelete">Oui</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="btnConfirmDeleteTuto">Oui</button>
             </div>
         </div>
     </div>
@@ -412,6 +422,7 @@
 <script src="~/javascript/Tutoriel/creation/ModificationTutoPageAction.js" asp-append-version="true"></script>
 <script src="~/javascript/Tutoriel/creation/script-rangee-utils.js" asp-append-version="true"></script>
 <script src="~/javascript/Tutoriel/creation/script-rangee-init.js" asp-append-version="true"></script>
+<script src="~/javascript/Tutoriel/creation/DeleteTutoPageAction.js" asp-append-version="true"></script>
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.0.20/tinymce.min.js"></script>
 <script>

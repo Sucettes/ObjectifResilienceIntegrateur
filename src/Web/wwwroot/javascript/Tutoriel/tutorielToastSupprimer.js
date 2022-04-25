@@ -12,13 +12,11 @@
 
         // QUand le toast a fini de ce cacher
         toastRD.addEventListener('hide.bs.toast', function () {
-            console.log("ajouts hidden")
             $('#toastTutoDeleteDiv').attr('hidden');
         });
 
         // Quand le toast a fini de ce montrer
         toastRD.addEventListener('show.bs.toast', function () {
-            console.log("retire hidden")
 
             $('#toastTutoDeleteDiv').removeAttr('hidden');
         });

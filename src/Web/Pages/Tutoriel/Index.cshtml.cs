@@ -23,7 +23,7 @@ using Newtonsoft.Json;
 using NuGet.Packaging;
 using NuGet.Protocol;
 using Spk.Common.Helpers.String;
-
+using Gwenael.Web.FctUtils;
 
 namespace Gwenael.Web.Pages
 {
@@ -37,11 +37,26 @@ namespace Gwenael.Web.Pages
         public class InputModel
         {
             public List<Tutos> lstTutoriels { get; set; }
+            public bool droitAccess { get; set; }
+
         }
         public TutorielIndexModel(GwenaelDbContext pDb) => _db = pDb;
 
+        public Guid ObtenirIdDuUserSelonEmail(string email)
+        {
+            User user = (User)_db.Users.Where(u => u.UserName == email).First();
+            return user.Id;
+        }
         public IActionResult OnGet()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
+                if (Permission.EstGestionnaireDeContenu(idConnectedUser, _db))
+                    Input.droitAccess = true;
+                else Input.droitAccess = false;
+            }
+            else Input.droitAccess = false;
             Input = new InputModel();
             Input.lstTutoriels = _db.Tutos.ToList();
 
