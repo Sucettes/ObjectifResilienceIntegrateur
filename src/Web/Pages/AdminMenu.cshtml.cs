@@ -33,7 +33,7 @@ namespace Gwenael.Web.Pages
         {
             //if (User.Identity.IsAuthenticated)
             //{
-            //    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
+            //Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
             //    if (Permission.EstAdministrateur(idConnectedUser, _context))
             //    {
             if (DynamicQueryableExtensions.Any(_context.CategoriesTutos))
@@ -86,6 +86,7 @@ namespace Gwenael.Web.Pages
                     {
                         List<User> userList = _context.Users.Where(u => u.Email.Contains(recherche)).ToList();
                         ViewData["lstUsers"] = userList;
+                        ViewData["tupleUsers"] = getListUserAndRoles(userList);
                         ViewData["Tab"] = "utilisateurs";
                         return Page();
                     }
