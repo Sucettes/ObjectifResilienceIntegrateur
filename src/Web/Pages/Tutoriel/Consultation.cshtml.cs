@@ -31,25 +31,24 @@ namespace Gwenael.Web.Pages
             _db = pDb;
         }
 
-        //public Guid ObtenirIdDuUserSelonEmail(string email)
-        //{
-        //    User user = (User)_db.Users.Where(u => u.UserName == email).First();
-        //    return user.Id;
-        //}
+        public Guid ObtenirIdDuUserSelonEmail(string email)
+        {
+            User user = (User)_db.Users.Where(u => u.UserName == email).First();
+            return user.Id;
+        }
         public IActionResult OnGet()
         {
             Input = new InputModel();
 
-            //Input.droitAccess = false;
-            Input.droitAccess = true; // a supprimer
-            //if (User.Identity.IsAuthenticated)
-            //{
-            //    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-            //    if (Permission.VerifierAccesGdC(idConnectedUser, _db))
-            //    {
-            //        Input.droitAccess = true;
-            //    }
-            //}
+            Input.droitAccess = false;
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
+                if (Permission.VerifierAccesGdC(idConnectedUser, _db))
+                {
+                    Input.droitAccess = true;
+                }
+            }
 
             if (Request.Query.Count >= 1)
             {
@@ -77,19 +76,18 @@ namespace Gwenael.Web.Pages
         {
             try
             {
-                //if (User.Identity.IsAuthenticated)
-                //{
-                //    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-                //    if (Permission.VerifierAccesGdC(idConnectedUser, _db))
-                //    {
+                if (User.Identity.IsAuthenticated)
+                {
+                    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
+                    if (Permission.VerifierAccesGdC(idConnectedUser, _db))
+                    {
                         _db.Tutos.Remove(entity: _db.Tutos.Where(t => t.Id == Guid.Parse(tutoVal.tutorielIdVal)).First());
                         _db.SaveChanges();
 
                         return Redirect("/tutoriel?deleteStatus=true");
-                //    }
-                //}
-                //return Redirect("/tutoriel");
-
+                    }
+                }
+                return Redirect("/tutoriel");
             }
             catch (Exception)
             {
@@ -101,18 +99,18 @@ namespace Gwenael.Web.Pages
         {
             try
             {
-                //if (User.Identity.IsAuthenticated)
-                //{
-                //    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-                //    if (Permission.VerifierAccesGdC(idConnectedUser, _db))
-                //    {
+                if (User.Identity.IsAuthenticated)
+                {
+                    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
+                    if (Permission.VerifierAccesGdC(idConnectedUser, _db))
+                    {
                         _db.Tutos.Where(t => t.Id == Guid.Parse(tutoVal.tutorielIdVal)).First().EstPublier = false;
                         _db.SaveChanges();
 
                         return Redirect("/tutoriel?unPublishStatus=true");
-                //    }
-                //}
-                //return Redirect("/tutoriel");
+                    }
+                }
+                return Redirect("/tutoriel");
             }
             catch (Exception)
             {
