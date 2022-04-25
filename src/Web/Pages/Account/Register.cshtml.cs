@@ -1,5 +1,6 @@
 using Gwenael.Application.Mailing;
 using Gwenael.Domain.Entities;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -56,7 +57,6 @@ namespace Gwenael.Web.Pages.Account
             [Compare("Password", ErrorMessage = "Vos deux mots de passe entrés ne correspondent pas.")]
             public string ConfirmPassword { get; set; }
         }
-
         public void OnGet(string returnUrl = null)
         {
             ReturnUrl = returnUrl;
