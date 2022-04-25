@@ -78,7 +78,7 @@
                 url: window.location.pathname,
                 async: false,
                 data: new FormData(document.getElementById('form-register')),
-                contentType: "application/json",
+                contentType: 'application/json',
                 cache: false,
                 contentType: false,
                 processData: false,
@@ -88,7 +88,7 @@
                 },
                 success: function (data) {
                     if (data.msgSuccess != null) {
-                        $(".msgSucceeded").append("<div class='alert alert-primary' role='alert'>" + data.msgSuccess + "</div>");
+                        $('.msgSucceeded').append("<div class='alert alert-primary' role='alert'>" + data.msgSuccess + "</div>");
                         setTimeout(function () {
                             window.location.href = '/Index';
                         }, 10000);
@@ -107,8 +107,6 @@
                         if (data.msgErreurCourriel != null)
                             console.log(data.msgErreurCourriel);
                     }
-
-
                 },
                 error: function () {
                     document.getElementById('msgErreurCourriel').textContent = "Ce courriel est déjà lié à un compte";
