@@ -5,22 +5,71 @@
 @{ 
     ViewData["Title"] = "Détail d'un poadcast";
      var audio = ViewData["Audio"] as Audio;
+    var Cat = ViewData["Cat"] as CategoriesTutos;
  }
 
+<nav class="navbar navbar-light shadow-sm">
+    <div class="container-fluid">
+        <h1>@audio.titre</h1>
+
+        <div class="d-flex">
+            <form method="post" asp-page="PoadcastPage" style="margin-right:0.4rem;">
+                <button type="submit" class="btn btn-outline-primary">Retour</button>
+            </form>
+        </div>
+
+    </div>
+</nav>
 
 <div>
-    <div>
-        <p>titre : @audio.titre</p>
+    
         
-    </div>
-    <div>
-        <div><img src="@audio.urlImage"></div>
-    </div>
+    <br />
+    <div class="searchBar-container paddingTop">
+        <div>
+            <img class="sizeImage2 paddingLeft" src="@audio.urlImage">
+        </div>
 
-    <div>
-        <audio controls
-               src="@audio.urlAudio">
-        </audio>
+        <div class="paddingLeft2">
 
+
+            <div>
+                @Cat.Nom
+            </div>
+
+            <br />
+            <div class="sizeDescription">
+                @audio.description
+            </div>
+
+            <br />
+            <div>
+                <audio controls
+                       src="@audio.urlAudio">
+                </audio>
+            </div>
+
+        </div>
     </div>
+    
+    @if (audio.EstPublier == false)
+    {
+        <br />
+        <div class="searchBar-container">
+            <div>
+                <form method="post">
+                    <input type="hidden" name="name" value="@audio.ID" />
+                    <input name="btnAjouterPoadcast" type="submit" value="Ajouter" class="btn btn-success form-control" style="width:15em !important; margin:1em;" />
+                </form>
+            </div>
+            <div>
+                <form method="post">
+                    <input type="hidden" name="name" value="@audio.ID" />
+                    <input name="btnSupprimerPoadcast" type="submit" value="Supprimer" class="btn btn-danger form-control" style="width:15em !important; margin:1em;" />
+                </form>
+            </div>
+        </div>
+    }
+
+
 </div>
