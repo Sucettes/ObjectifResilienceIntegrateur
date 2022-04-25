@@ -47,7 +47,6 @@ namespace Gwenael.Web.Pages
                     Input.droitAccess = true;
                 else Input.droitAccess = false;
             } else Input.droitAccess = false;
-
             if (Request.Query.Count >= 1)
             {
                 Input.id = Request.Query["id"];
