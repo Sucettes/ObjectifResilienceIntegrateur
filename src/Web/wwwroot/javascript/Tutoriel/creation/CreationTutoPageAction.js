@@ -2,7 +2,6 @@
 $(document).ready(function () {
 
     let id;
-    console.log("test2" + id)
     var toastRD = document.getElementById('toastTutoCree');
     // QUand le toast a fini de ce cacher
     toastRD.addEventListener('hide.bs.toast', function () {
@@ -46,7 +45,6 @@ $(document).ready(function () {
 
         $('#imgBanierre').attr('src', data.value.imgUrl);
         id = data.id;
-        console.log("test1:" + id);
         const state = { 'id': data.id, 'handler': 'CreeTutorielDetails' };
         const url = '/Tutoriel/CreationTuto';
 

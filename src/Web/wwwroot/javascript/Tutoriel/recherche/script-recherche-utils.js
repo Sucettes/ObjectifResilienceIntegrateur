@@ -55,7 +55,6 @@
         },
         ajouterItem: () => {
             var nbItem = currentDataItemList.length;
-            console.log(currentPosition)
             var zone = document.getElementById('zoneCardTuto');
             
             while (zone.firstChild) {
@@ -93,7 +92,6 @@
         },
         creationCarteItem: (i) => {
             let tutoData = currentDataItemList[i];
-            console.log(tutoData)
             // créé la carte
             let $a = $('<a class= "col"></a>');
             $a.attr('href', 'Tutoriel/Consultation?id=' + tutoData.id);
@@ -140,7 +138,6 @@
                 currentPosition = Number(currTargetClick.value);
             }
             scriptRechercheUtils.ajouterItem();
-            //console.log(currentDataItemList)
         }
     }
 
