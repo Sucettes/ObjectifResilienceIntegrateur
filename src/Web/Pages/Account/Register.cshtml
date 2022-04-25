@@ -78,34 +78,30 @@
                 url: window.location.pathname,
                 async: false,
                 data: new FormData(document.getElementById('form-register')),
-                contentType: 'application/json',
-                cache: false,
-                contentType: false,
-                processData: false,
                 headers: {
                     RequestVerificationToken:
                         $('input:hidden[name="__RequestVerificationToken"]').val()
                 },
+                cache: false,
+                contentType: false,
+                processData: false,
                 success: function (data) {
-                    if (data.msgSuccess != null) {
+                    if (data.msgSuccess != null)
+                    {
                         $('.msgSucceeded').append("<div class='alert alert-primary' role='alert'>" + data.msgSuccess + "</div>");
                         setTimeout(function () {
                             window.location.href = '/Index';
                         }, 10000);
                     }
-                    else {
+                    else
+                    {
                         if (data.erreurPassword != null) {
                             document.getElementById('msgErreurPassword').textContent = data.erreurPassword;
                             document.getElementById('msgErreurConfPassword').textContent = data.erreurPassword;
                         }
-                        if (data.erreurCourriel != null) 
+                        if (data.erreurCourriel != null) {
                             document.getElementById('msgErreurCourriel').textContent = data.erreurCourriel;
-                        if (data.msgErreurConfPassword != null)
-                            console.log(data.msgErreurConfPassword);
-                        if (data.msgErreurPassword != null)
-                            console.log(data.msgErreurPassword);
-                        if (data.msgErreurCourriel != null)
-                            console.log(data.msgErreurCourriel);
+                        }
                     }
                 },
                 error: function () {
