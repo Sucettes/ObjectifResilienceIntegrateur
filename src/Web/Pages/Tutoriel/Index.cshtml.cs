@@ -42,23 +42,24 @@ namespace Gwenael.Web.Pages
         }
         public TutorielIndexModel(GwenaelDbContext pDb) => _db = pDb;
 
-        public Guid ObtenirIdDuUserSelonEmail(string email)
-        {
-            User user = (User)_db.Users.Where(u => u.UserName == email).First();
-            return user.Id;
-        }
+        //public Guid ObtenirIdDuUserSelonEmail(string email)
+        //{
+        //    User user = (User)_db.Users.Where(u => u.UserName == email).First();
+        //    return user.Id;
+        //}
         public IActionResult OnGet()
         {
             Input = new InputModel();
-
-            if (User.Identity.IsAuthenticated)
-            {
-                Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-                if (Permission.VerifierAccesGdC(idConnectedUser, _db))
-                    Input.droitAccess = true;
-                else Input.droitAccess = false;
-            }
-            else Input.droitAccess = false;
+            //Input.droitAccess = false;
+            Input.droitAccess = true; // a supprimer
+            //if (User.Identity.IsAuthenticated)
+            //{
+            //    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
+            //    if (Permission.VerifierAccesGdC(idConnectedUser, _db))
+            //    {
+            //        Input.droitAccess = true;
+            //    }
+            //}
             Input.lstTutoriels = _db.Tutos.ToList();
 
             return Page();

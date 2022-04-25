@@ -56,7 +56,9 @@
         ajouterItem: () => {
             var nbItem = currentDataItemList.length;
             var zone = document.getElementById('zoneCardTuto');
-            
+            if (document.getElementById('errMsgRech')) {
+                document.getElementById('errMsgRech').remove();
+            }
             while (zone.firstChild) {
                 zone.removeChild(zone.firstChild);
             }
@@ -85,7 +87,10 @@
                     scriptRechercheUtils.creationCarteItem(i);
                 }
             } else {
-                let $msgAucunItem = $('<div class="alert alert-warning" role="alert" style="width:100%;"><p style="color:black">Aucun résultats trouvé!</p></div>');
+                if (document.getElementById('errMsgRech')) {
+                    document.getElementById('errMsgRech').remove();
+                }
+                let $msgAucunItem = $('<div class="alert alert-warning" role="alert" style="width:100%;" id="errMsgRech"><p style="color:black">Aucun résultats trouvé!</p></div>');
                 $('#zoneCardTuto').parent().append($msgAucunItem);
             }
         },
