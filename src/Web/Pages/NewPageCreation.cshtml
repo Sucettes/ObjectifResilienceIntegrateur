@@ -1,0 +1,29 @@
+@page
+@model Web.Pages.NewPageCreation
+@using Domain.Entities
+
+
+<div class="container">
+    <h1 style="text-align:center">Creation nouvelle page</h1>
+    <div style="margin:3rem;">
+
+        <form method="post" enctype="multipart/form-data">
+
+            <div class="input-group input-group-sm mb-3">
+                <span class="input-group-text" id="inputTitre">Titre</span>
+                <input type="text" id="titre" class="form-control" aria-label="Titre" aria-describedby="Titre" name="titre">
+            </div>
+
+            <h3 style="text-align: left">Contenue de la page :</h3>
+            <textarea name="inerText"></textarea><br /><br />
+
+
+            <button id="btnCreeNewPage" data-creationTuto type="submit" value="Upload" class="btn-outline-primary  btn btn-primary">Créé la nouvelle page</button>
+        </form>
+
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.0.20/tinymce.min.js"></script>
+        <script type="text/javascript">
+            tinymce.init({ selector: 'textarea' });
+        </script>
+    </div>
+</div>

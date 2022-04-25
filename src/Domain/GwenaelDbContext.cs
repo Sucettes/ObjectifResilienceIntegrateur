@@ -11,7 +11,7 @@ namespace Gwenael.Domain
         public GwenaelDbContext(DbContextOptions<GwenaelDbContext> options) : base(options)
         {
         }
-
+        public DbSet<NewPage> NewPages { get; set; }
         public DbSet<CategoriesTutos> CategoriesTutos { get; set; }
         public DbSet<RangeeTutos> RangeeTutos { get; set; }
         public DbSet<Tutos> Tutos { get; set; }
