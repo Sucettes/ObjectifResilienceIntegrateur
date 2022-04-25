@@ -41,7 +41,7 @@ namespace Gwenael.Web.Pages
             if (User.Identity.IsAuthenticated)
             {
                 Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-                if (Permission.EstGestionnaireDeContenu(idConnectedUser, _db))
+                if (Permission.VerifierAccesGdC(idConnectedUser, _db))
                     Input.droitAccess = true;
                 else Input.droitAccess = false;
             } else Input.droitAccess = false;
@@ -77,7 +77,7 @@ namespace Gwenael.Web.Pages
                 if (User.Identity.IsAuthenticated)
                 {
                     Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-                    if (Permission.EstGestionnaireDeContenu(idConnectedUser, _db))
+                    if (Permission.VerifierAccesGdC(idConnectedUser, _db))
                     {
                         _db.Tutos.Remove(entity: _db.Tutos.Where(t => t.Id == Guid.Parse(tutoVal.tutorielIdVal)).First());
                         _db.SaveChanges();
@@ -101,7 +101,7 @@ namespace Gwenael.Web.Pages
                 if (User.Identity.IsAuthenticated)
                 {
                     Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-                    if (Permission.EstGestionnaireDeContenu(idConnectedUser, _db))
+                    if (Permission.VerifierAccesGdC(idConnectedUser, _db))
                     {
                         _db.Tutos.Where(t => t.Id == Guid.Parse(tutoVal.tutorielIdVal)).First().EstPublier = false;
                         _db.SaveChanges();
