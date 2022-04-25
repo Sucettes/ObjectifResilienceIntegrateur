@@ -78,7 +78,7 @@ namespace Gwenael.Web.Pages
             if (User.Identity.IsAuthenticated)
             {
                 Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-                if (Permission.EstGestionnaireDeContenu(idConnectedUser, _db))
+                if (Permission.VerifierAccesGdC(idConnectedUser, _db))
                 {
                     Input = new InputModel();
 
@@ -109,7 +109,7 @@ namespace Gwenael.Web.Pages
                 if (User.Identity.IsAuthenticated)
                 {
                     Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-                    if (Permission.EstGestionnaireDeContenu(idConnectedUser, _db))
+                    if (Permission.VerifierAccesGdC(idConnectedUser, _db))
                     {
                         Input.handler = "TutoRangee";
                         RangeeTutos rt = _db.RangeeTutos.Where(r => r.Id == Guid.Parse(idRangee)).First();
@@ -134,7 +134,7 @@ namespace Gwenael.Web.Pages
             if (User.Identity.IsAuthenticated)
             {
                 Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-                if (Permission.EstGestionnaireDeContenu(idConnectedUser, _db))
+                if (Permission.VerifierAccesGdC(idConnectedUser, _db))
                 {
                     return RedirectToPage("../AdminMenu");
                 }
@@ -163,7 +163,7 @@ namespace Gwenael.Web.Pages
                 if (User.Identity.IsAuthenticated)
                 {
                     Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-                    if (Permission.EstGestionnaireDeContenu(idConnectedUser, _db))
+                    if (Permission.VerifierAccesGdC(idConnectedUser, _db))
                     {
                         formData.imgUrl = null;
                         bool creationTutoStatus = false;
@@ -238,7 +238,7 @@ namespace Gwenael.Web.Pages
                 if (User.Identity.IsAuthenticated)
                 {
                     Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-                    if (Permission.EstGestionnaireDeContenu(idConnectedUser, _db))
+                    if (Permission.VerifierAccesGdC(idConnectedUser, _db))
                     {
                         bool modificationTutoStatus = false;
                         Input.id = formData.idTutoP;
@@ -315,7 +315,7 @@ namespace Gwenael.Web.Pages
             if (User.Identity.IsAuthenticated)
             {
                 Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-                if (Permission.EstGestionnaireDeContenu(idConnectedUser, _db))
+                if (Permission.VerifierAccesGdC(idConnectedUser, _db))
                 {
                     return Redirect("/tutoriel/CreationTuto");
                 }
@@ -330,7 +330,7 @@ namespace Gwenael.Web.Pages
                 if (User.Identity.IsAuthenticated)
                 {
                     Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-                    if (Permission.EstGestionnaireDeContenu(idConnectedUser, _db))
+                    if (Permission.VerifierAccesGdC(idConnectedUser, _db))
                     {
                         string status = "false";
                         if (!_db.CategoriesTutos.Where(c => c.Nom == Input.nomCategorie).Any())
@@ -384,7 +384,7 @@ namespace Gwenael.Web.Pages
                 if (User.Identity.IsAuthenticated)
                 {
                     Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-                    if (Permission.EstGestionnaireDeContenu(idConnectedUser, _db))
+                    if (Permission.VerifierAccesGdC(idConnectedUser, _db))
                     {
                         bool estAjoutee = false;
                         Input.id = formData.idTutoP;
@@ -453,7 +453,7 @@ namespace Gwenael.Web.Pages
                 if (User.Identity.IsAuthenticated)
                 {
                     Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-                    if (Permission.EstGestionnaireDeContenu(idConnectedUser, _db))
+                    if (Permission.VerifierAccesGdC(idConnectedUser, _db))
                     {
                         Input.id = id;
                         Input.handler = handler;
@@ -479,7 +479,7 @@ namespace Gwenael.Web.Pages
                 if (User.Identity.IsAuthenticated)
                 {
                     Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-                    if (Permission.EstGestionnaireDeContenu(idConnectedUser, _db))
+                    if (Permission.VerifierAccesGdC(idConnectedUser, _db))
                     {
                         Input.handler = "TutoRangee";
                         Input.id = tutoId;
@@ -504,7 +504,7 @@ namespace Gwenael.Web.Pages
                 if (User.Identity.IsAuthenticated)
                 {
                     Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-                    if (Permission.EstGestionnaireDeContenu(idConnectedUser, _db))
+                    if (Permission.VerifierAccesGdC(idConnectedUser, _db))
                     {
                         bool estEdit = false;
                         Input.id = formData.idTutoP;
@@ -587,7 +587,7 @@ namespace Gwenael.Web.Pages
                 if (User.Identity.IsAuthenticated)
                 {
                     Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-                    if (Permission.EstGestionnaireDeContenu(idConnectedUser, _db))
+                    if (Permission.VerifierAccesGdC(idConnectedUser, _db))
                     {
                         Input.handler = "TutoRangee";
                         Input.id = r.IdtutoVal;
@@ -625,7 +625,7 @@ namespace Gwenael.Web.Pages
                 if (User.Identity.IsAuthenticated)
                 {
                     Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-                    if (Permission.EstGestionnaireDeContenu(idConnectedUser, _db))
+                    if (Permission.VerifierAccesGdC(idConnectedUser, _db))
                     {
                         Input.id = id;
 
@@ -661,7 +661,7 @@ namespace Gwenael.Web.Pages
                 if (User.Identity.IsAuthenticated)
                 {
                     Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-                    if (Permission.EstGestionnaireDeContenu(idConnectedUser, _db))
+                    if (Permission.VerifierAccesGdC(idConnectedUser, _db))
                     {
                         RangeeTutos oldRt = _db.RangeeTutos.Where(
                             rt => rt.Id == Guid.Parse(rangeeSwitchData.IdOld)).First();

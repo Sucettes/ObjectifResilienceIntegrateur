@@ -52,7 +52,7 @@ namespace Gwenael.Web.Pages
             if (User.Identity.IsAuthenticated)
             {
                 Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-                if (Permission.EstGestionnaireDeContenu(idConnectedUser, _db))
+                if (Permission.VerifierAccesGdC(idConnectedUser, _db))
                     Input.droitAccess = true;
                 else Input.droitAccess = false;
             }
