@@ -36,10 +36,17 @@ namespace Gwenael.Web.Pages
             //    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
             //    if (Permission.EstAdministrateur(idConnectedUser, _context))
             //    {
-            lstCategories = _context.CategoriesTutos.ToList<CategoriesTutos>();
+            if (DynamicQueryableExtensions.Any(_context.CategoriesTutos))
+            {
+                lstCategories = _context.CategoriesTutos.ToList<CategoriesTutos>();
+            }
+            if (DynamicQueryableExtensions.Any(_context.Audios))
+            {
+                audios = await _context.Audios.ToListAsync();
+                ViewData["lstAudios"] = audios;
+            }
 
-            audios = await _context.Audios.ToListAsync();
-            ViewData["lstAudios"] = audios;
+           
 
             if (Request.Query.Count == 1)
             {
@@ -93,7 +100,7 @@ namespace Gwenael.Web.Pages
             if (Tab == null || Tab == "")
             {
                 ViewData["Tab"] = "utilisateurs";
-                return Page();
+                return Redirect("/AdminMenu/?tab=utilisateurs");
             }
             else
             {
