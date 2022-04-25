@@ -21,21 +21,21 @@ $('[data-registerRequest]').on('click', event => {
             contentType: false,
             processData: false,
             success: function (data) {
-                //if (data.msgSuccess != null) {
-                //    $('.msgSucceeded').append("<div class='alert alert-primary' role='alert'>" + data.msgSuccess + "</div>");
-                //    setTimeout(function () {
-                //        window.location.href = '/Index';
-                //    }, 10000);
-                //}
-                //else {
-                if (data.erreurPassword != null) {
-                    document.getElementById('msgErreurPassword').textContent = data.erreurPassword;
-                    document.getElementById('msgErreurConfPassword').textContent = data.erreurPassword;
+                if (data.msgSuccess != null) {
+                    $('.msgSucceeded').append("<div class='alert alert-primary' role='alert'>" + data.msgSuccess + "</div>");
+                    setTimeout(function () {
+                        window.location.href = '/Index';
+                    }, 10000);
                 }
-                if (data.erreurCourriel != null) {
-                    document.getElementById('msgErreurCourriel').textContent = data.erreurCourriel;
+                else {
+                    if (data.erreurPassword != null) {
+                        document.getElementById('msgErreurPassword').textContent = data.erreurPassword;
+                        document.getElementById('msgErreurConfPassword').textContent = data.erreurPassword;
+                    }
+                    if (data.erreurCourriel != null) {
+                        document.getElementById('msgErreurCourriel').textContent = data.erreurCourriel;
+                    }
                 }
-                //}
             },
             error: function () {
                 document.getElementById('msgErreurCourriel').textContent = "Ce courriel est déjà lié à un compte";
