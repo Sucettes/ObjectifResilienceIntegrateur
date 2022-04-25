@@ -81,14 +81,12 @@
                     pagination.insertBefore(pageLink, pagination.children[pagination.children.length -1])
                 }
 
-                //for (var i = 0; i < 9; i++) {
                 for (var i = ((9 * currentPosition)-9); i < (currentPosition*9); i++) {
                     scriptRechercheUtils.creationCarteItem(i);
                 }
             } else {
                 let $msgAucunItem = $('<div class="alert alert-warning" role="alert" style="width:100%;"><p style="color:black">Aucun résultats trouvé!</p></div>');
                 $('#zoneCardTuto').parent().append($msgAucunItem);
-                //$('#zoneCardTuto').append($msgAucunItem);
             }
         },
         creationCarteItem: (i) => {

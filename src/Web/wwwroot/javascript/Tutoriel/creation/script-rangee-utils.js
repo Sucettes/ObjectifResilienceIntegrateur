@@ -304,11 +304,11 @@
                     inputRdGauche.setAttribute('type', 'radio');
                     inputRdGauche.setAttribute('value', 'left');
                     inputRdGauche.setAttribute('name', 'positionImage');
-                    inputRdGauche.setAttribute('id', 'imageLeft');
+                    inputRdGauche.setAttribute('id', ('imageLeft' + scriptRangeeUtils.currTargetToModifier.form[0].value));
 
                     let labelGauche = document.createElement('label');
                     labelGauche.className = 'form-check-label';
-                    labelGauche.setAttribute('for', 'imageLeft');
+                    labelGauche.setAttribute('for', ('imageLeft' + scriptRangeeUtils.currTargetToModifier.form[0].value));
                     labelGauche.setAttribute('style', 'margin:0;');
                     labelGauche.textContent = 'Gauche';
 
@@ -320,11 +320,11 @@
                     inputRdDroit.setAttribute('type', 'radio');
                     inputRdDroit.setAttribute('value', 'right');
                     inputRdDroit.setAttribute('name', 'positionImage');
-                    inputRdDroit.setAttribute('id', 'imageRight');
+                    inputRdDroit.setAttribute('id', ('imageRight' + scriptRangeeUtils.currTargetToModifier.form[0].value));
 
                     let labelDroite = document.createElement('label');
                     labelDroite.className = 'form-check-label';
-                    labelDroite.setAttribute('for', 'imageRight');
+                    labelDroite.setAttribute('for', ('imageRight' + scriptRangeeUtils.currTargetToModifier.form[0].value));
                     labelDroite.setAttribute('style', 'margin:0;');
                     labelDroite.textContent = 'Droite';
 
