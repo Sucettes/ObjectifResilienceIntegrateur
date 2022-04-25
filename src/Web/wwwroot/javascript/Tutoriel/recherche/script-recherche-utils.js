@@ -87,7 +87,8 @@
                 }
             } else {
                 let $msgAucunItem = $('<div class="alert alert-warning" role="alert" style="width:100%;"><p style="color:black">Aucun résultats trouvé!</p></div>');
-                $('#zoneCardTuto').append($msgAucunItem);
+                $('#zoneCardTuto').parent().append($msgAucunItem);
+                //$('#zoneCardTuto').append($msgAucunItem);
             }
         },
         creationCarteItem: (i) => {
@@ -105,7 +106,7 @@
             }
             let $divBody = $('<div class="card-body"></div>');
 
-            $divBody.append($('<h4 class="card-title" style="text-align:center;">' + tutoData.titre + '</h4>'));
+            $divBody.append($('<h4 class="card-title" style="text-align:center;word-break: break-all;">' + tutoData.titre + '</h4>'));
             if (tutoData.estPublier == true) {
                 $divBody.append($('<p style="color:#38b000; font-weight: bold;">États: Publié</p>'));
             } else {
