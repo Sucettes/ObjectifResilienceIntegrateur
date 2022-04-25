@@ -87,7 +87,7 @@ namespace Gwenael.Web.Pages.Account
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ModelState.AddModelError(string.Empty, "Votre compte est en attente de validation.");
                     return Page();
                 }
             }
