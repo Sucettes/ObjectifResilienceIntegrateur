@@ -38,6 +38,8 @@ namespace Gwenael.Web.Pages
         }
         public IActionResult OnGet()
         {
+            Input = new InputModel();
+
             if (User.Identity.IsAuthenticated)
             {
                 Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
@@ -45,8 +47,6 @@ namespace Gwenael.Web.Pages
                     Input.droitAccess = true;
                 else Input.droitAccess = false;
             } else Input.droitAccess = false;
-
-            Input = new InputModel();
 
             if (Request.Query.Count >= 1)
             {
