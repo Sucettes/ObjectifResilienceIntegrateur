@@ -11,6 +11,7 @@
 .pageBox {
     margin-top: 3rem;
     margin-bottom: 3rem;
+    padding:1rem;
     background-color: #ffa733;
 }
 
@@ -78,6 +79,7 @@ a:link {
 
 .articleContainer {
     display: flex;
+
 }
 
 @media (max-width: 770px) {
@@ -138,7 +140,9 @@ h3 {
 
 .articleTitle {
     position: relative;
-    background-color: rgba(255, 167, 51,0.5);
+    background-color: rgba(255, 167, 51,1);
     z-index: 0;
     top: 2.2rem;
+    padding: 1rem;
+    font-family: Cabin Sketch;
 }
