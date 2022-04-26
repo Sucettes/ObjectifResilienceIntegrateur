@@ -39,7 +39,7 @@ namespace Gwenael.Web.Pages.Account
             Dictionary<string, string> dictError = new Dictionary<string, string>();
             if (registerForm.password.Length < 6 || registerForm.password.Length > 100 || registerForm.confPassword.Length > 100 || registerForm.confPassword.Length < 6 && registerForm.confPassword != registerForm.password)
             {
-                dictError.Add("erreurPassword", "Le mot de passe doit contenir un minimum de 6 caractères et un maximum de 100 caracteres.");
+                dictError.Add("erreurPassword", "Le mot de passe doit contenir un minimum de 6 caractères et un maximum de 100 caractères.");
             }
             else
             {
@@ -79,7 +79,7 @@ namespace Gwenael.Web.Pages.Account
                 var result = await _userManager.CreateAsync(user, registerForm.password);
                 if (result.Succeeded)
                 {
-                    dictError.Add("msgSuccess", "Nous avons bien recu votre demande. Elle sera traitee dans les plus brefs delais. Vous allez etre redirige dans 10 secondes.");
+                    dictError.Add("msgSuccess", "Nous avons bien reçu votre demande. Elle sera traitée dans les plus brefs délais. Vous allez être redirigé dans 10 secondes.");
                     return new JsonResult(dictError);
                 }
                 foreach (var error in result.Errors)
