@@ -6,6 +6,9 @@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     ViewData["Title"] = "Admin menu";
+    User userRole1 = (User)ViewData["selectedUser"];
+    IList<User> userList1 = (IList<User>)ViewData["lstUsers"];
+    List<(User, List<Role>)> lstTupleUser = (List<(User, List<Role>)>)ViewData["tupleUsers"];
 }
 <!-- Entête de la page (Titre + btn retour) -->
 <nav class="navbar navbar-light shadow-sm">
@@ -27,7 +30,7 @@
                     <a href="?tab=poadcasts" class="nav-link">Poadcasts</a>
                     <form method="post" style="display:flex; justify-content: right;">
                         <div style="display: flex;justify-content:right;">
-                            <input class="form-control me-2" type="search" placeholder="Recherche" name="rechercheValeurUtilisateur">
+                            <input class="form-control me-2" type="search" placeholder="Recherche" required name="rechercheValeurUtilisateur">
                             <button data-filtreRecherche class="btn btn-outline-primary" type="submit">Recherche</button>
                         </div>
                     </form>
@@ -45,6 +48,12 @@
                     <a href="?tab=roles" class="nav-link">Rôles</a>
                     <a href="?tab=demandes" class="nav-link active">Demandes</a>
                     <a href="?tab=poadcasts" class="nav-link">Poadcasts</a>
+                    <form method="post" style="display:flex; justify-content: right;">
+                        <div style="display: flex;justify-content:right;">
+                            <input class="form-control me-2" type="search" placeholder="Recherche" required name="rechercheValeurDemande">
+                            <button data-filtreRecherche class="btn btn-outline-primary" type="submit">Recherche</button>
+                        </div>
+                    </form>
                 }
                 @if (ViewData["Tab"].ToString() == "poadcasts")
                 {
@@ -56,8 +65,8 @@
             }
         </div>
     </nav>
+    <br />
     <table class="table">
-
         @if (ViewData["Tab"] is not null)
         {
             @if (@ViewData["Tab"].ToString() == "roles")
@@ -71,13 +80,44 @@
                 <tr>
                     <th>
                         <div class="list-group" id="myList" role="tablist">
-                            @foreach (var user in ViewData["lstUsers"] as IList<User>)
+                            @if (ViewData["selectedUser"] is not null)
                             {
-                                <a href="?tab=roles&guid=@user.Id" class="list-group-item list-group-item-action">@user.Email</a>
+                                <h3>Utilisateur Selectionné</h3>
+                                <a class="list-group-item list-group-item-action">@userRole1.Email</a>
+                            }
+                        </div>
+                        <br />
+                        <br />
+                        <form method="post" style="display:flex; justify-content: space-evenly;">
+                            <div style="display: flex;justify-content:space-evenly;">
+                                <input class="form-control" type="search" placeholder="Recherche" required name="rechercheValeurUtilisateurRole">
+                                <button data-filtreRecherche class="btn btn-outline-primary" type="submit" name="btnRechercheRole">Recherche</button>
+                            </div>
+                        </form>
+                        <br />
+                        <div class="list-group" id="myList" role="tablist">
+                            @if (ViewData["lstUsers"] is not null && userList1.Count > 0)
+                            {
+                                @foreach (var user in ViewData["lstUsers"] as IList<User>)
+                                {
+                                    <a href="?tab=roles&guid=@user.Id" class="list-group-item list-group-item-action">@user.Email</a>
+                                }
+                            }
+                            else
+                            {
+                                <div class="container">
+                                    <div class="row alert alert-info" style="background-color:#cfe2ff;">
+                                        <div class="col-12">
+                                            <p style="text-align:center;color:#084298;">Aucun résultats</p>
+                                        </div>
+                                    </div>
+                                </div>
                             }
                         </div>
                     </th>
                     <th>
+                        <br />
+                        <br />
                         @if (ViewData["msgErreur"] is not null)
                         {
                             <div class="alert alert-danger" role="alert">
@@ -151,29 +191,42 @@
                         <th scope="col"><a asp-page="user" asp-route-id="" class="btn btn-primary btn-sm"><img src="~/icons/addIcon.svg" /></a></th>
                     </tr>
                 </thead>
-                @foreach (var tupleUser in ViewData["tupleUsers"] as List<(User, List<Role>)>)
+                @if (ViewData["tupleUsers"] is not null && lstTupleUser.Count > 0)
                 {
-                    <tbody>
-                        <tr>
-                            @if (tupleUser.Item1.Active == true)
-                            {
-                                <td><img src="~/icons/valide.svg" style="width: 1em; height:1em;" /></td>
-                            }
-                            else
-                            {
-                                <td></td>
-                            }
-                            <td>@tupleUser.Item1.Email</td>
-                            <td>
-                                @foreach (var role in tupleUser.Item2 as List<Role>)
+                    @foreach (var tupleUser in ViewData["tupleUsers"] as List<(User, List<Role>)>)
+                    {
+                        <tbody>
+                            <tr>
+                                @if (tupleUser.Item1.Active == true)
                                 {
-                                    @role
+                                    <td><img src="~/icons/valide.svg" style="width: 1em; height:1em;" /></td>
                                 }
-                            </td>
-                            <td>@tupleUser.Item1.CreationDate.ToString("dd/MM/yyyy")</td>
-                            <td><a asp-page="user" asp-route-id="@tupleUser.Item1.Id" class="btn btn-primary btn-sm"><img src="~/icons/editIcon.svg" style="width:2em;height:2em;" /></a></td>
-                        </tr>
-                    </tbody>
+                                else
+                                {
+                                    <td></td>
+                                }
+                                <td>@tupleUser.Item1.Email</td>
+                                <td>
+                                    @foreach (var role in tupleUser.Item2 as List<Role>)
+                                    {
+                                        <p>@role</p>
+                                    }
+                                </td>
+                                <td>@tupleUser.Item1.CreationDate.ToString("dd/MM/yyyy")</td>
+                                <td><a asp-page="user" asp-route-id="@tupleUser.Item1.Id" class="btn btn-primary btn-sm"><img src="~/icons/editIcon.svg" style="width:2em;height:2em;" /></a></td>
+                            </tr>
+                        </tbody>
+                    }
+                }
+                else
+                {
+                    <div class="container">
+                        <div class="row alert alert-info" style="background-color:#cfe2ff;">
+                            <div class="col-12">
+                                <p style="text-align:center;color:#084298;">Aucun résultats</p>
+                            </div>
+                        </div>
+                    </div>
                 }
             }
             @if (ViewData["Tab"].ToString() == "demandes")
@@ -187,16 +240,32 @@
                                 <div class="col-6">
                                     <p>@user.UserName</p>
                                 </div>
-                                <div class="col-3"></div>
-                                <div class="col-sm">
+                                <div class="col-3">
                                     <form method="post">
                                         <input type="hidden" name="name" value="@user.Id" />
                                         <input name="btnAccepter" type="submit" value="Accepter" class="btn btn-primary form-control" />
                                     </form>
                                 </div>
+                                <div class="col-sm">
+                                    <form method="post">
+                                        <input type="hidden" name="name" value="@user.Id" />
+                                        <input name="btnRefuser" type="submit" value="Refuser" class="btn btn-danger form-control" />
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     }
+                }
+                else
+                {
+                    <br />
+                    <div class="container">
+                        <div class="row alert alert-info" style="background-color:#cfe2ff;">
+                            <div class="col-12">
+                                <p style="text-align:center;color:#084298;">Aucune demande</p>
+                            </div>
+                        </div>
+                    </div>
                 }
             }
             @if (ViewData["Tab"].ToString() == "poadcasts")
@@ -221,6 +290,17 @@
                             </a>
                         }
                     }
+                }
+                else
+                {
+                    <br />
+                    <div class="container">
+                        <div class="row alert alert-info" style="background-color:#cfe2ff;">
+                            <div class="col-12">
+                                <p style="text-align:center;color:#084298;">Aucun poadcast</p>
+                            </div>
+                        </div>
+                    </div>
                 }
 
             }

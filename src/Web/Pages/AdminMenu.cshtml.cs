@@ -36,17 +36,6 @@ namespace Gwenael.Web.Pages
             //Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
             //    if (Permission.EstAdministrateur(idConnectedUser, _context))
             //    {
-            if (DynamicQueryableExtensions.Any(_context.CategoriesTutos))
-            {
-                lstCategories = _context.CategoriesTutos.ToList<CategoriesTutos>();
-            }
-            if (DynamicQueryableExtensions.Any(_context.Audios))
-            {
-                audios = await _context.Audios.ToListAsync();
-                ViewData["lstAudios"] = audios;
-            }
-
-           
 
             if (Request.Query.Count == 1)
             {
@@ -59,24 +48,38 @@ namespace Gwenael.Web.Pages
                 ViewData["Tab"] = Tab;
                 if (Tab == "roles")
                 {
-                    Guid selectedUserId = Guid.Parse(Request.Query["guid"]);
-                    if (DynamicQueryableExtensions.Any(_context.Roles))
+                    string champGuid = Request.Query["guid"];
+                    string champRecherche = Request.Query["recherche"];
+                    if (champGuid is not null)
                     {
-                        List<Role> lstRolesUser = Permission.ObtenirLstRolesUser(selectedUserId, _context);
-                        ViewData["userRoles"] = lstRolesUser;
-                        ViewData["selectRoles"] = ObtenirLstRolesSelect(lstRolesUser);
-                    }
-                    else
-                    {
+                        Guid selectedUserId = Guid.Parse(Request.Query["guid"]);
+                        if (DynamicQueryableExtensions.Any(_context.Roles))
+                        {
+                            List<Role> lstRolesUser = Permission.ObtenirLstRolesUser(selectedUserId, _context);
+                            ViewData["userRoles"] = lstRolesUser;
+                            ViewData["selectRoles"] = ObtenirLstRolesSelect(lstRolesUser);
+                            User userSelected = _context.Users.Find(selectedUserId);
+                            ViewData["selectedUser"] = _context.Users.Find(selectedUserId);
+                        }
+                        else
+                        {
 
-                        string[] jjj = { "" };
-                        Role roleAdmin = new("Administrateur", jjj, true);
-                        Role roleGDC = new("Gestionnaire de contenu", jjj, true);
-                        Role roleUser = new("Utilisateur", jjj, true);
-                        _context.Add(roleAdmin);
-                        _context.Add(roleGDC);
-                        _context.Add(roleUser);
-                        _context.SaveChanges();
+                            string[] jjj = { "" };
+                            Role roleAdmin = new("Administrateur", jjj, true);
+                            Role roleGDC = new("Gestionnaire de contenu", jjj, true);
+                            Role roleUser = new("Utilisateur", jjj, true);
+                            _context.Add(roleAdmin);
+                            _context.Add(roleGDC);
+                            _context.Add(roleUser);
+                            _context.SaveChanges();
+                            return Redirect("/AdminMenu/?tab=roles");
+                        }
+                    }
+                    else if (champRecherche is not null)
+                    {
+                        List<User> usersFiltre = _context.Users.Where(u => u.Email.Contains(champRecherche)).ToList();
+                        ViewData["lstUsers"] = usersFiltre;
+                        return Page();
                     }
                 }
                 else if (Tab == "utilisateurs")
@@ -85,13 +88,26 @@ namespace Gwenael.Web.Pages
                     if (recherche != null)
                     {
                         List<User> userList = _context.Users.Where(u => u.Email.Contains(recherche)).ToList();
-                        ViewData["lstUsers"] = userList;
                         ViewData["tupleUsers"] = getListUserAndRoles(userList);
                         ViewData["Tab"] = "utilisateurs";
                         return Page();
                     }
-                   
                 }
+                else if (Tab == "demandes")
+                {
+                    string recherche = Request.Query["recherch"];
+                    if (recherche != null)
+                    {
+                        Users = await _context.Users.ToListAsync();
+                        ViewData["lstUsers"] = Users;
+                        UsersNonActivated = _context.Users.Where(u => u.Active == false && u.Email.Contains(recherche)).ToList();
+                        if (UsersNonActivated.Count != 0)
+                        {
+                            ViewData["lstNonActiver"] = UsersNonActivated;
+                        }
+                    }
+                }
+               
                 string erreur = Request.Query["error"];
                 if (erreur != null)
                 {
@@ -105,11 +121,38 @@ namespace Gwenael.Web.Pages
             }
             else
             {
-                Users = await _context.Users.ToListAsync();
-                ViewData["lstUsers"] = Users;
-                ViewData["tupleUsers"] = getListUserAndRoles((List<User>)Users);
-                UsersNonActivated = _context.Users.Where(u => u.Active == false).ToList();
-                ViewData["lstNonActiver"] = UsersNonActivated;
+                if (Tab == "poadcasts")
+                {
+                    //if (DynamicQueryableExtensions.Any(_context.CategoriesTutos))
+                    //{
+                    //    lstCategories = _context.CategoriesTutos.ToList<CategoriesTutos>();
+                    //}
+                    if (DynamicQueryableExtensions.Any(_context.Audios))
+                    {
+                        audios = await _context.Audios.ToListAsync();
+                        ViewData["lstAudios"] = audios;
+                    }
+                }
+                else if (Tab == "utilisateurs")
+                {
+                    Users = await _context.Users.ToListAsync();
+                    ViewData["tupleUsers"] = getListUserAndRoles((List<User>)Users);
+                }
+                else if (Tab == "demandes")
+                {
+                    Users = await _context.Users.ToListAsync();
+                    ViewData["lstUsers"] = Users;
+                    UsersNonActivated = _context.Users.Where(u => u.Active == false).ToList();
+                    if (UsersNonActivated.Count != 0)
+                    {
+                        ViewData["lstNonActiver"] = UsersNonActivated;
+                    }
+                }
+                else if (Tab == "roles")
+                {
+                    Users = await _context.Users.ToListAsync();
+                    ViewData["lstUsers"] = Users;
+                }
                 return Page();
             }
             //}
@@ -126,15 +169,13 @@ namespace Gwenael.Web.Pages
             }
             return tupleUsers;
         }
-        public async Task<IActionResult> OnPostAsync(string rechercheValeurUtilisateur, string btnDeleteRole, string name, string selectRole, string btnAccepter, int? id)
+        public async Task<IActionResult> OnPostAsync(string rechercheValeurDemande,string rechercheValeurUtilisateur, string rechercheValeurUtilisateurRole, string btnDeleteRole, string name, string selectRole, string btnAccepter, string btnRefuser, int? id)
         {
             //if (User.Identity.IsAuthenticated)
             //{
             //    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
             //if (Permission.EstAdministrateur(idConnectedUser, _context))
             //{
-            
-
             if (btnDeleteRole is not null)
             {
                 Guid selectedUserId = Guid.Parse(Request.Query["guid"]);
@@ -171,24 +212,34 @@ namespace Gwenael.Web.Pages
             }
             else if (btnAccepter is not null)
             {
-                //// Modification Active à true
                 User userBd = (User)_context.Users.Where(u => u.Id == Guid.Parse(name)).First();
                 userBd.Active = true;
-                _context.UserRoles.Add(new UserRole(userBd.Id,_context.Roles.Where(r => r.Name == "Utilisateur").First().Id));
+                _context.UserRoles.Add(new UserRole(userBd.Id, _context.Roles.Where(r => r.Name == "Utilisateur").First().Id));
                 await _context.SaveChangesAsync();
                 return Redirect("/AdminMenu/?tab=demandes");
             }
-            else if (rechercheValeurUtilisateur is not null)
+            else if (btnRefuser is not null)
             {
-                return Redirect("/AdminMenu/?tab=utilisateurs&recherche="+rechercheValeurUtilisateur);
+                User userBd = (User)_context.Users.Where(u => u.Id == Guid.Parse(name)).First();
+                _context.Users.Remove(userBd);
+                await _context.SaveChangesAsync();
+                return Redirect("/AdminMenu/?tab=demandes");
             }
-            else
+            if (rechercheValeurUtilisateurRole is not null)
             {
-                return Redirect("/AdminMenu/?tab=utilisateurs&recherche=");
+                return Redirect("/AdminMenu/?tab=roles&recherche=" + rechercheValeurUtilisateurRole);
+            }
+            if (rechercheValeurUtilisateur is not null)
+            {
+                return Redirect("/AdminMenu/?tab=utilisateurs&recherche=" + rechercheValeurUtilisateur);
+            }
+            if (rechercheValeurDemande is not null)
+            {
+                return Redirect("/AdminMenu/?tab=demandes&recherche=" + rechercheValeurDemande);
             }
             //}
             //}
-            //return Redirect("/");
+            return Redirect("/AdminMenu");
         }
 
         public Guid ObtenirIdDuUserSelonEmail(string email)
