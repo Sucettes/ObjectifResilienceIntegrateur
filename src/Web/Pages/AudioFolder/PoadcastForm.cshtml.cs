@@ -30,8 +30,7 @@ namespace Gwenael.Web.Pages
         [BindProperty(SupportsGet = true)]
                
         public Audio audio { get; set; }
-        
-        
+                
         public IList<Audio> audios { get; set; }
        
         public InputModel Input { get; set; }
@@ -39,7 +38,7 @@ namespace Gwenael.Web.Pages
         public void OnGet()
         {
             Input = new InputModel();
-            Input.lstCategories = _context.CategoriesTutos.ToList<CategoriesTutos>();
+            Input.lstCategories = _context.CategoriesTutos.ToList();
         }
 
         public class InputModel
@@ -47,7 +46,6 @@ namespace Gwenael.Web.Pages
             public IFormFile FormFileAudio { get; set; }
         
             public List<CategoriesTutos> lstCategories { get; set; }
-
         }
         
         public async Task<IActionResult> OnPost(string titre, string description, string categorie, IFormFile fileAudio, IFormFile fileImage)
@@ -62,9 +60,7 @@ namespace Gwenael.Web.Pages
             CategoriesTutos cat = _context.CategoriesTutos.Where(c => c.Nom == categorie).First();
 
             using (var client = new AmazonS3Client("AKIAVDH3AEDD6PUJMKGG", "kKV5WKu0tFe8Svl2QdTIMIydLc7CGSMiy2h+KOvV", RegionEndpoint.CACentral1))
-            {
-                
-                
+            {               
                 using (var newMemoryStream = new MemoryStream())
                 {
                 fileAudio.CopyTo(newMemoryStream);

@@ -2,7 +2,6 @@
 $(document).ready(function () {
 
     let id;
-    console.log("test2" + id)
     var toastRD = document.getElementById('toastTutoCree');
     // QUand le toast a fini de ce cacher
     toastRD.addEventListener('hide.bs.toast', function () {
@@ -46,16 +45,18 @@ $(document).ready(function () {
 
         $('#imgBanierre').attr('src', data.value.imgUrl);
         id = data.id;
-        console.log("test1:" + id);
         const state = { 'id': data.id, 'handler': 'CreeTutorielDetails' };
         const url = '/Tutoriel/CreationTuto';
 
         history.pushState(state, '', url);
 
-        $('#btnCreeTuto').removeClass('btn btn-outline-primary')
+        $('#btnCreeTuto').removeClass('btn btn-outline-primary');
         $('#btnCreeTuto').addClass('btn disabled btn-primary');
-        $('#btnModifierTuto').removeClass('btn disabled btn-primary')
+        $('#btnModifierTuto').removeClass('btn disabled btn-primary');
         $('#btnModifierTuto').addClass('btn btn-outline-primary');
+
+        $('#btnPublieTuto').removeClass('btn disabled btn-primary');
+        $('#btnPublieTuto').addClass('btn btn-outline-primary');
 
         $('#idTutoP').val(data.value.idTutoP);
 

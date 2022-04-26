@@ -17,16 +17,15 @@ namespace Gwenael.Web.Pages
     public class AdminMenuModel : PageModel
     {
         private UserManager<User> _userManager;
-        private readonly GwenaelDbContext _context;
         public AdminMenuModel(GwenaelDbContext context, UserManager<User> pUserManager)
         {
             _context = context;
             _userManager = pUserManager;
         }
         public IList<User> Users { get; set; }
+        public GwenaelDbContext _context { get; set; }
         [BindProperty]
         public IList<User> UsersNonActivated { get; set; }
-
         public IList<Audio> audios { get; set; }
         public List<CategoriesTutos> lstCategories { get; set; }
         public String Tab { get; set; }
@@ -34,12 +33,20 @@ namespace Gwenael.Web.Pages
         {
             //if (User.Identity.IsAuthenticated)
             //{
-            //    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
+            //Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
             //    if (Permission.EstAdministrateur(idConnectedUser, _context))
             //    {
+            if (DynamicQueryableExtensions.Any(_context.CategoriesTutos))
+            {
+                lstCategories = _context.CategoriesTutos.ToList<CategoriesTutos>();
+            }
+            if (DynamicQueryableExtensions.Any(_context.Audios))
+            {
+                audios = await _context.Audios.ToListAsync();
+                ViewData["lstAudios"] = audios;
+            }
 
-            audios = await _context.Audios.ToListAsync();
-            ViewData["lstAudios"] = audios;
+           
 
             if (Request.Query.Count == 1)
             {
@@ -72,30 +79,54 @@ namespace Gwenael.Web.Pages
                         _context.SaveChanges();
                     }
                 }
+                else if (Tab == "utilisateurs")
+                {
+                    string recherche = Request.Query["recherche"];
+                    if (recherche != null)
+                    {
+                        List<User> userList = _context.Users.Where(u => u.Email.Contains(recherche)).ToList();
+                        ViewData["lstUsers"] = userList;
+                        ViewData["tupleUsers"] = getListUserAndRoles(userList);
+                        ViewData["Tab"] = "utilisateurs";
+                        return Page();
+                    }
+                   
+                }
                 string erreur = Request.Query["error"];
                 if (erreur != null)
                 {
                     ViewData["msgErreur"] = "Vous ne pouvez pas retirer votre accès administrateur";
                 }
             }
-            Users = await _context.Users.ToListAsync();
-            ViewData["lstUsers"] = Users;
-            UsersNonActivated = _context.Users.Where(u => u.Active == false).ToList();
-            ViewData["lstNonActiver"] = UsersNonActivated;
             if (Tab == null || Tab == "")
             {
                 ViewData["Tab"] = "utilisateurs";
-                return Page();
-
+                return Redirect("/AdminMenu/?tab=utilisateurs");
             }
-            return Page();
+            else
+            {
+                Users = await _context.Users.ToListAsync();
+                ViewData["lstUsers"] = Users;
+                ViewData["tupleUsers"] = getListUserAndRoles((List<User>)Users);
+                UsersNonActivated = _context.Users.Where(u => u.Active == false).ToList();
+                ViewData["lstNonActiver"] = UsersNonActivated;
+                return Page();
+            }
             //}
             //    }
             //    return Redirect("/");
             //}
         }
-
-        public async Task<IActionResult> OnPostAsync(string btnDeleteRole, string name, string selectRole, string btnAccepter, string btnAjouterPoadcast, string btnSupprimerPoadcast, int? id)
+        public List<(User,List<Role>)> getListUserAndRoles(List<User> pLstUser)
+        {
+            List<(User, List<Role>)> tupleUsers = new List<(User, List<Role>)>();
+            foreach (User user in pLstUser)
+            {
+                tupleUsers.Add((user, Permission.ObtenirLstRolesUser(user.Id, _context)));
+            }
+            return tupleUsers;
+        }
+        public async Task<IActionResult> OnPostAsync(string rechercheValeurUtilisateur, string btnDeleteRole, string name, string selectRole, string btnAccepter, int? id)
         {
             //if (User.Identity.IsAuthenticated)
             //{
@@ -143,39 +174,23 @@ namespace Gwenael.Web.Pages
                 //// Modification Active à true
                 User userBd = (User)_context.Users.Where(u => u.Id == Guid.Parse(name)).First();
                 userBd.Active = true;
+                _context.UserRoles.Add(new UserRole(userBd.Id,_context.Roles.Where(r => r.Name == "Utilisateur").First().Id));
                 await _context.SaveChangesAsync();
                 return Redirect("/AdminMenu/?tab=demandes");
             }
-            else if(btnAjouterPoadcast is not null)
+            else if (rechercheValeurUtilisateur is not null)
             {
-                Audio audioBd = (Audio)_context.Audios.Where(u => u.ID == Guid.Parse(name)).First();
-                audioBd.EstPublier = true;
-                await _context.SaveChangesAsync();
-                return Redirect("/AdminMenu/?tab=poadcasts");
+                return Redirect("/AdminMenu/?tab=utilisateurs&recherche="+rechercheValeurUtilisateur);
             }
-            else if (btnSupprimerPoadcast is not null)
+            else
             {
-                if (id == null)
-                {
-                    return NotFound();
-                }
-
-                Audio audioBd =  _context.Audios.Find(id);
-
-                if (audioBd != null)
-                {
-                    _context.Audios.Remove(audioBd);
-                    await _context.SaveChangesAsync();
-                }
-
-                return RedirectToPage("/AdminMenu/?tab=poadcasts");
-
+                return Redirect("/AdminMenu/?tab=utilisateurs&recherche=");
             }
-            return Page();
             //}
             //}
             //return Redirect("/");
         }
+
         public Guid ObtenirIdDuUserSelonEmail(string email)
         {
             User user = (User)_context.Users.Where(u => u.UserName == email).First();

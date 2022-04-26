@@ -19,7 +19,7 @@
         }
         <div class="d-flex">
             <form method="post" asp-page="AdminMenu" style="margin-right:0.4rem;">
-                <button type="submit" class="btn btn-outline-primary" asp-page-handler="AdminMenu">Retour</button>
+                <button type="submit" class="btn btn-outline-primary" asp-page="AdminMenu">Retour</button>
             </form>
         </div>
     </div>
@@ -92,14 +92,14 @@
         @if (@ViewContext.RouteData.Values["id"] is not null)
         {
             <div class="row" style="justify-content:center">
-                <input name="btnSave" type="submit" value="Sauvegarder les changements" class="btn btn-success form-control" style="width:15em !important; margin:1em;" />
+                <input name="btnSave" type="submit" value="Sauvegarder les changements" class="btn btn-primary form-control" style="width:15em !important; margin:1em;" />
                 <input name="btnDelete" type="submit" value="Supprimer l'utilisateur" class="btn btn-danger form-control" style="width:15em !important; margin:1em;" />
             </div>
         }
         else
         {
             <div class="row" style="justify-content:center">
-                <input name="btnAdd" type="submit" value="Ajouter l'utilisateur" class="btn btn-success form-control" style="width:15em !important; margin:1em;" />
+                <input name="btnAdd" type="submit" value="Ajouter l'utilisateur" class="btn btn-primary form-control" style="width:15em !important; margin:1em;" />
                 <a name="btnAnnuler" class="btn btn-danger form-control" style="width:15em !important; margin:1em;" asp-page="AdminMenu">Annuler</a>
             </div>
         }

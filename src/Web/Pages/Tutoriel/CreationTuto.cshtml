@@ -26,7 +26,7 @@
                 <button type="submit" class="btn btn-outline-primary" asp-page-handler="RedirectHomeTuto">Retour</button>
             </form>
             <form method="post" asp-page="CreationTuto" style="margin-left:0.4rem;">
-                <button type="submit" class="btn btn-outline-primary" asp-route-id="@id" asp-page-handler="PublieTuto">Publié</button>
+                <button type="submit" id="btnPublieTuto" class="@(id.IsNullOrEmpty() ? "btn disabled btn-primary": "btn btn-outline-primary")" asp-route-id="@id" asp-page-handler="PublieTuto">Publié</button>
             </form>
         </div>
     </div>
@@ -54,10 +54,12 @@
                     <form method="post" asp-page="CreationTuto" enctype="multipart/form-data" id="formCreationTuto">
                         <input id="idTutoP" value="@id" hidden name="idTutoP" />
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-6" style="max-width:33.75rem;max-height:19.063rem;">
                                 @if (Model.Input.imgBannierUrl != null)
                                 {
-                                    <img class="shadow-lg" src="@Model.Input.imgBannierUrl" style="width:100%; height:100%;" id="imgBanierre" />
+                                    <a href="@Model.Input.imgBannierUrl" target="_blank">
+                                        <img class="shadow-lg" src="@Model.Input.imgBannierUrl" style="width:100%; height:100%;" id="imgBanierre" />
+                                    </a>
                                 }
                                 else
                                 {
@@ -88,8 +90,8 @@
                                 </div>
 
                                 <div class="input-group input-group-sm mb-3">
-                                    <label for="DifficulteRange" style="width: 100%;">Difficulté 1 à 10</label>
-                                    <input type="range" class="form-range" min="1" max="10" id="DifficulteRange" asp-for="@Model.Input.difficulte" required name="difficulte">
+                                    <label id="difficulteLbl" for="DifficulteRange" style="width: 100%;">Difficulté: 1</label>
+                                    <input type="range" class="form-range" min="1" max="10" id="DifficulteRange" asp-for="@Model.Input.difficulte" required name="difficulte" onchange="updateTextInput(this.value);">
                                 </div>
 
                                 <div class="input-group input-group-sm mb-3">
@@ -122,20 +124,33 @@
                         <div class="row">
                             <div class="col-12">
                                 <br />
-                                <h2>Introduction</h2>
 
-                                @*<div class="input-group">*@
-                                <div>
-                                    @if (!String.IsNullOrEmpty(@Model.Input.intro))
-                                    {
-                                        <textarea class="form-control shadow-sm" rows="7" name="intro" id="intro">@Model.Input.intro</textarea>
-                                    }
-                                    else
-                                    {
-                                        <textarea class="form-control shadow-sm" rows="7" name="intro" id="intro"></textarea>
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <h2>Introduction</h2>
+                                        @if (!String.IsNullOrEmpty(@Model.Input.intro))
+                                        {
+                                            <textarea class="form-control shadow-sm" rows="7" name="intro" id="intro">@Model.Input.intro</textarea>
+                                        }
+                                        else
+                                        {
+                                            <textarea class="form-control shadow-sm" rows="7" name="intro" id="intro"></textarea>
+                                        }
+                                    </div>
+                                    <div class="col-md-4">
+                                        <h2>Matériels</h2>
 
-                                    }
+                                        @if (!String.IsNullOrEmpty(@Model.Input.materiel))
+                                        {
+                                            <textarea class="form-control shadow-sm" rows="7" name="materiel" id="materiel">@Model.Input.materiel</textarea>
+                                        }
+                                        else
+                                        {
+                                            <textarea class="form-control shadow-sm" rows="7" name="materiel" id="materiel"></textarea>
+                                        }
+                                    </div>
                                 </div>
+                                
                             </div>
                         </div>
 
@@ -162,11 +177,11 @@
                                         {
                                             if (!String.IsNullOrEmpty(@id) && tuto.Id.ToString() == @id)
                                             {
-                                                <option value="@tuto.Id" selected>@tuto.Titre</option>
+                                                <option value="@tuto.Id" selected>@tuto.Titre (Non Publié)</option>
                                             }
                                             else
                                             {
-                                                <option value="@tuto.Id">@tuto.Titre</option>
+                                                <option value="@tuto.Id">@tuto.Titre (Non Publié)</option>
                                             }
                                         }
                                     }
@@ -276,7 +291,7 @@
                                 <div class="row">
                                     <div>
                                         <!--AjoutRangee-->
-                                        <button type="submit" class="btn btn-primary" data-addRangee><img src="~/icons/addIcon.svg" /></button>
+                                        <button type="submit" class="@(id.IsNullOrEmpty() ? "btn disabled btn-primary": "btn btn-primary")" data-addRangee id="btnAddRangee"><img src="~/icons/addIcon.svg" /></button>
                                     </div>
                                 </div>
                             </div>
@@ -312,8 +327,8 @@
                                 créées ou supprimées via la page administrateur. Vous pouvez y accéder grâce à ce bouton.
                             </p>
                             <br />
-                            <form method="post" asp-page="Index" style="display:flex; justify-content: center;">
-                                <button type="submit" class="btn btn-outline-secondary">Voir page admin</button>
+                            <form method="post" asp-page="CreationTuto" style="display:flex; justify-content: center;">
+                                <button type="submit" class="btn btn-outline-secondary" asp-page-handler="RedirectAdminMenu">Voir page admin</button>
                             </form>
                         </div>
                     </div>
@@ -342,6 +357,7 @@
         </div>
     </div>
 </div>
+
 
 <div id="toastTutoCreeDiv" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11" hidden>
     <div id="toastTutoCree" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-animation="true" data-bs-delay="5000">
@@ -408,5 +424,11 @@
 <script src="~/javascript/Tutoriel/creation/ModificationTutoPageAction.js" asp-append-version="true"></script>
 <script src="~/javascript/Tutoriel/creation/script-rangee-utils.js" asp-append-version="true"></script>
 <script src="~/javascript/Tutoriel/creation/script-rangee-init.js" asp-append-version="true"></script>
+<script src="~/javascript/Tutoriel/creation/DeleteTutoPageAction.js" asp-append-version="true"></script>
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.0.20/tinymce.min.js"></script>
+<script>
+    function updateTextInput(val) {
+          document.getElementById('difficulteLbl').textContent = ("Difficulte: " + val); 
+        }
+</script>

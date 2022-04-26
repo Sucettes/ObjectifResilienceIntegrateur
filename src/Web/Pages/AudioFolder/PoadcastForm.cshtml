@@ -8,49 +8,92 @@
 
 }
 
+<nav class="navbar navbar-light shadow-sm">
+    <div class="container-fluid">
+        <h1>Ajout d'un poadcast</h1>
 
-<div>
-    <form method="post" enctype="multipart/form-data" id="centerForm">
-
-        <div class="form-group row">
-            <label for="titre">Titre <em>*</em></label>
-            <input name="titre" id="titre" placeholder="titre du formulaire" autofocus="" required=""><br>
+        <div class="d-flex">
+            <form method="post" asp-page="PoadcastPage" style="margin-right:0.4rem;">
+                <button type="submit" class="btn btn-outline-primary">Retour</button>
+            </form>
         </div>
 
-        <div class="form-group row">
-            <label for="description">Description</label>
-            <textarea name="description" id="description"></textarea><br>
+    </div>
+</nav>
+
+<div class="container">
+    <form method="post" enctype="multipart/form-data">
+        <br />
+        <div class="row">
+            <div class="col-3">
+            </div>
+
+            <div class="col-6">
+                <div class="input-group input-group-sm mb-3">
+                    <span class="input-group-text">Titre</span>
+                    <input name ="titre" type="text" class="form-control" aria-label="Titre" aria-describedby="Titre" required>
+                </div>
+            </div>
+            <div class="col-3"></div>
         </div>
 
-        <div class="form-group row">
-            <label for="categorie">Catégorie <em>*</em></label>
-            <select name="categorie" id="categorie">
-                
-                    @foreach (var cat in @Model.Input.lstCategories)
-                    {
-
-                        
-                            <option id="@cat.Id" value="@cat.Nom" selected>@cat.Nom</option>
-                        
-                    }
-                
-                
-
-            </select><br><br>
+        <div class="row">
+            <div class="col-3">
+            </div>
+            <div class="col-6">
+                <label for="description">Description</label>
+                <textarea name="description" id="description" rows="6" cols="55"></textarea><br>
+            </div>
+            <div class="col-3"></div>
         </div>
 
-        <div class="form-group row">
-            <input name="fileAudio" accept="audio/*"  class="form-control" type="file" required="" /><br />
+        <div class="row">
+            <div class="col-3">
+            </div>
+            <div class="col-6">
+                <div class="input-group input-group-sm mb-3">
+                    <span class="input-group-text">Catégorie</span>
+                    <select class="form-control" name="categorie" id="categorie">
 
-            <input name="fileImage" accept="image/*"  class="form-control" type="file"  /><br />
-
+                        @foreach (var cat in @Model.Input.lstCategories)
+                        {
+                            <option id="@cat.Id" value="@cat.Nom">@cat.Nom</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="col-3"></div>
         </div>
 
-        <div class="form-group row">
-
-
-            <input class="btn btn-success btn-sm" type="submit" value="valider" /><br /><br />
-            <a name="btnAnnuler" class="btn btn-danger form-control" asp-page="poadcastPage">Annuler</a>
+        <div class="row">
+            <div class="col-3">
+            </div>
+            <div class="col-6">
+                <div class="input-group input-group-sm mb-3">
+                    <span class="input-group-text">fichier audio</span>
+                    <input name="fileAudio" accept="audio/*" class="form-control" type="file" required="" />
+                </div>
+            </div>
+            <div class="col-3"></div>
         </div>
+
+        <div class="row">
+            <div class="col-3">
+            </div>
+            <div class="col-6">
+                <div class="input-group input-group-sm mb-3">
+                    <span class="input-group-text">fichier image</span>
+                    <input name="fileImage" accept="image/*" class="form-control" type="file" />
+                </div>
+                <p>Privilégié une image de 300 par 300</p>
+            </div>
+            <div class="col-3"></div>
+        </div>
+
+        <div class="row" style="justify-content:center">
+            <input type="submit" value="valider" class="btn btn-success form-control" style="width:15em !important; margin:1em;" />
+            <a name="btnAnnuler" class="btn btn-danger form-control" style="width:15em !important; margin:1em;" asp-page="poadcastPage">Annuler</a>
+        </div>
+
     </form>
 </div>

@@ -1,5 +1,5 @@
 ﻿@page
-
+@using FctUtils
 @using Web.Pages
 @model Web.Pages.AdminMenuModel
 @using Domain.Entities
@@ -13,6 +13,7 @@
         <h1>Panel Admin</h1>
     </div>
 </nav>
+<br />
 <div class="container">
     <nav>
         <div class="nav nav-tabs">
@@ -24,6 +25,12 @@
                     <a href="?tab=roles" class="nav-link">Rôles</a>
                     <a href="?tab=demandes" class="nav-link">Demandes</a>
                     <a href="?tab=poadcasts" class="nav-link">Poadcasts</a>
+                    <form method="post" style="display:flex; justify-content: right;">
+                        <div style="display: flex;justify-content:right;">
+                            <input class="form-control me-2" type="search" placeholder="Recherche" name="rechercheValeurUtilisateur">
+                            <button data-filtreRecherche class="btn btn-outline-primary" type="submit">Recherche</button>
+                        </div>
+                    </form>
                 }
                 @if (ViewData["Tab"].ToString() == "roles")
                 {
@@ -112,7 +119,7 @@
                                                 </select>
                                             </div>
                                             <div class="col-4" style="align-self:end;">
-                                                <input name="btnAjoutRole" type="submit" value="Ajouter" class="btn btn-success form-control" />
+                                                <input name="btnAjoutRole" type="submit" value="Ajouter" class="btn btn-primary form-control" />
                                             </div>
                                         </div>
                                     </form>
@@ -122,9 +129,9 @@
                         else
                         {
                             <div class="container">
-                                <div class="row alert-info">
+                                <div class="row alert alert-info" style="background-color:#cfe2ff;">
                                     <div class="col-12">
-                                        <p style="text-align:center;">Sélectionner un utilisateur afin d'afficher ces rôles.</p>
+                                        <p style="text-align:center;color:#084298;">Sélectionner un utilisateur afin d'afficher ces rôles.</p>
                                     </div>
                                 </div>
                             </div>
@@ -137,18 +144,34 @@
             {
                 <thead>
                     <tr>
+                        <th scope="col">Actif</th>
                         <th scope="col">Courriel</th>
+                        <th scope="col">Rôles</th>
                         <th scope="col">Date de création</th>
-                        <th scope="col"><a asp-page="user" asp-route-id="" class="btn btn-success btn-sm">Ajouter un utilisateur</a></th>
+                        <th scope="col"><a asp-page="user" asp-route-id="" class="btn btn-primary btn-sm"><img src="~/icons/addIcon.svg" /></a></th>
                     </tr>
                 </thead>
-                @foreach (var user in ViewData["lstUsers"] as IList<User>)
+                @foreach (var tupleUser in ViewData["tupleUsers"] as List<(User, List<Role>)>)
                 {
                     <tbody>
                         <tr>
-                            <td>@user.Email</td>
-                            <td>@user.CreationDate.ToString("dd/MM/yyyy")</td>
-                            <td><a asp-page="user" asp-route-id="@user.Id" class="btn btn-success btn-sm">Modifier</a></td>
+                            @if (tupleUser.Item1.Active == true)
+                            {
+                                <td><img src="~/icons/valide.svg" style="width: 1em; height:1em;" /></td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                            <td>@tupleUser.Item1.Email</td>
+                            <td>
+                                @foreach (var role in tupleUser.Item2 as List<Role>)
+                                {
+                                    @role
+                                }
+                            </td>
+                            <td>@tupleUser.Item1.CreationDate.ToString("dd/MM/yyyy")</td>
+                            <td><a asp-page="user" asp-route-id="@tupleUser.Item1.Id" class="btn btn-primary btn-sm"><img src="~/icons/editIcon.svg" style="width:2em;height:2em;" /></a></td>
                         </tr>
                     </tbody>
                 }
@@ -168,7 +191,7 @@
                                 <div class="col-sm">
                                     <form method="post">
                                         <input type="hidden" name="name" value="@user.Id" />
-                                        <input name="btnAccepter" type="submit" value="Accepter" class="btn btn-success form-control" />
+                                        <input name="btnAccepter" type="submit" value="Accepter" class="btn btn-primary form-control" />
                                     </form>
                                 </div>
                             </div>
@@ -178,35 +201,28 @@
             }
             @if (ViewData["Tab"].ToString() == "poadcasts")
             {
-                @foreach (var audio in ViewData["lstAudios"] as IList<Audio>)
+                @if (ViewData["lstAudios"] is not null)
                 {
-                    if (audio.EstPublier == false)
+                    @foreach (var audio in ViewData["lstAudios"] as IList<Audio>)
                     {
-
-                        <div><p>titre : @audio.titre</p></div>
-                        <div><img src="@audio.urlImage"></div>
-                        @*@foreach (var cat in @Model.lstCategories)
+                        if (audio.EstPublier == false)
                         {
-                            if (audio.categorie == cat)
-                            {
-                                <div>@cat.Nom</div>
-                            }
-                        }*@
-                        <div>
-                            <audio controls
-                                   src="@audio.urlAudio">
-                            </audio>
+                            <a asp-page="./AudioFolder/PoadcastDetail" asp-route-id="@audio.ID">
+                                <div class="searchBar-container borderPoadcast">
 
-                        </div>
-                        <div class="col-sm">
-                            <form method="post">
-                                <input type="hidden" name="name" value="@audio.ID" />
-                                <input name="btnAjouterPoadcast" type="submit" value="Ajouter" class="btn btn-success form-control" />
-                            </form>
-                        </div>
+                                    <div>
+                                        <img class="sizeImage" src="@audio.urlImage">
+                                    </div>
+                                    <div>
+                                        titre : @audio.titre
+                                    </div>
 
+                                </div>
+                            </a>
+                        }
                     }
                 }
+
             }
         }
     </table>
