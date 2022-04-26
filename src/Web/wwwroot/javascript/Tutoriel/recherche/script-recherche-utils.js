@@ -77,7 +77,7 @@
                     let pageLink = document.createElement('li');
                     pageLink.className = 'page-item';
 
-                    let $pageLinkBtn = $('<button id="test" data-paginationBtn class="page-link" value="' + (i) + '">' + i + '</button>');
+                    let $pageLinkBtn = $('<button id="test" data-paginationBtn class="page-link" style="background-color:#38b000;" value="' + (i) + '">' + i + '</button>');
                     $pageLinkBtn.on('click', scriptRechercheUtils.setPaginationClick);
                     pageLink.appendChild($pageLinkBtn[0]);
                     pagination.insertBefore(pageLink, pagination.children[pagination.children.length -1])

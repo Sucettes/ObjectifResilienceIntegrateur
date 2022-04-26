@@ -28,13 +28,13 @@
     <div class="second-alf-container">
         <div class="major-theme">
             <div class="theme-box">
-                <h3 class="themeH3">Theme</h3>
+                <h3 class="themeH3">Construire</h3>
             </div>
             <div class="theme-box">
-                <h3 class="themeH3">Theme</h3>
+                <h3 class="themeH3">Renover</h3>
             </div>
             <div class="theme-box">
-                <h3 class="themeH3">Theme</h3>
+                <h3 class="themeH3">Ensemble</h3>
             </div>
         </div>
 
@@ -64,9 +64,10 @@
 
                 <div class="articleSmallContainer">
                     @{
+                        i = 0;
                         foreach (var article in ViewData["lstArticles"] as IList<Article>)
                         {
-                            if (i < 3)
+                            if (i < 3 && i!=0)
                             {
                                 <div class="div-article">
                                     <a href="/Article?id=@article.Id">
@@ -75,9 +76,9 @@
 
                                     </a>
                                 </div>
-                                i++;
-                            }
 
+                            }
+                            i++;
                         }
                     }
 

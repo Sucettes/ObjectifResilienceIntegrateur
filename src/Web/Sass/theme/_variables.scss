@@ -33,7 +33,7 @@ $orangeLight: RGB(255, 119, 51,0.4) !default;
 
 $primary: $greenPrimary !default;
 $secondary:     $gray-600 !default;
-$success:       $green !default;
+$success:       $greenPrimary !default;
 $info:          $cyan !default;
 $warning:       $yellow !default;
 $danger:        $red !default;
@@ -60,7 +60,7 @@ $table-accent-bg:             $gray-200 !default;
 
 // Dropdowns
 
-$dropdown-link-color:           $greenPrimary !default;
+//$dropdown-link-color:           $greenPrimary !default;
 $dropdown-link-hover-color:         $white !default;
 $dropdown-link-hover-bg:            $primary !default;
 

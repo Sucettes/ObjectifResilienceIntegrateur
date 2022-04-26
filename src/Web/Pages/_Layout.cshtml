@@ -1,5 +1,7 @@
-﻿<!DOCTYPE html>
-<html>
+﻿@using Domain.Entities
+
+<!DOCTYPE html>
+<html style="min-height:100%;max-width:100%">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -33,23 +35,25 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Home</a>
+                        <li class="navItem">
+                            <a class="nav-link" href="/indexArticles">Articles</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Link</a>
+
+                        <li class="navItem">
+                            <a class="nav-link" href="/Tutoriel">Tutoriels</a>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Dropdown
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="#">Action</a></li>
-                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li>
-                            </ul>
+
+                        <li class="navItem">
+                            <a class="nav-link" href="/AudioFolder/PoadcastPage">Podcast</a>
                         </li>
+
+
+                        @*@foreach (var nouvellePage in ViewData["newPages"] as IList<NewPage>)
+                        {
+                            <li class="navItem">
+                                <a class="nav-link" href="/NewPage?Titre=@nouvellePage.Titre">@nouvellePage.Titre</a>
+                            </li>
+                        }*@
                     </ul>
                     <div>
                         @await Html.PartialAsync("_LoginPartial")
@@ -64,19 +68,32 @@
             <footer>
                 <div class="footer">
                     <div class="footer-part1" style="display:flex;flex-direction:column;">
-                        <div style="display:flex;justify-content:space-between">
-                            <div><p>Ou nous trouver : </p></div>
-                            
-                            <div><p>Nos informations : </p></div>
+                        <div style="display:flex;justify-content:space-around;">
+                            <div>
+                                <h3 >Ou nous trouver</h3>
+                                <p style="text-align:center;">200 Adresse a Quebec QC</p></div>
+
+                            <div>
+                                <h3 >Nos informations</h3>
+                                <p style="margin:0;text-align:center;">Anthony Dev - Abraham Dev</p>
+                                <p style="margin:0;text-align:center;">Antoine Dev - Gwenael Dev</p>
+                            </div>
+                                                       <div>
+                            <h3 style="text-align:left;">Nos coordonnees</h3>
+                            <p style="text-align:center;">Mail: Projet@gmail.com</p>
+                            <p style="margin:0;text-align:center;">Tel: 418-000-0000</p>
                         </div>
-                        <div>
-                            <p>Nos coordonnees : </p>
                         </div>
+@*                        <div>
+                            <h3 style="padding-right:20px;padding-left:20px;text-align:left;">Nos coordonnees</h3>
+                            <p style="padding-right:20px;padding-left:20px;margin:0;">Tel: 418-000-0000</p>
+                            <p style="padding-right:20px;padding-left:20px;">Mail: Projet@gmail.com</p>
+                        </div>*@
 
                     </div>
 
-                    <div class="footer-part2">
-                        <p>&copy; @DateTime.Now.Year - Gwenael</p>
+                    <div class="footer-part2" style="display:flex;align-items: center;justify-content: center;">
+                        <p style="padding-right:20px;padding-left:20px;text-align:center;margin-bottom:8px;margin-top:8px;">&copy; @DateTime.Now.Year - Objectif Résilience</p>
                     </div>
                 </div>
 
