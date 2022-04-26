@@ -15,7 +15,7 @@ $web-font-path: "https://fonts.googleapis.com/css?family=Lato:400,700,400italic"
 
 .bg-primary {
     .navbar-nav .active > .nav-link {
-       // color: $greenPrimary !important;
+       color: $greenPrimary !important;
     }
 }
 
@@ -26,7 +26,7 @@ $web-font-path: "https://fonts.googleapis.com/css?family=Lato:400,700,400italic"
         .nav-link:focus,
         .nav-link:hover,
         .active > .nav-link {
-           // color: $greenPrimary !important;
+           color: $greenPrimary !important;
         }
     }
 }
@@ -128,7 +128,7 @@ $web-font-path: "https://fonts.googleapis.com/css?family=Lato:400,700,400italic"
     }
 }
 .nav-link{
-    //color: $greenPrimary
+    color: $greenPrimary
 }
 .pagination {
     a:hover {
@@ -136,6 +136,9 @@ $web-font-path: "https://fonts.googleapis.com/css?family=Lato:400,700,400italic"
     }
 }
 
+.nav-link:focus, .nav-link:hover {
+    color: #257301;
+}
 // Indicators ==================================================================
 
 .close {

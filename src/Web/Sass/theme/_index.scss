@@ -11,8 +11,9 @@
 .pageBox {
     margin-top: 3rem;
     margin-bottom: 3rem;
-    padding:1rem;
-    background-color: #ffa733;
+    padding: 1rem;
+    background-color: #f1f9ee;
+    border-style: dashed;
 }
 
 
@@ -141,6 +142,8 @@ h3 {
 .articleTitle {
     position: relative;
     background-color: rgba(255, 167, 51,1);
+    font-size:2rem;
+    color:black;
     z-index: 0;
     top: 2.2rem;
     padding: 1rem;
