@@ -162,7 +162,7 @@ namespace Gwenael.Web.Pages
                     }
                 }
             }
-            return Page();
+            return Redirect("/");
         }
         public List<(User, List<Role>)> getListUserAndRoles(List<User> pLstUser)
         {
@@ -265,7 +265,7 @@ namespace Gwenael.Web.Pages
                     }
                 }
             }
-            return Redirect("/AdminMenu");
+            return Redirect("/");
         }
 
         public Guid ObtenirIdDuUserSelonEmail(string email)
