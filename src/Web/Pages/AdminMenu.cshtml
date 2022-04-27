@@ -9,6 +9,7 @@
     User userRole1 = (User)ViewData["selectedUser"];
     IList<User> userList1 = (IList<User>)ViewData["lstUsers"];
     List<(User, List<Role>)> lstTupleUser = (List<(User, List<Role>)>)ViewData["tupleUsers"];
+    List<CategoriesTutos> lstCategorie = (List<CategoriesTutos>)ViewData["lstCategories"];
 }
 <!-- Entête de la page (Titre + btn retour) -->
 <nav class="navbar navbar-light shadow-sm">
@@ -28,10 +29,13 @@
                     <a href="?tab=roles" class="nav-link">Rôles</a>
                     <a href="?tab=demandes" class="nav-link">Demandes</a>
                     <a href="?tab=poadcasts" class="nav-link">Poadcasts</a>
+                    <a href="?tab=categories" class="nav-link">Categories</a>
                     <form method="post" style="display:flex; justify-content: right;">
-                        <div style="display: flex;justify-content:right;">
-                            <input class="form-control me-2" type="search" placeholder="Recherche" required name="rechercheValeurUtilisateur">
-                            <button data-filtreRecherche class="btn btn-outline-primary" type="submit">Recherche</button>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Recherche" required name="rechercheValeurUtilisateur">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-primary" type="submit"><img style="width:40%;" src="~/icons/searchIcon.svg" /></button>
+                            </div>
                         </div>
                     </form>
                 }
@@ -41,6 +45,7 @@
                     <a href="?tab=roles" class="nav-link active">Rôles</a>
                     <a href="?tab=demandes" class="nav-link">Demandes</a>
                     <a href="?tab=poadcasts" class="nav-link">Poadcasts</a>
+                    <a href="?tab=categories" class="nav-link">Categories</a>
                 }
                 @if (ViewData["Tab"].ToString() == "demandes")
                 {
@@ -48,10 +53,13 @@
                     <a href="?tab=roles" class="nav-link">Rôles</a>
                     <a href="?tab=demandes" class="nav-link active">Demandes</a>
                     <a href="?tab=poadcasts" class="nav-link">Poadcasts</a>
+                    <a href="?tab=categories" class="nav-link">Categories</a>
                     <form method="post" style="display:flex; justify-content: right;">
-                        <div style="display: flex;justify-content:right;">
-                            <input class="form-control me-2" type="search" placeholder="Recherche" required name="rechercheValeurDemande">
-                            <button data-filtreRecherche class="btn btn-outline-primary" type="submit">Recherche</button>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" type="search" placeholder="Recherche" required name="rechercheValeurDemande">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-primary" type="submit"><img style="width:40%;" src="~/icons/searchIcon.svg" /></button>
+                            </div>
                         </div>
                     </form>
                 }
@@ -61,6 +69,15 @@
                     <a href="?tab=roles" class="nav-link">Rôles</a>
                     <a href="?tab=demandes" class="nav-link">Demandes</a>
                     <a href="?tab=poadcasts" class="nav-link active">Poadcasts</a>
+                    <a href="?tab=categories" class="nav-link">Categories</a>
+                }
+                @if (ViewData["Tab"].ToString() == "categories")
+                {
+                    <a href="?tab=utilisateurs" class="nav-link">Utilisateurs</a>
+                    <a href="?tab=roles" class="nav-link">Rôles</a>
+                    <a href="?tab=demandes" class="nav-link">Demandes</a>
+                    <a href="?tab=poadcasts" class="nav-link">Poadcasts</a>
+                    <a href="?tab=categories" class="nav-link active">Categories</a>
                 }
             }
         </div>
@@ -89,9 +106,11 @@
                         <br />
                         <br />
                         <form method="post" style="display:flex; justify-content: space-evenly;">
-                            <div style="display: flex;justify-content:space-evenly;">
-                                <input class="form-control" type="search" placeholder="Recherche" required name="rechercheValeurUtilisateurRole">
-                                <button data-filtreRecherche class="btn btn-outline-primary" type="submit" name="btnRechercheRole">Recherche</button>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" type="search" placeholder="Recherche" required name="rechercheValeurUtilisateurRole">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-primary" type="submit"><img style="width:40%;" src="~/icons/searchIcon.svg" /></button>
+                                </div>
                             </div>
                         </form>
                         <br />
@@ -303,6 +322,57 @@
                     </div>
                 }
 
+            }
+            @if (ViewData["Tab"].ToString() == "categories")
+            {
+                <form method="post">
+                    <div class="row">
+                        <div class="col-8">
+                            <input type="text" class="form-control" placeholder="Nom catégorie" required name="nomCat" max="50" min="1" />
+                            <br />
+                            <textarea placeholder="Description catégorie" class="form-control" id="desc" name="descCat" rows="3"></textarea>
+                            <br />
+                        </div>
+                        <div class="col-4">
+                            <input name="btnAjoutCategorie" type="submit" value="Ajouter" class="btn btn-primary form-control" />
+                        </div>
+                        <br />
+                        <hr />
+                    </div>
+                </form>
+                @if (lstCategorie is not null)
+                {
+                    @foreach (var categorie in lstCategorie)
+                    {
+                        <div class="list-group-item ">
+                            <div class="row">
+                                <div class="col-6">
+                                    <p>@categorie.Nom</p>
+                                    <p>@categorie.Description</p>
+                                </div>
+                                <div class="col-3">
+                                </div>
+                                <div class="col-sm">
+                                    <form method="post">
+                                        <input type="hidden" name="supprCatVal" value="@categorie.Id" />
+                                        <input type="submit" value="Supprimer" class="btn btn-danger form-control" />
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <br />
+                    <div class="container">
+                        <div class="row alert alert-info" style="background-color:#cfe2ff;">
+                            <div class="col-12">
+                                <p style="text-align:center;color:#084298;">Aucune catégorie</p>
+                            </div>
+                        </div>
+                    </div>
+                }
             }
         }
     </table>

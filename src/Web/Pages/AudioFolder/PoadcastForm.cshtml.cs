@@ -50,43 +50,27 @@ namespace Gwenael.Web.Pages
         
         public async Task<IActionResult> OnPost(string titre, string description, string categorie, IFormFile fileAudio, IFormFile fileImage)
         {
-            string nomFichier ="";
-
-            if (description == null)
+            try
             {
-            description = "aucune description disponible pour ce poadcast";
-            }
+                string nomFichier = "";
 
-            CategoriesTutos cat = _context.CategoriesTutos.Where(c => c.Nom == categorie).First();
-
-            using (var client = new AmazonS3Client("AKIAVDH3AEDD6PUJMKGG", "kKV5WKu0tFe8Svl2QdTIMIydLc7CGSMiy2h+KOvV", RegionEndpoint.CACentral1))
-            {               
-                using (var newMemoryStream = new MemoryStream())
+                if (description == null)
                 {
-                fileAudio.CopyTo(newMemoryStream);
-                    Debug.WriteLine("My debug string here");
-                    var uploadRequest = new TransferUtilityUploadRequest
-                    {
-                        InputStream = newMemoryStream,
-                        Key = fileAudio.FileName, // filename
-                        BucketName = "mediafileobjectifresiliance", // bucket name of S3
-                        CannedACL = S3CannedACL.PublicRead,
-                    };
-
-                    var fileTransferUtil = new TransferUtility(client);
-                    await fileTransferUtil.UploadAsync(uploadRequest);
+                    description = "aucune description disponible pour ce poadcast";
                 }
-                
-                if (fileImage != null)
+
+                CategoriesTutos cat = _context.CategoriesTutos.Where(c => c.Nom == categorie).First();
+
+                using (var client = new AmazonS3Client("AKIAVDH3AEDD6PUJMKGG", "kKV5WKu0tFe8Svl2QdTIMIydLc7CGSMiy2h+KOvV", RegionEndpoint.CACentral1))
                 {
                     using (var newMemoryStream = new MemoryStream())
                     {
-                        fileImage.CopyTo(newMemoryStream);
+                        fileAudio.CopyTo(newMemoryStream);
                         Debug.WriteLine("My debug string here");
                         var uploadRequest = new TransferUtilityUploadRequest
                         {
                             InputStream = newMemoryStream,
-                            Key = fileImage.FileName, // filename
+                            Key = fileAudio.FileName, // filename
                             BucketName = "mediafileobjectifresiliance", // bucket name of S3
                             CannedACL = S3CannedACL.PublicRead,
                         };
@@ -94,27 +78,51 @@ namespace Gwenael.Web.Pages
                         var fileTransferUtil = new TransferUtility(client);
                         await fileTransferUtil.UploadAsync(uploadRequest);
                     }
-                    nomFichier = fileImage.FileName;
-                }
-                else
-                {
-                    nomFichier = "imagePlaceHolder.png";
-                }
-                             
-                Audio audio = new Audio
-                {
-                    titre = titre,
-                    urlAudio = "https://mediafileobjectifresiliance.s3.ca-central-1.amazonaws.com/" + fileAudio.FileName,
-                    description = description,
-                    categorie = cat,
-                    urlImage = "https://mediafileobjectifresiliance.s3.ca-central-1.amazonaws.com/" +nomFichier,
-                    EstPublier = false
-                };
 
-                        _context.Audios.Add(audio);
-                        await _context.SaveChangesAsync();
-               
-                return RedirectToPage("PoadcastPage");
+                    if (fileImage != null)
+                    {
+                        using (var newMemoryStream = new MemoryStream())
+                        {
+                            fileImage.CopyTo(newMemoryStream);
+                            Debug.WriteLine("My debug string here");
+                            var uploadRequest = new TransferUtilityUploadRequest
+                            {
+                                InputStream = newMemoryStream,
+                                Key = fileImage.FileName, // filename
+                                BucketName = "mediafileobjectifresiliance", // bucket name of S3
+                                CannedACL = S3CannedACL.PublicRead,
+                            };
+
+                            var fileTransferUtil = new TransferUtility(client);
+                            await fileTransferUtil.UploadAsync(uploadRequest);
+                        }
+                        nomFichier = fileImage.FileName;
+                    }
+                    else
+                    {
+                        nomFichier = "imagePlaceHolder.png";
+                    }
+
+                    Audio audio = new Audio
+                    {
+                        titre = titre,
+                        urlAudio = "https://mediafileobjectifresiliance.s3.ca-central-1.amazonaws.com/" + fileAudio.FileName,
+                        description = description,
+                        categorie = cat,
+                        urlImage = "https://mediafileobjectifresiliance.s3.ca-central-1.amazonaws.com/" + nomFichier,
+                        EstPublier = false
+                    };
+
+                    _context.Audios.Add(audio);
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToPage("PoadcastPage");
+                }
+            
+            }
+            catch
+            {
+                return Page();
             }
         }
     }

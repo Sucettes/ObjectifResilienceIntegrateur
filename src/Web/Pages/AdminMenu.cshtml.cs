@@ -95,7 +95,7 @@ namespace Gwenael.Web.Pages
                 }
                 else if (Tab == "demandes")
                 {
-                    string recherche = Request.Query["recherch"];
+                    string recherche = Request.Query["recherche"];
                     if (recherche != null)
                     {
                         Users = await _context.Users.ToListAsync();
@@ -105,6 +105,7 @@ namespace Gwenael.Web.Pages
                         {
                             ViewData["lstNonActiver"] = UsersNonActivated;
                         }
+                        return Page();
                     }
                 }
                
@@ -123,10 +124,7 @@ namespace Gwenael.Web.Pages
             {
                 if (Tab == "poadcasts")
                 {
-                    //if (DynamicQueryableExtensions.Any(_context.CategoriesTutos))
-                    //{
-                    //    lstCategories = _context.CategoriesTutos.ToList<CategoriesTutos>();
-                    //}
+
                     if (DynamicQueryableExtensions.Any(_context.Audios))
                     {
                         audios = await _context.Audios.ToListAsync();
@@ -153,6 +151,14 @@ namespace Gwenael.Web.Pages
                     Users = await _context.Users.ToListAsync();
                     ViewData["lstUsers"] = Users;
                 }
+                else if (Tab == "categories")
+                {
+                    if (DynamicQueryableExtensions.Any(_context.CategoriesTutos))
+                    {
+                        lstCategories = _context.CategoriesTutos.ToList<CategoriesTutos>();
+                        ViewData["lstCategories"] = lstCategories;
+                    }
+                }
                 return Page();
             }
             //}
@@ -169,13 +175,22 @@ namespace Gwenael.Web.Pages
             }
             return tupleUsers;
         }
-        public async Task<IActionResult> OnPostAsync(string rechercheValeurDemande,string rechercheValeurUtilisateur, string rechercheValeurUtilisateurRole, string btnDeleteRole, string name, string selectRole, string btnAccepter, string btnRefuser, int? id)
+        public async Task<IActionResult> OnPostAsync(string supprCatVal, string descCat, string nomCat, string rechercheValeurDemande, string rechercheValeurUtilisateur, string rechercheValeurUtilisateurRole, string btnDeleteRole, string name, string selectRole, string btnAccepter, string btnRefuser, int? id)
         {
             //if (User.Identity.IsAuthenticated)
             //{
             //    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
             //if (Permission.EstAdministrateur(idConnectedUser, _context))
             //{
+            if (supprCatVal is not null)
+            {
+                Console.WriteLine(supprCatVal);
+                CategoriesTutos catTuto = (CategoriesTutos)_context.CategoriesTutos.Where(c => c.Id == Guid.Parse(supprCatVal)).First();
+                Console.WriteLine(catTuto.Nom);
+                _context.CategoriesTutos.Remove(catTuto);
+                await _context.SaveChangesAsync();
+                return Redirect("/AdminMenu/?tab=categories");
+            }
             if (btnDeleteRole is not null)
             {
                 Guid selectedUserId = Guid.Parse(Request.Query["guid"]);
@@ -225,17 +240,30 @@ namespace Gwenael.Web.Pages
                 await _context.SaveChangesAsync();
                 return Redirect("/AdminMenu/?tab=demandes");
             }
-            if (rechercheValeurUtilisateurRole is not null)
+            else if (rechercheValeurUtilisateurRole is not null)
             {
                 return Redirect("/AdminMenu/?tab=roles&recherche=" + rechercheValeurUtilisateurRole);
             }
-            if (rechercheValeurUtilisateur is not null)
+            else if (rechercheValeurUtilisateur is not null)
             {
                 return Redirect("/AdminMenu/?tab=utilisateurs&recherche=" + rechercheValeurUtilisateur);
             }
-            if (rechercheValeurDemande is not null)
+            else if (rechercheValeurDemande is not null)
             {
                 return Redirect("/AdminMenu/?tab=demandes&recherche=" + rechercheValeurDemande);
+            }
+            else if (nomCat is not null && descCat is not null)
+            {
+                CategoriesTutos cat = new();
+                cat.Nom = nomCat;
+                cat.Description = descCat;
+
+                if (cat.EstValide())
+                {
+                    _context.CategoriesTutos.Add(cat);
+                    _context.SaveChanges();
+                }
+                return Redirect("/AdminMenu/?tab=categories");
             }
             //}
             //}

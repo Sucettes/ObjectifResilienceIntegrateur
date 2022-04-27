@@ -23,33 +23,49 @@ namespace Gwenael.Web.Pages
         public Article article { get; set; }
         public Audio audio { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(Guid? id)
+        public IActionResult OnGet(Guid? id)
         {
-            lstCategories = _context.CategoriesTutos.ToList();
-            audio = _context.Audios.Find(id);
-            ViewData["Audio"] = audio;
-            Cat = _context.CategoriesTutos.Where(c => c.Id == audio.categorie.Id).First();
-            ViewData["Cat"] = Cat;
-            return Page();
+            try
+            {
+                lstCategories = _context.CategoriesTutos.ToList();
+                audio = _context.Audios.Find(id);
+                ViewData["Audio"] = audio;
+                Cat = _context.CategoriesTutos.Where(c => c.Id == audio.categorie.Id).First();
+                ViewData["Cat"] = Cat;
+                return Page();
+            }
+            catch
+            {
+                return Page();
+            }
         }
 
         public async Task<IActionResult> OnPostAsync(string name, string btnAjouterPoadcast, string btnSupprimerPoadcast, int? id)
         {
-            if (btnAjouterPoadcast is not null)
+            try
             {
-                Audio audioBd = _context.Audios.Where(u => u.ID == Guid.Parse(name)).First();
-                audioBd.EstPublier = true;
-                await _context.SaveChangesAsync();
-                return Redirect("/AdminMenu/?tab=poadcasts");
+                if (btnAjouterPoadcast is not null)
+                {
+                    Audio audioBd = _context.Audios.Where(u => u.ID == Guid.Parse(name)).First();
+                    audioBd.EstPublier = true;
+                    await _context.SaveChangesAsync();
+                    return Redirect("/AdminMenu/?tab=poadcasts");
+                }
+                else if (btnSupprimerPoadcast is not null)
+                {
+                    Audio audioBd = _context.Audios.Where(u => u.ID == Guid.Parse(name)).First();
+                    _context.Audios.Remove(audioBd);
+                    await _context.SaveChangesAsync();
+                    return Redirect("/AdminMenu/?tab=poadcasts");
+                }
+                return Page();
             }
-            else if (btnSupprimerPoadcast is not null)
+            catch
             {
-                Audio audioBd = _context.Audios.Where(u => u.ID == Guid.Parse(name)).First();
-                _context.Audios.Remove(audioBd);
-                await _context.SaveChangesAsync();
-                return Redirect("/AdminMenu/?tab=poadcasts");
+                return Page();
             }
-            return Page();
+
+
         }
     }
         
