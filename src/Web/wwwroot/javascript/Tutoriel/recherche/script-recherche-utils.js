@@ -5,6 +5,7 @@
     var currentPosition = 1;
     var currTargetClick;
     var nbPage;
+    //var estGestionaireContenue;
     let scriptRechercheUtils = {
         rechercherTuto: event => {
             $('#btn-pagination-before').off('click');
@@ -25,7 +26,7 @@
                     processData: false,
                     success: function (data) {
                         currentDataItemList = data.value;
-                        scriptRechercheUtils.ajouterItem();
+                        scriptRechercheUtils.obtenirDroit(scriptRechercheUtils.ajouterItem);
                     },
                     error: function () {
                         alert("un problème est survenu");
@@ -45,7 +46,7 @@
                     processData: false,
                     success: function (data) {
                         currentDataItemList = data.value;
-                        scriptRechercheUtils.ajouterItem();
+                        scriptRechercheUtils.obtenirDroit(scriptRechercheUtils.ajouterItem);
                     },
                     error: function () {
                         alert("un problème est survenu");
@@ -53,7 +54,7 @@
                 });
             }
         },
-        ajouterItem: () => {
+        ajouterItem: (a) => {
             var nbItem = currentDataItemList.length;
             var zone = document.getElementById('zoneCardTuto');
             if (document.getElementById('errMsgRech')) {
@@ -80,21 +81,27 @@
                     let $pageLinkBtn = $('<button id="test" data-paginationBtn class="page-link" style="background-color:#38b000;" value="' + (i) + '">' + i + '</button>');
                     $pageLinkBtn.on('click', scriptRechercheUtils.setPaginationClick);
                     pageLink.appendChild($pageLinkBtn[0]);
-                    pagination.insertBefore(pageLink, pagination.children[pagination.children.length -1])
+                    pagination.insertBefore(pageLink, pagination.children[pagination.children.length - 1])
                 }
 
-                for (var i = ((9 * currentPosition)-9); i < (currentPosition*9); i++) {
-                    scriptRechercheUtils.creationCarteItem(i);
+                let indicePage = 9 * (currentPosition - 1)
+                for (var i = indicePage; i < indicePage + 9; i++) {
+                    if (i === currentDataItemList.length) {
+                        break
+                    }
+                    //**********************
+                    scriptRechercheUtils.creationCarteItem(i, a);
                 }
             } else {
                 if (document.getElementById('errMsgRech')) {
                     document.getElementById('errMsgRech').remove();
                 }
-                let $msgAucunItem = $('<div class="alert alert-warning" role="alert" style="width:100%;" id="errMsgRech"><p style="color:black">Aucun résultats trouvé!</p></div>');
-                $('#zoneCardTuto').parent().append($msgAucunItem);
+                let $msgAucunItem = $('<div role="alert" style="width:100%;text-align: center;" id="errMsgRech"><p style="color:black">Aucun résultats trouvé!</p></div>');
+                $('#zoneCardTuto').append($msgAucunItem);
             }
+            
         },
-        creationCarteItem: (i) => {
+        creationCarteItem: (i, a) => {
             let tutoData = currentDataItemList[i];
             // créé la carte
             let $a = $('<a class= "col"></a>');
@@ -110,10 +117,14 @@
             let $divBody = $('<div class="card-body"></div>');
 
             $divBody.append($('<h4 class="card-title" style="text-align:center;word-break: break-all;">' + tutoData.titre + '</h4>'));
-            if (tutoData.estPublier == true) {
-                $divBody.append($('<p style="color:#38b000; font-weight: bold;">États: Publié</p>'));
-            } else {
-                $divBody.append($('<p style="color:#ff7733;font-weight: bold;">États: Non Publié</p>'));
+
+            //****************************
+            if (a == true) {
+                if (tutoData.estPublier == true) {
+                    $divBody.append($('<p style="color:#38b000; font-weight: bold;">État: Publié</p>'));
+                } else {
+                    $divBody.append($('<p style="color:#ff7733;font-weight: bold;">État: Non Publié</p>'));
+                }
             }
 
             $div.append($div2);
@@ -142,6 +153,26 @@
                 currentPosition = Number(currTargetClick.value);
             }
             scriptRechercheUtils.ajouterItem();
+        },
+        obtenirDroit: (callback) => {
+            $.ajax({
+                type: 'POST',
+                url: window.location.pathname + "?handler=ObtenirDroit",
+                data: new FormData(document.getElementById('formFiltre')),
+                headers: {
+                    RequestVerificationToken:
+                        $('input:hidden[name="__RequestVerificationToken"]').val()
+                },
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    callback(data);
+                },
+                error: function () {
+                    alert("un problème est survenu");
+                }
+            });
         }
     }
 

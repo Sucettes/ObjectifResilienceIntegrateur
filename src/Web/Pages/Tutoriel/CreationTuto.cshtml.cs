@@ -381,6 +381,7 @@ namespace Gwenael.Web.Pages
         {
             try
             {
+                Console.WriteLine(formData);
                 if (User.Identity.IsAuthenticated)
                 {
                     Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
@@ -431,7 +432,7 @@ namespace Gwenael.Web.Pages
                             r => r.TutorielId == Guid.Parse(formData.idTutoP)).ToList();
                         estAjoutee = true;
                         formData.idRangee = rId.ToString();
-
+                        formData.imageUrl = rangee.LienImg;
                         UpdateInputData();
                         return estAjoutee ? StatusCode(201, new JsonResult(formData)) :
                             StatusCode(400, new JsonResult(formData));

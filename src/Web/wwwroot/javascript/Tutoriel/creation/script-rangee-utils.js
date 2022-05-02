@@ -87,6 +87,7 @@
             let divBody = document.createElement('div');
             divBody.className = 'card-body row';
 
+            //console.log(data.value)
             if (data.value.imageUrl != null) {
                 if (data.value.rangeeTexte != null) {
                     if (data.value.positionImage === "left") {
@@ -137,6 +138,7 @@
                     }
                 }
                 else {
+                    console.log("image seulement")
                     let img = document.createElement('img');
                     img.setAttribute('src', data.value.imageUrl);
                     img.className = 'card-img-top';

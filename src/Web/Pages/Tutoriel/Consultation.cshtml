@@ -51,12 +51,12 @@
                         <h2>@tuto.Titre</h2>
                         @if (@tuto.EstPublier == true)
                         {
-                            <p style="font-weight: bold;">Publié le @tuto.DateCreation.ToString("dd/mm/yyyy")</p>
+                            <p style="font-weight: bold;">Publié le @tuto.DateCreation.ToString("dd/MM/yyyy")</p>
                             <p style="color:#38b000; font-weight: bold;">États: Publié</p>
                         }
                         else
                         {
-                            <p style="font-weight: bold;">Publié le @tuto.DateCreation.ToString("dd/mm/yyyy")</p>
+                            <p style="font-weight: bold;">Publié le @tuto.DateCreation.ToString("dd/MM/yyyy")</p>
                             <p style="color:#ff7733;font-weight: bold;">États: Non Publié</p>
                         }
                         <div class="input-group input-group-sm mb-3">
@@ -88,7 +88,7 @@
                         <p style="text-align:justify;">@tuto.Introduction</p>
                     </div>
                 </div>
-
+                <br>
                 @if (!@Model.Input.lstRangeeTuto.IsNullOrEmpty())
                 {
                     @foreach (var row in rangee)
@@ -128,7 +128,7 @@
                                     }
                                     else
                                     {
-                                        <a href="@row.LienImg" target="_blank">
+                                        <a href="@row.LienImg" target="_blank" style="text-align: center;">
                                             <img src="@row.LienImg" class="card-img-top" style="max-height:20rem; max-width:30rem;" alt="...">
                                         </a>
                                     }
@@ -139,7 +139,6 @@
                                 }
                             </div>
                         </div>
-                        <br />
                     }
                 }
 

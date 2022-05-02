@@ -4,7 +4,7 @@
 @using IdentityServer4.Extensions
 @model Web.Pages.TutorielIndexModel
 @{
-    ViewData["Title"] = "Home tutoriel";
+    ViewData["Title"] = "Accueil tutoriel";
 }
 
 <!-- Entête de la page (Titre + barre de recherche) -->
@@ -14,7 +14,7 @@
         @if(Model.Input.droitAccess == true)
         {
             <form class="d-flex" method="post" asp-page="Index" style="display:flex; justify-content: center;">
-                <button type="submit" class="btn btn-outline-primary" asp-page-handler="RedirectCreationTuto">Ajouté un tutoriel</button>
+                <button type="submit" class="btn btn-outline-primary" asp-page-handler="RedirectCreationTuto">Ajouter un tutoriel</button>
             </form>
         }
     </div>
@@ -25,20 +25,27 @@
     <div class="row">
         <!-- Contenue du menu (Ou les filtres de recherche ce trouve) -->
         <div class="col-3" style="padding-right:1.5rem;padding-left:1.5rem;">
-            <h4>Filtre de recherches</h4>
+            <h4>Filtrer par :</h4>
             <hr />
 
             <!-- Btn Radio pour le mode de filtre. -->
             <div>
                 <form method="post" asp-page="Index" enctype="multipart/form-data" id="formFiltre">
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="radioFiltre" id="radioFiltreTitre" value="radioFiltreTitre" checked>
-                        <label class="form-check-label" for="radioFiltreTitre" style="margin:0;">Par titre</label>
+                    <div class="input-group input-group-sm mb-3">
+                        <label for="categorieDataList" style="width: 100%;">Sélectionner une catégorie</label>
+                        <input class="form-control shadow-sm" list="categorieDatalistOptions" id="categorieDataList" placeholder="Écrire pour rechercher..." name="cat">
+                        <datalist id="categorieDatalistOptions">
+                            <option id="filtreCategorieTous" value="Toutes" selected />
+                            @if (!(@Model.Input.lstCategories.IsNullOrEmpty()))
+                            {
+                                @foreach (var cat in @Model.Input.lstCategories)
+                                {
+                                    <option id="@cat.Id" value="@cat.Nom" />
+                                }
+                            }
+                        </datalist>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="radioFiltre" id="radioFiltreCategorie" value="radioFiltreCategorie">
-                        <label class="form-check-label" for="radioFiltreCategorie" style="margin:0;">Par catégorie</label>
-                    </div>
+
                     <div class="form-check form-switch">
                         <input class="form-check-input" type="checkbox" role="switch" id="radioFiltreEstPublie" name="radioFiltreEstPublie" value="true" checked>
                         <label class="form-check-label" for="radioFiltreEstPublie" style="margin:0;">Est pubié</label>
@@ -47,7 +54,7 @@
                     <input class="form-control me-2" type="search" placeholder="Recherche" id="rechercheValeur" name="rechercheValeur">
                     <br />
                     <div style="display: flex;justify-content:center;">
-                        <button data-filtreRecherche class="btn btn-outline-primary" type="submit">Recherche</button>
+                        <button data-filtreRecherche class="btn btn-outline-primary" type="submit">Rechercher</button>
                     </div>
                 </form>
             </div>

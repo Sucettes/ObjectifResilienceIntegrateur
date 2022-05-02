@@ -38,6 +38,7 @@ namespace Gwenael.Web.Pages
         {
             public List<Tutos> lstTutoriels { get; set; }
             public bool droitAccess { get; set; }
+            public List<CategoriesTutos> lstCategories { get; set; }
 
         }
         public TutorielIndexModel(GwenaelDbContext pDb) => _db = pDb;
@@ -60,6 +61,7 @@ namespace Gwenael.Web.Pages
                 }
             }
             Input.lstTutoriels = _db.Tutos.ToList();
+            Input.lstCategories = _db.CategoriesTutos.ToList();
 
             return Page();
         }
@@ -73,45 +75,58 @@ namespace Gwenael.Web.Pages
             public bool radioFiltreEstPublie { get; set; }
             public string radioFiltre { get; set; }
             public string rechercheValeur { get; set; }
+            public string cat { get; set; }
         }
         public IActionResult OnPostRecherche([FromForm] RechercherFiltre formData)
         {
             try
             {
                 List<Tutos> t = new();
-                if (formData.radioFiltre == "radioFiltreTitre")
+                if (!formData.cat.IsNullOrEmpty() && formData.cat != "Toutes")
                 {
+                    CategoriesTutos ct = _db.CategoriesTutos.Where(c => c.Nom.Contains(formData.rechercheValeur)).First();
                     if (!formData.rechercheValeur.IsNullOrEmpty())
                     {
-                        t = _db.Tutos.Where(t => t.EstPublier == formData.radioFiltreEstPublie && t.Titre.Contains(formData.rechercheValeur)).ToList();
+                        t = _db.Tutos.Where(t => t.EstPublier ==
+                        formData.radioFiltreEstPublie && t.Categorie == ct
+                        && t.Titre.Contains(formData.rechercheValeur)).ToList();
                     }
                     else
                     {
-                        t = _db.Tutos.Where(t => t.EstPublier == formData.radioFiltreEstPublie).ToList();
+                        t = _db.Tutos.Where(t => t.EstPublier ==
+                        formData.radioFiltreEstPublie && t.Categorie == ct).ToList();
                     }
                 }
-                else if (formData.radioFiltre == "radioFiltreCategorie")
+                else if (!formData.rechercheValeur.IsNullOrEmpty())
                 {
-                    if (!formData.rechercheValeur.IsNullOrEmpty())
-                    {
-                        List<CategoriesTutos> ct = _db.CategoriesTutos.Where(c => c.Nom.Contains(formData.rechercheValeur)).ToList();
-                        foreach (var i in ct)
-                        {
-                            List<Tutos> iTemp = _db.Tutos.Where(t => t.EstPublier == formData.radioFiltreEstPublie && t.Categorie == i).ToList();
-
-                            foreach (var jTemp in iTemp)
-                            {
-                                t.Add(jTemp);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        t = _db.Tutos.Where(t => t.EstPublier == formData.radioFiltreEstPublie).ToList();
-                    }
-
+                    t = _db.Tutos.Where(t => t.EstPublier == formData.radioFiltreEstPublie
+                    && t.Titre.Contains(formData.rechercheValeur)).ToList();
+                }
+                else
+                {
+                    t = _db.Tutos.Where(t => t.EstPublier == formData.radioFiltreEstPublie).ToList();
                 }
                 return t != null ? StatusCode(201, new JsonResult(t)) : StatusCode(400);
+            }
+            catch (Exception)
+            {
+                return StatusCode(400);
+            }
+        }
+
+        public IActionResult OnPostObtenirDroit()
+        {
+            try
+            {
+                if (User.Identity.IsAuthenticated)
+                {
+                    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
+                    if (Permission.VerifierAccesGdC(idConnectedUser, _db))
+                    {
+                        return StatusCode(200, true);
+                    }
+                }
+                return StatusCode(200, false);
             }
             catch (Exception)
             {
