@@ -1,14 +1,6 @@
-﻿////$(document).ready(function () {
-
-
-////    //window.scriptRechercheUtils.rechercherTuto();
-
-////    //    window.scriptRechercheUtils.obtenirDroit();
-////});
-
-(function () {
+﻿(function () {
     'use strict';
-    
+
     window.addEventListener('load', () => {
         $('[data-filtreRecherche]').on('click', event => {
             event.preventDefault();

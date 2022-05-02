@@ -5,7 +5,7 @@
     var currentPosition = 1;
     var currTargetClick;
     var nbPage;
-    //var estGestionaireContenue;
+    var aDroitGestionContenue;
     let scriptRechercheUtils = {
         rechercherTuto: event => {
             $('#btn-pagination-before').off('click');
@@ -54,7 +54,7 @@
                 });
             }
         },
-        ajouterItem: (a) => {
+        ajouterItem: (aDroitGestionContenue) => {
             var nbItem = currentDataItemList.length;
             var zone = document.getElementById('zoneCardTuto');
             if (document.getElementById('errMsgRech')) {
@@ -90,7 +90,7 @@
                         break
                     }
                     //**********************
-                    scriptRechercheUtils.creationCarteItem(i, a);
+                    scriptRechercheUtils.creationCarteItem(i, aDroitGestionContenue);
                 }
             } else {
                 if (document.getElementById('errMsgRech')) {
@@ -99,9 +99,9 @@
                 let $msgAucunItem = $('<div role="alert" style="width:100%;text-align: center;" id="errMsgRech"><p style="color:black">Aucun résultats trouvé!</p></div>');
                 $('#zoneCardTuto').append($msgAucunItem);
             }
-            
+
         },
-        creationCarteItem: (i, a) => {
+        creationCarteItem: (i, aDroitGestionContenue) => {
             let tutoData = currentDataItemList[i];
             // créé la carte
             let $a = $('<a class= "col"></a>');
@@ -118,9 +118,9 @@
 
             $divBody.append($('<h4 class="card-title" style="text-align:center;word-break: break-all;">' + tutoData.titre + '</h4>'));
 
-            //****************************
-            if (a == true) {
-                if (tutoData.estPublier == true) {
+            // Affiche publié ou non si est gestionaire de contenue.
+            if (aDroitGestionContenue === true) {
+                if (tutoData.estPublier === true) {
                     $divBody.append($('<p style="color:#38b000; font-weight: bold;">État: Publié</p>'));
                 } else {
                     $divBody.append($('<p style="color:#ff7733;font-weight: bold;">État: Non Publié</p>'));
@@ -154,6 +154,11 @@
             }
             scriptRechercheUtils.ajouterItem();
         },
+        /**
+         * Vérifie si l'utilisateur a les droits de gestion sur le contenue et exécute
+         * la fonction fournis en callback.
+         * @param {any} callback
+         */
         obtenirDroit: (callback) => {
             $.ajax({
                 type: 'POST',
