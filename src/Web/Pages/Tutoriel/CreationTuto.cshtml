@@ -49,7 +49,19 @@
             <div class="tab-content" id="nav-tabContent">
                 <!-- Contenur page détail -->
                 <div class="@(handler == "CreeTutorielDetails" ? "tab-pane show active" : "tab-pane ")" style="background-color:white;" id="nav-detail" role="tabpanel" aria-labelledby="nav-detail-tab">
-                    <h3 style="text-align:left;">Détails du tutoriel</h3>
+
+                    <div class="pageDescriptionBox">
+                        <h3>Détails du tutoriel</h3>
+                        <p class="divIntro">
+                            Quisque interdum dapibus ipsum, vel lacinia nulla eleifend non. Sed tortor tortor, placerat ut tincidunt et, euismod non sem.
+                            Phasellus vel est iaculis, dictum lorem nec, hendrerit eros. Donec ultrices ex eget nisi eleifend, sed eleifend ex commodo.
+                            Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Donec sed eros sed mi mollis ullamcorper non et sapien.
+                            Interdum et malesuada fames ac ante ipsum primis in faucibus. Fusce hendrerit, augue sit amet fringilla ullamcorper, lorem leo auctor enim,
+                            non pharetra tortor mi id nunc. Duis vel volutpat velit, sit amet luctus ante. In sit amet lorem quis ligula consectetur gravida. Integer in nulla tortor.
+                        </p>
+                    </div>
+
+                    @*<h3 style="text-align:left;">Détails du tutoriel</h3>*@
 
                     <form method="post" asp-page="CreationTuto" enctype="multipart/form-data" id="formCreationTuto">
                         <input id="idTutoP" value="@id" hidden name="idTutoP" />
@@ -150,7 +162,7 @@
                                         }
                                     </div>
                                 </div>
-                                
+
                             </div>
                         </div>
 
@@ -164,7 +176,18 @@
                 <!-- Contenue page contenue tuto-->
                 <div class="@(handler == "TutoRangee" ? "tab-pane show active" : "tab-pane ")" id="nav-contenue" style="background-color:white;" role="tabpanel" aria-labelledby="nav-contenue-tab">
 
-                    <h3 style="text-align:left;">Étapes du tutoriel</h3>
+                    <div class="pageDescriptionBox">
+                        <h3>Étapes du tutoriel</h3>
+                        <p class="divIntro">
+                            Quisque interdum dapibus ipsum, vel lacinia nulla eleifend non. Sed tortor tortor, placerat ut tincidunt et, euismod non sem.
+                            Phasellus vel est iaculis, dictum lorem nec, hendrerit eros. Donec ultrices ex eget nisi eleifend, sed eleifend ex commodo.
+                            Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Donec sed eros sed mi mollis ullamcorper non et sapien.
+                            Interdum et malesuada fames ac ante ipsum primis in faucibus. Fusce hendrerit, augue sit amet fringilla ullamcorper, lorem leo auctor enim,
+                            non pharetra tortor mi id nunc. Duis vel volutpat velit, sit amet luctus ante. In sit amet lorem quis ligula consectetur gravida. Integer in nulla tortor.
+                        </p>
+                    </div>
+
+                    @*<h3 style="text-align:left;">Étapes du tutoriel</h3>*@
                     <form method="post" asp-page="CreationTuto">
                         <div class="row">
                             <label for="tutoId" style="width: 100%;">Sélectionner un tutoriel</label>
@@ -300,28 +323,13 @@
 
                 <!-- Contenue ajout catégorie -->
                 <div class="@(handler == "CreationCategorie" ? "tab-pane show active" : "tab-pane ")" id="nav-createCategorie" style="background-color:white;" role="tabpanel" aria-labelledby="nav-createCategorie-tab">
-                    <h3 style="text-align:left;">Création d'une nouvelle catégorie</h3>
 
+                    @*<h3 style="text-align:left;">Création d'une nouvelle catégorie</h3>*@
+                    <br />
                     <div class="row">
-                        <div class="col-md-6">
-                            <form method="post" asp-page="CreationTuto">
-
-                                <div class="input-group input-group-sm mb-3">
-                                    <span class="input-group-text" id="inputNomCategorie">Nom</span>
-                                    <input required type="text" class="form-control" aria-label="Nom catégorie" aria-describedby="Nom catégorie" asp-for="@Model.Input.nomCategorie">
-                                </div>
-                                <div class="input-group input-group-sm mb-3">
-                                    <span class="input-group-text" id="inputDescriptionCategorie">Description</span>
-                                    <input required type="text" class="form-control" aria-label="Description catégorie" aria-describedby="Description catégorie" asp-for="@Model.Input.descriptionCategorie">
-                                </div>
-
-                                <br />
-                                <button type="submit" class="btn btn-outline-primary" asp-route-id="@id" asp-page-handler="CreationCategorie">Créé la catégorie</button>
-                            </form>
-                        </div>
-
-                        <div class="col-md-6">
-                            <p>
+                        <div class="pageDescriptionBox" style="margin:0px;">
+                            <h3>Création d'une nouvelle catégorie</h3>
+                            <p class="divIntro">
                                 Ici c’est un raccourci pour l’ajout d’une nouvelle catégorie. Les catégories peuvent être modifiées,
                                 créées ou supprimées via la page administrateur. Vous pouvez y accéder grâce à ce bouton.
                             </p>
@@ -330,12 +338,26 @@
                                 <button type="submit" class="btn btn-outline-secondary" asp-page-handler="RedirectAdminMenu">Voir page admin</button>
                             </form>
                         </div>
-                    </div>
+                        <form method="post" asp-page="CreationTuto">
+                            <br />
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputNomCategorie">Nom</span>
+                                <input required type="text" class="form-control" aria-label="Nom catégorie" aria-describedby="Nom catégorie" asp-for="@Model.Input.nomCategorie">
+                            </div>
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputDescriptionCategorie">Description</span>
+                                <input required type="text" class="form-control" aria-label="Description catégorie" aria-describedby="Description catégorie" asp-for="@Model.Input.descriptionCategorie">
+                            </div>
 
+                            <br />
+                            <button type="submit" class="btn btn-outline-primary" asp-route-id="@id" asp-page-handler="CreationCategorie">Créé la catégorie</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 </div>
 
 <!-- Modal -->
@@ -430,6 +452,6 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.0.20/tinymce.min.js"></script>
 <script>
     function updateTextInput(val) {
-          document.getElementById('difficulteLbl').textContent = ("Difficulte: " + val); 
+          document.getElementById('difficulteLbl').textContent = ("Difficulte: " + val);
         }
 </script>
