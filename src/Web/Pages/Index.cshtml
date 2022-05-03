@@ -5,7 +5,7 @@
 @{ ViewData["Title"] = "Home page"; }
 
 <div >
-    <img src="../images/BanniereNature3.jpeg" class="divBanner" style="width:100%"/>
+    <img src="../images/Banniere_foret.jpg" class="divBanner" style="width:100%"/>
 </div>
 
 
@@ -26,13 +26,13 @@
 
     <div class="second-alf-container">
         <div class="major-theme">
-            <div class="theme-box">
+            <div class="theme-box shadow-lg rounded">
                 <h3 class="themeH3">Construire</h3>
             </div>
-            <div class="theme-box">
+            <div class="theme-box shadow-lg rounded">
                 <h3 class="themeH3">Renover</h3>
             </div>
-            <div class="theme-box">
+            <div class="theme-box shadow-lg rounded">
                 <h3 class="themeH3">Ensemble</h3>
             </div>
         </div>
@@ -46,11 +46,11 @@
                         {
                             if (i == 0)
                             {
-                                <div class="div-article1">
+                                <div class="div-article1 shadow-lg rounded">
 
                                     <a href="/Article?id=@article.Id">
                                         <h4 class="articleTitle">@article.Titre</h4>
-                                        <img src="/images/fondBois.jpg" style="width:100%">
+                                        <img src="/images/imgplaceholder.png" style="width:100%">
 
                                     </a>
                                 </div>
@@ -68,10 +68,10 @@
                         {
                             if (i < 3 && i!=0)
                             {
-                                <div class="div-article">
+                                <div class="div-article shadow-lg rounded">
                                     <a href="/Article?id=@article.Id">
                                         <h4 class="articleTitle">@article.Titre</h4>
-                                        <img src="/images/fondBois.jpg" style="max-width:100%">
+                                        <img src="/images/imgplaceholder.png" style="max-width:100%">
 
                                     </a>
                                 </div>
