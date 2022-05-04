@@ -105,8 +105,8 @@
             // créé la carte
             let $a = $('<a class= "col"></a>');
             $a.attr('href', 'Tutoriel/Consultation?id=' + tutoData.id);
-
-            let $div = $('<div class="shadow-lg rounded" style="background-color:#f1f9ee;"></div>');
+            // TODO : Ici retiré le cardPodcast si est pas a la bonne place et si ca marche pas....
+            let $div = $('<div class="shadow-lg rounded cardPodcast" style="background-color:#f1f9ee;"></div>');
             let $div2 = $('<div></div>');
             if (tutoData.lienImgBanniere !== null) {
                 $div2.append('<img style="max-width:100%;height:13.125rem;" src="' + tutoData.lienImgBanniere + '" class="card-img-top" alt="...">');
@@ -126,7 +126,9 @@
                 }
             }
             console.log(tutoData)
-            $divBody.append($('<p>Catégorie : ' + tutoData.categorie.nom + '</p>'))
+            $divBody.append($('<p>Catégorie : ' + tutoData.categorie.nom + '</p>'));
+
+            $divBody.append($('<p>' + tutoData.introduction.substring(0,200) + '</p>'));
 
             $div.append($div2);
             $div.append($divBody);
