@@ -28,7 +28,7 @@
                     <a href="?tab=utilisateurs" class="nav-link active">Utilisateurs</a>
                     <a href="?tab=roles" class="nav-link">Rôles</a>
                     <a href="?tab=demandes" class="nav-link">Demandes</a>
-                    <a href="?tab=poadcasts" class="nav-link">Poadcasts</a>
+                    <a href="?tab=podcasts" class="nav-link">Podcasts</a>
                     <a href="?tab=categories" class="nav-link">Categories</a>
                     <form method="post" style="display:flex; justify-content: right;">
                         <div class="input-group mb-3">
@@ -44,7 +44,7 @@
                     <a href="?tab=utilisateurs" class="nav-link">Utilisateurs</a>
                     <a href="?tab=roles" class="nav-link active">Rôles</a>
                     <a href="?tab=demandes" class="nav-link">Demandes</a>
-                    <a href="?tab=poadcasts" class="nav-link">Poadcasts</a>
+                    <a href="?tab=podcasts" class="nav-link">Podcasts</a>
                     <a href="?tab=categories" class="nav-link">Categories</a>
                 }
                 @if (ViewData["Tab"].ToString() == "demandes")
@@ -52,7 +52,7 @@
                     <a href="?tab=utilisateurs" class="nav-link">Utilisateurs</a>
                     <a href="?tab=roles" class="nav-link">Rôles</a>
                     <a href="?tab=demandes" class="nav-link active">Demandes</a>
-                    <a href="?tab=poadcasts" class="nav-link">Poadcasts</a>
+                    <a href="?tab=podcasts" class="nav-link">Podcasts</a>
                     <a href="?tab=categories" class="nav-link">Categories</a>
                     <form method="post" style="display:flex; justify-content: right;">
                         <div class="input-group mb-3">
@@ -63,12 +63,12 @@
                         </div>
                     </form>
                 }
-                @if (ViewData["Tab"].ToString() == "poadcasts")
+                @if (ViewData["Tab"].ToString() == "podcasts")
                 {
                     <a href="?tab=utilisateurs" class="nav-link">Utilisateurs</a>
                     <a href="?tab=roles" class="nav-link">Rôles</a>
                     <a href="?tab=demandes" class="nav-link">Demandes</a>
-                    <a href="?tab=poadcasts" class="nav-link active">Poadcasts</a>
+                    <a href="?tab=podcasts" class="nav-link active">Podcasts</a>
                     <a href="?tab=categories" class="nav-link">Categories</a>
                 }
                 @if (ViewData["Tab"].ToString() == "categories")
@@ -76,7 +76,7 @@
                     <a href="?tab=utilisateurs" class="nav-link">Utilisateurs</a>
                     <a href="?tab=roles" class="nav-link">Rôles</a>
                     <a href="?tab=demandes" class="nav-link">Demandes</a>
-                    <a href="?tab=poadcasts" class="nav-link">Poadcasts</a>
+                    <a href="?tab=podcasts" class="nav-link">Podcasts</a>
                     <a href="?tab=categories" class="nav-link active">Categories</a>
                 }
             }
@@ -287,15 +287,48 @@
                     </div>
                 }
             }
-            @if (ViewData["Tab"].ToString() == "poadcasts")
+            @if (ViewData["Tab"].ToString() == "podcasts")
             {
                 @if (ViewData["lstAudios"] is not null)
                 {
                     @foreach (var audio in ViewData["lstAudios"] as IList<Audio>)
-                    {
-                        if (audio.EstPublier == false)
-                        {
-                            <a asp-page="./AudioFolder/PoadcastDetail" asp-route-id="@audio.ID">
+                    {   <a asp-page="./AudioFolder/PoadcastDetail" asp-route-id="@audio.ID"> 
+                            <div class="list-group-item ">
+                                <div class="row">
+                                    <div class="col-3">
+                                        <img class="sizeImage" src="@audio.urlImage">
+                                    </div>
+                                    <div class="col-3">
+                                        titre : @audio.titre
+                                    </div>
+                                    @if (@audio.EstPublier == true)
+                                    {
+                                        <div class="col-3" style="color:green;">
+                                            <strong> Publié </strong>
+                                        </div>
+                                    }
+                                    else
+                                    { 
+                                    <div class="col-3" style="color:red;">
+                                    
+                                        <strong> Non Publié </strong>
+                                    </div>
+                                    }
+                                    @if (@audio.EstPublier == true)
+                                    {
+                                        <div class="col-sm">
+                                            <form method="post">
+                                                <input type="hidden" name="name" value="@audio.ID" />
+                                                <input name="btnSupprimer" type="submit" value="Supprimer" class="btn btn-danger form-control" />
+                                            </form>
+                                        </div>
+                                    }
+                                    </div>
+                            </div>
+                        </a>
+
+
+                            @*<a asp-page="./AudioFolder/PoadcastDetail" asp-route-id="@audio.ID">
                                 <div class="searchBar-container borderPoadcast">
 
                                     <div>
@@ -304,10 +337,19 @@
                                     <div>
                                         titre : @audio.titre
                                     </div>
+                                    @if(@audio.EstPublier == true)
+                                    {
+                                        <div class="col-sm">
+                                            <form method="post">
+                                                <input type="hidden" name="name" value="@audio.ID" />
+                                                <input name="btnSupprimer" type="submit" value="Supprimer" class="btn btn-danger form-control" />
+                                            </form>
+                                        </div>
+                                    }
+                                    
 
                                 </div>
-                            </a>
-                        }
+                            </a>*@                 
                     }
                 }
                 else
