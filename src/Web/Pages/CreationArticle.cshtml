@@ -8,11 +8,6 @@
     <div style="margin:3rem;">
 
         <form method="post" enctype="multipart/form-data">
-            @*<label for="titre" style="margin-top:3rem;">Titre de l'article :</label><br />
-
-        <input type="text" id="titre" name="titre" value="" style="margin-bottom:2rem;"><br><br />*@
-
-
             <div class="input-group input-group-sm mb-3">
                 <span class="input-group-text" id="inputTitre">Titre</span>
                 <input type="text" id="titre" class="form-control" aria-label="Titre" aria-describedby="Titre" name="titre">
@@ -24,12 +19,7 @@
             <input multiple="multiple" asp-for="Input.FormFile" class="form-control" type="file" id="formFile"><br = />
 
 
-            <button id="btnCreeTuto" data-creationTuto type="submit" value="Upload" class="btn btn btn-outline-primary btn disabled btn-primary">Créé tutoriel</button>
-            @*<button id="btnModifierTuto" data-modificationTuto type="submit" class="@(String.IsNullOrEmpty(Model.Input.id) ? "btn disabled btn-primary" : "btn btn-outline-primary")">Modifié tutoriel</button>
-        <button type="submit" class="btn btn-outline-primary" asp-page-handler="NettoyerTutorielDetails">Nettoyé</button>
-
-
-        <input class="btn" type="submit" value="Upload" /><br /><br />*@
+            <button id="btnCreeTuto" data-creationTuto type="submit" value="Upload" class="btn btn-primary">Créé Article</button>
         </form>
 
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.0.20/tinymce.min.js"></script>
