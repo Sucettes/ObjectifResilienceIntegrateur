@@ -92,8 +92,11 @@ namespace Gwenael.Web.Pages
                 }
             }
 
+
+            // ne rien retourner => afficher une modal et afficher la modifiication possible => option de suppression 
+            //return Redirect("~/Index");
             return Page();
-        }
+       }
 
     }
 }
