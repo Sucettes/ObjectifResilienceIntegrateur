@@ -2,10 +2,12 @@
 @using Web.Pages
 @using Domain.Entities
 @model Web.Pages.IndexModel
-@{ ViewData["Title"] = "Home page"; }
+@{
+    ViewData["Title"] = "Home page";
+}
 
-<div >
-    <img src="../images/Banniere_foret.jpg" class="divBanner" style="width:100%"/>
+<div>
+    <img src="../images/Banniere_foret.jpg" class="divBanner" style="width:100%" />
 </div>
 
 
@@ -37,47 +39,50 @@
             </div>
         </div>
 
-            <div class="articleContainer">
+        <div class="articleContainer">
 
-                <div class="articleBigContainer">
-                    @{ int i = 0;
-                        foreach (var article in ViewData["lstArticles"] as IList<Article>)
+            <div class="articleBigContainer">
+                @{
+                    int i = 0;
+                    foreach (var article in ViewData["lstArticles"] as IList<Article>)
+                    {
+                        if (i == 0)
                         {
-                            if (i == 0)
-                            {
-                                <div class="div-article1 shadow-lg rounded">
+                            <div class="div-article1 shadow-lg rounded">
 
-                                    <a href="/Article?id=@article.Id">
-                                        <h4 class="articleTitle">@article.Titre</h4>
-                                        <img src="/images/imgplaceholder.png" style="width:100%">
+                                <a href="/Article?id=@article.Id">
+                                    <h4 class="articleTitle">@article.Titre</h4>
+                                    <img src="/images/imgplaceholder.png" style="width:100%">
 
-                                    </a>
-                                </div> i++;
-                            }
-                        } 
-                    }
-                </div>
-
-                <div class="articleSmallContainer">
-                    @{ i = 0;
-                        var articles = ViewData["lstArticles"] as IList<Article>;
-                        foreach (var article in articles.Reverse())
-                        {
-                            if (i < 3 && i != 0)
-                            {
-                                <div class="div-article shadow-lg rounded">
-                                    <a href="/Article?id=@article.Id">
-                                        <h4 class="articleTitle">@article.Titre</h4>
-                                        <img src="/images/imgplaceholder.png" style="max-width:100%">
-
-                                    </a>
-                                </div>
-
-                            }
+                                </a>
+                            </div>
                             i++;
                         }
-
-                </div>
+                    }
+                }
             </div>
+
+            <div class="articleSmallContainer">
+                @{
+                    i = 0;
+                    var articles = ViewData["lstArticles"] as IList<Article>;
+                    foreach (var article in articles.Reverse())
+                    {
+                        if (i < 3 && i != 0)
+                        {
+                            <div class="div-article shadow-lg rounded">
+                                <a href="/Article?id=@article.Id">
+                                    <h4 class="articleTitle">@article.Titre</h4>
+                                    <img src="/images/imgplaceholder.png" style="max-width:100%">
+
+                                </a>
+                            </div>
+
+                        }
+                        i++;
+                    }
+                }
+            </div>
+        </div>
     </div>
 </div>
