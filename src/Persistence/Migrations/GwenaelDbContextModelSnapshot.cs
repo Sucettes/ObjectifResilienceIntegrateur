@@ -60,9 +60,6 @@ namespace Gwenael.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("nbVue")
-                        .HasColumnType("int");
-
                     b.Property<string>("titre")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");

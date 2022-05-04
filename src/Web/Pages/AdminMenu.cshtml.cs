@@ -30,11 +30,11 @@ namespace Gwenael.Web.Pages
         public String Tab { get; set; }
         public async Task<IActionResult> OnGetAsync()
         {
-            //if (User.Identity.IsAuthenticated)
-            //{
-            //    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-            //    if (Permission.EstAdministrateur(idConnectedUser, _context))
-            //    {
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
+                if (Permission.EstAdministrateur(idConnectedUser, _context))
+                {
 
                     if (Request.Query.Count == 1)
                     {
@@ -121,7 +121,7 @@ namespace Gwenael.Web.Pages
                     }
                     else
                     {
-                        if (Tab == "podcasts")
+                        if (Tab == "poadcasts")
                         {
 
                             if (DynamicQueryableExtensions.Any(_context.Audios))
@@ -160,10 +160,9 @@ namespace Gwenael.Web.Pages
                         }
                         return Page();
                     }
-            //}
-            //}
-            //return Redirect("/");
-            //return Page();
+                }
+            }
+            return Redirect("/");
         }
         public List<(User, List<Role>)> getListUserAndRoles(List<User> pLstUser)
         {
@@ -174,13 +173,13 @@ namespace Gwenael.Web.Pages
             }
             return tupleUsers;
         }
-        public async Task<IActionResult> OnPostAsync(string supprCatVal, string descCat, string nomCat, string rechercheValeurDemande, string rechercheValeurUtilisateur, string rechercheValeurUtilisateurRole, string btnDeleteRole, string name, string selectRole, string btnAccepter, string btnRefuser, int? id, string btnSupprimer)
+        public async Task<IActionResult> OnPostAsync(string supprCatVal, string descCat, string nomCat, string rechercheValeurDemande, string rechercheValeurUtilisateur, string rechercheValeurUtilisateurRole, string btnDeleteRole, string name, string selectRole, string btnAccepter, string btnRefuser, int? id)
         {
-            //if (User.Identity.IsAuthenticated)
-            //{
-            //    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-            //    if (Permission.EstAdministrateur(idConnectedUser, _context))
-            //    {
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
+                if (Permission.EstAdministrateur(idConnectedUser, _context))
+                {
                     if (supprCatVal is not null)
                     {
                         Console.WriteLine(supprCatVal);
@@ -264,17 +263,9 @@ namespace Gwenael.Web.Pages
                         }
                         return Redirect("/AdminMenu/?tab=categories");
                     }
-            else if (btnSupprimer is not null)
-            {
-                Audio audioBd = _context.Audios.Where(u => u.ID == Guid.Parse(name)).First();
-                _context.Audios.Remove(audioBd);
-                await _context.SaveChangesAsync();
-                return Redirect("/AdminMenu/?tab=podcasts");
+                }
             }
-            //}
-            //}
-            //return Redirect("/");
-            return Page();
+            return Redirect("/");
         }
 
         public Guid ObtenirIdDuUserSelonEmail(string email)
