@@ -15,7 +15,7 @@
 <!-- Entête de la page (Titre + btn retour) -->
 <nav class="navbar navbar-light shadow-sm">
     <div class="container-fluid">
-        <h1>Panel Admin</h1>
+        <h1>Panneau Administrateur</h1>
     </div>
 </nav>
 <br />
@@ -63,7 +63,7 @@
 
                     <form method="post" style="display:flex; justify-content: right;">
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control" type="search" placeholder="Recherche" required name="rechercheValeurDemande">
+                            <input type="text" class="form-control" placeholder="Recherche" required name="rechercheValeurDemande">
                             <div class="input-group-append">
                                 <button class="btn btn-outline-primary" type="submit"><img style="width:40%;" src="~/icons/searchIcon.svg" /></button>
                             </div>
@@ -237,7 +237,7 @@
                             <tr>
                                 @if (tupleUser.Item1.Active == true)
                                 {
-                                    <td><img src="~/icons/valide.svg" style="width: 1em; height:1em;" /></td>
+                                    <td><img src="~/icons/verifiedUser.svg" style="width: 1em; height:1em;" /></td>
                                 }
                                 else
                                 {
