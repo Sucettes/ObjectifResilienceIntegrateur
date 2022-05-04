@@ -66,7 +66,6 @@ namespace Gwenael.Web.Pages
                     using (var newMemoryStream = new MemoryStream())
                     {
                         File.CopyTo(newMemoryStream);
-                        Debug.WriteLine("My debug string here");
                         var uploadRequest = new TransferUtilityUploadRequest
                         {
                             InputStream = newMemoryStream,
@@ -92,9 +91,6 @@ namespace Gwenael.Web.Pages
                 }
             }
 
-
-            // ne rien retourner => afficher une modal et afficher la modifiication possible => option de suppression 
-            //return Redirect("~/Index");
             return Page();
        }
 
