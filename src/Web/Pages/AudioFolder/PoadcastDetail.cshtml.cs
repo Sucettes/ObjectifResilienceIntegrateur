@@ -40,6 +40,12 @@ namespace Gwenael.Web.Pages
             }
         }
 
+        public int CompterNbVue()
+        {
+
+            return 0;
+        }
+
         public async Task<IActionResult> OnPostAsync(string name, string btnAjouterPoadcast, string btnSupprimerPoadcast, int? id)
         {
             try
@@ -49,14 +55,14 @@ namespace Gwenael.Web.Pages
                     Audio audioBd = _context.Audios.Where(u => u.ID == Guid.Parse(name)).First();
                     audioBd.EstPublier = true;
                     await _context.SaveChangesAsync();
-                    return Redirect("/AdminMenu/?tab=poadcasts");
+                    return Redirect("/AdminMenu/?tab=podcasts");
                 }
                 else if (btnSupprimerPoadcast is not null)
                 {
                     Audio audioBd = _context.Audios.Where(u => u.ID == Guid.Parse(name)).First();
                     _context.Audios.Remove(audioBd);
                     await _context.SaveChangesAsync();
-                    return Redirect("/AdminMenu/?tab=poadcasts");
+                    return Redirect("/AdminMenu/?tab=podcasts");
                 }
                 return Page();
             }

@@ -22,5 +22,7 @@ namespace Gwenael.Domain.Entities
         [Required] public string urlAudio { get; set; }
 
         public bool EstPublier { get; set; }
+
+        public int nbVue { get; set; }
     }
 }

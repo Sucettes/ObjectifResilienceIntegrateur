@@ -4,19 +4,18 @@
 @using Domain.Entities
 @{
     ViewData["Title"] = "Home page";
-
+    //var descriptionCoupe;
 }
 
 <nav class="navbar navbar-light shadow-sm">
     <div class="container-fluid">
         <h1>Poadcasts</h1>
-
-        <div class="d-flex">
-            
-        
-        <a asp-page="PoadcastForm" style="margin-right:0.4rem;" type="submit" class="btn btn-outline-primary">Ajouter un poadcast</a>  
-        </div>
-
+        @if (Model.droitAccess == true)
+        {
+            <div class="d-flex">
+                <a asp-page="PoadcastForm" style="margin-right:0.4rem;" type="submit" class="btn btn-outline-primary">Ajouter un poadcast</a>
+            </div>
+        }
     </div>
 </nav>
 
@@ -35,7 +34,7 @@
                         <option value="tout">Tout</option>
                         @foreach (var cat in @Model.lstCategories)
                         {
-                            <option id="@cat.Id" value="@cat.Nom" selected>@cat.Nom</option>
+                            <option id="@cat.Id" value="@cat.Nom">@cat.Nom</option>
                         }
                     </select>
                     <button type="submit" class="btn btn-outline-primary">Filtrer</button>
@@ -51,7 +50,7 @@
                     if (audio.EstPublier == true)
                     {
                         <a asp-page="./PoadcastDetail" asp-route-id="@audio.ID" class="col">
-                            <div class="shadow-lg rounded" style="background-color:#f1f9ee;">
+                            <div class="shadow-lg rounded cardPodcast" style="background-color:#f1f9ee;">
                                 <div><img src="@audio.urlImage" class="card-img-top shadow-lg sizeImage"></div>
                                 
                                 <div class="card-body">
@@ -63,6 +62,15 @@
                                             <h5 class="card-title">Catégorie : @cat.Nom</h5>
                                         }
                                     }
+                                    @if (audio.description.Length > 200)
+                                    {
+                                        <h5 class="card-title">@audio.description.Substring(0, 200) . . .</h5>
+                                    }
+                                    else
+                                    {
+                                        <h5 class="card-title">@audio.description</h5>
+                                    }
+
                                 </div>
                             </div>
                         </a>
