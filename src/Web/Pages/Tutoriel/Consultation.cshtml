@@ -49,15 +49,18 @@
                     </div>
                     <div class="col-md-6">
                         <h2>@tuto.Titre</h2>
-                        @if (@tuto.EstPublier == true)
+                        @if (Model.Input.droitAccess == true)
                         {
-                            <p style="font-weight: bold;">Publié le @tuto.DateCreation.ToString("dd/MM/yyyy")</p>
-                            <p style="color:#38b000; font-weight: bold;">États: Publié</p>
-                        }
-                        else
-                        {
-                            <p style="font-weight: bold;">Publié le @tuto.DateCreation.ToString("dd/MM/yyyy")</p>
-                            <p style="color:#ff7733;font-weight: bold;">États: Non Publié</p>
+                            @if (@tuto.EstPublier == true)
+                            {
+                                <p style="font-weight: bold;">Publié le @tuto.DateCreation.ToString("dd/MM/yyyy")</p>
+                                <p style="color:#38b000; font-weight: bold;">États: Publié</p>
+                            }
+                            else
+                            {
+                                <p style="font-weight: bold;">Publié le @tuto.DateCreation.ToString("dd/MM/yyyy")</p>
+                                <p style="color:#ff7733;font-weight: bold;">États: Non Publié</p>
+                            }
                         }
                         <div class="input-group input-group-sm mb-3">
                             <span class="input-group-text" id="inputDuree">Durée (heures)</span>
