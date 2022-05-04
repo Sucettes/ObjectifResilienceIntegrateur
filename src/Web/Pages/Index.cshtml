@@ -4,8 +4,8 @@
 @model Web.Pages.IndexModel
 @{ ViewData["Title"] = "Home page"; }
 
-<div>
-    <img src="../images/BanniereNature3.jpeg" class="divBanner" style="width:100%" />
+<div >
+    <img src="../images/Banniere_foret.jpg" class="divBanner" style="width:100%"/>
 </div>
 
 
@@ -65,15 +65,16 @@
                         {
                             if (i < 3 && i != 0)
                             {
-                                        <div class="div-article shadow-lg rounded">
-                                            <a href="/Article?id=@article.Id">
-                                                <h4 class="articleTitle">@article.Titre</h4>
-                                                <img src="/images/imgplaceholder.png" style="max-width:100%">
-                                            </a>
-                                        </div> 
-                                    }
-                                i++;
-                            } 
+                                <div class="div-article shadow-lg rounded">
+                                    <a href="/Article?id=@article.Id">
+                                        <h4 class="articleTitle">@article.Titre</h4>
+                                        <img src="/images/imgplaceholder.png" style="max-width:100%">
+
+                                    </a>
+                                </div>
+
+                            }
+                            i++;
                         }
 
                 </div>

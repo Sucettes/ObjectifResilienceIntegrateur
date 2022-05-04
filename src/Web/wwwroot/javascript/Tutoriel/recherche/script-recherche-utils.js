@@ -25,7 +25,7 @@
                     processData: false,
                     success: function (data) {
                         currentDataItemList = data.value;
-                        scriptRechercheUtils.ajouterItem();
+                        scriptRechercheUtils.obtenirDroit(scriptRechercheUtils.ajouterItem);
                     },
                     error: function () {
                         alert("un problème est survenu");
@@ -45,7 +45,7 @@
                     processData: false,
                     success: function (data) {
                         currentDataItemList = data.value;
-                        scriptRechercheUtils.ajouterItem();
+                        scriptRechercheUtils.obtenirDroit(scriptRechercheUtils.ajouterItem);
                     },
                     error: function () {
                         alert("un problème est survenu");
@@ -53,7 +53,7 @@
                 });
             }
         },
-        ajouterItem: () => {
+        ajouterItem: (aDroitGestionContenue) => {
             var nbItem = currentDataItemList.length;
             var zone = document.getElementById('zoneCardTuto');
             if (document.getElementById('errMsgRech')) {
@@ -80,27 +80,33 @@
                     let $pageLinkBtn = $('<button id="test" data-paginationBtn class="page-link" style="background-color:#38b000;" value="' + (i) + '">' + i + '</button>');
                     $pageLinkBtn.on('click', scriptRechercheUtils.setPaginationClick);
                     pageLink.appendChild($pageLinkBtn[0]);
-                    pagination.insertBefore(pageLink, pagination.children[pagination.children.length -1])
+                    pagination.insertBefore(pageLink, pagination.children[pagination.children.length - 1])
                 }
 
-                for (var i = ((9 * currentPosition)-9); i < (currentPosition*9); i++) {
-                    scriptRechercheUtils.creationCarteItem(i);
+                let indicePage = 9 * (currentPosition - 1)
+                for (var i = indicePage; i < indicePage + 9; i++) {
+                    if (i === currentDataItemList.length) {
+                        break
+                    }
+                    //**********************
+                    scriptRechercheUtils.creationCarteItem(i, aDroitGestionContenue);
                 }
             } else {
                 if (document.getElementById('errMsgRech')) {
                     document.getElementById('errMsgRech').remove();
                 }
-                let $msgAucunItem = $('<div class="alert alert-warning" role="alert" style="width:100%;" id="errMsgRech"><p style="color:black">Aucun résultats trouvé!</p></div>');
-                $('#zoneCardTuto').parent().append($msgAucunItem);
+                let $msgAucunItem = $('<div role="alert" style="width:100%;text-align: center;" id="errMsgRech"><p style="color:black">Aucun résultats trouvé!</p></div>');
+                $('#zoneCardTuto').append($msgAucunItem);
             }
+
         },
-        creationCarteItem: (i) => {
+        creationCarteItem: (i, aDroitGestionContenue) => {
             let tutoData = currentDataItemList[i];
             // créé la carte
             let $a = $('<a class= "col"></a>');
             $a.attr('href', 'Tutoriel/Consultation?id=' + tutoData.id);
-
-            let $div = $('<div class="shadow-lg rounded" style="background-color:#f1f9ee;"></div>');
+            // TODO : Ici retiré le cardPodcast si est pas a la bonne place et si ca marche pas....
+            let $div = $('<div class="shadow-lg rounded cardPodcast" style="background-color:#f1f9ee;"></div>');
             let $div2 = $('<div></div>');
             if (tutoData.lienImgBanniere !== null) {
                 $div2.append('<img style="max-width:100%;height:13.125rem;" src="' + tutoData.lienImgBanniere + '" class="card-img-top" alt="...">');
@@ -110,11 +116,19 @@
             let $divBody = $('<div class="card-body"></div>');
 
             $divBody.append($('<h4 class="card-title" style="text-align:center;word-break: break-all;">' + tutoData.titre + '</h4>'));
-            if (tutoData.estPublier == true) {
-                $divBody.append($('<p style="color:#38b000; font-weight: bold;">États: Publié</p>'));
-            } else {
-                $divBody.append($('<p style="color:#ff7733;font-weight: bold;">États: Non Publié</p>'));
+
+            // Affiche publié ou non si est gestionaire de contenue.
+            if (aDroitGestionContenue === true) {
+                if (tutoData.estPublier === true) {
+                    $divBody.append($('<p style="color:#38b000; font-weight: bold;">État: Publié</p>'));
+                } else {
+                    $divBody.append($('<p style="color:#ff7733;font-weight: bold;">État: Non Publié</p>'));
+                }
             }
+            console.log(tutoData)
+            $divBody.append($('<p>Catégorie : ' + tutoData.categorie.nom + '</p>'));
+
+            $divBody.append($('<p>' + tutoData.introduction.substring(0,200) + '</p>'));
 
             $div.append($div2);
             $div.append($divBody);
@@ -141,7 +155,33 @@
             } else {
                 currentPosition = Number(currTargetClick.value);
             }
-            scriptRechercheUtils.ajouterItem();
+            scriptRechercheUtils.obtenirDroit(scriptRechercheUtils.ajouterItem);
+        },
+        /**
+         * Vérifie si l'utilisateur a les droits de gestion sur le contenue et exécute
+         * la fonction fournis en callback.
+         * @param {any} callback
+         */
+        obtenirDroit: (callback) => {
+            $.ajax({
+                type: 'POST',
+                url: window.location.pathname + "?handler=ObtenirDroit",
+                data: new FormData(document.getElementById('formFiltre')),
+                headers: {
+                    RequestVerificationToken:
+                        $('input:hidden[name="__RequestVerificationToken"]').val()
+                },
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    callback(data);
+                    aDroitGestionContenue = data;
+                },
+                error: function () {
+                    alert("un problème est survenu");
+                }
+            });
         }
     }
 

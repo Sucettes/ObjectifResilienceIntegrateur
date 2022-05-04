@@ -53,7 +53,10 @@ namespace Gwenael.Web.Pages
             if (Request.Query.Count >= 1)
             {
                 Input.id = Request.Query["id"];
-                if (IdEstValide())
+                if (IdEstValide() && Input.droitAccess==true)
+                {
+                    return Page();
+                } else if(IdEstValide() && Input.droitAccess==false && EstPublie())
                 {
                     return Page();
                 }
@@ -133,6 +136,15 @@ namespace Gwenael.Web.Pages
                     GetContenue();
                     return true;
                 }
+            }
+            return false;
+        }
+
+        private bool EstPublie()
+        {
+            if (Input.tutoriel.EstPublier)
+            {
+                return true;
             }
             return false;
         }

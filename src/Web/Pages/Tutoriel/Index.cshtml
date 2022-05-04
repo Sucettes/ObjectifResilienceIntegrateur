@@ -4,7 +4,7 @@
 @using IdentityServer4.Extensions
 @model Web.Pages.TutorielIndexModel
 @{
-    ViewData["Title"] = "Home tutoriel";
+    ViewData["Title"] = "Accueil tutoriel";
 }
 
 <!-- Entête de la page (Titre + barre de recherche) -->
@@ -14,7 +14,7 @@
         @if(Model.Input.droitAccess == true)
         {
             <form class="d-flex" method="post" asp-page="Index" style="display:flex; justify-content: center;">
-                <button type="submit" class="btn btn-outline-primary" asp-page-handler="RedirectCreationTuto">Ajouté un tutoriel</button>
+                <button type="submit" class="btn btn-outline-primary" asp-page-handler="RedirectCreationTuto">Gestion des tutoriels</button>
             </form>
         }
     </div>
@@ -25,29 +25,44 @@
     <div class="row">
         <!-- Contenue du menu (Ou les filtres de recherche ce trouve) -->
         <div class="col-3" style="padding-right:1.5rem;padding-left:1.5rem;">
-            <h4>Filtre de recherches</h4>
+            <h4>Filtrer par :</h4>
             <hr />
 
             <!-- Btn Radio pour le mode de filtre. -->
             <div>
                 <form method="post" asp-page="Index" enctype="multipart/form-data" id="formFiltre">
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="radioFiltre" id="radioFiltreTitre" value="radioFiltreTitre" checked>
-                        <label class="form-check-label" for="radioFiltreTitre" style="margin:0;">Par titre</label>
+                    <div class="input-group input-group-sm mb-3">
+                        <label for="categorieDataList" style="width: 100%;">Sélectionner une catégorie</label>
+                        <input class="form-control shadow-sm" list="categorieDatalistOptions" id="categorieDataList" placeholder="Écrire pour rechercher..." name="cat">
+                        <datalist id="categorieDatalistOptions">
+                            <option id="filtreCategorieTous" value="Toutes" selected />
+                            @if (!(@Model.Input.lstCategories.IsNullOrEmpty()))
+                            {
+                                @foreach (var cat in @Model.Input.lstCategories)
+                                {
+                                    <option id="@cat.Id" value="@cat.Nom" />
+                                }
+                            }
+                        </datalist>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="radioFiltre" id="radioFiltreCategorie" value="radioFiltreCategorie">
-                        <label class="form-check-label" for="radioFiltreCategorie" style="margin:0;">Par catégorie</label>
-                    </div>
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" role="switch" id="radioFiltreEstPublie" name="radioFiltreEstPublie" value="true" checked>
-                        <label class="form-check-label" for="radioFiltreEstPublie" style="margin:0;">Est pubié</label>
-                    </div>
+
+                    @if(Model.Input.droitAccess == false){
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch" id="radioFiltreEstPublie" name="radioFiltreEstPublie" value="true" checked hidden>
+                            <label class="form-check-label" for="radioFiltreEstPublie" style="margin:0;" hidden>Est pubié</label>
+                        </div>
+                    } else
+                    {
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch" id="radioFiltreEstPublie" name="radioFiltreEstPublie" value="true" checked>
+                            <label class="form-check-label" for="radioFiltreEstPublie" style="margin:0;">Est pubié</label>
+                        </div>
+                    }
                     <br />
                     <input class="form-control me-2" type="search" placeholder="Recherche" id="rechercheValeur" name="rechercheValeur">
                     <br />
                     <div style="display: flex;justify-content:center;">
-                        <button data-filtreRecherche class="btn btn-outline-primary" type="submit">Recherche</button>
+                        <button data-filtreRecherche class="btn btn-outline-primary" type="submit">Rechercher</button>
                     </div>
                 </form>
             </div>
@@ -55,6 +70,16 @@
 
         <!-- Contenue de la page (ou les articles ce trouve) -->
         <div class="col-9">
+            <div class="pageDescriptionBox">
+                <h3>Un titre??????</h3>
+                <p class="divIntro">
+                    Quisque interdum dapibus ipsum, vel lacinia nulla eleifend non. Sed tortor tortor, placerat ut tincidunt et, euismod non sem.
+                    Phasellus vel est iaculis, dictum lorem nec, hendrerit eros. Donec ultrices ex eget nisi eleifend, sed eleifend ex commodo.
+                    Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Donec sed eros sed mi mollis ullamcorper non et sapien.
+                    Interdum et malesuada fames ac ante ipsum primis in faucibus. Fusce hendrerit, augue sit amet fringilla ullamcorper, lorem leo auctor enim,
+                    non pharetra tortor mi id nunc. Duis vel volutpat velit, sit amet luctus ante. In sit amet lorem quis ligula consectetur gravida. Integer in nulla tortor.
+                </p>
+            </div>
             <div class="row row-cols-1 row-cols-md-3 g-4" id="zoneCardTuto">
 
             </div>
@@ -103,8 +128,10 @@
     </div>
 </div>
 
+<!--
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.js" integrity="sha512-n/4gHW3atM3QqRcbCn6ewmpxcLAHGaDjpEBu4xZd47N0W2oQ+6q7oc3PXstrJYXcbNU1OHdQ1T7pAP+gi5Yu8g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.6.0/umd/popper.min.js" integrity="sha512-BmM0/BQlqh02wuK5Gz9yrbe7VyIVwOzD1o40yi1IsTjriX/NGF37NyXHfmFzIlMmoSIBXgqDiG1VNU6kB5dBbA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+-->
 
 <script src="~/javascript/Tutoriel/recherche/script-recherche-utils.js" asp-append-version="true"></script>
 <script src="~/javascript/Tutoriel/recherche/script-recherche-init.js" asp-append-version="true"></script>

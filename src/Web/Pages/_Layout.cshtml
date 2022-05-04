@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css"
           integrity="sha384-ejwKkLla8gPP8t2u0eQyL0Q/4ItcnyveF505U0NIobD/SMsNyXrLti6CWaD0L52l" crossorigin="anonymous">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.js" integrity="sha512-n/4gHW3atM3QqRcbCn6ewmpxcLAHGaDjpEBu4xZd47N0W2oQ+6q7oc3PXstrJYXcbNU1OHdQ1T7pAP+gi5Yu8g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!--<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>-->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js%22%3E</script>-->
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link rel="stylesheet" href="~/css/site.css" />
@@ -26,32 +28,31 @@
 
 
         <nav class="navbar navbar-expand-lg navbar-light" style="background-color:#ffa733;">
-          <div class="container-fluid">
-            <a class="navbar-brand" asp-page="/Index">
-              <img src="../images/CJC-ObjectifResilience-Mangue.png" alt="" width="30" height="24" class="d-inline-block align-text-top">
-              Objectif Résilience
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-              <div class="navbar-nav">
-                <a class="nav-link" href="/indexArticles">Articles</a>
-                <a class="nav-link" href="/Tutoriel">Tutoriels</a>
-                <a class="nav-link" href="/AudioFolder/PoadcastPage">Podcast</a>
-                @*<span class="navbar-text">*@
-                    @await Html.PartialAsync("_LoginPartial")
-                @*</span>*@
-                <!-- Je sais pas comment cétait, faq j'ai juste copier coller ton truc.' -->
-                @*@foreach (var nouvellePage in ViewData["newPages"] as IList<NewPage>)
-                {
-                    <li class="navItem">
-                        <a class="nav-link" href="/NewPage?Titre=@nouvellePage.Titre">@nouvellePage.Titre</a>
-                    </li>
-                }*@
-              </div>
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-page="/Index">
+                    <img src="../images/ObjectifResilience.png" alt="" width="100" height="50" class="d-inline-block align-text-top">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                    <div class="navbar-nav">
+                        <a class="nav-link" href="/indexArticles">Articles</a>
+                        <a class="nav-link" href="/Tutoriel">Tutoriels</a>
+                        <a class="nav-link" href="/AudioFolder/PoadcastPage">Podcast</a>
+                        @*<span class="navbar-text">*@
+                        @await Html.PartialAsync("_LoginPartial")
+                        @*</span>*@
+                        <!-- Je sais pas comment cétait, faq j'ai juste copier coller ton truc.' -->
+                        @*@foreach (var nouvellePage in ViewData["newPages"] as IList<NewPage>)
+                            {
+                            <li class="navItem">
+                            <a class="nav-link" href="/NewPage?Titre=@nouvellePage.Titre">@nouvellePage.Titre</a>
+                            </li>
+                            }*@
+                    </div>
+                </div>
             </div>
-          </div>
         </nav>
 
         <div class="body-content main affichageEtendu containerMain z-index -2">
@@ -62,25 +63,26 @@
                     <div class="footer-part1" style="display:flex;flex-direction:column;">
                         <div style="display:flex;justify-content:space-around;">
                             <div>
-                                <h3 >Ou nous trouver</h3>
-                                <p style="text-align:center;">200 Adresse a Quebec QC</p></div>
+                                <h3>Ou nous trouver</h3>
+                                <p style="text-align:center;">200 Adresse a Quebec QC</p>
+                            </div>
 
                             <div>
-                                <h3 >Nos informations</h3>
+                                <h3>Nos informations</h3>
                                 <p style="margin:0;text-align:center;">Anthony Dev - Abraham Dev</p>
                                 <p style="margin:0;text-align:center;">Antoine Dev - Gwenael Dev</p>
                             </div>
-                                                       <div>
-                            <h3 style="text-align:left;">Nos coordonnees</h3>
-                            <p style="text-align:center;margin:0">Mail: Projet@gmail.com</p>
-                            <p style="margin:0;text-align:center;">Tel: 418-000-0000</p>
+                            <div>
+                                <h3 style="text-align:left;">Nos coordonnees</h3>
+                                <p style="text-align:center;margin:0">Mail: Projet@gmail.com</p>
+                                <p style="margin:0;text-align:center;">Tel: 418-000-0000</p>
+                            </div>
                         </div>
-                        </div>
-@*                        <div>
+                        @*                        <div>
                             <h3 style="padding-right:20px;padding-left:20px;text-align:left;">Nos coordonnees</h3>
                             <p style="padding-right:20px;padding-left:20px;margin:0;">Tel: 418-000-0000</p>
                             <p style="padding-right:20px;padding-left:20px;">Mail: Projet@gmail.com</p>
-                        </div>*@
+                            </div>*@
 
                     </div>
                     <div class="footer-part2" style="display:flex;align-items: center;justify-content: center;">
@@ -96,14 +98,20 @@
     </div>
 
 
-    @RenderSection("Scripts", required: false)
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+            crossorigin="anonymous"></script>
+
     <script src="https://code.jquery.com/jquery-3.6.0.js"
             integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" c
-            rossorigin="anonymous"></script>
+            rossorigin="anonymous"></script>-->
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.js" integrity="sha512-n/4gHW3atM3QqRcbCn6ewmpxcLAHGaDjpEBu4xZd47N0W2oQ+6q7oc3PXstrJYXcbNU1OHdQ1T7pAP+gi5Yu8g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.6.0/umd/popper.min.js" integrity="sha512-BmM0/BQlqh02wuK5Gz9yrbe7VyIVwOzD1o40yi1IsTjriX/NGF37NyXHfmFzIlMmoSIBXgqDiG1VNU6kB5dBbA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    @RenderSection("Scripts", required: false)
+
 
 </body>
 </html>
