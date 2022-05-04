@@ -158,6 +158,14 @@ namespace Gwenael.Web.Pages
                                 ViewData["lstCategories"] = lstCategories;
                             }
                         }
+                        else if (Tab == "tutoriels")
+                        {
+                            if (DynamicQueryableExtensions.Any(_context.Tutos))
+                            {
+                                List<Tutos> lstTutos = (List<Tutos>)_context.Tutos.ToList();
+                                ViewData["lstTutos"] = lstTutos;
+                            }
+                        }
                         return Page();
                     }
                 }
@@ -173,7 +181,7 @@ namespace Gwenael.Web.Pages
             }
             return tupleUsers;
         }
-        public async Task<IActionResult> OnPostAsync(string supprCatVal, string descCat, string nomCat, string rechercheValeurDemande, string rechercheValeurUtilisateur, string rechercheValeurUtilisateurRole, string btnDeleteRole, string name, string selectRole, string btnAccepter, string btnRefuser, int? id)
+        public async Task<IActionResult> OnPostAsync(string btnRendrePublicTuto, string idTuto, string supprCatVal, string nomCat, string rechercheValeurDemande, string rechercheValeurUtilisateur, string rechercheValeurUtilisateurRole, string btnDeleteRole, string name, string selectRole, string btnAccepter, string btnRefuser, int? id)
         {
             if (User.Identity.IsAuthenticated)
             {
@@ -250,18 +258,47 @@ namespace Gwenael.Web.Pages
                     {
                         return Redirect("/AdminMenu/?tab=demandes&recherche=" + rechercheValeurDemande);
                     }
-                    else if (nomCat is not null && descCat is not null)
+                    else if (nomCat != null)
                     {
                         CategoriesTutos cat = new();
                         cat.Nom = nomCat;
-                        cat.Description = descCat;
+                        cat.Description = "";
 
-                        if (cat.EstValide())
+                        if (!String.IsNullOrEmpty(nomCat) && nomCat.Length <= 50)
                         {
-                            _context.CategoriesTutos.Add(cat);
-                            _context.SaveChanges();
+                            if (_context.CategoriesTutos.Where(c => c.Nom == nomCat).Count() == 0)
+                            {
+                                _context.CategoriesTutos.Add(cat);
+                                await _context.SaveChangesAsync();
+                            }
                         }
                         return Redirect("/AdminMenu/?tab=categories");
+                    }
+                    else if (idTuto != null)
+                    {
+                        Tutos tuto = new Tutos();
+                        try
+                        {
+                            tuto = _context.Tutos.Find(Guid.Parse(idTuto));
+                        }
+                        catch
+                        {
+                            Console.WriteLine("ERREUR");
+                        }
+                        if(tuto != null)
+                        {
+                            if (tuto.EstPublier)
+                            {
+                                tuto.EstPublier = false;
+                            }
+                            else
+                            {
+                                tuto.EstPublier = true;
+                            }
+                            _context.SaveChanges();
+                            return Redirect("/AdminMenu/?tab=tutoriels");
+                        }
+                       
                     }
                 }
             }
