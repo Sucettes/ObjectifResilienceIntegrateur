@@ -5,7 +5,6 @@
     var currentPosition = 1;
     var currTargetClick;
     var nbPage;
-    var aDroitGestionContenue;
     let scriptRechercheUtils = {
         rechercherTuto: event => {
             $('#btn-pagination-before').off('click');
@@ -126,6 +125,8 @@
                     $divBody.append($('<p style="color:#ff7733;font-weight: bold;">État: Non Publié</p>'));
                 }
             }
+            console.log(tutoData)
+            $divBody.append($('<p>Catégorie : ' + tutoData.categorie.nom + '</p>'))
 
             $div.append($div2);
             $div.append($divBody);
@@ -152,7 +153,7 @@
             } else {
                 currentPosition = Number(currTargetClick.value);
             }
-            scriptRechercheUtils.ajouterItem();
+            scriptRechercheUtils.obtenirDroit(scriptRechercheUtils.ajouterItem);
         },
         /**
          * Vérifie si l'utilisateur a les droits de gestion sur le contenue et exécute
@@ -173,6 +174,7 @@
                 processData: false,
                 success: function (data) {
                     callback(data);
+                    aDroitGestionContenue = data;
                 },
                 error: function () {
                     alert("un problème est survenu");

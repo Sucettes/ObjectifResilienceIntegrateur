@@ -46,10 +46,18 @@
                         </datalist>
                     </div>
 
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" role="switch" id="radioFiltreEstPublie" name="radioFiltreEstPublie" value="true" checked>
-                        <label class="form-check-label" for="radioFiltreEstPublie" style="margin:0;">Est pubié</label>
-                    </div>
+                    @if(Model.Input.droitAccess == false){
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch" id="radioFiltreEstPublie" name="radioFiltreEstPublie" value="true" checked hidden>
+                            <label class="form-check-label" for="radioFiltreEstPublie" style="margin:0;" hidden>Est pubié</label>
+                        </div>
+                    } else
+                    {
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch" id="radioFiltreEstPublie" name="radioFiltreEstPublie" value="true" checked>
+                            <label class="form-check-label" for="radioFiltreEstPublie" style="margin:0;">Est pubié</label>
+                        </div>
+                    }
                     <br />
                     <input class="form-control me-2" type="search" placeholder="Recherche" id="rechercheValeur" name="rechercheValeur">
                     <br />

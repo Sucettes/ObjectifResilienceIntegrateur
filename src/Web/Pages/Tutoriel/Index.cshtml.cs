@@ -81,32 +81,43 @@ namespace Gwenael.Web.Pages
         {
             try
             {
-                List<Tutos> t = new();
+                List<Tutos> t = new List<Tutos>();
                 if (!formData.cat.IsNullOrEmpty() && formData.cat != "Toutes")
                 {
-                    CategoriesTutos ct = _db.CategoriesTutos.Where(c => c.Nom.Contains(formData.rechercheValeur)).First();
-                    if (!formData.rechercheValeur.IsNullOrEmpty())
+                    List<CategoriesTutos> cats = _db.CategoriesTutos.Where(c => c.Nom.Contains(formData.cat)).ToList();
+                    if (cats.Count > 0)
                     {
-                        t = _db.Tutos.Where(t => t.EstPublier ==
-                        formData.radioFiltreEstPublie && t.Categorie == ct
-                        && t.Titre.Contains(formData.rechercheValeur)).ToList();
-                    }
-                    else
-                    {
-                        t = _db.Tutos.Where(t => t.EstPublier ==
-                        formData.radioFiltreEstPublie && t.Categorie == ct).ToList();
+                        if (!formData.rechercheValeur.IsNullOrEmpty())
+                        {
+                            t = _db.Tutos.Where(t => t.EstPublier ==
+                            formData.radioFiltreEstPublie && t.Categorie == cats[0]
+                            && t.Titre.Contains(formData.rechercheValeur)).ToList();
+                        }
+                        else
+                        {
+                            t = _db.Tutos.Where(t => t.EstPublier ==
+                            formData.radioFiltreEstPublie && t.Categorie == cats[0]).ToList();
+                        }
                     }
                 }
                 else if (!formData.rechercheValeur.IsNullOrEmpty())
                 {
-                    t = _db.Tutos.Where(t => t.EstPublier == formData.radioFiltreEstPublie
-                    && t.Titre.Contains(formData.rechercheValeur)).ToList();
+                    List<CategoriesTutos> catTemp = _db.CategoriesTutos.ToList();
+                    foreach (var item in catTemp)
+                    {
+                        t.AddRange(_db.Tutos.Where(t => t.EstPublier == formData.radioFiltreEstPublie
+                        && t.Categorie == item && t.Titre.Contains(formData.rechercheValeur)).ToList());
+                    }
                 }
                 else
                 {
-                    t = _db.Tutos.Where(t => t.EstPublier == formData.radioFiltreEstPublie).ToList();
+                    List<CategoriesTutos> catTemp = _db.CategoriesTutos.ToList();
+                    foreach (var item in catTemp)
+                    {
+                        t.AddRange(_db.Tutos.Where(t => t.EstPublier == formData.radioFiltreEstPublie && t.Categorie == item).ToList());
+                    }
                 }
-                return t != null ? StatusCode(201, new JsonResult(t)) : StatusCode(400);
+                return StatusCode(201, new JsonResult(t));
             }
             catch (Exception)
             {
