@@ -41,7 +41,7 @@
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
                     <button class="@(handler == "CreeTutorielDetails" ? "nav-link active" : "nav-link")" id="nav-detail-tab" data-bs-toggle="tab" data-bs-target="#nav-detail" type="button" role="tab" aria-controls="nav-detail" aria-selected="true">Détail</button>
                     <button class="@(handler == "TutoRangee" ? "nav-link active" : "nav-link ")" id="nav-contenue-tab" data-bs-toggle="tab" data-bs-target="#nav-contenue" type="button" role="tab" aria-controls="nav-contenue" aria-selected="false">Contenue</button>
-                    <button class="@(handler == "CreationCategorie" ? "nav-link active" : "nav-link")" id="nav-createCategorie-tab" data-bs-toggle="tab" data-bs-target="#nav-createCategorie" type="button" role="tab" aria-controls="nav-createCategorie" aria-selected="false">Créer catégorie</button>
+                    @*<button class="@(handler == "CreationCategorie" ? "nav-link active" : "nav-link")" id="nav-createCategorie-tab" data-bs-toggle="tab" data-bs-target="#nav-createCategorie" type="button" role="tab" aria-controls="nav-createCategorie" aria-selected="false">Créer catégorie</button>*@
                 </div>
             </nav>
 
@@ -321,7 +321,8 @@
                     </form>
                 </div>
 
-                <!-- Contenue ajout catégorie -->
+                <!--
+                @*<!-- Contenue ajout catégorie -->
                 <div class="@(handler == "CreationCategorie" ? "tab-pane show active" : "tab-pane ")" id="nav-createCategorie" style="background-color:white;" role="tabpanel" aria-labelledby="nav-createCategorie-tab">
 
                     @*<h3 style="text-align:left;">Création d'une nouvelle catégorie</h3>*@
@@ -344,16 +345,16 @@
                                 <span class="input-group-text" id="inputNomCategorie">Nom</span>
                                 <input required type="text" class="form-control" aria-label="Nom catégorie" aria-describedby="Nom catégorie" asp-for="@Model.Input.nomCategorie">
                             </div>
-                            <div class="input-group input-group-sm mb-3">
+    @*                        <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputDescriptionCategorie">Description</span>
                                 <input required type="text" class="form-control" aria-label="Description catégorie" aria-describedby="Description catégorie" asp-for="@Model.Input.descriptionCategorie">
-                            </div>
+                            </div>*@
 
                             <br />
                             <button type="submit" class="btn btn-outline-primary" asp-route-id="@id" asp-page-handler="CreationCategorie">Créé la catégorie</button>
                         </form>
                     </div>
-                </div>
+                </div>-->
             </div>
         </div>
     </div>
@@ -441,7 +442,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.6.0/umd/popper.min.js" integrity="sha512-BmM0/BQlqh02wuK5Gz9yrbe7VyIVwOzD1o40yi1IsTjriX/NGF37NyXHfmFzIlMmoSIBXgqDiG1VNU6kB5dBbA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 -->
 <script src="~/javascript/Tutoriel/tutorielToast.js" asp-append-version="true"></script>
-<script src="~/javascript/Tutoriel/tutorielCategorieCreeToast.js" asp-append-version="true"></script>
+<!--<script src="~/javascript/Tutoriel/tutorielCategorieCreeToast.js" asp-append-version="true"></script>-->
 
 <script src="~/javascript/Tutoriel/creation/CreationTutoPageAction.js" asp-append-version="true"></script>
 <script src="~/javascript/Tutoriel/creation/ModificationTutoPageAction.js" asp-append-version="true"></script>

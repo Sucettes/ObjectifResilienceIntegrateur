@@ -323,48 +323,6 @@ namespace Gwenael.Web.Pages
             return StatusCode(403);
         }
 
-        public IActionResult OnPostCreationCategorie(string id, string handler)
-        {
-            try
-            {
-                if (User.Identity.IsAuthenticated)
-                {
-                    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-                    if (Permission.VerifierAccesGdC(idConnectedUser, _db))
-                    {
-                        string status = "false";
-                        if (!_db.CategoriesTutos.Where(c => c.Nom == Input.nomCategorie).Any())
-                        {
-                            CategoriesTutos cat = new();
-                            cat.Nom = Input.nomCategorie;
-                            cat.Description = Input.descriptionCategorie;
-
-                            if (cat.EstValide())
-                            {
-                                _db.CategoriesTutos.Add(cat);
-                                _db.SaveChanges();
-
-                                Input.descriptionCategorie = "";
-                                Input.nomCategorie = "";
-                                status = "true";
-                            }
-                        }
-                        Input.id = id;
-                        Input.handler = handler;
-
-                        UpdateInputData();
-                        return Redirect($"/Tutoriel/CreationTuto?handler=CreationCategorie&id={Input.id}&creationCategorieStatus={status}");
-                    }
-                }
-                return StatusCode(403);
-            }
-            catch (Exception)
-            {
-                UpdateInputData();
-                return Page();
-            }
-        }
-
         public class CreationTutoRangeeFormData
         {
             public string idRangee { get; set; }
