@@ -33,7 +33,7 @@
                 <form method="post" asp-page="Index" enctype="multipart/form-data" id="formFiltre">
                     <div class="input-group input-group-sm mb-3">
                         <label for="categorieDataList" style="width: 100%;">Sélectionner une catégorie</label>
-                        <input class="form-control shadow-sm" list="categorieDatalistOptions" id="categorieDataList" placeholder="Écrire pour rechercher..." name="cat">
+                        <input class="form-control shadow-sm" list="categorieDatalistOptions" id="categorieDataList" placeholder="Écrire pour Sélectionner une catégorie..." name="cat">
                         <datalist id="categorieDatalistOptions">
                             <option id="filtreCategorieTous" value="Toutes" selected />
                             @if (!(@Model.Input.lstCategories.IsNullOrEmpty()))
@@ -123,7 +123,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
         <div class="toast-body">
-            Le tutoriel a bien été retiré du mode public!
+            Le status de visibilité du tutoriel a bien été mis a jours!
         </div>
     </div>
 </div>

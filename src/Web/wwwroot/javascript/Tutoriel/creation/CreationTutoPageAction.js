@@ -35,7 +35,6 @@ $(document).ready(function () {
                 creationReussie(data, curTarget);
             },
             error: function () {
-                // 
             }
         });
     });

@@ -38,7 +38,6 @@ $(document).ready(function () {
     });
 
     function modificationReussie(data) {
-        console.log(data);
         var toastObj = new bootstrap.Toast(toastRD);
 
         $('#imgBanierre').attr('src', data.value.imgUrl);

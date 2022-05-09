@@ -19,14 +19,21 @@
                 <form method="post" asp-page="CreationTuto" style="margin-right:0.4rem;">
                     <button type="submit" class="btn btn-outline-primary" asp-page-handler="RedirectHomeTuto">Retour</button>
                 </form>
+
+                @if (!Model.Input.tutoriel.EstPublier)
+                {
+                    <a class="btn btn-outline-primary" href="/Tutoriel/CreationTuto?handler=TutoRangee&id=@tuto.Id" style="margin-right: 5px;">Modifié</a>
+                }
                 <form method="post" asp-page="Consultation">
                     <input name="tutorielIdVal" type="text" value="@tuto.Id" hidden />
-                    @if(Model.Input.droitAccess == true)
-                    {
-                        <button type="submit" class="btn btn-danger" data-supprimerTuto asp-page-handler="DeleteTuto" data-bs-toggle="modal" data-bs-target="#modalValideDeleteTuto"><img src="~/icons/deleteIcon.svg" /></button>
+                    @if(Model.Input.tutoriel.EstPublier){
                         <button type="submit" class="btn btn-primary" data-UnpublishTuto asp-page-handler="UnpublishTuto" data-bs-toggle="modal" data-bs-target="#modalValideUnpublishTuto">Rendre non public</button>
                     }
-                </form>
+                    else
+                    {
+                        <button type="submit" class="btn btn-primary" data-UnpublishTuto asp-page-handler="UnpublishTuto" data-bs-toggle="modal" data-bs-target="#modalValideUnpublishTuto">Rendre public</button>
+                    }
+            </form>
             </div>
         </div>
     </nav>
@@ -54,12 +61,12 @@
                             @if (@tuto.EstPublier == true)
                             {
                                 <p style="font-weight: bold;">Publié le @tuto.DateCreation.ToString("dd/MM/yyyy")</p>
-                                <p style="color:#38b000; font-weight: bold;">États: Publié</p>
+                                <p style="color:#38b000; font-weight: bold;">Status: Publié</p>
                             }
                             else
                             {
                                 <p style="font-weight: bold;">Publié le @tuto.DateCreation.ToString("dd/MM/yyyy")</p>
-                                <p style="color:#ff7733;font-weight: bold;">États: Non Publié</p>
+                                <p style="color:#ff7733;font-weight: bold;">Status: Non Publié</p>
                             }
                         }
                         <div class="input-group input-group-sm mb-3">
@@ -151,23 +158,7 @@
 }
 
 
-<div class="modal" id="modalValideDeleteTuto" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalValideDeleteTutoLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalValideDeleteTutoLabel">Confirmation!</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Cette action n’est pas réversible, est-ce que vous voulez vraiment supprimer ce tutoriel?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Non</button>
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="btnConfirmDeleteTuto">Oui</button>
-            </div>
-        </div>
-    </div>
-</div>
+
 
 <div class="modal" id="modalValideUnpublishTuto" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalValideUnpublishTutoLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -177,7 +168,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                Voulez-vous vraiment retirer le tutoriel du mode public? Vous allez devoir aller dans le menu créé tutoriel afin de pouvoir le modifier et de le republier.
+                Voulez-vous vraiment mettre a jours le Status du tutoriel?
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Non</button>
@@ -199,6 +190,5 @@
     </div>
 </div>
 
-<script src="~/javascript/Tutoriel/tutorielSupprimer.js" asp-append-version="true"></script>
 <script src="~/javascript/Tutoriel/tutorielUnpublish.js" asp-append-version="true"></script>
 <script src="~/javascript/Tutoriel/tutorielToastPublish.js" asp-append-version="true"></script>
