@@ -75,29 +75,6 @@ namespace Gwenael.Web.Pages
             return RedirectToPage("Index");
         }
 
-        public IActionResult OnPostDeleteTuto([FromBody] TutorielIdVal tutoVal)
-        {
-            try
-            {
-                if (User.Identity.IsAuthenticated)
-                {
-                    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-                    if (Permission.VerifierAccesGdC(idConnectedUser, _db))
-                    {
-                        _db.Tutos.Remove(entity: _db.Tutos.Where(t => t.Id == Guid.Parse(tutoVal.tutorielIdVal)).First());
-                        _db.SaveChanges();
-
-                        return Redirect("/tutoriel?deleteStatus=true");
-                    }
-                }
-                return Redirect("/tutoriel");
-            }
-            catch (Exception)
-            {
-                return Redirect("/tutoriel");
-            }
-        }
-
         public IActionResult OnPostUnpublishTuto([FromBody] TutorielIdVal tutoVal)
         {
             try
@@ -107,7 +84,15 @@ namespace Gwenael.Web.Pages
                     Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
                     if (Permission.VerifierAccesGdC(idConnectedUser, _db))
                     {
-                        _db.Tutos.Where(t => t.Id == Guid.Parse(tutoVal.tutorielIdVal)).First().EstPublier = false;
+                        Console.WriteLine(tutoVal);
+
+                        Tutos t = _db.Tutos.Where(t => t.Id == Guid.Parse(tutoVal.tutorielIdVal)).First();
+                        
+                        bool status = false;
+                        if (!t.EstPublier)
+                            status = true;
+
+                        _db.Tutos.Where(t => t.Id == Guid.Parse(tutoVal.tutorielIdVal)).First().EstPublier = status;
                         _db.SaveChanges();
 
                         return Redirect("/tutoriel?unPublishStatus=true");

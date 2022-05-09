@@ -41,7 +41,6 @@
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
                     <button class="@(handler == "CreeTutorielDetails" ? "nav-link active" : "nav-link")" id="nav-detail-tab" data-bs-toggle="tab" data-bs-target="#nav-detail" type="button" role="tab" aria-controls="nav-detail" aria-selected="true">Détail</button>
                     <button class="@(handler == "TutoRangee" ? "nav-link active" : "nav-link ")" id="nav-contenue-tab" data-bs-toggle="tab" data-bs-target="#nav-contenue" type="button" role="tab" aria-controls="nav-contenue" aria-selected="false">Contenue</button>
-                    @*<button class="@(handler == "CreationCategorie" ? "nav-link active" : "nav-link")" id="nav-createCategorie-tab" data-bs-toggle="tab" data-bs-target="#nav-createCategorie" type="button" role="tab" aria-controls="nav-createCategorie" aria-selected="false">Créer catégorie</button>*@
                 </div>
             </nav>
 
@@ -61,8 +60,36 @@
                         </p>
                     </div>
 
-                    @*<h3 style="text-align:left;">Détails du tutoriel</h3>*@
+                    <form method="post" asp-page="CreationTuto">
+                        <div class="row">
+                            <label for="tutoId" style="width: 100%;">Sélectionner un tutoriel</label>
+                            <div class="col-10">
+                                <select class="form-select" aria-label="Sélectionner un tutoriel" name="tutoId">
+                                    @if (!(@Model.Input.lstTutoriels.IsNullOrEmpty()))
+                                    {
+                                        <option value="@id" selected disabled>Sélectionner un tutoriel</option>
+                                        @foreach (var tuto in @Model.Input.lstTutoriels)
+                                        {
+                                            if (!String.IsNullOrEmpty(@id) && tuto.Id.ToString() == @id)
+                                            {
+                                                <option value="@tuto.Id" selected>@tuto.Titre (Non Publié)</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@tuto.Id">@tuto.Titre (Non Publié)</option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-2">
+                                <button type="submit" class="btn btn-outline-primary" asp-page-handler="TutoChanger">Sélectionner</button>
+                            </div>
+                        </div>
+                    </form>
 
+                    <br />
+                    <h3 style="text-align:left;">Nouveau tutoriels</h3>
                     <form method="post" asp-page="CreationTuto" enctype="multipart/form-data" id="formCreationTuto">
                         <input id="idTutoP" value="@id" hidden name="idTutoP" />
                         <div class="row">
@@ -89,13 +116,13 @@
                                     <div class="col-6">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputDuree">Durée (heures)</span>
-                                            <input type="number" class="form-control" aria-label="Durée" aria-describedby="Durée" asp-for="@Model.Input.duree" name="duree">
+                                            <input type="number" class="form-control" aria-label="Durée" aria-describedby="Durée" asp-for="@Model.Input.duree" name="duree" min=0>
                                         </div>
                                     </div>
                                     <div class="col-6">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputCout">Cout</span>
-                                            <input type="number" class="form-control" aria-label="Cout" aria-describedby="Cout" asp-for="@Model.Input.cout" name="cout">
+                                            <input type="number" class="form-control" aria-label="Cout" aria-describedby="Cout" asp-for="@Model.Input.cout" name="cout" min=0>
                                             <span class="input-group-text">$</span>
                                         </div>
                                     </div>
@@ -187,40 +214,7 @@
                         </p>
                     </div>
 
-                    @*<h3 style="text-align:left;">Étapes du tutoriel</h3>*@
-                    <form method="post" asp-page="CreationTuto">
-                        <div class="row">
-                            <label for="tutoId" style="width: 100%;">Sélectionner un tutoriel</label>
-                            <div class="col-10">
-                                <select class="form-select" aria-label="Sélectionner un tutoriel" name="tutoId">
-                                    @if (!(@Model.Input.lstTutoriels.IsNullOrEmpty()))
-                                    {
-                                        <option value="@id" selected disabled>Sélectionner un tutoriel</option>
-                                        @foreach (var tuto in @Model.Input.lstTutoriels)
-                                        {
-                                            if (!String.IsNullOrEmpty(@id) && tuto.Id.ToString() == @id)
-                                            {
-                                                <option value="@tuto.Id" selected>@tuto.Titre (Non Publié)</option>
-                                            }
-                                            else
-                                            {
-                                                <option value="@tuto.Id">@tuto.Titre (Non Publié)</option>
-                                            }
-                                        }
-                                    }
-                                </select>
-                            </div>
-                            <div class="col-2">
-                                <button type="submit" class="btn btn-outline-primary" asp-page-handler="TutoChanger">Sélectionner</button>
-                            </div>
-                        </div>
-                    </form>
-
-                    <br />
-
                     <h3 style="text-align:left;">Étapes</h3>
-
-                    <br />
 
                     <section id="rangeeTutoSection">
                         <!-- Boucle sur toute les étapes et valide si elle ne sont pas null.-->
@@ -320,41 +314,6 @@
                         </div>
                     </form>
                 </div>
-
-                <!--
-                @*<!-- Contenue ajout catégorie -->
-                <div class="@(handler == "CreationCategorie" ? "tab-pane show active" : "tab-pane ")" id="nav-createCategorie" style="background-color:white;" role="tabpanel" aria-labelledby="nav-createCategorie-tab">
-
-                    @*<h3 style="text-align:left;">Création d'une nouvelle catégorie</h3>*@
-                    <br />
-                    <div class="row">
-                        <div class="pageDescriptionBox" style="margin:0px;">
-                            <h3>Création d'une nouvelle catégorie</h3>
-                            <p class="divIntro">
-                                Ici c’est un raccourci pour l’ajout d’une nouvelle catégorie. Les catégories peuvent être modifiées,
-                                créées ou supprimées via la page administrateur. Vous pouvez y accéder grâce à ce bouton.
-                            </p>
-                            <br />
-                            <form method="post" asp-page="CreationTuto" style="display:flex; justify-content: center;">
-                                <button type="submit" class="btn btn-outline-secondary" asp-page-handler="RedirectAdminMenu">Voir page admin</button>
-                            </form>
-                        </div>
-                        <form method="post" asp-page="CreationTuto">
-                            <br />
-                            <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text" id="inputNomCategorie">Nom</span>
-                                <input required type="text" class="form-control" aria-label="Nom catégorie" aria-describedby="Nom catégorie" asp-for="@Model.Input.nomCategorie">
-                            </div>
-    @*                        <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text" id="inputDescriptionCategorie">Description</span>
-                                <input required type="text" class="form-control" aria-label="Description catégorie" aria-describedby="Description catégorie" asp-for="@Model.Input.descriptionCategorie">
-                            </div>*@
-
-                            <br />
-                            <button type="submit" class="btn btn-outline-primary" asp-route-id="@id" asp-page-handler="CreationCategorie">Créé la catégorie</button>
-                        </form>
-                    </div>
-                </div>-->
             </div>
         </div>
     </div>
@@ -437,12 +396,7 @@
     </div>
 </div>
 
-<!--
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.js" integrity="sha512-n/4gHW3atM3QqRcbCn6ewmpxcLAHGaDjpEBu4xZd47N0W2oQ+6q7oc3PXstrJYXcbNU1OHdQ1T7pAP+gi5Yu8g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.6.0/umd/popper.min.js" integrity="sha512-BmM0/BQlqh02wuK5Gz9yrbe7VyIVwOzD1o40yi1IsTjriX/NGF37NyXHfmFzIlMmoSIBXgqDiG1VNU6kB5dBbA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
--->
 <script src="~/javascript/Tutoriel/tutorielToast.js" asp-append-version="true"></script>
-<!--<script src="~/javascript/Tutoriel/tutorielCategorieCreeToast.js" asp-append-version="true"></script>-->
 
 <script src="~/javascript/Tutoriel/creation/CreationTutoPageAction.js" asp-append-version="true"></script>
 <script src="~/javascript/Tutoriel/creation/ModificationTutoPageAction.js" asp-append-version="true"></script>

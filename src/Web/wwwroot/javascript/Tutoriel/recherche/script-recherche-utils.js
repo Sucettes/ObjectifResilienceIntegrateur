@@ -125,7 +125,6 @@
                     $divBody.append($('<p style="color:#ff7733;font-weight: bold;">État: Non Publié</p>'));
                 }
             }
-            console.log(tutoData)
             $divBody.append($('<p>Catégorie : ' + tutoData.categorie.nom + '</p>'));
 
             $divBody.append($('<p>' + tutoData.introduction.substring(0,200) + '</p>'));
