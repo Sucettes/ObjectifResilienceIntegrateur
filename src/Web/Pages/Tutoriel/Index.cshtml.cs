@@ -77,6 +77,7 @@ namespace Gwenael.Web.Pages
             public string rechercheValeur { get; set; }
             public string cat { get; set; }
         }
+
         public IActionResult OnPostRecherche([FromForm] RechercherFiltre formData)
         {
             try
