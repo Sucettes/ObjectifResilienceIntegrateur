@@ -92,6 +92,26 @@ namespace Gwenael.Web.Pages
                                 return Page();
                             }
                         }
+                        else if (Tab == "podcasts")
+                        {
+                            string recherche = Request.Query["recherche"];
+                            if (recherche is not null)
+                            {
+                                audios = _context.Audios.ToList().Where(a => a.titre.Contains(recherche)).ToList();
+                                ViewData["lstAudios"] = audios;
+                                return Page();
+                               
+                            }
+                        }
+                        else if (Tab == "tutoriels")
+                        {
+                            string recherche = Request.Query["recherche"];
+                            if (recherche != null)
+                            {
+                                ViewData["lstTutos"] = _context.Tutos.ToList().Where(t => t.Titre.Contains(recherche)).ToList();
+                                return Page();
+                            }
+                        }
                         else if (Tab == "demandes")
                         {
                             string recherche = Request.Query["recherche"];
@@ -104,6 +124,15 @@ namespace Gwenael.Web.Pages
                                 {
                                     ViewData["lstNonActiver"] = UsersNonActivated;
                                 }
+                                return Page();
+                            }
+                        }
+                        else if (Tab == "articles")
+                        {
+                            string recherche = Request.Query["recherche"];
+                            if (recherche is not null)
+                            {
+                                ViewData["lstArticles"] = _context.Articles.ToList().Where(a => a.Titre.Contains(recherche)).ToList();
                                 return Page();
                             }
                         }
@@ -197,7 +226,7 @@ namespace Gwenael.Web.Pages
             }
             return tupleUsers;
         }
-        public async Task<IActionResult> OnPostAsync(string btnSupprimerArticle, string btnSupprimer, string btnSupprimerTuto, string idAudio, string idTuto, string supprCatVal, string nomCat, string rechercheValeurDemande, string rechercheValeurUtilisateur, string rechercheValeurUtilisateurRole, string btnDeleteRole, string name, string selectRole, string btnAccepter, string btnRefuser, int? id)
+        public async Task<IActionResult> OnPostAsync(string btnSupprimerArticle, string btnSupprimer, string btnSupprimerTuto, string idAudio, string idTuto, string supprCatVal, string nomCat, string rechercheValeurArticle, string rechercheValeurTuto, string rechercheValeurPodcast, string rechercheValeurDemande, string rechercheValeurUtilisateur, string rechercheValeurUtilisateurRole, string btnDeleteRole, string name, string selectRole, string btnAccepter, string btnRefuser, int? id)
         {
             if (User.Identity.IsAuthenticated)
             {
@@ -273,6 +302,19 @@ namespace Gwenael.Web.Pages
                     else if (rechercheValeurDemande is not null)
                     {
                         return Redirect("/AdminMenu/?tab=demandes&recherche=" + rechercheValeurDemande);
+                    }
+                    else if (rechercheValeurPodcast is not null)
+                    {
+                        return Redirect("/AdminMenu/?tab=podcasts&recherche=" + rechercheValeurPodcast);
+                    }
+                    else if (rechercheValeurTuto is not null)
+                    {
+                        return Redirect("/AdminMenu/?tab=tutoriels&recherche=" + rechercheValeurTuto);
+
+                    }
+                    else if (rechercheValeurArticle is not null)
+                    {
+                        return Redirect("/AdminMenu/?tab=articles&recherche=" + rechercheValeurTuto);
                     }
                     else if (nomCat != null)
                     {

@@ -13,6 +13,7 @@
     List<Tutos> lstTutos = (List<Tutos>)ViewData["lstTutos"];
     List<Article> lstArticles = (List<Article>)ViewData["lstArticles"];
     List<NewPage> lstPages = (List<NewPage>)ViewData["lstPages"];
+    List<Audio> lstAudios = (List<Audio>)ViewData["lstAudios"];
 
 }
 <!-- Entête de la page (Titre + btn retour) -->
@@ -331,7 +332,16 @@
             }
             else if (ViewData["Tab"].ToString() == "podcasts")
             {
-                @if (ViewData["lstAudios"] is not null)
+                <form method="post" style="display:flex; justify-content: right;">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Recherche" required name="rechercheValeurPodcast">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-primary" type="submit"><img style="width:40%;" src="~/icons/searchIcon.svg" /></button>
+                            <a class="btn btn-outline-primary" href="?tab=podcasts"><img style="width:40%;" src="~/icons/refresh.svg" /></a>
+                        </div>
+                    </div>
+                </form>
+                @if (lstAudios is not null && lstAudios.Count > 0)
                 {
                     @foreach (var audio in ViewData["lstAudios"] as IList<Audio>)
                     {
@@ -469,7 +479,16 @@
             }
             else if (ViewData["Tab"].ToString() == "tutoriels")
             {
-                if (lstTutos != null)
+                <form method="post" style="display:flex; justify-content: right;">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Recherche" required name="rechercheValeurTuto">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-primary" type="submit"><img style="width:40%;" src="~/icons/searchIcon.svg" /></button>
+                            <a class="btn btn-outline-primary" href="?tab=tutoriels"><img style="width:40%;" src="~/icons/refresh.svg" /></a>
+                        </div>
+                    </div>
+                </form>
+                if (lstTutos != null && lstTutos.Count > 0)
                 {
                     foreach (Tutos tuto in lstTutos)
                     {
@@ -616,7 +635,16 @@
             }
             else if (ViewData["Tab"].ToString() == "articles")
             {
-                if (lstArticles != null)
+                <form method="post" style="display:flex; justify-content: right;">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Recherche" required name="rechercheValeurArticle">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-primary" type="submit"><img style="width:40%;" src="~/icons/searchIcon.svg" /></button>
+                            <a class="btn btn-outline-primary" href="?tab=articles"><img style="width:40%;" src="~/icons/refresh.svg" /></a>
+                        </div>
+                    </div>
+                </form>
+                if (lstArticles != null && lstArticles.Count > 0)
                 {
                     foreach (Article article in lstArticles)
                     {
