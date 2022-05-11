@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using System;
 using Gwenael.Domain;
 using Microsoft.AspNetCore.Identity;
+using System.Text.RegularExpressions;
+using System.Linq;
 
 namespace Gwenael.Web.Pages
 {
@@ -32,11 +34,25 @@ namespace Gwenael.Web.Pages
             {
                 user = await _context.Users.FindAsync(id);
                 ViewData["user"] = user;
+                string erreur = Request.Query["erreur"];
+                if (erreur != null)
+                {
+                    Console.WriteLine(erreur);
+                    if (erreur == "courriel")
+                    {
+                        Console.WriteLine("Test");
+                        ViewData["erreur"] = "Le courriel n'est pas valide";
+                    }
+                    else if (erreur == "courrielExist")
+                    {
+                        ViewData["erreur"] = "Le courriel est déjà utilisé";
+                    }
+                }
                 return Page();
             }
 
         }
-        public async Task<IActionResult> OnPost(string btnSave, string btnDelete, string btnAdd, string NewPassword, string ConfPassword)
+        public async Task<IActionResult> OnPost(string btnSave, string btnDelete, string btnAdd, string ConfPassword, string NewPassword)
         {
             User userBd = null;
             try
@@ -48,31 +64,35 @@ namespace Gwenael.Web.Pages
             }
             if (btnSave != null)
             {
-                //Console.WriteLine(NewPassword);
-                //Console.WriteLine(ConfPassword);
-
-                //if (NewPassword is not null)
-                //{
-                //    string hashedPassword = _passHasher.HashPassword(userBd, NewPassword);
-                //    if (ConfPassword is not null)
-                //    {
-                //        PasswordVerificationResult result = _passHasher.VerifyHashedPassword(userBd, hashedPassword, ConfPassword);
-                //        if (result is PasswordVerificationResult.Success)
-                //        {
-                //            Console.WriteLine("Success");
-                //            userBd.PasswordHash = hashedPassword;
-                //        }
-                //        else
-                //        {
-                //            return Page();
-                //        }
-                //    }
-                //}
-                //userBd.UserName = user.UserName;
-                //userBd.Email = user.Email;
-                //userBd.LastName = user.LastName;
-                //userBd.FirstName = user.FirstName;
-                //await _context.SaveChangesAsync();
+                if (userBd.Email != user.Email)
+                {
+                    if (!Regex.IsMatch(user.Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+                    {
+                        return Redirect("/User/" + user.Id + "/?erreur=courriel");
+                    }
+                    else
+                    {
+                        List<User> userTest = _context.Users.Where(u => u.Email == user.Email).ToList();
+                        if (userTest.Count == 0)
+                        {
+                            userBd.Email = user.Email;
+                            userBd.UserName = user.Email;
+                        }
+                        else
+                        {
+                            return Redirect("/User/" + user.Id +"/?erreur=courrielExist");
+                        }
+                    }
+                }
+                if (userBd.FirstName != user.FirstName)
+                {
+                    userBd.FirstName = user.FirstName;
+                }
+                if (userBd.LastName != user.LastName)
+                {
+                    userBd.LastName = user.LastName;
+                }
+                await _context.SaveChangesAsync();
                 return RedirectToPage("adminMenu");
             }
             else if (btnDelete != null)
@@ -99,39 +119,15 @@ namespace Gwenael.Web.Pages
                         var result = await _userManager.CreateAsync(newUser, NewPassword);
                         if (result.Succeeded)
                         {
-                            Console.WriteLine("Yo big c'est sensé avoir marché");
                             _context.SaveChanges();
-                            return RedirectToPage("adminMenu");
                         }
                         else
                         {
-                            Console.WriteLine("Wtf");
                             Console.WriteLine(result);
-                            return RedirectToPage("user");
                         }
 
                     }
-                    else
-                    {
-                        Console.WriteLine("SONT Pas Pareille");
-
-                    }
-                    //string hashedPassword = _passHasher.HashPassword(userBd, NewPassword);
-                    //if (ConfPassword is not null)
-                    //{
-                    //    PasswordVerificationResult result = _passHasher.VerifyHashedPassword(userBd, hashedPassword, ConfPassword);
-                    //    if(result is PasswordVerificationResult.Success)
-                    //    {
-                    //        user.PasswordHash = hashedPassword;
-                    //        succeed = true;
-                    //    }
-                    //    else
-                    //    {
-                    //        return Page();
-                    //    }
-                    //}
                 }
-                //_context.SaveChanges();
                 return RedirectToPage("adminMenu");
             }
             return RedirectToPage("index");

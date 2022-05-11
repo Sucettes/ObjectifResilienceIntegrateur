@@ -11,6 +11,9 @@
     List<(User, List<Role>)> lstTupleUser = (List<(User, List<Role>)>)ViewData["tupleUsers"];
     List<CategoriesTutos> lstCategorie = (List<CategoriesTutos>)ViewData["lstCategories"];
     List<Tutos> lstTutos = (List<Tutos>)ViewData["lstTutos"];
+    List<Article> lstArticles = (List<Article>)ViewData["lstArticles"];
+    List<NewPage> lstPages = (List<NewPage>)ViewData["lstPages"];
+
 }
 <!-- Entête de la page (Titre + btn retour) -->
 <nav class="navbar navbar-light shadow-sm">
@@ -29,74 +32,77 @@
                     <a href="?tab=utilisateurs" class="nav-link active">Utilisateurs</a>
                     <a href="?tab=roles" class="nav-link">Rôles</a>
                     <a href="?tab=demandes" class="nav-link">Demandes</a>
-                    <a href="?tab=poadcasts" class="nav-link">Poadcasts</a>
                     <a href="?tab=categories" class="nav-link">Categories</a>
+                    <a href="?tab=podcasts" class="nav-link">Podcasts</a>
                     <a href="?tab=tutoriels" class="nav-link">Tutoriels</a>
+                    <a href="?tab=articles" class="nav-link">Articles</a>
 
-                    <form method="post" style="display:flex; justify-content: right;">
-                        <div class="input-group mb-3">
-                            <input type="text" class="form-control" placeholder="Recherche" required name="rechercheValeurUtilisateur">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-primary" type="submit"><img style="width:40%;" src="~/icons/searchIcon.svg" /></button>
-                            </div>
-                        </div>
-                    </form>
+
                 }
-                @if (ViewData["Tab"].ToString() == "roles")
+                else if (ViewData["Tab"].ToString() == "roles")
                 {
                     <a href="?tab=utilisateurs" class="nav-link">Utilisateurs</a>
                     <a href="?tab=roles" class="nav-link active">Rôles</a>
                     <a href="?tab=demandes" class="nav-link">Demandes</a>
-                    <a href="?tab=poadcasts" class="nav-link">Poadcasts</a>
                     <a href="?tab=categories" class="nav-link">Categories</a>
+                    <a href="?tab=podcasts" class="nav-link">Podcasts</a>
                     <a href="?tab=tutoriels" class="nav-link">Tutoriels</a>
+                    <a href="?tab=articles" class="nav-link">Articles</a>
 
                 }
-                @if (ViewData["Tab"].ToString() == "demandes")
+                else if (ViewData["Tab"].ToString() == "demandes")
                 {
                     <a href="?tab=utilisateurs" class="nav-link">Utilisateurs</a>
                     <a href="?tab=roles" class="nav-link">Rôles</a>
                     <a href="?tab=demandes" class="nav-link active">Demandes</a>
-                    <a href="?tab=poadcasts" class="nav-link">Poadcasts</a>
                     <a href="?tab=categories" class="nav-link">Categories</a>
+                    <a href="?tab=podcasts" class="nav-link">Podcasts</a>
                     <a href="?tab=tutoriels" class="nav-link">Tutoriels</a>
-
-                    <form method="post" style="display:flex; justify-content: right;">
-                        <div class="input-group mb-3">
-                            <input type="text" class="form-control" placeholder="Recherche" required name="rechercheValeurDemande">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-primary" type="submit"><img style="width:40%;" src="~/icons/searchIcon.svg" /></button>
-                            </div>
-                        </div>
-                    </form>
+                    <a href="?tab=articles" class="nav-link">Articles</a>
                 }
-                @if (ViewData["Tab"].ToString() == "poadcasts")
+                else if (ViewData["Tab"].ToString() == "podcasts")
                 {
                     <a href="?tab=utilisateurs" class="nav-link">Utilisateurs</a>
                     <a href="?tab=roles" class="nav-link">Rôles</a>
                     <a href="?tab=demandes" class="nav-link">Demandes</a>
-                    <a href="?tab=poadcasts" class="nav-link active">Poadcasts</a>
                     <a href="?tab=categories" class="nav-link">Categories</a>
+                    <a href="?tab=podcasts" class="nav-link active">Podcasts</a>
                     <a href="?tab=tutoriels" class="nav-link">Tutoriels</a>
+                    <a href="?tab=articles" class="nav-link">Articles</a>
 
                 }
-                @if (ViewData["Tab"].ToString() == "categories")
+                else if (ViewData["Tab"].ToString() == "categories")
                 {
                     <a href="?tab=utilisateurs" class="nav-link">Utilisateurs</a>
                     <a href="?tab=roles" class="nav-link">Rôles</a>
                     <a href="?tab=demandes" class="nav-link">Demandes</a>
-                    <a href="?tab=poadcasts" class="nav-link">Poadcasts</a>
                     <a href="?tab=categories" class="nav-link active">Categories</a>
+                    <a href="?tab=podcasts" class="nav-link">Podcasts</a>
                     <a href="?tab=tutoriels" class="nav-link">Tutoriels</a>
+                    <a href="?tab=articles" class="nav-link">Articles</a>
+
                 }
-                @if (ViewData["Tab"].ToString() == "tutoriels")
+                else if (ViewData["Tab"].ToString() == "tutoriels")
                 {
                     <a href="?tab=utilisateurs" class="nav-link">Utilisateurs</a>
                     <a href="?tab=roles" class="nav-link">Rôles</a>
                     <a href="?tab=demandes" class="nav-link">Demandes</a>
-                    <a href="?tab=poadcasts" class="nav-link">Poadcasts</a>
                     <a href="?tab=categories" class="nav-link">Categories</a>
+                    <a href="?tab=podcasts" class="nav-link">Podcasts</a>
                     <a href="?tab=tutoriels" class="nav-link active">Tutoriels</a>
+                    <a href="?tab=articles" class="nav-link">Articles</a>
+
+                }
+                else if (ViewData["Tab"].ToString() == "articles")
+                {
+                    <a href="?tab=utilisateurs" class="nav-link">Utilisateurs</a>
+                    <a href="?tab=roles" class="nav-link">Rôles</a>
+                    <a href="?tab=demandes" class="nav-link">Demandes</a>
+                    <a href="?tab=categories" class="nav-link">Categories</a>
+                    <a href="?tab=podcasts" class="nav-link">Podcasts</a>
+                    <a href="?tab=tutoriels" class="nav-link">Tutoriels</a>
+                    <a href="?tab=articles" class="nav-link active">Articles</a>
+
                 }
             }
         </div>
@@ -129,6 +135,7 @@
                                 <input type="text" class="form-control" type="search" placeholder="Recherche" required name="rechercheValeurUtilisateurRole">
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-primary" type="submit"><img style="width:40%;" src="~/icons/searchIcon.svg" /></button>
+                                    <a class="btn btn-outline-primary" href="?tab=roles"><img style="width:40%;" src="~/icons/refresh.svg" /></a>
                                 </div>
                             </div>
                         </form>
@@ -144,10 +151,8 @@
                             else
                             {
                                 <div class="container">
-                                    <div class="row alert alert-info" style="background-color:#cfe2ff;">
-                                        <div class="col-12">
-                                            <p style="text-align:center;color:#084298;">Aucun résultats</p>
-                                        </div>
+                                    <div class="col-12">
+                                        <p style="text-align:center;">Aucun résultats</p>
                                     </div>
                                 </div>
                             }
@@ -207,9 +212,9 @@
                         else
                         {
                             <div class="container">
-                                <div class="row alert alert-info" style="background-color:#cfe2ff;">
+                                <div class="row">
                                     <div class="col-12">
-                                        <p style="text-align:center;color:#084298;">Sélectionner un utilisateur afin d'afficher ces rôles.</p>
+                                        <p style="text-align:center;">Sélectionner un utilisateur afin d'afficher ces rôles.</p>
                                     </div>
                                 </div>
                             </div>
@@ -218,8 +223,17 @@
 
                 </tr>
             }
-            @if (@ViewData["Tab"].ToString() == "utilisateurs")
+            else if (@ViewData["Tab"].ToString() == "utilisateurs")
             {
+                <form method="post" style="display:flex; justify-content: right;">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Recherche" required name="rechercheValeurUtilisateur">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-primary" type="submit"><img style="width:40%;" src="~/icons/searchIcon.svg" /></button>
+                            <a class="btn btn-outline-primary" href="?tab=utilisateurs"><img style="width:40%;" src="~/icons/refresh.svg" /></a>
+                        </div>
+                    </div>
+                </form>
                 <thead>
                     <tr>
                         <th scope="col">Actif</th>
@@ -259,16 +273,25 @@
                 else
                 {
                     <div class="container">
-                        <div class="row alert alert-info" style="background-color:#cfe2ff;">
+                        <div class="row">
                             <div class="col-12">
-                                <p style="text-align:center;color:#084298;">Aucun résultats</p>
+                                <p style="text-align:center;">Aucun résultats</p>
                             </div>
                         </div>
                     </div>
                 }
             }
-            @if (ViewData["Tab"].ToString() == "demandes")
+            else if (ViewData["Tab"].ToString() == "demandes")
             {
+                <form method="post" style="display:flex; justify-content: right;">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Recherche" required name="rechercheValeurDemande">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-primary" type="submit"><img style="width:40%;" src="~/icons/searchIcon.svg" /></button>
+                            <a class="btn btn-outline-primary" href="?tab=demandes"><img style="width:40%;" src="~/icons/refresh.svg" /></a>
+                        </div>
+                    </div>
+                </form>
                 @if (ViewData["lstNonActiver"] is not null)
                 {
                     @foreach (var user in ViewData["lstNonActiver"] as List<User>)
@@ -298,51 +321,96 @@
                 {
                     <br />
                     <div class="container">
-                        <div class="row alert alert-info" style="background-color:#cfe2ff;">
+                        <div class="row">
                             <div class="col-12">
-                                <p style="text-align:center;color:#084298;">Aucune demande</p>
+                                <p style="text-align:center;">Aucune demandes</p>
                             </div>
                         </div>
                     </div>
                 }
             }
-            @if (ViewData["Tab"].ToString() == "poadcasts")
+            else if (ViewData["Tab"].ToString() == "podcasts")
             {
                 @if (ViewData["lstAudios"] is not null)
                 {
                     @foreach (var audio in ViewData["lstAudios"] as IList<Audio>)
                     {
-                        if (audio.EstPublier == false)
-                        {
-                            <a asp-page="./AudioFolder/PoadcastDetail" asp-route-id="@audio.ID">
-                                <div class="searchBar-container borderPoadcast">
-
-                                    <div>
-                                        <img class="sizeImage" src="@audio.urlImage">
+                        <a asp-page="./AudioFolder/PoadcastDetail" asp-route-id="@audio.ID">
+                            <div class="list-group-item ">
+                                <div class="row">
+                                    <div class="col-9">
+                                        <div class="row">
+                                            <div class="col-2">
+                                                @if (audio.EstPublier)
+                                                {
+                                                    <img src="~/icons/published.svg" style="width:2em; height:2em;" />
+                                                }
+                                                else
+                                                {
+                                                    <img src="~/icons/unpublished.svg" style="width:2em; height:2em;" />
+                                                }
+                                            </div>
+                                            <div class="col-8">
+                                                <h3>@audio.titre</h3>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            @if (audio.EstPublier)
+                                            {
+                                                <p style="text-align:center;">Statut: Publié</p>
+                                            }
+                                            else
+                                            {
+                                                <p style="text-align:center;">Statut: Non publié</p>
+                                            }
+                                        </div>
                                     </div>
-                                    <div>
-                                        titre : @audio.titre
-                                    </div>
+                                    <div class="col-3">
+                                        <div class="row" style="justify-content:center;">
+                                            <form method="post">
+                                                <input type="hidden" name="name" value="@audio.ID" />
+                                                <input name="btnSupprimer" type="submit" value="Supprimer" class="btn btn-danger form-control" style="width: 10em; margin-top: 10px;" />
+                                            </form>
+                                        </div>
+                                        <div class="row" style="justify-content:center;">
+                                            <br />
+                                            @if (!audio.EstPublier)
+                                            {
+                                                <form method="post">
+                                                    <input name="idAudio" hidden value="@audio.ID" />
+                                                    <button type="submit" class="btn btn-outline-primary form-control" style="margin-top:10px; width:10em;">Publier</button>
+                                                </form>
+                                            }
+                                            else
+                                            {
+                                                <form method="post">
+                                                    <input name="idAudio" hidden value="@audio.ID" />
+                                                    <button type="submit" class="btn btn-outline-primary form-control" style="margin-top:10px; width:10em;">Rendre non public</button>
+                                                </form>
+                                            }
 
+                                        </div>
+
+                                    </div>
                                 </div>
-                            </a>
-                        }
+                            </div>
+                        </a>
                     }
                 }
                 else
                 {
                     <br />
                     <div class="container">
-                        <div class="row alert alert-info" style="background-color:#cfe2ff;">
+                        <div class="row">
                             <div class="col-12">
-                                <p style="text-align:center;color:#084298;">Aucun poadcast</p>
+                                <p style="text-align:center;">Aucun podcasts</p>
                             </div>
                         </div>
                     </div>
                 }
 
             }
-            @if (ViewData["Tab"].ToString() == "categories")
+            else if (ViewData["Tab"].ToString() == "categories")
             {
                 <form method="post">
                     <div class="row">
@@ -352,13 +420,15 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-8">
+                        <div class="col-2"></div>
+                        <div class="col-4">
                             <input type="text" class="form-control" placeholder="Nom catégorie" required name="nomCat" max="50" min="1" />
                             <br />
                         </div>
                         <div class="col-4">
                             <input name="btnAjoutCategorie" type="submit" value="Ajouter" class="btn btn-primary form-control" />
                         </div>
+                        <div class="col-2"></div>
                         <br />
                         <hr />
                     </div>
@@ -389,80 +459,243 @@
                 {
                     <br />
                     <div class="container">
-                        <div class="row alert alert-info" style="background-color:#cfe2ff;">
+                        <div class="row">
                             <div class="col-12">
-                                <p style="text-align:center;color:#084298;">Aucune catégorie</p>
+                                <p style="text-align:center;">Aucune catégories</p>
                             </div>
                         </div>
                     </div>
                 }
             }
-            @if (ViewData["Tab"].ToString() == "tutoriels")
+            else if (ViewData["Tab"].ToString() == "tutoriels")
             {
                 if (lstTutos != null)
                 {
                     foreach (Tutos tuto in lstTutos)
                     {
-                        <div class="list-group-item ">
-                            <div class="row">
-                                <div class="col-9">
+                        @if (!tuto.EstPublier)
+                        {
+                            <a href="/Tutoriel/CreationTuto?handler=TutoRangee&id=@tuto.Id">
+                                <div class="list-group-item ">
                                     <div class="row">
-                                        <div class="col-2">
-                                            @if (tuto.EstPublier)
-                                            {
-                                                <img src="~/icons/published.svg" style="width:2em; height:2em;"  />
-                                            }
-                                            else
-                                            {
-                                                <img src="~/icons/unpublished.svg" style="width:2em; height:2em;" />
-                                            }
+                                        <div class="col-9">
+                                            <div class="row">
+                                                <div class="col-2">
+                                                    @if (tuto.EstPublier)
+                                                    {
+                                                        <img src="~/icons/published.svg" style="width:2em; height:2em;" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <img src="~/icons/unpublished.svg" style="width:2em; height:2em;" />
+                                                    }
+                                                </div>
+                                                <div class="col-8">
+                                                    <h3>@tuto.Titre</h3>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                @if (tuto.EstPublier)
+                                                {
+                                                    <p style="text-align:center;">État: Publié</p>
+                                                }
+                                                else
+                                                {
+                                                    <p style="text-align:center;">État: Non publié</p>
+                                                }
+                                            </div>
                                         </div>
-                                        <div class="col-8">
-                                            <h3>@tuto.Titre</h3>
+                                        <div class="col-3">
+                                            <div class="row" style="justify-content:center;">
+                                                <form method="post">
+                                                    <input type="hidden" name="name" value="@tuto.Id" />
+
+                                                    <input name="btnSupprimerTuto" type="submit" value="Supprimer" class="btn btn-danger form-control" style="width: 10em; margin-top: 10px;" />
+                                                </form>
+                                            </div>
+                                            <div class="row" style="justify-content:center;">
+                                                <br />
+                                                @if (!tuto.EstPublier)
+                                                {
+                                                    <form method="post">
+                                                        <input name="idTuto" hidden value="@tuto.Id" />
+                                                        <button type="submit" class="btn btn-outline-primary form-control" style="margin-top:10px; width:10em;">Publier</button>
+                                                    </form>
+                                                }
+                                                else
+                                                {
+                                                    <form method="post">
+                                                        <input name="idTuto" hidden value="@tuto.Id" />
+                                                        <button type="submit" class="btn btn-outline-primary form-control" style="margin-top:10px; width:10em;">Rendre non public</button>
+                                                    </form>
+                                                }
+                                            </div>
+
                                         </div>
-                                    </div>
-                                    <div class="row">
-                                        <p style="text-align:center;">@tuto.DateCreation.ToString("dd/MM/yyyy")</p>
                                     </div>
                                 </div>
-                                <div class="col-3">
-                                    <div class="row" style="justify-content:center;">
-                                        <a name="btnAccepter" href="/Tutoriel/Consultation?id=@tuto.Id" style="width:10em;" class="btn btn-primary form-control">Consulter</a>
+                            </a>
+                        }
+                        else
+                        {
+                            <a href="/Tutoriel/consultation?id=@tuto.Id">
+                                <div class="list-group-item ">
+                                    <div class="row">
+                                        <div class="col-9">
+                                            <div class="row">
+                                                <div class="col-2">
+                                                    @if (tuto.EstPublier)
+                                                    {
+                                                        <img src="~/icons/published.svg" style="width:2em; height:2em;" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <img src="~/icons/unpublished.svg" style="width:2em; height:2em;" />
+                                                    }
+                                                </div>
+                                                <div class="col-8">
+                                                    <h3>@tuto.Titre</h3>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                @if (tuto.EstPublier)
+                                                {
+                                                    <p style="text-align:center;">État: Publié</p>
+                                                }
+                                                else
+                                                {
+                                                    <p style="text-align:center;">État: Non publié</p>
+                                                }
+                                            </div>
+                                        </div>
+                                        <div class="col-3">
+                                            <div class="row" style="justify-content:center;">
+                                                <form method="post">
+                                                    <input type="hidden" name="name" value="@tuto.Id" />
+
+                                                    <input name="btnSupprimerTuto" type="submit" value="Supprimer" class="btn btn-danger form-control" style="width: 10em; margin-top: 10px;" />
+                                                </form>
+                                            </div>
+                                            <div class="row" style="justify-content:center;">
+                                                <br />
+                                                @if (!tuto.EstPublier)
+                                                {
+                                                    <form method="post">
+                                                        <input name="idTuto" hidden value="@tuto.Id" />
+                                                        <button type="submit" class="btn btn-outline-primary form-control" style="margin-top:10px; width:10em;">Publier</button>
+                                                    </form>
+                                                }
+                                                else
+                                                {
+                                                    <form method="post">
+                                                        <input name="idTuto" hidden value="@tuto.Id" />
+                                                        <button type="submit" class="btn btn-outline-primary form-control" style="margin-top:10px; width:10em;">Rendre non public</button>
+                                                    </form>
+                                                }
+                                            </div>
+
+                                        </div>
                                     </div>
-                                    <div class="row" style="justify-content:center;">
-                                        <br />
-                                        @if (!tuto.EstPublier)
-                                        {
-                                            <form method="post">
-                                                <input name="idTuto" hidden value="@tuto.Id" />
-                                                <button type="submit" class="btn btn-secondary form-control" style="margin-top:10px; width:10em;">Publier</button>
-                                            </form>
-                                        }
-                                        else
-                                        {
-                                            <form method="post">
-                                                <input name="idTuto" hidden value="@tuto.Id" />
-                                                <button type="submit" class="btn btn-secondary form-control" style="margin-top:10px;">Rendre non public</button>
-                                            </form>
-                                        }
-                                    </div>
-                                   
                                 </div>
-                            </div>
-                        </div>
+                            </a>
+                        }
+
                     }
                 }
                 else
                 {
                     <br />
                     <div class="container">
-                        <div class="row alert alert-info" style="background-color:#cfe2ff;">
+                        <div class="row">
                             <div class="col-12">
-                                <p style="text-align:center;color:#084298;">Aucun tutoriel</p>
+                                <p style="text-align:center;">Aucun tutoriels</p>
                             </div>
                         </div>
                     </div>
                 }
+            }
+            else if (ViewData["Tab"].ToString() == "articles")
+            {
+                if (lstArticles != null)
+                {
+                    foreach (Article article in lstArticles)
+                    {
+                        <a href="/Tutoriel/Article?id=@article.Id">
+                            <div class="list-group-item ">
+                                <div class="row">
+                                    <div class="col-9">
+                                        <div class="row">
+                                            @*<div class="col-2">
+                                                @if (article.EstPublier)
+                                                {
+                                                    <img src="~/icons/published.svg" style="width:2em; height:2em;" />
+                                                }
+                                                else
+                                                {
+                                                    <img src="~/icons/unpublished.svg" style="width:2em; height:2em;" />
+                                                }
+                                            </div>*@
+                                            <div class="col-8">
+                                                <h3>@article.Titre</h3>
+                                            </div>
+                                        </div>
+                                        @*<div class="row">
+                                            @if (article.EstPublier)
+                                            {
+                                                <p style="text-align:center;">État: Publié</p>
+                                            }
+                                            else
+                                            {
+                                                <p style="text-align:center;">État: Non publié</p>
+                                            }
+                                        </div>*@
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="row" style="justify-content:center;">
+                                            <form method="post">
+                                                <input type="hidden" name="name" value="@article.Id" />
+                                                <input name="btnSupprimerArticle" type="submit" value="Supprimer" class="btn btn-danger form-control" style="width: 10em; margin-top: 10px;" />
+                                            </form>
+                                        </div>
+                                        @*<div class="row" style="justify-content:center;">
+                                            <br />
+                                            @if (!article)
+                                            {
+                                                <form method="post">
+                                                    <input name="idTuto" hidden value="@article.Id" />
+                                                    <button type="submit" class="btn btn-outline-primary form-control" style="margin-top:10px; width:10em;">Publier</button>
+                                                </form>
+                                            }
+                                            else
+                                            {
+                                                <form method="post">
+                                                    <input name="idTuto" hidden value="@tuto.Id" />
+                                                    <button type="submit" class="btn btn-outline-primary form-control" style="margin-top:10px; width:10em;">Rendre non public</button>
+                                                </form>
+                                            }
+                                        </div>*@
+
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    }
+                }
+                else
+                {
+                    <br />
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12">
+                                <p style="text-align:center;">Aucun Articles</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else if (ViewData["Tab"].ToString() == "pages")
+            {
+
             }
         }
     </table>

@@ -60,6 +60,16 @@
         <div class="row">
             <div class="col-3"></div>
             <div class="col-6">
+                @if (ViewData["erreur"] is not null)
+                {
+                    <span class="text-danger">Votre Courriel n'est pas valide</span>
+                }
+            </div>
+            <div class="col-3"></div>
+        </div>
+        <div class="row">
+            <div class="col-3"></div>
+            <div class="col-6">
                 @if (@ViewContext.RouteData.Values["id"] is null)
                 {
                     <div class="input-group input-group-sm mb-3">
@@ -69,18 +79,6 @@
                     <div class="input-group input-group-sm mb-3">
                         <span class="input-group-text">Confirmation du mot de passe</span>
                         <input type="password" class="form-control" aria-label="ConfPassword" aria-describedby="ConfPassword" name="ConfPassword" required>
-                    </div>
-                }
-                else
-                {
-                    <br /><h4>Modification du mot de passe</h4>
-                    <div class="input-group input-group-sm mb-3">
-                        <span class="input-group-text">Nouveau mot de passe</span>
-                        <input type="password" class="form-control" aria-label="NewPassword" aria-describedby="NewPassword" name="NewPassword">
-                    </div>
-                    <div class="input-group input-group-sm mb-3">
-                        <span class="input-group-text">Confirmation du mot de passe</span>
-                        <input type="password" class="form-control" aria-label="ConfPassword" aria-describedby="ConfPassword" name="ConfPassword">
                     </div>
                 }
             </div>
