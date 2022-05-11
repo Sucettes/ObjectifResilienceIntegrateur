@@ -226,7 +226,7 @@ namespace Gwenael.Web.Pages
             }
             return tupleUsers;
         }
-        public async Task<IActionResult> OnPostAsync(string btnSupprimerArticle, string btnSupprimer, string btnSupprimerTuto, string idAudio, string idTuto, string supprCatVal, string nomCat, string rechercheValeurArticle, string rechercheValeurTuto, string rechercheValeurPodcast, string rechercheValeurDemande, string rechercheValeurUtilisateur, string rechercheValeurUtilisateurRole, string btnDeleteRole, string name, string selectRole, string btnAccepter, string btnRefuser, int? id)
+        public async Task<IActionResult> OnPostAsync(string btnSupprimerArticle, string idUserToDelete, string btnSupprimer, string btnSupprimerTuto, string idAudio, string idTuto, string supprCatVal, string nomCat, string rechercheValeurArticle, string rechercheValeurTuto, string rechercheValeurPodcast, string rechercheValeurDemande, string rechercheValeurUtilisateur, string rechercheValeurUtilisateurRole, string btnDeleteRole, string name, string selectRole, string btnAccepter, string btnRefuser, int? id)
         {
             if (User.Identity.IsAuthenticated)
             {
@@ -235,9 +235,7 @@ namespace Gwenael.Web.Pages
                 {
                     if (supprCatVal is not null)
                     {
-                        Console.WriteLine(supprCatVal);
                         CategoriesTutos catTuto = (CategoriesTutos)_context.CategoriesTutos.Where(c => c.Id == Guid.Parse(supprCatVal)).First();
-                        Console.WriteLine(catTuto.Nom);
                         _context.CategoriesTutos.Remove(catTuto);
                         await _context.SaveChangesAsync();
                         return Redirect("/AdminMenu/?tab=categories");
@@ -408,6 +406,18 @@ namespace Gwenael.Web.Pages
                         _context.Articles.Remove(articleBD);
                         await _context.SaveChangesAsync();
                         return Redirect("/AdminMenu/?tab=articles");
+                    }
+                    else if (idUserToDelete is not null)
+                    {
+                        User userToDelete = _context.Users.Find(Guid.Parse(idUserToDelete));
+                        if (userToDelete != null)
+                        {
+                            _context.Users.Remove(userToDelete);
+                            _context.SaveChanges();
+
+                        }
+                        Console.WriteLine(userToDelete);
+                        return Redirect("/AdminMenu/?tab=utilisateurs");
                     }
                 }
             }
