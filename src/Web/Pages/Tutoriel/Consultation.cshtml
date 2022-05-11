@@ -20,20 +20,23 @@
                     <button type="submit" class="btn btn-outline-primary" asp-page-handler="RedirectHomeTuto">Retour</button>
                 </form>
 
-                @if (!Model.Input.tutoriel.EstPublier)
+                @if (Model.Input.droitAccess)
                 {
-                    <a class="btn btn-outline-primary" href="/Tutoriel/CreationTuto?handler=TutoRangee&id=@tuto.Id" style="margin-right: 5px;">Modifié</a>
-                }
-                <form method="post" asp-page="Consultation">
-                    <input name="tutorielIdVal" type="text" value="@tuto.Id" hidden />
-                    @if(Model.Input.tutoriel.EstPublier){
-                        <button type="submit" class="btn btn-primary" data-UnpublishTuto asp-page-handler="UnpublishTuto" data-bs-toggle="modal" data-bs-target="#modalValideUnpublishTuto">Rendre non public</button>
-                    }
-                    else
+                    @if (!Model.Input.tutoriel.EstPublier)
                     {
-                        <button type="submit" class="btn btn-primary" data-UnpublishTuto asp-page-handler="UnpublishTuto" data-bs-toggle="modal" data-bs-target="#modalValideUnpublishTuto">Rendre public</button>
+                        <a class="btn btn-outline-primary" href="/Tutoriel/CreationTuto?handler=TutoRangee&id=@tuto.Id" style="margin-right: 5px;">Modifié</a>
                     }
-            </form>
+                    <form method="post" asp-page="Consultation">
+                        <input name="tutorielIdVal" type="text" value="@tuto.Id" hidden />
+                        @if(Model.Input.tutoriel.EstPublier){
+                            <button type="submit" class="btn btn-primary" data-UnpublishTuto asp-page-handler="UnpublishTuto" data-bs-toggle="modal" data-bs-target="#modalValideUnpublishTuto">Rendre non public</button>
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn btn-primary" data-UnpublishTuto asp-page-handler="UnpublishTuto" data-bs-toggle="modal" data-bs-target="#modalValideUnpublishTuto">Rendre public</button>
+                        }
+                    </form>   
+                }
             </div>
         </div>
     </nav>
@@ -87,7 +90,7 @@
                         </div>
                         <div>
                         </div>
-                        <textarea class="input-group input-group-sm mb-3" disabled rows="4">@tuto.Materiels</textarea>
+                        <textarea class="input-group input-group-sm mb-3" style="resize: none;" disabled rows="4">@tuto.Materiels</textarea>
                     </div>
                 </div>
                 <br />

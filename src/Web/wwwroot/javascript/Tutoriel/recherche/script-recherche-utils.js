@@ -175,7 +175,7 @@
                 processData: false,
                 success: function (data) {
                     callback(data);
-                    aDroitGestionContenue = data;
+                    //aDroitGestionContenue = data;
                 },
                 error: function () {
                     alert("un problème est survenu");
