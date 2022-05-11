@@ -63,10 +63,10 @@ namespace Gwenael.Web.Pages
                                 else
                                 {
 
-                                    string[] jjj = { "" };
-                                    Role roleAdmin = new("Administrateur", jjj, true);
-                                    Role roleGDC = new("Gestionnaire de contenu", jjj, true);
-                                    Role roleUser = new("Utilisateur", jjj, true);
+                                    string[] strBidon = { "" };
+                                    Role roleAdmin = new("Administrateur", strBidon, true);
+                                    Role roleGDC = new("Gestionnaire de contenu", strBidon, true);
+                                    Role roleUser = new("Utilisateur", strBidon, true);
                                     _context.Add(roleAdmin);
                                     _context.Add(roleGDC);
                                     _context.Add(roleUser);
@@ -76,7 +76,7 @@ namespace Gwenael.Web.Pages
                             }
                             else if (champRecherche is not null)
                             {
-                                List<User> usersFiltre = _context.Users.Where(u => u.Email.Contains(champRecherche)).ToList();
+                                List<User> usersFiltre = _context.Users.Where(u => u.Email.Contains(champRecherche) && u.Active == true).ToList();
                                 ViewData["lstUsers"] = usersFiltre;
                                 return Page();
                             }
@@ -121,7 +121,7 @@ namespace Gwenael.Web.Pages
                     }
                     else
                     {
-                        if (Tab == "poadcasts")
+                        if (Tab == "podcasts")
                         {
 
                             if (DynamicQueryableExtensions.Any(_context.Audios))
@@ -148,6 +148,7 @@ namespace Gwenael.Web.Pages
                         else if (Tab == "roles")
                         {
                             Users = await _context.Users.ToListAsync();
+                            Users = Users.Where(u => u.Active == true).ToList();
                             ViewData["lstUsers"] = Users;
                         }
                         else if (Tab == "categories")
@@ -166,6 +167,21 @@ namespace Gwenael.Web.Pages
                                 ViewData["lstTutos"] = lstTutos;
                             }
                         }
+                        else if(Tab == "pages")
+                        {
+                            if (DynamicQueryableExtensions.Any(_context.Articles))
+                                ViewData["lstPages"] = _context.Articles.ToList();
+
+                        }
+                        else if (Tab == "articles")
+                        {
+                            if (DynamicQueryableExtensions.Any(_context.Articles))
+                                ViewData["lstArticles"] = _context.Articles.ToList();
+                        }
+                        else
+                        {
+                            return Redirect("/adminMenu/?tab=utilisateurs");
+                        }
                         return Page();
                     }
                 }
@@ -181,7 +197,7 @@ namespace Gwenael.Web.Pages
             }
             return tupleUsers;
         }
-        public async Task<IActionResult> OnPostAsync(string btnRendrePublicTuto, string idTuto, string supprCatVal, string nomCat, string rechercheValeurDemande, string rechercheValeurUtilisateur, string rechercheValeurUtilisateurRole, string btnDeleteRole, string name, string selectRole, string btnAccepter, string btnRefuser, int? id)
+        public async Task<IActionResult> OnPostAsync(string btnSupprimerArticle, string btnSupprimer, string btnSupprimerTuto, string idAudio, string idTuto, string supprCatVal, string nomCat, string rechercheValeurDemande, string rechercheValeurUtilisateur, string rechercheValeurUtilisateurRole, string btnDeleteRole, string name, string selectRole, string btnAccepter, string btnRefuser, int? id)
         {
             if (User.Identity.IsAuthenticated)
             {
@@ -274,6 +290,31 @@ namespace Gwenael.Web.Pages
                         }
                         return Redirect("/AdminMenu/?tab=categories");
                     }
+                    else if (idAudio != null)
+                    {
+                        Audio audio = new Audio();
+                        try
+                        {
+                            audio = _context.Audios.Find(Guid.Parse(idAudio));
+                        }
+                        catch
+                        {
+                            Console.WriteLine("ERREUR");
+                        }
+                        if (audio != null)
+                        {
+                            if (audio.EstPublier)
+                            {
+                                audio.EstPublier = false;
+                            }
+                            else
+                            {
+                                audio.EstPublier = true;
+                            }
+                            _context.SaveChanges();
+                            return Redirect("/AdminMenu/?tab=podcasts");
+                        }
+                    }
                     else if (idTuto != null)
                     {
                         Tutos tuto = new Tutos();
@@ -299,6 +340,32 @@ namespace Gwenael.Web.Pages
                             return Redirect("/AdminMenu/?tab=tutoriels");
                         }
                        
+                    }
+                    else if (btnSupprimer is not null)
+                    {
+                        Audio audioBd = _context.Audios.Where(a => a.ID == Guid.Parse(name)).First();
+                        _context.Audios.Remove(audioBd);
+                        await _context.SaveChangesAsync();
+                        return Redirect("/AdminMenu/?tab=podcasts");
+                    }
+                    else if (btnSupprimerTuto is not null)
+                    {
+                        Tutos tutoBD = _context.Tutos.Where(t => t.Id == Guid.Parse(name)).First();
+                        List<RangeeTutos> lstRangee = _context.RangeeTutos.Where(r => r.TutorielId == tutoBD.Id).ToList();
+                        foreach(RangeeTutos range in lstRangee)
+                        {
+                            _context.RangeeTutos.Remove(range);
+                        }
+                        _context.Tutos.Remove(tutoBD);
+                        await _context.SaveChangesAsync();
+                        return Redirect("/AdminMenu/?tab=tutoriels");
+                    }
+                    else if (btnSupprimerArticle is not null)
+                    {
+                        Article articleBD = _context.Articles.Where(a => a.Id == int.Parse(name)).First();
+                        _context.Articles.Remove(articleBD);
+                        await _context.SaveChangesAsync();
+                        return Redirect("/AdminMenu/?tab=articles");
                     }
                 }
             }
