@@ -33,7 +33,6 @@ namespace Gwenael.Web.Pages
 
         public async Task<IActionResult> OnPost(string titre, string inerText)
         {
-            int idNewPage = 0;
 
             NewPage newPage = new NewPage
             {

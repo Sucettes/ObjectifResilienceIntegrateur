@@ -4,23 +4,22 @@
 
 namespace Gwenael.Persistence.Migrations
 {
-    public partial class podcast : Migration
+    public partial class miseajourbd : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            //migrationBuilder.AddColumn<int>(
-            //    name: "nbVue",
-            //    table: "Audios",
-            //    type: "int",
-            //    nullable: false,
-            //    defaultValue: 0);
+            migrationBuilder.AddColumn<string>(
+                name: "LienImg",
+                table: "Articles",
+                type: "nvarchar(max)",
+                nullable: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "nbVue",
-                table: "Audios");
+                name: "LienImg",
+                table: "Articles");
         }
     }
 }
