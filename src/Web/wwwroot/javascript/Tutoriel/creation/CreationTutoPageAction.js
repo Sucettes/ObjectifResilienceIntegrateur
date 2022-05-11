@@ -1,19 +1,7 @@
 ﻿'use strict';
 $(document).ready(function () {
-
-    let id;
-    var toastRD = document.getElementById('toastTutoCree');
-    // QUand le toast a fini de ce cacher
-    toastRD.addEventListener('hide.bs.toast', function () {
-        $('#toastTutoCreeDiv').attr('hidden');
-    });
-
-    // Quand le toast a fini de ce montrer
-    toastRD.addEventListener('show.bs.toast', function () {
-        $('#toastTutoCreeDiv').removeAttr('hidden');
-    });
-
     // Création du tuto.
+    let id;
     $('[data-creationTuto]').on('click', event => {
         event.preventDefault();
         let curTarget = event.currentTarget;
@@ -35,13 +23,12 @@ $(document).ready(function () {
                 creationReussie(data, curTarget);
             },
             error: function () {
+                window.scriptToastNotification.AjouterNotification("Le tutoriel n'a pas été créé!", false);
             }
         });
     });
 
     function creationReussie(data) {
-        var toastObj = new bootstrap.Toast(toastRD);
-
         $('#imgBanierre').attr('src', data.value.imgUrl);
         id = data.id;
         const state = { 'id': data.id, 'handler': 'CreeTutorielDetails' };
@@ -59,6 +46,7 @@ $(document).ready(function () {
 
         $('#idTutoP').val(data.value.idTutoP);
 
-        toastObj.show();
+        // lancement du toast
+        window.scriptToastNotification.AjouterNotification('Le tutoriel a été créé!', true);
     }
 });

@@ -33,8 +33,8 @@
                 <form method="post" asp-page="Index" enctype="multipart/form-data" id="formFiltre">
                     <div class="input-group input-group-sm mb-3">
                         <label for="categorieDataList" style="width: 100%;">Sélectionner une catégorie</label>
-                        <input class="form-control shadow-sm" list="categorieDatalistOptions" id="categorieDataList" placeholder="Écrire pour Sélectionner une catégorie..." name="cat">
-                        <datalist id="categorieDatalistOptions">
+                        <input class="form-control shadow-sm" list="categorieDatalistOptions" id="categorieDataList" placeholder="Écrire pour Sélectionner une catégorie..." name="cat" autocomplete="off">
+                        <datalist id="categorieDatalistOptions" autocomplete="off">
                             <option id="filtreCategorieTous" value="Toutes" selected />
                             @if (!(@Model.Input.lstCategories.IsNullOrEmpty()))
                             {
@@ -137,3 +137,5 @@
 <script src="~/javascript/Tutoriel/recherche/script-recherche-init.js" asp-append-version="true"></script>
 <script src="~/javascript/Tutoriel/tutorielToastSupprimer.js" asp-append-version="true"></script>
 <script src="~/javascript/Tutoriel/tutorielToastUnPublish.js" asp-append-version="true"></script>
+
+<script src="~/javascript/utils/ToastNotification.js" asp-append-version="true"></script>

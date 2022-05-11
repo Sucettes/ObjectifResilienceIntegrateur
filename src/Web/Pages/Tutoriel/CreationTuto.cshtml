@@ -139,8 +139,8 @@
 
                                 <div class="input-group input-group-sm mb-3">
                                     <label for="categorieDataList" style="width: 100%;">Sélectionner une catégorie</label>
-                                    <input class="form-control shadow-sm" list="categorieDatalistOptions" id="categorieDataList" placeholder="Écrire pour rechercher..." asp-for="@Model.Input.cat" name="cat">
-                                    <datalist id="categorieDatalistOptions">
+                                    <input autocomplete="off" class="form-control shadow-sm" list="categorieDatalistOptions" id="categorieDataList" placeholder="Écrire pour rechercher..." asp-for="@Model.Input.cat" name="cat">
+                                    <datalist id="categorieDatalistOptions" autocomplete="off">
                                         @if (!(@Model.Input.lstCategories.IsNullOrEmpty()))
                                         {
                                             @foreach (var cat in @Model.Input.lstCategories)
@@ -340,7 +340,7 @@
 </div>
 
 
-<div id="toastTutoCreeDiv" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11" hidden>
+@*<div id="toastTutoCreeDiv" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11" hidden>
     <div id="toastTutoCree" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-animation="true" data-bs-delay="5000">
         <div class="toast-header">
             <img style="max-width:1.5rem;max-height:1.5rem;" src="/icons/valide.svg" class="rounded me-2" alt="...">
@@ -352,9 +352,9 @@
             Le tutoriel a bien été créé!
         </div>
     </div>
-</div>
+</div>*@
 
-<div id="toastTutoModifieDiv" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11" hidden>
+@*<div id="toastTutoModifieDiv" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11" hidden>
     <div id="toastTutoModifie" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-animation="true" data-bs-delay="5000">
         <div class="toast-header">
             <img style="max-width:1.5rem;max-height:1.5rem;" src="/icons/valide.svg" class="rounded me-2" alt="...">
@@ -396,13 +396,15 @@
     </div>
 </div>
 
-<script src="~/javascript/Tutoriel/tutorielToast.js" asp-append-version="true"></script>
+<script src="~/javascript/Tutoriel/tutorielToast.js" asp-append-version="true"></script>*@
 
 <script src="~/javascript/Tutoriel/creation/CreationTutoPageAction.js" asp-append-version="true"></script>
 <script src="~/javascript/Tutoriel/creation/ModificationTutoPageAction.js" asp-append-version="true"></script>
 <script src="~/javascript/Tutoriel/creation/script-rangee-utils.js" asp-append-version="true"></script>
 <script src="~/javascript/Tutoriel/creation/script-rangee-init.js" asp-append-version="true"></script>
 <script src="~/javascript/Tutoriel/creation/DeleteTutoPageAction.js" asp-append-version="true"></script>
+
+<script src="~/javascript/utils/ToastNotification.js" asp-append-version="true"></script>
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.0.20/tinymce.min.js"></script>
 <script>

@@ -1,15 +1,15 @@
 ﻿'use strict';
 $(document).ready(function () {
-    var toastRD = document.getElementById('toastTutoModifie');
-    // QUand le toast a fini de ce cacher
-    toastRD.addEventListener('hide.bs.toast', function () {
-        $('#toastTutoModifieDiv').attr('hidden');
-    });
+    //var toastRD = document.getElementById('toastTutoModifie');
+    //// QUand le toast a fini de ce cacher
+    //toastRD.addEventListener('hide.bs.toast', function () {
+    //    $('#toastTutoModifieDiv').attr('hidden');
+    //});
 
-    // Quand le toast a fini de ce montrer
-    toastRD.addEventListener('show.bs.toast', function () {
-        $('#toastTutoModifieDiv').removeAttr('hidden');
-    });
+    //// Quand le toast a fini de ce montrer
+    //toastRD.addEventListener('show.bs.toast', function () {
+    //    $('#toastTutoModifieDiv').removeAttr('hidden');
+    //});
 
     // Création du tuto.
     $('[data-modificationTuto]').on('click', event => {
