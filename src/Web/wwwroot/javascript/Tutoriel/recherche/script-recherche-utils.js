@@ -88,7 +88,6 @@
                     if (i === currentDataItemList.length) {
                         break
                     }
-                    //**********************
                     scriptRechercheUtils.creationCarteItem(i, aDroitGestionContenue);
                 }
             } else {

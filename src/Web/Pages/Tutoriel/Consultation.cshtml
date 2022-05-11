@@ -29,11 +29,11 @@
                     <form method="post" asp-page="Consultation">
                         <input name="tutorielIdVal" type="text" value="@tuto.Id" hidden />
                         @if(Model.Input.tutoriel.EstPublier){
-                            <button type="submit" class="btn btn-primary" data-UnpublishTuto asp-page-handler="UnpublishTuto" data-bs-toggle="modal" data-bs-target="#modalValideUnpublishTuto">Rendre non public</button>
+                            <button type="submit" class="btn btn-primary" data-UnpublishTuto asp-page-handler="UnpublishTuto" data-bs-toggle="modal" data-bs-target="#modalValideUnpublishTuto" name="nonPublic">Rendre non public</button>
                         }
                         else
                         {
-                            <button type="submit" class="btn btn-primary" data-UnpublishTuto asp-page-handler="UnpublishTuto" data-bs-toggle="modal" data-bs-target="#modalValideUnpublishTuto">Rendre public</button>
+                            <button type="submit" class="btn btn-primary" data-UnpublishTuto asp-page-handler="UnpublishTuto" data-bs-toggle="modal" data-bs-target="#modalValideUnpublishTuto" name="public">Rendre public</button>
                         }
                     </form>   
                 }
@@ -159,9 +159,6 @@
         </div>
     </div>
 }
-
-
-
 
 <div class="modal" id="modalValideUnpublishTuto" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalValideUnpublishTutoLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">

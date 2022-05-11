@@ -178,6 +178,8 @@
             curTarget.form[1].value = '';
             curTarget.form[2].value = '';
             curTarget.form[3].value = '';
+
+            window.scriptToastNotification.AjouterNotification("La rangée a été ajoutée!", true);
         },
         ajoutRangee: curTarget => {
             $.ajax({
@@ -195,7 +197,7 @@
                     scriptRangeeUtils.ajoutRangeeReussie(data, curTarget);
                 },
                 error: function () {
-                    alert("un problème est survenu");
+                    window.scriptToastNotification.AjouterNotification("Le rangée n'a pas été ajoutée!", false);
                 }
             });
         },
@@ -213,9 +215,10 @@
                 },
                 success: function () {
                     scriptRangeeUtils.currTargetToDelete.form.parentElement.removeChild(scriptRangeeUtils.currTargetToDelete.form);
+                    window.scriptToastNotification.AjouterNotification("La rangée a été supprimé!", true);
                 },
                 error: function () {
-                    alert("un problème est survenu");
+                    window.scriptToastNotification.AjouterNotification("La rangée n'a pas été supprimé!", false);
                 }
             });
         },
@@ -398,6 +401,7 @@
                 },
                 error: function () {
                     alert("un problème est survenu");
+                    window.scriptToastNotification.AjouterNotification("Un problème est survenue", true);
                 }
             });
         },
@@ -559,10 +563,10 @@
                     token.setAttribute('value', tokenVal);
 
                     form.appendChild(token);
-
+                    window.scriptToastNotification.AjouterNotification("La rangée a été modifié!", true);
                 },
                 error: function () {
-                    alert("un problème est survenu");
+                    window.scriptToastNotification.AjouterNotification("La rangée n'a pas été modifié!", false);
                 }
             });
         },

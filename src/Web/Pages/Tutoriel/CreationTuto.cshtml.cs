@@ -639,18 +639,6 @@ namespace Gwenael.Web.Pages
             }
         }
 
-        public IActionResult OnPostNettoyerTutorielDetails()
-        {
-            if (User.Identity.IsAuthenticated)
-            {
-                Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-                if (Permission.VerifierAccesGdC(idConnectedUser, _db))
-                {
-                    return Redirect("/tutoriel/CreationTuto");
-                }
-            }
-            return StatusCode(403);
-        }
         #endregion
 
         public void UpdateInputData()

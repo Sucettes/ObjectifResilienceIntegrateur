@@ -95,7 +95,7 @@ namespace Gwenael.Web.Pages
                         _db.Tutos.Where(t => t.Id == Guid.Parse(tutoVal.tutorielIdVal)).First().EstPublier = status;
                         _db.SaveChanges();
 
-                        return Redirect("/tutoriel?unPublishStatus=true");
+                        return Redirect("/tutoriel?unPublishStatus=" + status);
                     }
                 }
                 return Redirect("/tutoriel");
