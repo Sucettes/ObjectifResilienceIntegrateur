@@ -48,7 +48,6 @@ namespace Gwenael.Web.Pages
 
                 if (objects != null)
                 {
-                    Console.WriteLine(string.Join(",", objects.S3Objects.Select(x => x.Key)));
                     var tst = objects.S3Objects;
                     ViewData["unObjet"] = tst;
 

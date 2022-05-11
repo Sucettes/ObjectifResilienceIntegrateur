@@ -23,6 +23,5 @@ namespace Gwenael.Domain.Entities
 
         public bool EstPublier { get; set; }
 
-        public int nbVue { get; set; }
     }
 }

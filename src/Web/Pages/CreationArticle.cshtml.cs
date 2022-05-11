@@ -3,11 +3,17 @@ using Amazon.S3;
 using Amazon.S3.Transfer;
 using Gwenael.Domain;
 using Gwenael.Domain.Entities;
+using Gwenael.Web.FctUtils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Diagnostics;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Data;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Gwenael.Web.Pages
@@ -52,47 +58,55 @@ namespace Gwenael.Web.Pages
                 Titre = titre,
                 InerText = inerText
             };
-            _context.Articles.Add(newArticle);
-            await _context.SaveChangesAsync();
+
+            //await _context.SaveChangesAsync();
             idNewArticle = newArticle.Id;
 
 
+            Media newMedia = new Media();
+            var client = new AmazonS3Client("AKIAVDH3AEDD6PUJMKGG", "kKV5WKu0tFe8Svl2QdTIMIydLc7CGSMiy2h+KOvV", RegionEndpoint.CACentral1);
             // mettre dans app setting
-            using (var client = new AmazonS3Client("AKIAVDH3AEDD6PUJMKGG", "kKV5WKu0tFe8Svl2QdTIMIydLc7CGSMiy2h+KOvV", RegionEndpoint.CACentral1))
+            //using (var client = new AmazonS3Client("AKIAVDH3AEDD6PUJMKGG", "kKV5WKu0tFe8Svl2QdTIMIydLc7CGSMiy2h+KOvV", RegionEndpoint.CACentral1))
+            //{
+
+            //foreach (IFormFile File in Input.FormFile)
+            //{
+            var File = Input.FormFile[0];
+            using (var newMemoryStream = new MemoryStream())
             {
 
-                foreach (IFormFile File in Input.FormFile)
+                File.CopyTo(newMemoryStream);
+                var uploadRequest = new TransferUtilityUploadRequest
                 {
-                    using (var newMemoryStream = new MemoryStream())
-                    {
-                        File.CopyTo(newMemoryStream);
-                        var uploadRequest = new TransferUtilityUploadRequest
-                        {
-                            InputStream = newMemoryStream,
-                            Key = File.FileName, // filename
-                            BucketName = "mediafileobjectifresiliance", // bucket name of S3
-                            CannedACL = S3CannedACL.PublicRead,
-                        };
+                    InputStream = newMemoryStream,
+                    Key = File.FileName, // filename
+                    BucketName = "mediafileobjectifresiliance", // bucket name of S3
+                    CannedACL = S3CannedACL.PublicRead,
+                };
 
-                        var fileTransferUtility = new TransferUtility(client);
-                        await fileTransferUtility.UploadAsync(uploadRequest);
-                    }
-
-
-                    Media newMedia = new Media
-                    {
-                        Id = File.FileName,
-                        Idreference = idNewArticle,
-                        LinkS3 = "s3/mediafileobjectifresiliance/" + File.FileName,
-                        OrderInThePage = 0
-                    };
-                    _context.Medias.Add(newMedia);
-                    await _context.SaveChangesAsync();
-                }
+                var fileTransferUtility = new TransferUtility(client);
+                await fileTransferUtility.UploadAsync(uploadRequest);
             }
 
+            string link = "s3/mediafileobjectifresiliance/" + File.FileName;
+
+
+            newArticle.LienImg = link;
+            _context.Articles.Add(newArticle);
+            //newMedia.Id = File.FileName;
+            //newMedia.Idreference = idNewArticle;
+            //newMedia.LinkS3 = link;
+            //newMedia.OrderInThePage = 0;
+
+
+            //_context.Medias.Add(newMedia);
+            //Console.WriteLine(newMedia.ToString());
+            //}
+            //}
+
+            _context.SaveChanges();
             return Page();
-       }
+        }
 
     }
 }
