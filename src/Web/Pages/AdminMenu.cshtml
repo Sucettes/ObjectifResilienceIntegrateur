@@ -13,6 +13,8 @@
     List<Tutos> lstTutos = (List<Tutos>)ViewData["lstTutos"];
     List<Article> lstArticles = (List<Article>)ViewData["lstArticles"];
     List<NewPage> lstPages = (List<NewPage>)ViewData["lstPages"];
+    List<Audio> lstAudios = (List<Audio>)ViewData["lstAudios"];
+    List<Role> lstSelect = (List<Role>)ViewData["selectRoles"];
 
 }
 <!-- Entête de la page (Titre + btn retour) -->
@@ -152,7 +154,7 @@
                             {
                                 <div class="container">
                                     <div class="col-12">
-                                        <p style="text-align:center;">Aucun résultats</p>
+                                        <p style="text-align:center;">Aucun résultat</p>
                                     </div>
                                 </div>
                             }
@@ -171,24 +173,26 @@
                         }
                         @if (ViewData["userRoles"] is not null)
                         {
-                            <div class="container">
+                        <div class="container">
 
-                                @foreach (var roleUser in ViewData["userRoles"] as List<Role>)
-                                {
-                                    <div class="list-group-item">
-                                        <div class="row">
-                                            <div class="col-8">
-                                                <p>@roleUser.Name</p>
-                                            </div>
-                                            <div class="col-4">
-                                                <form method="post">
-                                                    <input type="hidden" name="name" asp-for="@roleUser.Name" />
-                                                    <input name="btnDeleteRole" type="submit" value="Retirer" class="btn btn-danger form-control" />
-                                                </form>
-                                            </div>
+                            @foreach (var roleUser in ViewData["userRoles"] as List<Role>)
+                            {
+                                <div class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-8">
+                                            <p>@roleUser.Name</p>
+                                        </div>
+                                        <div class="col-4">
+                                            <form method="post">
+                                                <input type="hidden" name="name" asp-for="@roleUser.Name" />
+                                                <input name="btnDeleteRole" type="submit" value="Retirer" class="btn btn-danger form-control" />
+                                            </form>
                                         </div>
                                     </div>
-                                }
+                                </div>
+                            }
+                            @if (lstSelect.Count > 0)
+                            {
                                 <div class="list-group-item">
                                     <form method="post">
                                         <div class="row">
@@ -207,7 +211,9 @@
                                         </div>
                                     </form>
                                 </div>
-                            </div>
+                            }
+
+                        </div>
                         }
                         else
                         {
@@ -241,6 +247,7 @@
                         <th scope="col">Rôles</th>
                         <th scope="col">Date de création</th>
                         <th scope="col"><a asp-page="user" asp-route-id="" class="btn btn-primary btn-sm"><img src="~/icons/addIcon.svg" /></a></th>
+                  
                     </tr>
                 </thead>
                 @if (ViewData["tupleUsers"] is not null && lstTupleUser.Count > 0)
@@ -265,7 +272,16 @@
                                     }
                                 </td>
                                 <td>@tupleUser.Item1.CreationDate.ToString("dd/MM/yyyy")</td>
-                                <td><a asp-page="user" asp-route-id="@tupleUser.Item1.Id" class="btn btn-primary btn-sm"><img src="~/icons/editIcon.svg" style="width:2em;height:2em;" /></a></td>
+
+                                <td>
+                                    <div class="row" style="display:inline-flex;">
+                                        <form method="post">
+                                            <input type="hidden" name="idUserToDelete" value="@tupleUser.Item1.Id" style="width:2em;height:2em;" />
+                                            <a asp-page="user" asp-route-id="@tupleUser.Item1.Id" class="btn btn-primary btn-sm"><img src="~/icons/editIcon.svg" style="width:2em;height:2em;" /></a>
+                                            <button class="btn btn-danger btn-sm" type="submit"><img src="~/icons/deleteIcon.svg" style="width:2em;height:2em;" /></button>
+                                        </form>
+                                    </div>
+                                </td>
                             </tr>
                         </tbody>
                     }
@@ -275,7 +291,7 @@
                     <div class="container">
                         <div class="row">
                             <div class="col-12">
-                                <p style="text-align:center;">Aucun résultats</p>
+                                <p style="text-align:center;">Aucun résultat</p>
                             </div>
                         </div>
                     </div>
@@ -323,7 +339,7 @@
                     <div class="container">
                         <div class="row">
                             <div class="col-12">
-                                <p style="text-align:center;">Aucune demandes</p>
+                                <p style="text-align:center;">Aucune demande</p>
                             </div>
                         </div>
                     </div>
@@ -331,7 +347,16 @@
             }
             else if (ViewData["Tab"].ToString() == "podcasts")
             {
-                @if (ViewData["lstAudios"] is not null)
+                <form method="post" style="display:flex; justify-content: right;">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Recherche" required name="rechercheValeurPodcast">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-primary" type="submit"><img style="width:40%;" src="~/icons/searchIcon.svg" /></button>
+                            <a class="btn btn-outline-primary" href="?tab=podcasts"><img style="width:40%;" src="~/icons/refresh.svg" /></a>
+                        </div>
+                    </div>
+                </form>
+                @if (lstAudios is not null && lstAudios.Count > 0)
                 {
                     @foreach (var audio in ViewData["lstAudios"] as IList<Audio>)
                     {
@@ -403,7 +428,7 @@
                     <div class="container">
                         <div class="row">
                             <div class="col-12">
-                                <p style="text-align:center;">Aucun podcasts</p>
+                                <p style="text-align:center;">Aucun podcast</p>
                             </div>
                         </div>
                     </div>
@@ -461,7 +486,7 @@
                     <div class="container">
                         <div class="row">
                             <div class="col-12">
-                                <p style="text-align:center;">Aucune catégories</p>
+                                <p style="text-align:center;">Aucune catégorie</p>
                             </div>
                         </div>
                     </div>
@@ -469,7 +494,16 @@
             }
             else if (ViewData["Tab"].ToString() == "tutoriels")
             {
-                if (lstTutos != null)
+                <form method="post" style="display:flex; justify-content: right;">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Recherche" required name="rechercheValeurTuto">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-primary" type="submit"><img style="width:40%;" src="~/icons/searchIcon.svg" /></button>
+                            <a class="btn btn-outline-primary" href="?tab=tutoriels"><img style="width:40%;" src="~/icons/refresh.svg" /></a>
+                        </div>
+                    </div>
+                </form>
+                if (lstTutos != null && lstTutos.Count > 0)
                 {
                     foreach (Tutos tuto in lstTutos)
                     {
@@ -497,11 +531,11 @@
                                             <div class="row">
                                                 @if (tuto.EstPublier)
                                                 {
-                                                    <p style="text-align:center;">État: Publié</p>
+                                                    <p style="text-align:center;">Status: Publié</p>
                                                 }
                                                 else
                                                 {
-                                                    <p style="text-align:center;">État: Non publié</p>
+                                                    <p style="text-align:center;">Status: Non publié</p>
                                                 }
                                             </div>
                                         </div>
@@ -560,11 +594,11 @@
                                             <div class="row">
                                                 @if (tuto.EstPublier)
                                                 {
-                                                    <p style="text-align:center;">État: Publié</p>
+                                                    <p style="text-align:center;">Status: Publié</p>
                                                 }
                                                 else
                                                 {
-                                                    <p style="text-align:center;">État: Non publié</p>
+                                                    <p style="text-align:center;">Status: Non publié</p>
                                                 }
                                             </div>
                                         </div>
@@ -608,7 +642,7 @@
                     <div class="container">
                         <div class="row">
                             <div class="col-12">
-                                <p style="text-align:center;">Aucun tutoriels</p>
+                                <p style="text-align:center;">Aucun tutoriel</p>
                             </div>
                         </div>
                     </div>
@@ -616,7 +650,16 @@
             }
             else if (ViewData["Tab"].ToString() == "articles")
             {
-                if (lstArticles != null)
+                <form method="post" style="display:flex; justify-content: right;">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Recherche" required name="rechercheValeurArticle">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-primary" type="submit"><img style="width:40%;" src="~/icons/searchIcon.svg" /></button>
+                            <a class="btn btn-outline-primary" href="?tab=articles"><img style="width:40%;" src="~/icons/refresh.svg" /></a>
+                        </div>
+                    </div>
+                </form>
+                if (lstArticles != null && lstArticles.Count > 0)
                 {
                     foreach (Article article in lstArticles)
                     {
@@ -687,7 +730,7 @@
                     <div class="container">
                         <div class="row">
                             <div class="col-12">
-                                <p style="text-align:center;">Aucun Articles</p>
+                                <p style="text-align:center;">Aucun article</p>
                             </div>
                         </div>
                     </div>
