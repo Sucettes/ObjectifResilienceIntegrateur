@@ -10,16 +10,24 @@
         <form method="post" enctype="multipart/form-data">
             <div class="input-group input-group-sm mb-3">
                 <span class="input-group-text" id="inputTitre">Titre</span>
-                <input type="text" id="titre" class="form-control" aria-label="Titre" aria-describedby="Titre" name="titre">
+                <input type="text" id="titre" class="form-control" aria-label="Titre" aria-describedby="Titre" name="titre" asp-for="Input.Titre">
             </div>
 
             <h3 style="text-align: left">Redaction de l'article :</h3>
-            <textarea name="inerText"></textarea><br /><br />
+            <textarea name="inerText" asp-for="Input.TextArea"></textarea><br /><br />
 
             <input multiple="multiple" asp-for="Input.FormFile" class="form-control" type="file" id="formFile"><br = />
 
 
-            <button id="btnCreeTuto" data-creationTuto type="submit" value="Upload" class="btn btn-primary">Créé Article</button>
+
+            @if (ViewData["Modifier"] as string == "true")
+            {
+                <button id="btnCreeTuto" data-creationTuto type="submit" value="Upload" class="btn btn-primary">Modifier</button>
+            }
+            else
+            {
+                <button id="btnCreeTuto" data-creationTuto type="submit" value="Upload" class="btn btn-primary">Créé Article</button>
+            }
         </form>
 
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.0.20/tinymce.min.js"></script>

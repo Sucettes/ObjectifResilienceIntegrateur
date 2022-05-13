@@ -35,42 +35,57 @@ namespace Gwenael.Web.Pages
 
         [BindProperty]
         public InputModel Input { get; set; }
+        public List<Article> Articles { get; set; }
 
-        public void OnGet()
+        public IActionResult  OnGet()
         {
             Input = new InputModel();
+            string idArticle;
+
+            if (Request.Query.Count > 0 && Request.Query.ContainsKey("id"))
+            {
+                
+                Articles = _context.Articles.ToList();
+                idArticle = Request.Query["id"];
+                int intId = Int32.Parse(idArticle);
+                Article b = Articles.Where(article => article.Id == intId).First();
+                Input.TextArea = b.InerText;
+                Input.Titre = b.Titre;
+                ViewData["Modifier"] = "true";
+            }
+            
+            return Page();
         }
 
         public class InputModel
         {
             public IFormFile[] FormFile { get; set; }
 
+            public string TextArea { get; set; }
+            public string Titre { get; set; }
+
         }
 
 
         public async Task<IActionResult> OnPost(string titre, string inerText)
         {
-
-            // Upload de l'article et sont titre 
-            int idNewArticle = 0;
             Article newArticle = new Article
+                {
+                    Titre = titre,
+                    InerText = inerText
+                };
+
+            if (Request.Query.Count > 0 && Request.Query.ContainsKey("id"))
             {
-                Titre = titre,
-                InerText = inerText
-            };
+                string idArticle = Request.Query["id"];
+                int intId = Int32.Parse(idArticle);
+                Article b = _context.Articles.Where(b => b.Id == intId).First();
+                b.Titre = titre;
+                b.InerText = inerText;
+                _context.Articles.Update(b);
+            }
 
-            //await _context.SaveChangesAsync();
-            idNewArticle = newArticle.Id;
-
-
-            Media newMedia = new Media();
             var client = new AmazonS3Client("AKIAVDH3AEDD6PUJMKGG", "kKV5WKu0tFe8Svl2QdTIMIydLc7CGSMiy2h+KOvV", RegionEndpoint.CACentral1);
-            // mettre dans app setting
-            //using (var client = new AmazonS3Client("AKIAVDH3AEDD6PUJMKGG", "kKV5WKu0tFe8Svl2QdTIMIydLc7CGSMiy2h+KOvV", RegionEndpoint.CACentral1))
-            //{
-
-            //foreach (IFormFile File in Input.FormFile)
-            //{
             var File = Input.FormFile[0];
             using (var newMemoryStream = new MemoryStream())
             {
@@ -89,22 +104,15 @@ namespace Gwenael.Web.Pages
             }
 
             string link = "s3/mediafileobjectifresiliance/" + File.FileName;
-
-
             newArticle.LienImg = link;
-            _context.Articles.Add(newArticle);
-            //newMedia.Id = File.FileName;
-            //newMedia.Idreference = idNewArticle;
-            //newMedia.LinkS3 = link;
-            //newMedia.OrderInThePage = 0;
+            
+            if (Request.Query.Count == 0 && !Request.Query.ContainsKey("id"))
+            {
+               _context.Articles.Add(newArticle);
+            }
 
-
-            //_context.Medias.Add(newMedia);
-            //Console.WriteLine(newMedia.ToString());
-            //}
-            //}
-
-            _context.SaveChanges();
+                _context.SaveChanges();
+            
             return Page();
         }
 
