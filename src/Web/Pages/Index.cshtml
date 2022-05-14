@@ -28,60 +28,69 @@
 
     <div class="second-alf-container">
         <div class="major-theme">
-            <div class="theme-box shadow-lg rounded">
-                <h3 class="themeH3">Construire</h3>
-            </div>
-            <div class="theme-box shadow-lg rounded">
-                <h3 class="themeH3">Renover</h3>
-            </div>
-            <div class="theme-box shadow-lg rounded">
-                <h3 class="themeH3">Ensemble</h3>
-            </div>
+            <a href="/indexArticles" class="theme-box shadow-lg rounded" style="color:black">
+                <h3 class="themeH3">Article</h3>
+            </a>
+            <a href="PoadcastPage" class="theme-box shadow-lg rounded" style="color:black">
+                <h3 class="themeH3">Podcast</h3>
+            </a>
+            <a href="Tutoriel/Index" class="theme-box shadow-lg rounded" style="color:black">
+                <h3 class="themeH3">Tuto</h3>
+            </a>
         </div>
 
         <div class="articleContainer">
 
             <div class="articleBigContainer">
                 @{
-                    int i = 0;
-                    foreach (var article in ViewData["lstArticles"] as IList<Article>)
-                    {
-                        if (i == 0)
-                        {
-                            <div class="div-article1 shadow-lg rounded">
+                    IList<Article> lst = ViewData["lstArticles"] as IList<Article>;
+                    int nbArticle = lst.Count();
+                    Article unarticle = lst[nbArticle - 1];
 
-                                <a href="/Article?id=@article.Id">
-                                    <h4 class="articleTitle">@article.Titre</h4>
-                                    <img src="/images/imgplaceholder.png" style="width:100%">
+                    //Article unarticle = lst.Last();
+                    <div class="div-article1 shadow-lg rounded">
 
-                                </a>
-                            </div>
-                            i++;
-                        }
-                    }
+                        <a href="/Article?id=@unarticle.Id">
+                            <h4 class="articleTitle">@unarticle.Titre</h4>
+
+                            @if (unarticle.LienImg != null)
+                            {
+                                <img src="https://mediafileobjectifresiliance.s3.ca-central-1.amazonaws.com/@unarticle.LienImg" style="max-width:100%">
+                            }
+                            else
+                            {
+                                <img src="/images/imgplaceholder.png" style="width:100%">
+                            }
+                        </a>
+                    </div>
                 }
             </div>
 
             <div class="articleSmallContainer">
                 @{
-                    i = 0;
-                    var articles = ViewData["lstArticles"] as IList<Article>;
-                    foreach (var article in articles.Reverse())
+                    for (int i = 0; i < 2; i++)
                     {
-                        if (i < 3 && i != 0)
-                        {
-                            <div class="div-article shadow-lg rounded">
-                                <a href="/Article?id=@article.Id">
-                                    <h4 class="articleTitle">@article.Titre</h4>
-                                    <img src="/images/imgplaceholder.png" style="max-width:100%">
+                        nbArticle = lst.Count();
+                        unarticle = lst[nbArticle - i - 2];
 
-                                </a>
-                            </div>
+                        <div class="div-article shadow-lg rounded">
+                            <a href="/Article?id=@unarticle.Id">
+                                <h4 class="articleTitle">@unarticle.Titre</h4>
+                                @if (unarticle.LienImg != "")
+                                {
+                                    <img src="https://mediafileobjectifresiliance.s3.ca-central-1.amazonaws.com/@unarticle.LienImg" style="max-width:100%">
+                                }
+                                else
+                                {
+                                    <img src="/images/imgplaceholder.png" style="width:100%">
+                                }
 
-                        }
-                        i++;
+                            </a>
+                        </div>
                     }
+
                 }
+
             </div>
         </div>
     </div>

@@ -12,10 +12,10 @@
     <div class="container-fluid">
         <h1>Les Article</h1>
         @*@if (Model.Input.droitAccess == true)
-        {
-<form class="d-flex" method="post" asp-page="Index" style="display:flex; justify-content: center;">
-    <button type="submit" class="btn btn-outline-primary" asp-page-handler="RedirectCreationTuto">Ajouter un tutoriel</button>
-</form>}*@
+                    {
+            <form class="d-flex" method="post" asp-page="Index" style="display:flex; justify-content: center;">
+                <button type="submit" class="btn btn-outline-primary" asp-page-handler="RedirectCreationTuto">Ajouter un tutoriel</button>
+            </form>}*@
     </div>
 </nav>
 
@@ -31,31 +31,45 @@
 
             <!-- Btn Radio pour le mode de filtre. -->
             <div>
-                <form method="post" asp-page="Index" enctype="multipart/form-data" id="formFiltre">
-                    <div class="input-group input-group-sm mb-3">
+                <form method="post" asp-page="indexArticles" enctype="multipart/form-data" id="formFiltre">
+                    <!--<div class="input-group input-group-sm mb-3">
                         <label for="categorieDataList" style="width: 100%;">Sélectionner une catégorie</label>
-                        <input class="form-control shadow-sm" list="categorieDatalistOptions" id="categorieDataList" placeholder="Écrire pour rechercher..." name="cat">
+                        <input class="form-control shadow-sm" list="categorieDatalistOptions" id="categorieDataList" placeholder="Écrire pour Sélectionner une catégorie..." name="cat">
                         <datalist id="categorieDatalistOptions">
-                            <option id="filtreCategorieTous" value="Toutes" selected />
+                            <option id="filtreCategorieTous" value="Toutes" selected />-->
                             @*@if (!(@Model.Input.lstCategories.IsNullOrEmpty()))
-                                                            {
-                                                @foreach (var cat in @Model.Input.lstCategories)
-                                                {
-                                <option id="@cat.Id" value="@cat.Nom" />}}*@
-                        </datalist>
-                    </div>
+                                {
+                                    @foreach (var cat in @Model.Input.lstCategories)
+                                    {
+                                        <option id="@cat.Id" value="@cat.Nom" />
+                                    }
+                                }*@
+                        <!--</datalist>
+                    </div>-->
 
+                    @if (Model.Input.droitAccess == false)
+                        {
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="radioFiltreEstPublie" name="radioFiltreEstPublie" value="true" checked hidden>
+                                <label class="form-check-label" for="radioFiltreEstPublie" style="margin:0;" hidden>Est pubié</label>
+                            </div>
+                        }
+                        else
+                        {
                     <div class="form-check form-switch">
                         <input class="form-check-input" type="checkbox" role="switch" id="radioFiltreEstPublie" name="radioFiltreEstPublie" value="true" checked>
                         <label class="form-check-label" for="radioFiltreEstPublie" style="margin:0;">Est pubié</label>
                     </div>
+                    }
                     <br />
                     <input class="form-control me-2" type="search" placeholder="Recherche" id="rechercheValeur" name="rechercheValeur">
                     <br />
                     <div style="display: flex;justify-content:center;">
-                        <button data-filtreRecherche class="btn btn-outline-primary" type="submit">Rechercher</button>
+                        <button data-filtreRecherche class="btn btn-outline-primary" type="submit" @*asp-page-handler="Recherche"*@>Rechercher</button>
                     </div>
                 </form>
+
+
             </div>
         </div>
 
@@ -71,48 +85,30 @@
                     non pharetra tortor mi id nunc. Duis vel volutpat velit, sit amet luctus ante. In sit amet lorem quis ligula consectetur gravida. Integer in nulla tortor.
                 </p>
             </div>
+            <div class="row row-cols-1 row-cols-md-3 g-4" id="zoneCardTuto">
 
-
-            <br />
-            <br />
-
-            @*<form method="post" asp-page="Index" style="display:flex; justify-content: center;">
-                    <button type="submit" class="btn btn-outline-secondary" asp-page-handler="RedirectCreationArticle">Ajouté un Article</button>
-                </form>*@
-            <div class="">
-                <div class="row row-cols-1 row-cols-md-3 g-4">
-
-                    @if (!(@Model.Input.lstArticles.IsNullOrEmpty()))
-                    {
-                        @foreach (var article in @Model.Input.lstArticles)
-                        {
-                            <a href="Article?id=@article.Id" class="col">
-                                <div class="shadow-lg rounded" style="background-color:#f1f9ee;">
-                                    <div>
-                                        <img src="~/images/imgplaceholder.png" class="card-img-top shadow-lg" alt="...">
-                                    </div>
-                                    <div class="card-body">
-                                        <h5 class="card-title">@article.Titre</h5>
-                                    </div>
-                                </div>
-                            </a>
-                        }
-                    }
-
-                </div>
             </div>
+
+            <br />
+            <br />
+            <!-- Navigation de pagination -->
+            <div>
+                <ul class="pagination justify-content-center" id="navPagination">
+                    <li class="page-item"><button class="page-link" style="background-color:#38b000;" data-paginationBtn id="btn-pagination-before">&laquo</button></li>
+
+                    <li class="page-item"><button class="page-link" style="background-color:#38b000;" data-paginationBtn id="btn-pagination-after">&raquo</button></li>
+                </ul>
+            </div>
+
         </div>
 
     </div>
-    <div>
-        <ul class="pagination justify-content-center" id="navPagination">
-            <li class="page-item"><button class="page-link" style="background-color:#38b000;" data-paginationBtn id="btn-pagination-before">&laquo</button></li>
-
-            <li class="page-item"><button class="page-link" style="background-color:#38b000;" data-paginationBtn id="btn-pagination-after">&raquo</button></li>
-        </ul>
-    </div>
 </div>
 
+<script src="~/javascript/Article/recherche/script-recherche-utils.js" asp-append-version="true"></script>
+<script src="~/javascript/Article/recherche/script-recherche-init.js" asp-append-version="true"></script>
+@*<script src="~/javascript/Article/tutorielToastSupprimer.js" asp-append-version="true"></script>
+    <script src="~/javascript/Article/tutorielToastUnPublish.js" asp-append-version="true"></script>*@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.js" integrity="sha512-n/4gHW3atM3QqRcbCn6ewmpxcLAHGaDjpEBu4xZd47N0W2oQ+6q7oc3PXstrJYXcbNU1OHdQ1T7pAP+gi5Yu8g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.6.0/umd/popper.min.js" integrity="sha512-BmM0/BQlqh02wuK5Gz9yrbe7VyIVwOzD1o40yi1IsTjriX/NGF37NyXHfmFzIlMmoSIBXgqDiG1VNU6kB5dBbA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>

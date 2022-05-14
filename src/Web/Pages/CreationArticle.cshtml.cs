@@ -70,11 +70,12 @@ namespace Gwenael.Web.Pages
         public async Task<IActionResult> OnPost(string titre, string inerText)
         {
             Article newArticle = new Article
-                {
-                    Titre = titre,
-                    InerText = inerText
-                };
+            {
+                Titre = titre,
+                InerText = inerText,
+                EstPublier = false
 
+            };
             if (Request.Query.Count > 0 && Request.Query.ContainsKey("id"))
             {
                 string idArticle = Request.Query["id"];
@@ -85,27 +86,31 @@ namespace Gwenael.Web.Pages
                 _context.Articles.Update(b);
             }
 
-            var client = new AmazonS3Client("AKIAVDH3AEDD6PUJMKGG", "kKV5WKu0tFe8Svl2QdTIMIydLc7CGSMiy2h+KOvV", RegionEndpoint.CACentral1);
-            var File = Input.FormFile[0];
-            using (var newMemoryStream = new MemoryStream())
+            if (Input.FormFile != null)
             {
-
-                File.CopyTo(newMemoryStream);
-                var uploadRequest = new TransferUtilityUploadRequest
+                var client = new AmazonS3Client("AKIAVDH3AEDD6PUJMKGG", "kKV5WKu0tFe8Svl2QdTIMIydLc7CGSMiy2h+KOvV", RegionEndpoint.CACentral1);
+                var File = Input.FormFile[0];
+                using (var newMemoryStream = new MemoryStream())
                 {
-                    InputStream = newMemoryStream,
-                    Key = File.FileName, // filename
-                    BucketName = "mediafileobjectifresiliance", // bucket name of S3
-                    CannedACL = S3CannedACL.PublicRead,
-                };
 
-                var fileTransferUtility = new TransferUtility(client);
-                await fileTransferUtility.UploadAsync(uploadRequest);
+                    File.CopyTo(newMemoryStream);
+                    var uploadRequest = new TransferUtilityUploadRequest
+                    {
+                        InputStream = newMemoryStream,
+                        Key = File.FileName, // filename
+                        BucketName = "mediafileobjectifresiliance", // bucket name of S3
+                        CannedACL = S3CannedACL.PublicRead,
+                    };
+
+                    var fileTransferUtility = new TransferUtility(client);
+                    await fileTransferUtility.UploadAsync(uploadRequest);
+                }
+
+                string link =  File.FileName;
+                newArticle.LienImg = link;
+
             }
 
-            string link = "s3/mediafileobjectifresiliance/" + File.FileName;
-            newArticle.LienImg = link;
-            
             if (Request.Query.Count == 0 && !Request.Query.ContainsKey("id"))
             {
                _context.Articles.Add(newArticle);
