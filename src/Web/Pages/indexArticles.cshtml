@@ -23,31 +23,33 @@
 
 <div class="container-fluid">
     <br />
-    <div class="row">
-        <!-- Contenue du menu (Ou les filtres de recherche ce trouve) -->
-        <div class="col-3" style="padding-right:1.5rem;padding-left:1.5rem;">
-            <h4>Filtrer par :</h4>
-            <hr />
+    <div class="main-content">
 
-            <!-- Btn Radio pour le mode de filtre. -->
-            <div>
-                <form method="post" asp-page="indexArticles" enctype="multipart/form-data" id="formFiltre">
-                    <!--<div class="input-group input-group-sm mb-3">
-                        <label for="categorieDataList" style="width: 100%;">Sélectionner une catégorie</label>
-                        <input class="form-control shadow-sm" list="categorieDatalistOptions" id="categorieDataList" placeholder="Écrire pour Sélectionner une catégorie..." name="cat">
-                        <datalist id="categorieDatalistOptions">
-                            <option id="filtreCategorieTous" value="Toutes" selected />-->
-                            @*@if (!(@Model.Input.lstCategories.IsNullOrEmpty()))
-                                {
-                                    @foreach (var cat in @Model.Input.lstCategories)
-                                    {
-                                        <option id="@cat.Id" value="@cat.Nom" />
-                                    }
-                                }*@
+        <div class="row">
+            <!-- Contenue du menu (Ou les filtres de recherche ce trouve) -->
+            <div class="col-3" style="padding-right:1.5rem;padding-left:1.5rem;">
+                <h4>Filtrer par :</h4>
+                <hr />
+
+                <!-- Btn Radio pour le mode de filtre. -->
+                <div>
+                    <form method="post" asp-page="indexArticles" enctype="multipart/form-data" id="formFiltre">
+                        <!--<div class="input-group input-group-sm mb-3">
+                    <label for="categorieDataList" style="width: 100%;">Sélectionner une catégorie</label>
+                    <input class="form-control shadow-sm" list="categorieDatalistOptions" id="categorieDataList" placeholder="Écrire pour Sélectionner une catégorie..." name="cat">
+                    <datalist id="categorieDatalistOptions">
+                        <option id="filtreCategorieTous" value="Toutes" selected />-->
+                        @*@if (!(@Model.Input.lstCategories.IsNullOrEmpty()))
+                        {
+                            @foreach (var cat in @Model.Input.lstCategories)
+                            {
+                                <option id="@cat.Id" value="@cat.Nom" />
+                            }
+                        }*@
                         <!--</datalist>
                     </div>-->
 
-                    @if (Model.Input.droitAccess == false)
+                        @if (Model.Input.droitAccess == false)
                         {
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" role="switch" id="radioFiltreEstPublie" name="radioFiltreEstPublie" value="true" checked hidden>
@@ -56,41 +58,39 @@
                         }
                         else
                         {
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" role="switch" id="radioFiltreEstPublie" name="radioFiltreEstPublie" value="true" checked>
-                        <label class="form-check-label" for="radioFiltreEstPublie" style="margin:0;">Est pubié</label>
-                    </div>
-                    }
-                    <br />
-                    <input class="form-control me-2" type="search" placeholder="Recherche" id="rechercheValeur" name="rechercheValeur">
-                    <br />
-                    <div style="display: flex;justify-content:center;">
-                        <button data-filtreRecherche class="btn btn-outline-primary" type="submit" @*asp-page-handler="Recherche"*@>Rechercher</button>
-                    </div>
-                </form>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="radioFiltreEstPublie" name="radioFiltreEstPublie" value="true" checked>
+                                <label class="form-check-label" for="radioFiltreEstPublie" style="margin:0;">Est pubié</label>
+                            </div>
+                        }
+                        <br />
+                        <input class="form-control me-2" type="search" placeholder="Recherche" id="rechercheValeur" name="rechercheValeur">
+                        <br />
+                        <div style="display: flex;justify-content:center;">
+                            <button data-filtreRecherche class="btn btn-outline-primary" type="submit" @*asp-page-handler="Recherche"*@>Rechercher</button>
+                        </div>
+                    </form>
 
 
             </div>
         </div>
 
         <!-- Contenue de la page (ou les articles ce trouve) -->
-        <div class="col-9">
-            <div class="pageDescriptionBox">
-                <h3>Un titre??????</h3>
-                <p class="divIntro">
-                    Quisque interdum dapibus ipsum, vel lacinia nulla eleifend non. Sed tortor tortor, placerat ut tincidunt et, euismod non sem.
-                    Phasellus vel est iaculis, dictum lorem nec, hendrerit eros. Donec ultrices ex eget nisi eleifend, sed eleifend ex commodo.
-                    Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Donec sed eros sed mi mollis ullamcorper non et sapien.
-                    Interdum et malesuada fames ac ante ipsum primis in faucibus. Fusce hendrerit, augue sit amet fringilla ullamcorper, lorem leo auctor enim,
-                    non pharetra tortor mi id nunc. Duis vel volutpat velit, sit amet luctus ante. In sit amet lorem quis ligula consectetur gravida. Integer in nulla tortor.
-                </p>
-            </div>
-            <div class="row row-cols-1 row-cols-md-3 g-4" id="zoneCardTuto">
+            <div class="col-9">
+                <div class="pageDescriptionBox">
+                    <p class="divIntro">
+                        Voici un ensemble d'articles qui ont été produits lors des formations du Centre Jacques-Cartier.
+                    </p>
+                </div>
+                <div class="row row-cols-1 row-cols-md-3 g-4" id="zoneCardTuto">
 
-            </div>
+                </div>
 
-            <br />
-            <br />
+                <br />
+                <br />
+            </div>
+    </div>
+        </div>
             <!-- Navigation de pagination -->
             <div>
                 <ul class="pagination justify-content-center" id="navPagination">
@@ -99,10 +99,6 @@
                     <li class="page-item"><button class="page-link" style="background-color:#38b000;" data-paginationBtn id="btn-pagination-after">&raquo</button></li>
                 </ul>
             </div>
-
-        </div>
-
-    </div>
 </div>
 
 <script src="~/javascript/Article/recherche/script-recherche-utils.js" asp-append-version="true"></script>
