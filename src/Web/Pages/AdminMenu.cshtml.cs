@@ -30,11 +30,11 @@ namespace Gwenael.Web.Pages
         public String Tab { get; set; }
         public async Task<IActionResult> OnGetAsync()
         {
-            if (User.Identity.IsAuthenticated)
-            {
-                Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-                if (Permission.EstAdministrateur(idConnectedUser, _context))
-                {
+            //if (User.Identity.IsAuthenticated)
+            //{
+            //    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
+            //    if (Permission.EstAdministrateur(idConnectedUser, _context))
+            //    {
 
                     if (Request.Query.Count == 1)
                     {
@@ -213,9 +213,9 @@ namespace Gwenael.Web.Pages
                         }
                         return Page();
                     }
-                }
-            }
-            return Redirect("/");
+            //    }
+            //}
+            //return Redirect("/");
         }
         public List<(User, List<Role>)> getListUserAndRoles(List<User> pLstUser)
         {
@@ -228,11 +228,11 @@ namespace Gwenael.Web.Pages
         }
         public async Task<IActionResult> OnPostAsync(string btnSupprimerArticle, string idUserToDelete, string btnSupprimer, string btnSupprimerTuto, string idAudio, string idTuto, string supprCatVal, string nomCat, string rechercheValeurArticle, string rechercheValeurTuto, string rechercheValeurPodcast, string rechercheValeurDemande, string rechercheValeurUtilisateur, string rechercheValeurUtilisateurRole, string btnDeleteRole, string name, string selectRole, string btnAccepter, string btnRefuser, int? id)
         {
-            if (User.Identity.IsAuthenticated)
-            {
-                Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-                if (Permission.EstAdministrateur(idConnectedUser, _context))
-                {
+            //if (User.Identity.IsAuthenticated)
+            //{
+            //    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
+            //    if (Permission.EstAdministrateur(idConnectedUser, _context))
+            //    {
                     if (supprCatVal is not null)
                     {
                         CategoriesTutos catTuto = (CategoriesTutos)_context.CategoriesTutos.Where(c => c.Id == Guid.Parse(supprCatVal)).First();
@@ -419,8 +419,8 @@ namespace Gwenael.Web.Pages
                         Console.WriteLine(userToDelete);
                         return Redirect("/AdminMenu/?tab=utilisateurs");
                     }
-                }
-            }
+            //    }
+            //}
             return Redirect("/");
         }
 

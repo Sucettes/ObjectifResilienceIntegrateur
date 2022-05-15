@@ -22,10 +22,11 @@ $('[data-registerRequest]').on('click', event => {
             processData: false,
             success: function (data) {
                 if (data.msgSuccess != null) {
-                    $('.msgSucceeded').append("<div class='alert alert-primary' role='alert'>" + data.msgSuccess + "</div>");
+                    window.scriptToastNotification.AjouterNotification("Demande d'inscription effectué ! Vous allez être redirigé vers la page d'accueil dans 10 secondes.", true);
                     setTimeout(function () {
                         window.location.href = '/Index';
                     }, 10000);
+
                 }
                 else {
                     if (data.erreurPassword != null) {
@@ -35,10 +36,12 @@ $('[data-registerRequest]').on('click', event => {
                     if (data.erreurCourriel != null) {
                         document.getElementById('msgErreurCourriel').textContent = data.erreurCourriel;
                     }
+                    window.scriptToastNotification.AjouterNotification("Une erreure est survenu lors de la demande d'inscription !", false);
+
                 }
             },
             error: function () {
-                document.getElementById('msgErreurPassword').textContent = "Votre mot de passe doit être composé de lettres et de chiffres.";
+                window.scriptToastNotification.AjouterNotification("Une erreure est survenu lors de la demande d'inscription !", false);
             }
         });
     }
