@@ -3,11 +3,17 @@ using Amazon.S3;
 using Amazon.S3.Transfer;
 using Gwenael.Domain;
 using Gwenael.Domain.Entities;
+using Gwenael.Web.FctUtils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Diagnostics;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Data;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Gwenael.Web.Pages
@@ -22,26 +28,95 @@ namespace Gwenael.Web.Pages
         }
 
         [BindProperty(SupportsGet = true)]
-        public NewPage newPage { get; set; }
+        public Article article { get; set; }
 
+        [BindProperty(SupportsGet = true)]
+        public Media media { get; set; }
 
-        public void OnGet()
+        [BindProperty]
+        public InputModel Input { get; set; }
+        public List<NewPage> NewPages { get; set; }
+
+        public IActionResult OnGet()
         {
+            Input = new InputModel();
+            string idNewPage;
+
+            if (Request.Query.Count > 0 && Request.Query.ContainsKey("id"))
+            {
+
+                NewPages = _context.NewPages.ToList();
+                idNewPage = Request.Query["id"];
+                int intId = Int32.Parse(idNewPage);
+                NewPage b = NewPages.Where(newPage => newPage.Id == intId).First();
+                Input.TextArea = b.InerText;
+                Input.Titre = b.Titre;
+                ViewData["Modifier"] = "true";
+            }
+
+            return Page();
         }
 
+        public class InputModel
+        {
+            public IFormFile[] FormFile { get; set; }
+
+            public string TextArea { get; set; }
+            public string Titre { get; set; }
+
+        }
 
 
         public async Task<IActionResult> OnPost(string titre, string inerText)
         {
-
             NewPage newPage = new NewPage
             {
                 Titre = titre,
-                InerText = inerText
-            };
+                InerText = inerText,
+                EstPublier = false
 
-            _context.NewPages.Add(newPage);
-            await _context.SaveChangesAsync();
+            };
+            if (Request.Query.Count > 0 && Request.Query.ContainsKey("id"))
+            {
+                string idNewPage = Request.Query["id"];
+                int intId = Int32.Parse(idNewPage);
+                NewPage b = _context.NewPages.Where(b => b.Id == intId).First();
+                b.Titre = titre;
+                b.InerText = inerText;
+                _context.NewPages.Update(b);
+            }
+
+            if (Input.FormFile != null)
+            {
+                var client = new AmazonS3Client("AKIAVDH3AEDD6PUJMKGG", "kKV5WKu0tFe8Svl2QdTIMIydLc7CGSMiy2h+KOvV", RegionEndpoint.CACentral1);
+                var File = Input.FormFile[0];
+                using (var newMemoryStream = new MemoryStream())
+                {
+
+                    File.CopyTo(newMemoryStream);
+                    var uploadRequest = new TransferUtilityUploadRequest
+                    {
+                        InputStream = newMemoryStream,
+                        Key = File.FileName, // filename
+                        BucketName = "mediafileobjectifresiliance", // bucket name of S3
+                        CannedACL = S3CannedACL.PublicRead,
+                    };
+
+                    var fileTransferUtility = new TransferUtility(client);
+                    await fileTransferUtility.UploadAsync(uploadRequest);
+                }
+
+                string link = File.FileName;
+                newPage.LienImg = link;
+
+            }
+
+            if (Request.Query.Count == 0 && !Request.Query.ContainsKey("id"))
+            {
+                _context.NewPages.Add(newPage);
+            }
+
+            _context.SaveChanges();
 
             return Page();
         }
