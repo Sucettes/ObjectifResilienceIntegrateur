@@ -43,40 +43,20 @@
 
             <div class="articleBigContainer">
                 @{
-                    IList<Article> lst = ViewData["lstArticles"] as IList<Article>;
+
+                    List<Article> lst = ViewData["lstArticles"] as List<Article>;
                     int nbArticle = lst.Count();
-                    Article unarticle = lst[nbArticle - 1];
-
-                    //Article unarticle = lst.Last();
-                    <div class="div-article1 shadow-lg rounded">
-
-                        <a href="/Article?id=@unarticle.Id">
-                            <h4 class="articleTitle">@unarticle.Titre</h4>
-
-                            @if (unarticle.LienImg != null)
-                            {
-                                <img src="https://mediafileobjectifresiliance.s3.ca-central-1.amazonaws.com/@unarticle.LienImg" style="max-width:100%">
-                            }
-                            else
-                            {
-                                <img src="/images/imgplaceholder.png" style="width:100%">
-                            }
-                        </a>
-                    </div>
-                }
-            </div>
-
-            <div class="articleSmallContainer">
-                @{
-                    for (int i = 0; i < 2; i++)
+                    if (nbArticle > 0)
                     {
-                        nbArticle = lst.Count();
-                        unarticle = lst[nbArticle - i - 2];
+                        Article unarticle = lst[nbArticle - 1];
 
-                        <div class="div-article shadow-lg rounded">
+                        //Article unarticle = lst.Last();
+                        <div class="div-article1 shadow-lg rounded">
+
                             <a href="/Article?id=@unarticle.Id">
                                 <h4 class="articleTitle">@unarticle.Titre</h4>
-                                @if (unarticle.LienImg != "")
+
+                                @if (unarticle.LienImg != null)
                                 {
                                     <img src="https://mediafileobjectifresiliance.s3.ca-central-1.amazonaws.com/@unarticle.LienImg" style="max-width:100%">
                                 }
@@ -84,10 +64,39 @@
                                 {
                                     <img src="/images/imgplaceholder.png" style="width:100%">
                                 }
-
                             </a>
                         </div>
                     }
+
+                }
+            </div>
+
+            <div class="articleSmallContainer">
+                @{
+                    if (nbArticle > 1)
+                    {
+                        for (int i = 0; i < 2; i++)
+                        {
+                            nbArticle = lst.Count();
+                            Article unarticle = lst[nbArticle - i - 2];
+
+                            <div class="div-article shadow-lg rounded">
+                                <a href="/Article?id=@unarticle.Id">
+                                    <h4 class="articleTitle">@unarticle.Titre</h4>
+                                    @if (unarticle.LienImg != "")
+                                    {
+                                        <img src="https://mediafileobjectifresiliance.s3.ca-central-1.amazonaws.com/@unarticle.LienImg" style="max-width:100%">
+                                    }
+                                    else
+                                    {
+                                        <img src="/images/imgplaceholder.png" style="width:100%">
+                                    }
+
+                                </a>
+                            </div>
+                        }
+                    }
+
 
                 }
 
