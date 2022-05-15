@@ -1,31 +1,37 @@
 ﻿.searchBar-container {
-    display: flex;   
+    display: flex;
 }
+
 .sizeImage {
     width: 100%;
     height: 250px;
 }
+
 .sizeImage2 {
     width: 500px;
-    height: 500px;
+    height: 450px;
 }
 
-.paddingLeft{
-    padding-left: 30px;
+.paddingLeft {
+    padding-left: 5%;
 }
+
 .paddingLeft2 {
-    padding-left: 80px;
-}
-.sizeDescription {
-    width: 1050px;
-}
-audio{
-    width :800px; 
-}
-.borderPoadcast{
-    border-top:3px groove black;
+    padding-left: 5%;
 }
 
-.cardPodcast{
-    height:100%;
+.sizeDescription {
+    width: 80%;
+}
+
+audio {
+    width: 80%;
+}
+
+.borderPoadcast {
+    border-top: 3px groove black;
+}
+
+.cardPodcast {
+    height: 100%;
 }
