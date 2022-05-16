@@ -5,16 +5,24 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Gwenael.Domain.Entities;
+using System.Collections.Generic;
+using Gwenael.Domain;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace Gwenael.Web.Pages.Account
 {
     public class ResetPasswordModel : PageModel
     {
         private readonly UserManager<User> _userManager;
+        public IList<NewPage> NewPages { get; set; }
+        private readonly GwenaelDbContext _db;
 
-        public ResetPasswordModel(UserManager<User> userManager)
+        public ResetPasswordModel(UserManager<User> userManager,
+        GwenaelDbContext pDb)
         {
             _userManager = userManager;
+            _db = pDb;
         }
 
         [BindProperty]
@@ -41,6 +49,9 @@ namespace Gwenael.Web.Pages.Account
 
         public IActionResult OnGet(string code = null)
         {
+            NewPages = _db.NewPages.ToList();
+            ViewData["NewPages"] = NewPages;
+
             if (code == null)
             {
                 throw new ApplicationException("A code must be supplied for password reset.");
@@ -57,6 +68,9 @@ namespace Gwenael.Web.Pages.Account
 
         public async Task<IActionResult> OnPostAsync()
         {
+            NewPages = await _db.NewPages.ToListAsync();
+            ViewData["NewPages"] = NewPages;
+
             if (!ModelState.IsValid)
             {
                 return Page();

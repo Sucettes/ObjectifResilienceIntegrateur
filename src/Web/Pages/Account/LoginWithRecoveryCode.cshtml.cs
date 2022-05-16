@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using Gwenael.Domain.Entities;
 using Gwenael.Web.Extensions;
+using System.Collections.Generic;
+using Gwenael.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace Gwenael.Web.Pages.Account
 {
@@ -14,11 +17,15 @@ namespace Gwenael.Web.Pages.Account
     {
         private readonly SignInManager<User> _signInManager;
         private readonly ILogger<LoginWithRecoveryCodeModel> _logger;
+        public IList<NewPage> NewPages { get; set; }
+        private readonly GwenaelDbContext _db;
 
-        public LoginWithRecoveryCodeModel(SignInManager<User> signInManager, ILogger<LoginWithRecoveryCodeModel> logger)
+        public LoginWithRecoveryCodeModel(SignInManager<User> signInManager, ILogger<LoginWithRecoveryCodeModel> logger,
+            GwenaelDbContext pDb)
         {
             _signInManager = signInManager;
             _logger = logger;
+            _db = pDb;
         }
 
         [BindProperty]
@@ -37,6 +44,10 @@ namespace Gwenael.Web.Pages.Account
 
         public async Task<IActionResult> OnGetAsync(string returnUrl = null)
         {
+
+            NewPages = await _db.NewPages.ToListAsync();
+            ViewData["NewPages"] = NewPages;
+
             // Ensure the user has gone through the username & password screen first
             var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
             if (user == null)
@@ -51,6 +62,9 @@ namespace Gwenael.Web.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
+            NewPages = await _db.NewPages.ToListAsync();
+            ViewData["NewPages"] = NewPages;
+
             if (!ModelState.IsValid)
             {
                 return Page();

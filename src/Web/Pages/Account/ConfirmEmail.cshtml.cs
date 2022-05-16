@@ -4,20 +4,29 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Gwenael.Domain.Entities;
+using System.Collections.Generic;
+using Gwenael.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace Gwenael.Web.Pages.Account
 {
     public class ConfirmEmailModel : PageModel
     {
         private readonly UserManager<User> _userManager;
+        public IList<NewPage> NewPages { get; set; }
+        private readonly GwenaelDbContext _db;
 
-        public ConfirmEmailModel(UserManager<User> userManager)
+        public ConfirmEmailModel(UserManager<User> userManager, GwenaelDbContext pDb)
         {
             _userManager = userManager;
+            _db = pDb;
         }
 
         public async Task<IActionResult> OnGetAsync(string userId, string code)
         {
+            NewPages = await _db.NewPages.ToListAsync();
+            ViewData["NewPages"] = NewPages;
+
             if (userId == null || code == null)
             {
                 return RedirectToPage("/Index");

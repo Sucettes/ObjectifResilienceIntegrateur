@@ -6,18 +6,26 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Gwenael.Application.Mailing;
 using Gwenael.Domain.Entities;
 using Gwenael.Web.Extensions;
+using System.Collections.Generic;
+using Gwenael.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace Gwenael.Web.Pages.Account
 {
     public class ForgotPasswordModel : PageModel
     {
+        public IList<NewPage> NewPages { get; set; }
+        private readonly GwenaelDbContext _db;
+
         private readonly UserManager<User> _userManager;
         private readonly IEmailFactory _emailFactory;
 
-        public ForgotPasswordModel(UserManager<User> userManager, IEmailFactory emailFactory)
+        public ForgotPasswordModel(UserManager<User> userManager, IEmailFactory emailFactory,
+        GwenaelDbContext pDb)
         {
             _userManager = userManager;
             _emailFactory = emailFactory;
+            _db = pDb;
         }
 
         [BindProperty]
@@ -32,6 +40,9 @@ namespace Gwenael.Web.Pages.Account
 
         public async Task<IActionResult> OnPostAsync()
         {
+            NewPages = await _db.NewPages.ToListAsync();
+            ViewData["NewPages"] = NewPages;
+
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByEmailAsync(Input.Email);
