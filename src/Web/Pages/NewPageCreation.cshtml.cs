@@ -46,6 +46,8 @@ namespace Gwenael.Web.Pages
             {
 
                 NewPages = _context.NewPages.ToList();
+                ViewData["NewPages"] = NewPages;
+
                 idNewPage = Request.Query["id"];
                 int intId = Int32.Parse(idNewPage);
                 NewPage b = NewPages.Where(newPage => newPage.Id == intId).First();

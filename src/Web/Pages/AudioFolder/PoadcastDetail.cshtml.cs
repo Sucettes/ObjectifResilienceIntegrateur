@@ -22,17 +22,24 @@ namespace Gwenael.Web.Pages
         CategoriesTutos Cat { get; set; }
         public Article article { get; set; }
         public Audio audio { get; set; }
+        public IList<NewPage> NewPages { get; set; }
 
         public IActionResult OnGet(Guid? id)
         {
+
             try
             {
+                NewPages = _context.NewPages.ToList();
+
                 lstCategories = _context.CategoriesTutos.ToList();
                 audio = _context.Audios.Find(id);
                 ViewData["Audio"] = audio;
                 Cat = _context.CategoriesTutos.Where(c => c.Id == audio.categorie.Id).First();
                 ViewData["Cat"] = Cat;
+                ViewData["NewPages"] = NewPages;
+
                 return Page();
+
             }
             catch
             {

@@ -28,6 +28,7 @@ namespace Gwenael.Web.Pages
 
         public async Task<IActionResult> OnGetAsync()
         {
+
             try
             {
                 if(_context.Articles != null)

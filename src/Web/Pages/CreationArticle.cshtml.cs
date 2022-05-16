@@ -21,6 +21,8 @@ namespace Gwenael.Web.Pages
     public class CreationArticle : PageModel
     {
         private readonly GwenaelDbContext _context;
+        private IList<NewPage> NewPages { get; set; }
+
 
         public CreationArticle(GwenaelDbContext context)
         {
@@ -39,6 +41,9 @@ namespace Gwenael.Web.Pages
 
         public IActionResult  OnGet()
         {
+            NewPages = _context.NewPages.ToList();
+            ViewData["NewPages"] = NewPages;
+
             Input = new InputModel();
             string idArticle;
 

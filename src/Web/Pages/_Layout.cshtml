@@ -40,18 +40,21 @@
                         <a class="nav-link" href="/indexArticles">Articles</a>
                         <a class="nav-link" href="/Tutoriel">Tutoriels</a>
                         <a class="nav-link" href="/AudioFolder/PoadcastPage">Podcast</a>
+                        @foreach (var nouvellePage in ViewData["newPages"] as IList<NewPage>)
+                        {
+                            if (nouvellePage != null)
+                            {
+                    <a class="nav-link" href="/NewPage?Titre=@nouvellePage.Titre">@nouvellePage.Titre</a>}
+                                }
                         @if (User.Identity.IsAuthenticated)
                         {
-            <a class="nav-link" href="/AdminMenu">Administrateur</a> } @*<span class="navbar-text">*@
+                    <a class="nav-link" href="/AdminMenu">Administrateur</a> } @*<span class="navbar-text">*@
                         @await Html.PartialAsync("_LoginPartial")
                         @*</span>*@
                         <!-- Je sais pas comment cétait, faq j'ai juste copier coller ton truc.' -->
-                        @*@foreach (var nouvellePage in ViewData["newPages"] as IList<NewPage>)
-                            {
-                            <li class="navItem">
-                            <a class="nav-link" href="/NewPage?Titre=@nouvellePage.Titre">@nouvellePage.Titre</a>
-                            </li>
-                            }*@
+
+
+
                     </div>
                 </div>
             </div>

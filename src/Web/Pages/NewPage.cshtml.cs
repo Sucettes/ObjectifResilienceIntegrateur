@@ -18,6 +18,7 @@ namespace Gwenael.Web.Pages
     {
         private readonly GwenaelDbContext _context;
 
+
         public NewPagesModel(GwenaelDbContext context)
         {
             _context = context;

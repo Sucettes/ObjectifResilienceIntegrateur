@@ -18,6 +18,7 @@ namespace Gwenael.Web.Pages
         public InputModel Input { get; set; }
 
         private readonly GwenaelDbContext _db;
+        public IList<NewPage> NewPages { get; set; }
 
         public class InputModel
         {
@@ -38,6 +39,9 @@ namespace Gwenael.Web.Pages
         }
         public IActionResult OnGet()
         {
+            NewPages = _db.NewPages.ToList();
+            ViewData["NewPages"] = NewPages;
+
             Input = new InputModel();
 
             Input.droitAccess = false;

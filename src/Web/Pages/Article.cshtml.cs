@@ -17,6 +17,8 @@ namespace Gwenael.Web.Pages
     public class ArticleModel : PageModel
     {
         private readonly GwenaelDbContext _context;
+        private IList<NewPage> NewPages { get; set; }
+
 
         public ArticleModel(GwenaelDbContext context)
         {
@@ -30,6 +32,9 @@ namespace Gwenael.Web.Pages
         public async Task<IActionResult> OnGet()
         {
             Articles = await _context.Articles.ToListAsync();
+            NewPages = await _context.NewPages.ToListAsync();
+            ViewData["NewPages"] = NewPages;
+
             string id = Request.Query["id"];
             int intId = Int32.Parse(id);
 
