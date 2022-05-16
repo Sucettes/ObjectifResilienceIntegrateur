@@ -27,7 +27,6 @@
                                 <div class="alert alert-primary" role="alert">@ViewData["msgSucceeded"]</div>
                             }
                         </div>
-                        <p style="text-align:center;">Votre demande sera traitée dans les plus brefs délais.</p>
                         <div class="text-danger"></div>
                         <div class="form-group">
                             <br />
@@ -42,7 +41,7 @@
                         <div class="form-group">
                             <input class="form-control" placeholder="Confirmation du mot de passe" aria-label="Confirmation du mot de passe" type="password" name="confPassword" id="confPassword">
                             <span class="text-danger" id="msgErreurConfPassword"></span>
-                            <p>Vous avez déjà un compte ?  <a asp-page="/Account/Login">Connectez-vous !</a></p>
+                            <p>Vous avez un compte ?  <a asp-page="/Account/Login">Connectez-vous !</a></p>
                         </div>
                         <div class="form-group" style="display:flex; justify-content:end;">
                             <button class="g-recaptcha btn btn-outline-primary"
@@ -53,7 +52,7 @@
                                 Envoyer la demande d'inscription
                             </button>
                         </div>
-                       
+
 
                     </form>
                 </div>
@@ -61,5 +60,6 @@
         </div>
     </div>
 </div>
+<script src="~/javascript/utils/ToastNotification.js" asp-append-version="true"></script>
 <script src="https://www.google.com/recaptcha/api.js"></script>
 <script src="~/javascript/Register/registerCaptcha.js" asp-append-version="true"></script>
