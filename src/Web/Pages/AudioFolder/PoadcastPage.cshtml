@@ -4,12 +4,11 @@
 @using Domain.Entities
 @{
     ViewData["Title"] = "Home page";
-    //var descriptionCoupe;
 }
 
 <nav class="navbar navbar-light shadow-sm">
     <div class="container-fluid">
-        <h1>Poadcasts</h1>
+        <h1>Podcasts</h1>
         @if (Model.droitAccess == true)
         {
             <div class="d-flex">
@@ -19,6 +18,7 @@
     </div>
 </nav>
 
+
 <div class="container-fluid">
     <br />
     
@@ -26,31 +26,54 @@
         
         <div class="col-3">
             <form method="post" enctype="multipart/form-data">
-                <h4>Filtre de recherches</h4>
+                <h4>Filtrer par: </h4>
                 <hr />              
-                
+                <label for="categorie" style="width: 100%;">Sélectionner une catégorie</label>
                 <div class="searchBar-container">
+                    
                     <select id="categorie" name="categorie" asp-for="cat" class="form-control me-2">
                         <option value="tout">Tout</option>
                         @foreach (var cat in @Model.lstCategories)
                         {
-                            <option id="@cat.Id" value="@cat.Nom">@cat.Nom</option>
+                            if (ViewData["recherche"] is not null)
+                            {
+                                if(ViewData["recherche"].Equals(cat.Nom))
+                                {
+                                    <option id="@cat.Id" value="@cat.Nom" selected>@cat.Nom</option>
+                                }
+                                else if (ViewData["recherche"].Equals("tout"))
+                                {
+                                    <option id="@cat.Id" value="@cat.Nom">@cat.Nom</option>
+                                }
+                                else
+                                {
+                                    <option id="@cat.Id" value="@cat.Nom">@cat.Nom</option>
+                                }
+                            }
+                            else
+                            {
+                                <option id="@cat.Id" value="@cat.Nom">@cat.Nom</option>
+                            }
+
+
                         }
                     </select>
                     <button type="submit" class="btn btn-outline-primary">Filtrer</button>
                 </div>               
             </form>
         </div>
-
-
+        
         <div class="col-9">
+            <div class="alert alert-success" role="alert">
+              Sur cette page vous aurez accès aux podcasts publiés par des membres de la communauté
+            </div>
             <div class="row row-cols-1 row-cols-md-3 g-4">
                 @foreach (var audio in ViewData["lstAudios"] as IList<Audio>)
                 {
                     if (audio.EstPublier == true)
                     {
                         <a asp-page="./PoadcastDetail" asp-route-id="@audio.ID" class="col">
-                            <div class="shadow-lg rounded cardPodcast" style="background-color:#f1f9ee;">
+                            <div class="shadow-lg rounded card" style="background-color:#f1f9ee;">
                                 <div><img src="@audio.urlImage" class="card-img-top shadow-lg sizeImage"></div>
                                 
                                 <div class="card-body">
@@ -78,6 +101,15 @@
                 }
             </div>
         </div>
+
+        <!-- Navigation de pagination -->
+            <div>
+                <ul class="pagination justify-content-center" id="navPagination">
+                    <li class="page-item"><button class="page-link" style="background-color:#38b000;" data-paginationBtn id="btn-pagination-before">&laquo</button></li>
+
+                    <li class="page-item"><button class="page-link" style="background-color:#38b000;" data-paginationBtn id="btn-pagination-after">&raquo</button></li>
+                </ul>
+            </div>
     </div>
 
 </div>
