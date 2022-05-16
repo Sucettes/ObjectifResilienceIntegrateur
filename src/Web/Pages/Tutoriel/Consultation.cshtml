@@ -26,6 +26,10 @@
                     {
                         <a class="btn btn-outline-primary" href="/Tutoriel/CreationTuto?handler=TutoRangee&id=@tuto.Id" style="margin-right: 5px;">Modifié</a>
                     }
+                    else
+                    {
+                        <button class="btn btn-outline-primary disabled" style="margin-right: 5px;" title="test">Modifié</button>
+                    }
                     <form method="post" asp-page="Consultation">
                         <input name="tutorielIdVal" type="text" value="@tuto.Id" hidden />
                         @if(Model.Input.tutoriel.EstPublier){
@@ -167,7 +171,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                Voulez-vous vraiment mettre a jours le Status du tutoriel?
+                Voulez-vous vraiment mettre à jour le Status du tutoriel?
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Non</button>

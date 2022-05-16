@@ -33,17 +33,6 @@
                 <form method="post" asp-page="Index" enctype="multipart/form-data" id="formFiltre">
                     <div class="input-group input-group-sm mb-3">
                         <label for="categorieDataList" style="width: 100%;">Sélectionner une catégorie</label>
-@*                        <input class="form-control shadow-sm" list="categorieDatalistOptions" id="categorieDataList" placeholder="Écrire pour Sélectionner une catégorie..." name="cat" autocomplete="off">
-                        <datalist id="categorieDatalistOptions" autocomplete="off">
-                            <option id="filtreCategorieTous" value="Toutes" selected />
-                            @if (!(@Model.Input.lstCategories.IsNullOrEmpty()))
-                            {
-                                @foreach (var cat in @Model.Input.lstCategories)
-                                {
-                                    <option id="@cat.Id" value="@cat.Nom" />
-                                }
-                            }
-                        </datalist>*@
                         <select class="form-select" id="categorieDataList" name="cat">
                             <option id="filtreCategorieTous" value="Toutes" selected>Toutes</option>
                             @if (!(@Model.Input.lstCategories.IsNullOrEmpty()))
@@ -136,11 +125,6 @@
         </div>
     </div>
 </div>
-
-<!--
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.js" integrity="sha512-n/4gHW3atM3QqRcbCn6ewmpxcLAHGaDjpEBu4xZd47N0W2oQ+6q7oc3PXstrJYXcbNU1OHdQ1T7pAP+gi5Yu8g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.6.0/umd/popper.min.js" integrity="sha512-BmM0/BQlqh02wuK5Gz9yrbe7VyIVwOzD1o40yi1IsTjriX/NGF37NyXHfmFzIlMmoSIBXgqDiG1VNU6kB5dBbA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
--->
 
 <script src="~/javascript/Tutoriel/recherche/script-recherche-utils.js" asp-append-version="true"></script>
 <script src="~/javascript/Tutoriel/recherche/script-recherche-init.js" asp-append-version="true"></script>
