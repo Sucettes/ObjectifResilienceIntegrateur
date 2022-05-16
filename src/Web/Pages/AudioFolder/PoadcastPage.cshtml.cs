@@ -105,11 +105,11 @@ namespace Gwenael.Web.Pages
 
             if(categorie != null)
             {
-                return Redirect("/AudioFolder/PoadcastPage/?recherche=" + categorie);
+                return Redirect("/AudioFolder/PoadcastPage?recherche=" + categorie);
             }
             else
             {
-                return Redirect("/AudioFolder/PoadcastPage/");
+                return Redirect("/AudioFolder/PoadcastPage");
             }
             
 
