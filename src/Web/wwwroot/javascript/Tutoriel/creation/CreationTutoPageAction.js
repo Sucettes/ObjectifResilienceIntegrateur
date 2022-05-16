@@ -36,16 +36,14 @@ $(document).ready(function () {
 
         history.pushState(state, '', url);
 
-        $('#btnCreeTuto').removeClass('btn btn-outline-primary');
-        $('#btnCreeTuto').addClass('btn disabled btn-primary');
-        $('#btnModifierTuto').removeClass('btn disabled btn-primary');
-        $('#btnModifierTuto').addClass('btn btn-outline-primary');
-
-        $('#btnPublieTuto').removeClass('btn disabled btn-primary');
-        $('#btnPublieTuto').addClass('btn btn-outline-primary');
-
-        $('#idTutoP').val(data.value.idTutoP);
-
+        $('[name="idTutoP"]').val(data.value.idTutoP);
+        $('[id="idTutoP"]').val(data.value.idTutoP);
+        $('[id="idTutoP2"]').val(data.value.idTutoP);
+        $('[name="idtutoVal"]').val(data.value.idTutoP);
+        console.log(data.value.idTutoP)
+        $('#btnAddRangee').removeClass('disabled');
+        $('<button id="btnModifierTuto" data-modificationTuto type="submit" class="btn btn-outline-primary">Enregistré modification</button>').insertAfter($('#btnCreeTuto'));
+        $('#btnCreeTuto').remove();
         // lancement du toast
         window.scriptToastNotification.AjouterNotification('Le tutoriel a été créé!', true);
     }

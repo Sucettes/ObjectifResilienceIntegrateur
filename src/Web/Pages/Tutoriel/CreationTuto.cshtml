@@ -48,14 +48,8 @@
             <div class="tab-content" id="nav-tabContent">
                 <!-- Contenur page détail -->
                 <div class="@(handler == "CreeTutorielDetails" ? "tab-pane show active" : "tab-pane ")" style="background-color:white;" id="nav-detail" role="tabpanel" aria-labelledby="nav-detail-tab">
-
-                    <div class="pageDescriptionBox">
-                        <p style="margin:auto;">
-                            Cette page permet de créer un tutoriel avec ses informations de base sans contenu.
-                        </p>
-                    </div>
-
                     <form method="post" asp-page="CreationTuto">
+                        <br />
                         <div class="row">
                             <label for="tutoId" style="width: 100%;">Sélectionner un tutoriel à modifié</label>
                             <div class="col-10">
@@ -86,7 +80,7 @@
                     <br />
                     <h3 style="text-align:left;">Nouveau tutoriels</h3>
                     <form method="post" asp-page="CreationTuto" enctype="multipart/form-data" id="formCreationTuto">
-                        <input id="idTutoP" value="@id" hidden name="idTutoP" />
+                        <input id="idTutoP2" value="@id" hidden name="idTutoP" />
                         <div class="row">
                             <div class="col-md-6" style="max-width:33.75rem;max-height:19.063rem;">
                                 @if (Model.Input.imgBannierUrl != null)
@@ -100,6 +94,17 @@
                                     <img class="shadow-lg" src="~/images/imgplaceholder.png" style="width:100%; height:100%;" id="imgBanierre" />
                                 }
                             </div>
+
+                            <script type="text/javascript" >
+                                var image = document.getElementById("imgBanierre");
+                                var previewPicture  = function (e) {
+                                    const [picture] = e.files
+                                    if (picture) {
+                                        // On change l'URL de l'image
+                                        image.src = URL.createObjectURL(picture)
+                                    }
+                                } 
+                            </script>
 
                             <div class="col-md-6">
                                 <div class="input-group input-group-sm mb-3">
@@ -124,12 +129,12 @@
                                 </div>
 
                                 <div class="input-group input-group-sm mb-3">
-                                    <label id="difficulteLbl" for="DifficulteRange" style="width: 100%;">Difficulté: 1</label>
+                                    <label id="difficulteLbl" for="DifficulteRange" style="width: 100%;">Difficulté: @Model.Input.difficulte</label>
                                     <input type="range" class="form-range" min="1" max="10" id="DifficulteRange" asp-for="@Model.Input.difficulte" required name="difficulte" onchange="updateTextInput(this.value);">
                                 </div>
 
                                 <div class="input-group input-group-sm mb-3">
-                                    <input type="file" class="form-control form-control-sm" id="inputImgBanierre" asp-for="@Model.Input.imageBanierFile" name="imageBanierFile">
+                                    <input type="file" class="form-control form-control-sm" id="inputImgBanierre" asp-for="@Model.Input.imageBanierFile" name="imageBanierFile" onchange="previewPicture(this)">
                                 </div>
 
                                 <div class="input-group input-group-sm mb-3">
@@ -143,10 +148,10 @@
                                                 {
                                                     <option id="@cat.Id" value="@cat.Nom" selected>@cat.Nom</option>
                                                 }
-                                                @*else
+                                                else
                                                 {
                                                     <option id="@cat.Id" value="@cat.Nom">@cat.Nom</option>
-                                                }*@
+                                                }
                                             }
                                         }
                                     </select>
@@ -199,13 +204,7 @@
 
                 <!-- Contenue page contenue tuto-->
                 <div class="@(handler == "TutoRangee" ? "tab-pane show active" : "tab-pane ")" id="nav-contenue" style="background-color:white;" role="tabpanel" aria-labelledby="nav-contenue-tab">
-
-                    <div class="pageDescriptionBox">
-                        <p style="margin:auto;">
-                            Cette page permet de créer le contenu du tutoriel sélectionner dans le menu détails.
-                        </p>
-                    </div>
-
+                    <br />
                     <h3 style="text-align:left;">Étapes</h3>
 
                     <section id="rangeeTutoSection">
@@ -216,7 +215,7 @@
                             {
                                 <form method="post" asp-page="CreationTuto" class="shadow-sm rounded" style="background-color:#f1f9ee; padding:0.7rem; margin-bottom:1.2rem; margin-top:0.7rem;">
                                     <!-- Data invisible pour les requêtes. -->
-                            <input name="idRangeeVal" type="text" value="@rangee.Id" hidden />
+                                    <input name="idRangeeVal" type="text" value="@rangee.Id" hidden />
                                     <input name="idtutoVal" type="text" value="@id" hidden />
 
                                     <div class="row" style="display:flex; justify-content:space-between">
