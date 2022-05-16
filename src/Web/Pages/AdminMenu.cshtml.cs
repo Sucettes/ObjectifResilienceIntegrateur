@@ -269,7 +269,10 @@ namespace Gwenael.Web.Pages
             List<(User, List<Role>)> tupleUsers = new List<(User, List<Role>)>();
             foreach (User user in pLstUser)
             {
-                tupleUsers.Add((user, Permission.ObtenirLstRolesUser(user.Id, _context)));
+                if(user.UserName != User.Identity.Name)
+                {
+                    tupleUsers.Add((user, Permission.ObtenirLstRolesUser(user.Id, _context)));
+                }
             }
             return tupleUsers;
         }

@@ -32,7 +32,14 @@
                 <br />
                 <div class="input-group input-group-sm mb-3">
                     <span class="input-group-text">Prénom</span>
-                    <input type="text" class="form-control" aria-label="Prénom" aria-describedby="Prénom" asp-for="user.FirstName">
+                    @if (@ViewContext.RouteData.Values["id"] is not null)
+                    {
+                        <input type="text" class="form-control" aria-label="Prénom" aria-describedby="Prénom" asp-for="user.FirstName" required>
+                    }
+                    else
+                    {
+                        <input type="text" class="form-control" aria-label="Prénom" aria-describedby="Prénom" asp-for="user.FirstName">
+                    }
                 </div>
             </div>
             <div class="col-3"></div>
@@ -42,7 +49,14 @@
             <div class="col-6">
                 <div class="input-group input-group-sm mb-3">
                     <span class="input-group-text">Nom de famille</span>
-                    <input type="text" class="form-control" aria-label="Nom de famille" aria-describedby="Nom de famille" asp-for="user.LastName">
+                    @if (@ViewContext.RouteData.Values["id"] is not null)
+                    {
+                        <input type="text" class="form-control" aria-label="Nom de famille" aria-describedby="Nom de famille" asp-for="user.LastName" required>
+                    }
+                    else
+                    {
+                        <input type="text" class="form-control" aria-label="Nom de famille" aria-describedby="Nom de famille" asp-for="user.LastName">
+                    }
                 </div>
             </div>
             <div class="col-3"></div>
@@ -89,7 +103,7 @@
         {
             <div class="row" style="justify-content:center">
                 <input name="btnSave" type="submit" value="Sauvegarder les changements" class="btn btn-primary form-control" style="width:15em !important; margin:1em;" />
-                <input name="btnDelete" type="submit" value="Supprimer l'utilisateur" class="btn btn-danger form-control" style="width:15em !important; margin:1em;" />
+                <a name="btnAnnuler" class="btn btn-danger form-control" style="width:15em !important; margin:1em;" asp-page="AdminMenu">Annuler</a>
             </div>
         }
         else
