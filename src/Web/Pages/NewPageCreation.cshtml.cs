@@ -42,11 +42,14 @@ namespace Gwenael.Web.Pages
             Input = new InputModel();
             string idNewPage;
 
+
+            NewPages = _context.NewPages.ToList();
+            ViewData["NewPages"] = NewPages;
+
             if (Request.Query.Count > 0 && Request.Query.ContainsKey("id"))
             {
 
-                NewPages = _context.NewPages.ToList();
-                ViewData["NewPages"] = NewPages;
+
 
                 idNewPage = Request.Query["id"];
                 int intId = Int32.Parse(idNewPage);
