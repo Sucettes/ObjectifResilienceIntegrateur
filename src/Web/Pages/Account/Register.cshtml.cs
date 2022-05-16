@@ -4,6 +4,7 @@ using Gwenael.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -17,11 +18,16 @@ namespace Gwenael.Web.Pages.Account
     {
         private readonly UserManager<User> _userManager;
         private readonly GwenaelDbContext _context;
+        public IList<NewPage> NewPages { get; set; }
+        private readonly GwenaelDbContext _db;
 
-        public RegisterModel(GwenaelDbContext context, UserManager<User> userManager)
+        public RegisterModel(GwenaelDbContext context, UserManager<User> userManager,
+            GwenaelDbContext pDb)
         {
             _context = context;
             _userManager = userManager;
+            _db = pDb;
+
         }
         public string ReturnUrl { get; set; }
         public void OnGet(string returnUrl = null)
@@ -36,6 +42,10 @@ namespace Gwenael.Web.Pages.Account
         }
         public async Task<IActionResult> OnPostAsync([FromForm] RegisterForm registerForm)
         {
+
+            NewPages = await _db.NewPages.ToListAsync();
+            ViewData["NewPages"] = NewPages;
+
             Dictionary<string, string> dictError = new Dictionary<string, string>();
             if (registerForm.password.Length < 6 || registerForm.password.Length > 100 || registerForm.confPassword.Length > 100 || registerForm.confPassword.Length < 6 && registerForm.confPassword != registerForm.password)
             {

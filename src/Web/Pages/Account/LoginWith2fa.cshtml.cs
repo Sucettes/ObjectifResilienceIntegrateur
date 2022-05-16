@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using Gwenael.Domain.Entities;
 using Gwenael.Web.Extensions;
+using System.Collections.Generic;
+using Gwenael.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace Gwenael.Web.Pages.Account
 {
@@ -14,11 +17,16 @@ namespace Gwenael.Web.Pages.Account
     {
         private readonly SignInManager<User> _signInManager;
         private readonly ILogger<LoginWith2faModel> _logger;
+        public IList<NewPage> NewPages { get; set; }
+        private readonly GwenaelDbContext _db;
 
-        public LoginWith2faModel(SignInManager<User> signInManager, ILogger<LoginWith2faModel> logger)
+
+        public LoginWith2faModel(SignInManager<User> signInManager, ILogger<LoginWith2faModel> logger,
+            GwenaelDbContext pDb)
         {
             _signInManager = signInManager;
             _logger = logger;
+            _db = pDb;
         }
 
         [BindProperty]
@@ -58,6 +66,10 @@ namespace Gwenael.Web.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(bool rememberMe, string returnUrl = null)
         {
+
+            NewPages = await _db.NewPages.ToListAsync();
+            ViewData["NewPages"] = NewPages;
+
             if (!ModelState.IsValid)
             {
                 return Page();

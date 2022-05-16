@@ -74,6 +74,10 @@ namespace Gwenael.Web.Pages
 
         public async Task<IActionResult> OnPost(string titre, string inerText)
         {
+
+            NewPages = _context.NewPages.ToList();
+            ViewData["NewPages"] = NewPages;
+
             NewPage newPage = new NewPage
             {
                 Titre = titre,

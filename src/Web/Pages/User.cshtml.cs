@@ -28,7 +28,9 @@ namespace Gwenael.Web.Pages
         public User user { get; set; }
         public async Task<IActionResult> OnGetAsync(Guid id)
         {
+
             NewPages = await _context.NewPages.ToListAsync();
+            ViewData["NewPages"] = NewPages;
 
             if (Guid.Empty == id)
             {
@@ -58,6 +60,9 @@ namespace Gwenael.Web.Pages
         }
         public async Task<IActionResult> OnPost(string btnSave, string btnDelete, string btnAdd, string ConfPassword, string NewPassword)
         {
+            NewPages = await _context.NewPages.ToListAsync();
+            ViewData["NewPages"] = NewPages;
+
             User userBd = null;
             try
             {

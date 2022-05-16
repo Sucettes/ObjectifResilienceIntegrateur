@@ -8,23 +8,34 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using Gwenael.Web.Extensions;
 using Gwenael.Domain.Entities;
+using System.Collections.Generic;
+using Gwenael.Domain;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace Gwenael.Web.Pages.Account
 {
     public class ExternalLoginModel : PageModel
     {
+        public IList<NewPage> NewPages { get; set; }
+        private readonly GwenaelDbContext _db;
+
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
         private readonly ILogger<ExternalLoginModel> _logger;
 
+
         public ExternalLoginModel(
             SignInManager<User> signInManager,
             UserManager<User> userManager,
-            ILogger<ExternalLoginModel> logger)
+            ILogger<ExternalLoginModel> logger,
+            GwenaelDbContext pDb)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _logger = logger;
+            _db = pDb;
+
         }
 
         [BindProperty]
@@ -46,6 +57,8 @@ namespace Gwenael.Web.Pages.Account
 
         public IActionResult OnGetAsync()
         {
+            NewPages = _db.NewPages.ToList();
+            ViewData["NewPages"] = NewPages;
             return RedirectToPage("./Login");
         }
 
@@ -59,6 +72,9 @@ namespace Gwenael.Web.Pages.Account
 
         public async Task<IActionResult> OnGetCallbackAsync(string returnUrl = null, string remoteError = null)
         {
+            NewPages = await _db.NewPages.ToListAsync();
+            ViewData["NewPages"] = NewPages;
+
             if (remoteError != null)
             {
                 ErrorMessage = $"Error from external provider: {remoteError}";
@@ -99,6 +115,9 @@ namespace Gwenael.Web.Pages.Account
 
         public async Task<IActionResult> OnPostConfirmationAsync(string returnUrl = null)
         {
+            NewPages = await _db.NewPages.ToListAsync();
+            ViewData["NewPages"] = NewPages;
+
             if (ModelState.IsValid)
             {
                 // Get the information about the user from the external login provider
