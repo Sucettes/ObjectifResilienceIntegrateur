@@ -68,6 +68,7 @@
 	<ItemGroup>
 		<Folder Include="Scripts\modules\" />
 		<Folder Include="Scripts\" />
+		<Folder Include="wwwroot\javascript\Podcast\" />
 		<Folder Include="wwwroot\js\" />
 	</ItemGroup>
 

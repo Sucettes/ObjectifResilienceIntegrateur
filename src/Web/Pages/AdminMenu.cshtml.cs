@@ -29,8 +29,48 @@ namespace Gwenael.Web.Pages
         public List<CategoriesTutos> lstCategories { get; set; }
         public String Tab { get; set; }
         private IList<NewPage> NewPages { get; set; }
+        public class CategorieNameVal
+        {
+            public string nomCat { get; set; }
+        }
+        public IActionResult OnGetAjoutCategorie()
+        {
+            return Redirect("/AdminMenu/?tab=categories");
+        }
+        public IActionResult OnPostAjoutCategorie([FromForm] CategorieNameVal catName)
+        {
+            Dictionary<string, string> dictError = new Dictionary<string, string>();
+            if (catName.nomCat != null)
+            {
+                CategoriesTutos cat = new();
+                cat.Nom = catName.nomCat;
+                cat.Description = "";
 
+                if (!String.IsNullOrEmpty(catName.nomCat) && catName.nomCat.Length <= 50)
+                {
+                    if (_context.CategoriesTutos.Where(c => c.Nom == catName.nomCat).Count() == 0)
+                    {
+                        dictError.Add("msgSuccess", "La catégorie à bien été crée !");
+                        _context.CategoriesTutos.Add(cat);
+                         _context.SaveChanges();
+                        return StatusCode(200);
+                    }
+                    else
+                    {
+                        dictError.Add("dejaCree", "La catégorie existe déjà !");
+                        return StatusCode(500);
+                    }
+     
 
+                }
+                dictError.Add("nomTropGrand", "Le nom de la catégorie doit contenir 1 à 50 caractères !");
+                return StatusCode(500);
+
+            }
+            dictError.Add("nomTropGrand", "Le nom de la catégorie doit contenir 1 à 50 caractères !");
+            return StatusCode(500);
+
+        }
         public async Task<IActionResult> OnGetAsync()
         {
 
@@ -321,22 +361,7 @@ namespace Gwenael.Web.Pages
                     {
                         return Redirect("/AdminMenu/?tab=articles&recherche=" + rechercheValeurTuto);
                     }
-                    else if (nomCat != null)
-                    {
-                        CategoriesTutos cat = new();
-                        cat.Nom = nomCat;
-                        cat.Description = "";
-
-                        if (!String.IsNullOrEmpty(nomCat) && nomCat.Length <= 50)
-                        {
-                            if (_context.CategoriesTutos.Where(c => c.Nom == nomCat).Count() == 0)
-                            {
-                                _context.CategoriesTutos.Add(cat);
-                                await _context.SaveChangesAsync();
-                            }
-                        }
-                        return Redirect("/AdminMenu/?tab=categories");
-                    }
+                    
                     else if (idAudio != null)
                     {
                         Audio audio = new Audio();

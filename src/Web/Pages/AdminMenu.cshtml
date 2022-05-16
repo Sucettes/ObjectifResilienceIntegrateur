@@ -173,47 +173,47 @@
                         }
                         @if (ViewData["userRoles"] is not null)
                         {
-                        <div class="container">
+                            <div class="container">
 
-                            @foreach (var roleUser in ViewData["userRoles"] as List<Role>)
-                            {
-                                <div class="list-group-item">
-                                    <div class="row">
-                                        <div class="col-8">
-                                            <p>@roleUser.Name</p>
-                                        </div>
-                                        <div class="col-4">
-                                            <form method="post">
-                                                <input type="hidden" name="name" asp-for="@roleUser.Name" />
-                                                <input name="btnDeleteRole" type="submit" value="Retirer" class="btn btn-danger form-control" />
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-                            @if (lstSelect.Count > 0)
-                            {
-                                <div class="list-group-item">
-                                    <form method="post">
+                                @foreach (var roleUser in ViewData["userRoles"] as List<Role>)
+                                {
+                                    <div class="list-group-item">
                                         <div class="row">
                                             <div class="col-8">
-                                                <p>Sélectionner un rôle à ajouter :</p>
-                                                <select class="form-control" name="selectRole">
-                                                    @foreach (var roleSelect in ViewData["selectRoles"] as List<Role>)
-                                                    {
-                                                        <option value="@roleSelect.Name">@roleSelect.Name</option>
-                                                    }
-                                                </select>
+                                                <p>@roleUser.Name</p>
                                             </div>
-                                            <div class="col-4" style="align-self:end;">
-                                                <input name="btnAjoutRole" type="submit" value="Ajouter" class="btn btn-primary form-control" />
+                                            <div class="col-4">
+                                                <form method="post">
+                                                    <input type="hidden" name="name" asp-for="@roleUser.Name" />
+                                                    <input name="btnDeleteRole" type="submit" value="Retirer" class="btn btn-danger form-control" />
+                                                </form>
                                             </div>
                                         </div>
-                                    </form>
-                                </div>
-                            }
+                                    </div>
+                                }
+                                @if (lstSelect.Count > 0)
+                                {
+                                    <div class="list-group-item">
+                                        <form method="post">
+                                            <div class="row">
+                                                <div class="col-8">
+                                                    <p>Sélectionner un rôle à ajouter :</p>
+                                                    <select class="form-control" name="selectRole">
+                                                        @foreach (var roleSelect in ViewData["selectRoles"] as List<Role>)
+                                                        {
+                                                            <option value="@roleSelect.Name">@roleSelect.Name</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                                <div class="col-4" style="align-self:end;">
+                                                    <input name="btnAjoutRole" type="submit" value="Ajouter" class="btn btn-primary form-control" />
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                }
 
-                        </div>
+                            </div>
                         }
                         else
                         {
@@ -247,7 +247,7 @@
                         <th scope="col">Rôles</th>
                         <th scope="col">Date de création</th>
                         <th scope="col"><a asp-page="user" asp-route-id="" class="btn btn-primary btn-sm"><img src="~/icons/addIcon.svg" /></a></th>
-                  
+
                     </tr>
                 </thead>
                 @if (ViewData["tupleUsers"] is not null && lstTupleUser.Count > 0)
@@ -437,7 +437,8 @@
             }
             else if (ViewData["Tab"].ToString() == "categories")
             {
-                <form method="post">
+
+                <form method="post" id="form-categorie">
                     <div class="row">
                         <div class="col-12">
                             <h3>Ajouter une catégorie</h3>
@@ -447,17 +448,20 @@
                     <div class="row">
                         <div class="col-2"></div>
                         <div class="col-4">
-                            <input type="text" class="form-control" placeholder="Nom catégorie" required name="nomCat" max="50" min="1" />
+                            <input type="text" class="form-control" placeholder="Nom catégorie" id="nomCat" required name="nomCat" max="50" min="1" />
                             <br />
                         </div>
                         <div class="col-4">
-                            <input name="btnAjoutCategorie" type="submit" value="Ajouter" class="btn btn-primary form-control" />
+                            <button id="btnAjoutCategorie" class="btn btn-primary form-control" )" asp-page-handler="AjoutCategorie">Ajouter</button>
+
+                            @* <input name="btnAjoutCategorie" type="submit" value="Ajouter" class="btn btn-primary form-control" />*@
                         </div>
                         <div class="col-2"></div>
                         <br />
                         <hr />
                     </div>
                 </form>
+
                 @if (lstCategorie is not null)
                 {
                     @foreach (var categorie in lstCategorie)
@@ -669,29 +673,29 @@
                                     <div class="col-9">
                                         <div class="row">
                                             @*<div class="col-2">
-                                                @if (article.EstPublier)
-                                                {
-                                                    <img src="~/icons/published.svg" style="width:2em; height:2em;" />
-                                                }
-                                                else
-                                                {
-                                                    <img src="~/icons/unpublished.svg" style="width:2em; height:2em;" />
-                                                }
-                                            </div>*@
+                                                    @if (article.EstPublier)
+                                                    {
+                                                        <img src="~/icons/published.svg" style="width:2em; height:2em;" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <img src="~/icons/unpublished.svg" style="width:2em; height:2em;" />
+                                                    }
+                                                </div>*@
                                             <div class="col-8">
                                                 <h3>@article.Titre</h3>
                                             </div>
                                         </div>
                                         @*<div class="row">
-                                            @if (article.EstPublier)
-                                            {
-                                                <p style="text-align:center;">État: Publié</p>
-                                            }
-                                            else
-                                            {
-                                                <p style="text-align:center;">État: Non publié</p>
-                                            }
-                                        </div>*@
+                                                @if (article.EstPublier)
+                                                {
+                                                    <p style="text-align:center;">État: Publié</p>
+                                                }
+                                                else
+                                                {
+                                                    <p style="text-align:center;">État: Non publié</p>
+                                                }
+                                            </div>*@
                                     </div>
                                     <div class="col-3">
                                         <div class="row" style="justify-content:center;">
@@ -701,22 +705,22 @@
                                             </form>
                                         </div>
                                         @*<div class="row" style="justify-content:center;">
-                                            <br />
-                                            @if (!article)
-                                            {
-                                                <form method="post">
-                                                    <input name="idTuto" hidden value="@article.Id" />
-                                                    <button type="submit" class="btn btn-outline-primary form-control" style="margin-top:10px; width:10em;">Publier</button>
-                                                </form>
-                                            }
-                                            else
-                                            {
-                                                <form method="post">
-                                                    <input name="idTuto" hidden value="@tuto.Id" />
-                                                    <button type="submit" class="btn btn-outline-primary form-control" style="margin-top:10px; width:10em;">Rendre non public</button>
-                                                </form>
-                                            }
-                                        </div>*@
+                                                <br />
+                                                @if (!article)
+                                                {
+                                                    <form method="post">
+                                                        <input name="idTuto" hidden value="@article.Id" />
+                                                        <button type="submit" class="btn btn-outline-primary form-control" style="margin-top:10px; width:10em;">Publier</button>
+                                                    </form>
+                                                }
+                                                else
+                                                {
+                                                    <form method="post">
+                                                        <input name="idTuto" hidden value="@tuto.Id" />
+                                                        <button type="submit" class="btn btn-outline-primary form-control" style="margin-top:10px; width:10em;">Rendre non public</button>
+                                                    </form>
+                                                }
+                                            </div>*@
 
                                     </div>
                                 </div>
@@ -742,4 +746,65 @@
             }
         }
     </table>
+    @*<div id="toastDiv" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11" hidden>
+            <div class="toast-header">
+                <img style="max-width:1.5rem;max-height:1.5rem;" src="/icons/valide.svg" class="rounded me-2" alt="...">
+                <strong class="me-auto">Confirmation de création</strong>
+                <small>Nouveau!</small>
+            </div>
+            <div class="toast-body" id="toastContent">
+            </div>
+        </div>
+    </div>*@
 </div>
+
+<script src="~/javascript/utils/ToastNotification.js" asp-append-version="true"></script>
+
+<script>
+    $('#btnAjoutCategorie').click(function () {
+        var href = window.location.pathname + "?handler=AjoutCategorie";
+        event.preventDefault();
+        event.stopPropagation();
+        $.ajax({
+            type: 'POST',
+            url: href,
+            data: new FormData(document.getElementById('form-categorie')),
+            contentType: "application/json",
+            headers: {
+                RequestVerificationToken:
+                    $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function () {
+                window.scriptToastNotification.AjouterNotification("La catégorie à bien été crée", true);
+                setTimeout(function () {
+                    window.location.href = '/AdminMenu/?tab=categories';
+                }, 3600);
+            },
+            error: function () {
+                window.scriptToastNotification.AjouterNotification("Une erreure est survenu lors de la création d'une catégorie !", false);
+                setTimeout(function () {
+                    window.locati3600ref = '/AdminMenu/?tab=categories';
+                }, 3600);
+            }
+        });
+    });
+    function showToast(content) {
+        toast = document.getElementById('toast');
+        // Quand le toast a fini de ce cacher
+        toast.addEventListener('hide.bs.toast', function () {
+            $('#toastDiv').attr('hidden');
+        });
+
+        // Quand le toast a fini de ce montrer
+        toast.addEventListener('show.bs.toast', function () {
+            $('#toastDiv').removeAttr('hidden');
+        });
+
+        var toastObj = new bootstrap.Toast(toast)
+        $('#toastContent').text(content);
+        toastObj.show();
+    }
+</script>

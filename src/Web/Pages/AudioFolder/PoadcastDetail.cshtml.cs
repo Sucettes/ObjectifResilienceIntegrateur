@@ -47,12 +47,6 @@ namespace Gwenael.Web.Pages
             }
         }
 
-        public int CompterNbVue()
-        {
-
-            return 0;
-        }
-
         public async Task<IActionResult> OnPostAsync(string name, string btnAjouterPoadcast, string btnSupprimerPoadcast, int? id)
         {
             try
