@@ -81,6 +81,10 @@ namespace Gwenael.Web.Pages
                 EstPublier = false
 
             };
+
+            NewPages = _context.NewPages.ToList();
+            ViewData["NewPages"] = NewPages;
+
             if (Request.Query.Count > 0 && Request.Query.ContainsKey("id"))
             {
                 string idArticle = Request.Query["id"];
