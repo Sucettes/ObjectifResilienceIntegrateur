@@ -437,7 +437,8 @@
             }
             else if (ViewData["Tab"].ToString() == "categories")
             {
-                <form method="post">
+
+                <form method="post" id="form-categorie">
                     <div class="row">
                         <div class="col-12">
                             <h3>Ajouter une catégorie</h3>
@@ -447,11 +448,13 @@
                     <div class="row">
                         <div class="col-2"></div>
                         <div class="col-4">
-                            <input type="text" class="form-control" placeholder="Nom catégorie" required name="nomCat" max="50" min="1" />
+                            <input type="text" class="form-control" placeholder="Nom catégorie" id="nomCat" required name="nomCat" max="50" min="1" />
                             <br />
                         </div>
                         <div class="col-4">
-                            <input name="btnAjoutCategorie" type="submit" value="Ajouter" class="btn btn-primary form-control" />
+                            <button id="btnAjoutCategorie" class="btn btn-primary form-control" )" asp-page-handler="AjoutCategorie">Ajouter</button>
+
+                            @* <input name="btnAjoutCategorie" type="submit" value="Ajouter" class="btn btn-primary form-control" />*@
                         </div>
                         <div class="col-2"></div>
                         <br />
@@ -743,23 +746,51 @@
             }
         }
     </table>
-    <button onclick="showToast('eueeue')">TEST</button>
-    <div id="toastDiv" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11" hidden>
-            <div id="toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-animation="true" data-bs-delay="3500">
-                <div class="toast-header">
-                    <img style="max-width:1.5rem;max-height:1.5rem;" src="/icons/valide.svg" class="rounded me-2" alt="...">
-                    <strong class="me-auto">Confirmation de création</strong>
-                    <small>Nouveau!</small>
-                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                </div>
-                <div class="toast-body" id="toastContent">
-                </div>
+    @*<div id="toastDiv" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11" hidden>
+            <div class="toast-header">
+                <img style="max-width:1.5rem;max-height:1.5rem;" src="/icons/valide.svg" class="rounded me-2" alt="...">
+                <strong class="me-auto">Confirmation de création</strong>
+                <small>Nouveau!</small>
+            </div>
+            <div class="toast-body" id="toastContent">
             </div>
         </div>
-    </div>
-
+    </div>*@
 </div>
+
+<script src="~/javascript/utils/ToastNotification.js" asp-append-version="true"></script>
+
 <script>
+    $('#btnAjoutCategorie').click(function () {
+        var href = window.location.pathname + "?handler=AjoutCategorie";
+        event.preventDefault();
+        event.stopPropagation();
+        $.ajax({
+            type: 'POST',
+            url: href,
+            data: new FormData(document.getElementById('form-categorie')),
+            contentType: "application/json",
+            headers: {
+                RequestVerificationToken:
+                    $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function () {
+                window.scriptToastNotification.AjouterNotification("La catégorie à bien été crée", true);
+                setTimeout(function () {
+                    window.location.href = '/AdminMenu/?tab=categories';
+                }, 3600);
+            },
+            error: function () {
+                window.scriptToastNotification.AjouterNotification("Une erreure est survenu lors de la création d'une catégorie !", false);
+                setTimeout(function () {
+                    window.locati3600ref = '/AdminMenu/?tab=categories';
+                }, 3600);
+            }
+        });
+    });
     function showToast(content) {
         toast = document.getElementById('toast');
         // Quand le toast a fini de ce cacher

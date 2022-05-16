@@ -28,13 +28,55 @@ namespace Gwenael.Web.Pages
         public IList<Audio> audios { get; set; }
         public List<CategoriesTutos> lstCategories { get; set; }
         public String Tab { get; set; }
+        public class CategorieNameVal
+        {
+            public string nomCat { get; set; }
+        }
+        public IActionResult OnGetAjoutCategorie()
+        {
+            return Redirect("/AdminMenu/?tab=categories");
+        }
+        public IActionResult OnPostAjoutCategorie([FromForm] CategorieNameVal catName)
+        {
+            Dictionary<string, string> dictError = new Dictionary<string, string>();
+            if (catName.nomCat != null)
+            {
+                CategoriesTutos cat = new();
+                cat.Nom = catName.nomCat;
+                cat.Description = "";
+
+                if (!String.IsNullOrEmpty(catName.nomCat) && catName.nomCat.Length <= 50)
+                {
+                    if (_context.CategoriesTutos.Where(c => c.Nom == catName.nomCat).Count() == 0)
+                    {
+                        dictError.Add("msgSuccess", "La catégorie à bien été crée !");
+                        _context.CategoriesTutos.Add(cat);
+                         _context.SaveChanges();
+                        return StatusCode(200);
+                    }
+                    else
+                    {
+                        dictError.Add("dejaCree", "La catégorie existe déjà !");
+                        return StatusCode(500);
+                    }
+     
+
+                }
+                dictError.Add("nomTropGrand", "Le nom de la catégorie doit contenir 1 à 50 caractères !");
+                return StatusCode(500);
+
+            }
+            dictError.Add("nomTropGrand", "Le nom de la catégorie doit contenir 1 à 50 caractères !");
+            return StatusCode(500);
+
+        }
         public async Task<IActionResult> OnGetAsync()
         {
-            //if (User.Identity.IsAuthenticated)
-            //{
-            //    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-            //    if (Permission.EstAdministrateur(idConnectedUser, _context))
-            //    {
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
+                if (Permission.EstAdministrateur(idConnectedUser, _context))
+                {
 
                     if (Request.Query.Count == 1)
                     {
@@ -213,9 +255,9 @@ namespace Gwenael.Web.Pages
                         }
                         return Page();
                     }
-            //    }
-            //}
-            //return Redirect("/");
+                }
+            }
+            return Redirect("/");
         }
         public List<(User, List<Role>)> getListUserAndRoles(List<User> pLstUser)
         {
@@ -228,11 +270,11 @@ namespace Gwenael.Web.Pages
         }
         public async Task<IActionResult> OnPostAsync(string btnSupprimerArticle, string idUserToDelete, string btnSupprimer, string btnSupprimerTuto, string idAudio, string idTuto, string supprCatVal, string nomCat, string rechercheValeurArticle, string rechercheValeurTuto, string rechercheValeurPodcast, string rechercheValeurDemande, string rechercheValeurUtilisateur, string rechercheValeurUtilisateurRole, string btnDeleteRole, string name, string selectRole, string btnAccepter, string btnRefuser, int? id)
         {
-            //if (User.Identity.IsAuthenticated)
-            //{
-            //    Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
-            //    if (Permission.EstAdministrateur(idConnectedUser, _context))
-            //    {
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
+                if (Permission.EstAdministrateur(idConnectedUser, _context))
+                {
                     if (supprCatVal is not null)
                     {
                         CategoriesTutos catTuto = (CategoriesTutos)_context.CategoriesTutos.Where(c => c.Id == Guid.Parse(supprCatVal)).First();
@@ -314,22 +356,7 @@ namespace Gwenael.Web.Pages
                     {
                         return Redirect("/AdminMenu/?tab=articles&recherche=" + rechercheValeurTuto);
                     }
-                    else if (nomCat != null)
-                    {
-                        CategoriesTutos cat = new();
-                        cat.Nom = nomCat;
-                        cat.Description = "";
-
-                        if (!String.IsNullOrEmpty(nomCat) && nomCat.Length <= 50)
-                        {
-                            if (_context.CategoriesTutos.Where(c => c.Nom == nomCat).Count() == 0)
-                            {
-                                _context.CategoriesTutos.Add(cat);
-                                await _context.SaveChangesAsync();
-                            }
-                        }
-                        return Redirect("/AdminMenu/?tab=categories");
-                    }
+                    
                     else if (idAudio != null)
                     {
                         Audio audio = new Audio();
@@ -419,8 +446,8 @@ namespace Gwenael.Web.Pages
                         Console.WriteLine(userToDelete);
                         return Redirect("/AdminMenu/?tab=utilisateurs");
                     }
-            //    }
-            //}
+                }
+            }
             return Redirect("/");
         }
 
