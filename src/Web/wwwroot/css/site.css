@@ -5565,7 +5565,10 @@ h3 {
   font-family: 'Cabin Sketch', cursive !important; }
 
 p {
-  font-family: 'Nunito', sans-serif !important; }
+  font-family: 'Patrick Hand', cursive !important; }
+
+a {
+  font-family: 'Patrick Hand', cursive !important; }
 
 body {
   /*background-image: url("../images/image de fond.jpg");*/
@@ -5735,6 +5738,20 @@ h3 {
   display: -ms-flexbox;
   display: flex; }
 
+.nav-link {
+  font-size: 1.5em; }
+
+.navbar-text {
+  font-size: 1.5em; }
+
+.navbar-text a {
+  color: black; }
+
+.navbar-button {
+  font-size: 1.5em;
+  color: black;
+  background-color: transparent; }
+
 .footer {
   display: -webkit-box;
   display: -webkit-flex;
@@ -5774,19 +5791,19 @@ h3 {
 
 .sizeImage2 {
   width: 500px;
-  height: 500px; }
+  height: 450px; }
 
 .paddingLeft {
-  padding-left: 30px; }
+  padding-left: 5%; }
 
 .paddingLeft2 {
-  padding-left: 80px; }
+  padding-left: 5%; }
 
 .sizeDescription {
-  width: 1050px; }
+  width: 80%; }
 
 audio {
-  width: 800px; }
+  width: 80%; }
 
 .borderPoadcast {
   border-top: 3px groove black; }

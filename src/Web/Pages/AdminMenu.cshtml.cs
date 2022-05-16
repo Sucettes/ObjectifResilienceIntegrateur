@@ -28,8 +28,15 @@ namespace Gwenael.Web.Pages
         public IList<Audio> audios { get; set; }
         public List<CategoriesTutos> lstCategories { get; set; }
         public String Tab { get; set; }
+        private IList<NewPage> NewPages { get; set; }
+
+
         public async Task<IActionResult> OnGetAsync()
         {
+
+            NewPages = await _context.NewPages.ToListAsync();
+            ViewData["NewPages"] = NewPages;
+
             if (User.Identity.IsAuthenticated)
             {
                 Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);

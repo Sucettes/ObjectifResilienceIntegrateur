@@ -5,13 +5,21 @@
 @{ ViewData["Title"] = "New page"; }
 
 
-<div id="container" class="container">
 
 
-    @{ NewPage aNewPage = ViewData["newPage"] as NewPage;
-        string newPageContent = aNewPage.InerText;
 
-        <h2>@aNewPage.Titre</h2>
+@{ NewPage aNewPage = ViewData["newPage"] as NewPage;
+    string newPageContent = aNewPage.InerText;
+
+    <h2>@aNewPage.Titre</h2>
+
+    <div>
+        <img src="https://mediafileobjectifresiliance.s3.ca-central-1.amazonaws.com/@aNewPage.LienImg" class="divBanner" style="width:100%" />
+    </div>
+
+
+
+    <div id="container" class="container">
         <div>
             <script>
             var article = '@newPageContent';
@@ -28,6 +36,6 @@
             tst.innerHTML += tst2;
             </script>
         </div>
-    }
+    </div>
+}
 
-</div>

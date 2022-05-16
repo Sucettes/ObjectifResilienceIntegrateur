@@ -21,6 +21,8 @@ namespace Gwenael.Web.Pages
     public class CreationArticle : PageModel
     {
         private readonly GwenaelDbContext _context;
+        private IList<NewPage> NewPages { get; set; }
+
 
         public CreationArticle(GwenaelDbContext context)
         {
@@ -35,76 +37,96 @@ namespace Gwenael.Web.Pages
 
         [BindProperty]
         public InputModel Input { get; set; }
+        public List<Article> Articles { get; set; }
 
-        public void OnGet()
+        public IActionResult  OnGet()
         {
+            NewPages = _context.NewPages.ToList();
+            ViewData["NewPages"] = NewPages;
+
             Input = new InputModel();
+            string idArticle;
+
+            if (Request.Query.Count > 0 && Request.Query.ContainsKey("id"))
+            {
+                
+                Articles = _context.Articles.ToList();
+                idArticle = Request.Query["id"];
+                int intId = Int32.Parse(idArticle);
+                Article b = Articles.Where(article => article.Id == intId).First();
+                Input.TextArea = b.InerText;
+                Input.Titre = b.Titre;
+                ViewData["Modifier"] = "true";
+            }
+            
+            return Page();
         }
 
         public class InputModel
         {
             public IFormFile[] FormFile { get; set; }
 
+            public string TextArea { get; set; }
+            public string Titre { get; set; }
+
         }
 
 
         public async Task<IActionResult> OnPost(string titre, string inerText)
         {
-
-            // Upload de l'article et sont titre 
-            int idNewArticle = 0;
             Article newArticle = new Article
             {
                 Titre = titre,
-                InerText = inerText
+                InerText = inerText,
+                EstPublier = false
+
             };
 
-            //await _context.SaveChangesAsync();
-            idNewArticle = newArticle.Id;
+            NewPages = _context.NewPages.ToList();
+            ViewData["NewPages"] = NewPages;
 
-
-            Media newMedia = new Media();
-            var client = new AmazonS3Client("AKIAVDH3AEDD6PUJMKGG", "kKV5WKu0tFe8Svl2QdTIMIydLc7CGSMiy2h+KOvV", RegionEndpoint.CACentral1);
-            // mettre dans app setting
-            //using (var client = new AmazonS3Client("AKIAVDH3AEDD6PUJMKGG", "kKV5WKu0tFe8Svl2QdTIMIydLc7CGSMiy2h+KOvV", RegionEndpoint.CACentral1))
-            //{
-
-            //foreach (IFormFile File in Input.FormFile)
-            //{
-            var File = Input.FormFile[0];
-            using (var newMemoryStream = new MemoryStream())
+            if (Request.Query.Count > 0 && Request.Query.ContainsKey("id"))
             {
-
-                File.CopyTo(newMemoryStream);
-                var uploadRequest = new TransferUtilityUploadRequest
-                {
-                    InputStream = newMemoryStream,
-                    Key = File.FileName, // filename
-                    BucketName = "mediafileobjectifresiliance", // bucket name of S3
-                    CannedACL = S3CannedACL.PublicRead,
-                };
-
-                var fileTransferUtility = new TransferUtility(client);
-                await fileTransferUtility.UploadAsync(uploadRequest);
+                string idArticle = Request.Query["id"];
+                int intId = Int32.Parse(idArticle);
+                Article b = _context.Articles.Where(b => b.Id == intId).First();
+                b.Titre = titre;
+                b.InerText = inerText;
+                _context.Articles.Update(b);
             }
 
-            string link = "s3/mediafileobjectifresiliance/" + File.FileName;
+            if (Input.FormFile != null)
+            {
+                var client = new AmazonS3Client("AKIAVDH3AEDD6PUJMKGG", "kKV5WKu0tFe8Svl2QdTIMIydLc7CGSMiy2h+KOvV", RegionEndpoint.CACentral1);
+                var File = Input.FormFile[0];
+                using (var newMemoryStream = new MemoryStream())
+                {
 
+                    File.CopyTo(newMemoryStream);
+                    var uploadRequest = new TransferUtilityUploadRequest
+                    {
+                        InputStream = newMemoryStream,
+                        Key = File.FileName, // filename
+                        BucketName = "mediafileobjectifresiliance", // bucket name of S3
+                        CannedACL = S3CannedACL.PublicRead,
+                    };
 
-            newArticle.LienImg = link;
-            _context.Articles.Add(newArticle);
-            //newMedia.Id = File.FileName;
-            //newMedia.Idreference = idNewArticle;
-            //newMedia.LinkS3 = link;
-            //newMedia.OrderInThePage = 0;
+                    var fileTransferUtility = new TransferUtility(client);
+                    await fileTransferUtility.UploadAsync(uploadRequest);
+                }
 
+                string link =  File.FileName;
+                newArticle.LienImg = link;
 
-            //_context.Medias.Add(newMedia);
-            //Console.WriteLine(newMedia.ToString());
-            //}
-            //}
+            }
 
-            _context.SaveChanges();
+            if (Request.Query.Count == 0 && !Request.Query.ContainsKey("id"))
+            {
+               _context.Articles.Add(newArticle);
+            }
+
+                _context.SaveChanges();
+            
             return Page();
         }
 

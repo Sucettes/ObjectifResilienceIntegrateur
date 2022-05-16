@@ -16,6 +16,8 @@ namespace Gwenael.Web.Pages
     {
         private readonly GwenaelDbContext _context;
         private readonly UserManager<User> _userManager;
+        private IList<NewPage> NewPages { get; set; }
+
 
         public UserModel(GwenaelDbContext context, UserManager<User> userManager)
         {
@@ -26,6 +28,8 @@ namespace Gwenael.Web.Pages
         public User user { get; set; }
         public async Task<IActionResult> OnGetAsync(Guid id)
         {
+            NewPages = await _context.NewPages.ToListAsync();
+
             if (Guid.Empty == id)
             {
                 return Page();

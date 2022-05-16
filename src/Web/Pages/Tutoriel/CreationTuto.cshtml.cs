@@ -20,6 +20,7 @@ namespace Gwenael.Web.Pages
     public class CreationTutoModel : PageModel
     {
         private readonly GwenaelDbContext _db;
+        private IList<NewPage> NewPages { get; set; }
 
         [BindProperty(SupportsGet = true)]
         public InputModel Input { get; set; }
@@ -94,6 +95,10 @@ namespace Gwenael.Web.Pages
         #region GET POST UPDATE DELETE
         public IActionResult OnGet()
         {
+            NewPages = _db.NewPages.ToList();
+            ViewData["NewPages"] = NewPages;
+
+
             if (User.Identity.IsAuthenticated)
             {
                 Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);

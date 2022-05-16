@@ -28,13 +28,21 @@ namespace Gwenael.Web.Pages
 
         public async Task<IActionResult> OnGetAsync()
         {
+
             try
             {
-                Articles = await _context.Articles.ToListAsync();
-                NewPages = await _context.NewPages.ToListAsync();
+                if(_context.Articles != null)
+                {
+                    Articles = await _context.Articles.ToListAsync();
+                    NewPages = await _context.NewPages.ToListAsync();
+                }
+                else
+                {
+                    Articles = new List<Article>();
+                    NewPages = new List<NewPage>();
+                }
                 
                 ViewData["NewPages"] = NewPages;
-
                 ViewData["lstArticles"] = Articles;
                 return Page();
 

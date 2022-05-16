@@ -4,6 +4,7 @@ using Gwenael.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gwenael.Persistence.Migrations
 {
     [DbContext(typeof(GwenaelDbContext))]
-    partial class GwenaelDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220513194318_article EstPublier")]
+    partial class articleEstPublier
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -158,14 +160,8 @@ namespace Gwenael.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<bool>("EstPublier")
-                        .HasColumnType("bit");
-
                     b.Property<string>("InerText")
-                        .HasMaxLength(20000)
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LienImg")
+                        .HasMaxLength(99999)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Titre")

@@ -34,9 +34,13 @@ namespace Gwenael.Web.Pages
         public IList<Audio> audios { get; set; }
        
         public InputModel Input { get; set; }
-        
+        public IList<NewPage> NewPages { get; set; }
+
         public void OnGet()
         {
+            NewPages = _context.NewPages.ToList();
+            ViewData["NewPages"] = NewPages;
+
             Input = new InputModel();
             Input.lstCategories = _context.CategoriesTutos.ToList();
         }

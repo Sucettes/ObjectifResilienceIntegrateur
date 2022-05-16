@@ -12,6 +12,6 @@ namespace Gwenael.Domain.Entities
         [Required] [MaxLength(50)] public string Titre { get; set; }
         [MaxLength(20000)] public string InerText { get; set; }
         public string LienImg { get; set; }
-
+        public bool EstPublier { get; set; }
     }
 }

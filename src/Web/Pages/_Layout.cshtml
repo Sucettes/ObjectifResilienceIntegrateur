@@ -39,19 +39,22 @@
                     <div class="navbar-nav">
                         <a class="nav-link" href="/indexArticles">Articles</a>
                         <a class="nav-link" href="/Tutoriel">Tutoriels</a>
-                        <a class="nav-link" href="/AudioFolder/PoadcastPage">Podcast</a>
+                        <a class="nav-link" href="/AudioFolder/PoadcastPage">Podcasts</a>
+                        @foreach (var nouvellePage in ViewData["newPages"] as IList<NewPage>)
+                        {
+                            if (nouvellePage != null)
+                            {
+                    <a class="nav-link" href="/NewPage?Titre=@nouvellePage.Titre">@nouvellePage.Titre</a>}
+                                }
                         @if (User.Identity.IsAuthenticated)
                         {
-            <a class="nav-link" href="/AdminMenu">Administrateur</a> } @*<span class="navbar-text">*@
+                    <a class="nav-link" href="/AdminMenu">Administrateur</a> } @*<span class="navbar-text">*@
                         @await Html.PartialAsync("_LoginPartial")
                         @*</span>*@
                         <!-- Je sais pas comment cétait, faq j'ai juste copier coller ton truc.' -->
-                        @*@foreach (var nouvellePage in ViewData["newPages"] as IList<NewPage>)
-                            {
-                            <li class="navItem">
-                            <a class="nav-link" href="/NewPage?Titre=@nouvellePage.Titre">@nouvellePage.Titre</a>
-                            </li>
-                            }*@
+
+
+
                     </div>
                 </div>
             </div>
@@ -65,7 +68,7 @@
                     <div class="footer-part1" style="display:flex;flex-direction:column;">
                         <div style="display:flex;justify-content:space-around;">
                             <div>
-                                <h3>Ou nous trouver</h3>
+                                <h3>Où nous trouver</h3>
                                 <p style="text-align:center;">20, boulevard Charest Est Quebec, QC G1K 3G2</p>
                             </div>
 
@@ -75,7 +78,7 @@
                                 <p style="margin:0;text-align:center;">Antoine Dev - Gwenael Dev</p>
                             </div>
                             <div>
-                                <h3 style="text-align:left;">Nos coordonnees</h3>
+                                <h3 style="text-align:left;">Nos coordonnées</h3>
                                 <p style="text-align:center;margin:0">Mail: laurent.metais@centrejacquescartier.org</p>
                                 <p style="margin:0;text-align:center;">Tel: 418 523-6021 poste 24</p>
                                 <p style="text-align:center;margin:0">Mail: marc.herbert@centrejacquescartier.org</p>

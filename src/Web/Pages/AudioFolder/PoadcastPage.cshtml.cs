@@ -33,12 +33,17 @@ namespace Gwenael.Web.Pages
         public string descriptionCoupe { get; set; }
         public string audioDesc { get; set; }
         public bool droitAccess { get; set; }
+        public IList<NewPage> NewPages { get; set; }
 
 
         public async Task<IActionResult> OnGetAsync()
         {
+
             try
             {
+                NewPages = await _context.NewPages.ToListAsync();
+                ViewData["NewPages"] = NewPages;
+
                 audios = await _context.Audios.ToListAsync();
 
                 ViewData["lstAudios"] = audios;
