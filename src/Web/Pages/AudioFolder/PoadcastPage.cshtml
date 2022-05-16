@@ -64,8 +64,9 @@
         </div>
         
         <div class="col-9">
-            <div class="alert alert-success" role="alert">
-              Sur cette page vous aurez accès aux podcasts publiés par des membres de la communauté
+
+            <div class="pageDescriptionBox">
+                Sur cette page vous aurez accès aux podcasts publiés par des membres de la communauté
             </div>
             <div class="row row-cols-1 row-cols-md-3 g-4">
                 @foreach (var audio in ViewData["lstAudios"] as IList<Audio>)
@@ -73,7 +74,7 @@
                     if (audio.EstPublier == true)
                     {
                         <a asp-page="./PoadcastDetail" asp-route-id="@audio.ID" class="col">
-                            <div class="shadow-lg rounded card" style="background-color:#f1f9ee;">
+                            <div class="shadow-lg rounded cardPodcast" style="background-color:#f1f9ee;">
                                 <div><img src="@audio.urlImage" class="card-img-top shadow-lg sizeImage"></div>
                                 
                                 <div class="card-body">
