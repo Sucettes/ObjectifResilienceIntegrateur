@@ -57,7 +57,7 @@
 
                     <form method="post" asp-page="CreationTuto">
                         <div class="row">
-                            <label for="tutoId" style="width: 100%;">Sélectionner un tutoriel</label>
+                            <label for="tutoId" style="width: 100%;">Sélectionner un tutoriel à modifié</label>
                             <div class="col-10">
                                 <select class="form-select" aria-label="Sélectionner un tutoriel" name="tutoId">
                                     @if (!(@Model.Input.lstTutoriels.IsNullOrEmpty()))
@@ -133,24 +133,23 @@
                                 </div>
 
                                 <div class="input-group input-group-sm mb-3">
-                                    <label for="categorieDataList" style="width: 100%;">Sélectionner une catégorie</label>
-                                    <input autocomplete="off" class="form-control shadow-sm" list="categorieDatalistOptions" id="categorieDataList" placeholder="Écrire pour rechercher..." asp-for="@Model.Input.cat" name="cat">
-                                    <datalist id="categorieDatalistOptions" autocomplete="off">
+                                    <label for="categorie" style="width: 100%;">Sélectionner une catégorie</label>
+                                    <select class="form-select" id="categorie" name="cat">
                                         @if (!(@Model.Input.lstCategories.IsNullOrEmpty()))
                                         {
                                             @foreach (var cat in @Model.Input.lstCategories)
                                             {
                                                 if (@cat.Nom == @Model.Input.cat)
                                                 {
-                                                    <option id="@cat.Id" value="@cat.Nom" selected />
+                                                    <option id="@cat.Id" value="@cat.Nom" selected>@cat.Nom</option>
                                                 }
-                                                else
+                                                @*else
                                                 {
-                                                    <option id="@cat.Id" value="@cat.Nom" />
-                                                }
+                                                    <option id="@cat.Id" value="@cat.Nom">@cat.Nom</option>
+                                                }*@
                                             }
                                         }
-                                    </datalist>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -193,7 +192,7 @@
                             <button id="btnCreeTuto" data-creationTuto type="submit" class="btn btn-outline-primary">Créé tutoriel</button>
                         } else
                         {
-                            <button id="btnModifierTuto" data-modificationTuto type="submit" class="btn btn-outline-primary">Modifié tutoriel</button>
+                            <button id="btnModifierTuto" data-modificationTuto type="submit" class="btn btn-outline-primary">Enregistré modification</button>
                         }
                     </form>
                 </div>
