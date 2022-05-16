@@ -31,7 +31,7 @@ namespace Gwenael.Web.Pages
         [BindProperty(SupportsGet = true)]
         public string cat { get; set; }
         public string descriptionCoupe { get; set; }
-        public string audioDesc { get; set; }
+        public string recherche { get; set; }
         public bool droitAccess { get; set; }
 
 
@@ -40,8 +40,30 @@ namespace Gwenael.Web.Pages
             try
             {
                 audios = await _context.Audios.ToListAsync();
-
                 ViewData["lstAudios"] = audios;
+                recherche = Request.Query["recherche"];
+                
+                if (recherche != null)
+                {
+                    lstCategories = _context.CategoriesTutos.ToList();
+
+                    var audioSort = from p in _context.Audios select p;
+                    CategoriesTutos cat = _context.CategoriesTutos.Where(c => c.Nom == recherche).First();
+
+                    foreach (var p in ViewData["lstAudios"] as IList<Audio>)
+                    {
+                        audioSort = audioSort.Where(p => p.categorie == cat);
+                        lstAudioSort = await audioSort.ToListAsync();
+                    }
+                    ViewData["lstAudios"] = lstAudioSort;
+                    ViewData["recherche"] = recherche;
+                }
+                else
+                {
+                    audios = await _context.Audios.ToListAsync();
+
+                    ViewData["lstAudios"] = audios;
+                }
 
                 lstCategories = _context.CategoriesTutos.ToList();
 
@@ -71,46 +93,20 @@ namespace Gwenael.Web.Pages
 
         public async Task<IActionResult> OnPost(string categorie)
         {
-            try
-            {
+           
                 audios = await _context.Audios.ToListAsync();
                 ViewData["lstAudios"] = audios;
-                if(categorie is not null)
-                {
-                    if (categorie != "tout" && categorie != null)
-                    {
 
-                        lstCategories = _context.CategoriesTutos.ToList();
 
-                        var audioSort = from p in _context.Audios select p;
-                        CategoriesTutos cat = _context.CategoriesTutos.Where(c => c.Nom == categorie).First();
-
-                        foreach (var p in ViewData["lstAudios"] as IList<Audio>)
-                        {
-                            audioSort = audioSort.Where(p => p.categorie == cat);
-                            lstAudioSort = await audioSort.ToListAsync();
-                        }
-                        ViewData["lstAudios"] = lstAudioSort;
-
-                    }
-                    else
-                    {
-                        audios = await _context.Audios.ToListAsync();
-                        ViewData["lstAudios"] = audios;
-                    }
-                    lstCategories = _context.CategoriesTutos.ToList();
-                    return Page();
-                }
-                else
-                {
-                    return Page();
-                }
-                
-            }
-            catch
+            if(categorie != null)
             {
-                return Page();
+                return Redirect("/AudioFolder/PoadcastPage/?recherche=" + categorie);
             }
+            else
+            {
+                return Redirect("/AudioFolder/PoadcastPage/");
+            }
+            
 
         }    
     }

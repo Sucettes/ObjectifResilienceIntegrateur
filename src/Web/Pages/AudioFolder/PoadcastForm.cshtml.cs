@@ -3,6 +3,7 @@ using Amazon.S3;
 using Amazon.S3.Transfer;
 using Gwenael.Domain;
 using Gwenael.Domain.Entities;
+using Gwenael.Web.FctUtils;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -35,10 +36,26 @@ namespace Gwenael.Web.Pages
        
         public InputModel Input { get; set; }
         
-        public void OnGet()
+        public IActionResult OnGet()
         {
             Input = new InputModel();
             Input.lstCategories = _context.CategoriesTutos.ToList();
+
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
+                if (Permission.VerifierAccesGdC(idConnectedUser, _context))
+                {
+                    return Page();
+                }
+            }
+            return RedirectToPage("Index");
+        }
+
+        public Guid ObtenirIdDuUserSelonEmail(string email)
+        {
+            User user = (User)_context.Users.Where(u => u.UserName == email).First();
+            return user.Id;
         }
 
         public class InputModel
@@ -56,7 +73,7 @@ namespace Gwenael.Web.Pages
 
                 if (description == null)
                 {
-                    description = "aucune description disponible pour ce poadcast";
+                    description = "aucune description disponible pour ce podcast";
                 }
 
                 CategoriesTutos cat = _context.CategoriesTutos.Where(c => c.Nom == categorie).First();
