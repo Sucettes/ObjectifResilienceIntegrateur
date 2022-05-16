@@ -3,7 +3,7 @@
 @model Web.Pages.PoadcastPageModel
 @using Domain.Entities
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Podcasts";
 }
 
 <nav class="navbar navbar-light shadow-sm">
@@ -12,7 +12,7 @@
         @if (Model.droitAccess == true)
         {
             <div class="d-flex">
-                <a asp-page="PoadcastForm" style="margin-right:0.4rem;" type="submit" class="btn btn-outline-primary">Ajouter un poadcast</a>
+                <a asp-page="PoadcastForm" style="margin-right:0.4rem;" type="submit" class="btn btn-outline-primary">Ajouter un podcast</a>
             </div>
         }
     </div>
@@ -66,7 +66,7 @@
         <div class="col-9">
 
             <div class="pageDescriptionBox">
-                Sur cette page vous aurez accès aux podcasts publiés par des membres de la communauté
+                voici un ensemble de balados qui ont été produits lors des formations du Centre Jacques-Cartier.
             </div>
             <div class="row row-cols-1 row-cols-md-3 g-4">
                 @foreach (var audio in ViewData["lstAudios"] as IList<Audio>)
