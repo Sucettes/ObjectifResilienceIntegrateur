@@ -33,6 +33,10 @@ namespace Gwenael.Web.Pages
         {
             public string nomCat { get; set; }
         }
+        public class UserVal
+        {
+            public string idUserToDelete { get; set; }
+        }
         public IActionResult OnGetAjoutCategorie()
         {
             return Redirect("/AdminMenu/?tab=categories");
@@ -69,6 +73,19 @@ namespace Gwenael.Web.Pages
             }
             dictError.Add("nomTropGrand", "Le nom de la catégorie doit contenir 1 à 50 caractères !");
             return StatusCode(500);
+
+        }
+        public IActionResult OnPostSupprimerUser([FromForm] UserVal userVal)
+        {
+            User userToDelete = _context.Users.Find(Guid.Parse(userVal.idUserToDelete));
+            if (userToDelete != null)
+            {
+                _context.Users.Remove(userToDelete);
+                _context.SaveChanges();
+
+            }
+            Console.WriteLine(userToDelete);
+            return Redirect("/AdminMenu/?tab=utilisateurs");
 
         }
         public async Task<IActionResult> OnGetAsync()
@@ -183,7 +200,15 @@ namespace Gwenael.Web.Pages
                                 return Page();
                             }
                         }
-
+                        else if (Tab == "pages")
+                        {
+                            string recherche = Request.Query["recherche"];
+                            if (recherche is not null)
+                            {
+                                ViewData["lstPages"] = _context.NewPages.ToList().Where(a => a.Titre.Contains(recherche)).ToList();
+                                return Page();
+                            }
+                        }
                         string erreur = Request.Query["error"];
                         if (erreur != null)
                         {
@@ -276,7 +301,7 @@ namespace Gwenael.Web.Pages
             }
             return tupleUsers;
         }
-        public async Task<IActionResult> OnPostAsync(string btnSupprimerPage, string idPage, string idArticle, string btnSupprimerArticle, string idUserToDelete, string btnSupprimer, string btnSupprimerTuto, string idAudio, string idTuto, string supprCatVal, string nomCat, string rechercheValeurArticle, string rechercheValeurTuto, string rechercheValeurPodcast, string rechercheValeurDemande, string rechercheValeurUtilisateur, string rechercheValeurUtilisateurRole, string btnDeleteRole, string name, string selectRole, string btnAccepter, string btnRefuser, int? id)
+        public async Task<IActionResult> OnPostAsync(string rechercheValeurPage, string btnSupprimerPage, string idPage, string idArticle, string btnSupprimerArticle, string idUserToDelete, string btnSupprimer, string btnSupprimerTuto, string idAudio, string idTuto, string supprCatVal, string nomCat, string rechercheValeurArticle, string rechercheValeurTuto, string rechercheValeurPodcast, string rechercheValeurDemande, string rechercheValeurUtilisateur, string rechercheValeurUtilisateurRole, string btnDeleteRole, string name, string selectRole, string btnAccepter, string btnRefuser, int? id)
         {
             if (User.Identity.IsAuthenticated)
             {
@@ -364,6 +389,10 @@ namespace Gwenael.Web.Pages
                     {
                         return Redirect("/AdminMenu/?tab=articles&recherche=" + rechercheValeurTuto);
                     }
+                    else if (rechercheValeurPage is not null)
+                    {
+                        return Redirect("/AdminMenu/?tab=pages&recherche=" + rechercheValeurPage);
+                    }
                     else if (idArticle != null)
                     {
                         Article article = new Article();
@@ -389,7 +418,7 @@ namespace Gwenael.Web.Pages
                             return Redirect("/AdminMenu/?tab=articles");
                         }
                     }
-                    else if(idPage != null)
+                    else if (idPage != null)
                     {
                         NewPage newPage = new NewPage();
                         try
@@ -497,18 +526,6 @@ namespace Gwenael.Web.Pages
                         _context.Articles.Remove(articleBD);
                         await _context.SaveChangesAsync();
                         return Redirect("/AdminMenu/?tab=articles");
-                    }
-                    else if (idUserToDelete is not null)
-                    {
-                        User userToDelete = _context.Users.Find(Guid.Parse(idUserToDelete));
-                        if (userToDelete != null)
-                        {
-                            _context.Users.Remove(userToDelete);
-                            _context.SaveChanges();
-
-                        }
-                        Console.WriteLine(userToDelete);
-                        return Redirect("/AdminMenu/?tab=utilisateurs");
                     }
                 }
             }
