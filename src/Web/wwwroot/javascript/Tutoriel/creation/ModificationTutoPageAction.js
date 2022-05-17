@@ -5,7 +5,7 @@ $(document).ready(function () {
         event.preventDefault();
         let curTarget = event.currentTarget;
         var href = window.location.pathname + "?handler=ModifieTutorielDetails";
-
+        console.log(curTarget.form)
         $.ajax({
             type: 'POST',
             url: href,

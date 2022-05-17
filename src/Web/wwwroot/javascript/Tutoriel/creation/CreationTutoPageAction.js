@@ -1,7 +1,6 @@
 ﻿'use strict';
 $(document).ready(function () {
     // Création du tuto.
-    let id;
     $('[data-creationTuto]').on('click', event => {
         event.preventDefault();
         let curTarget = event.currentTarget;
@@ -30,8 +29,7 @@ $(document).ready(function () {
 
     function creationReussie(data) {
         $('#imgBanierre').attr('src', data.value.imgUrl);
-        id = data.id;
-        const state = { 'id': data.id, 'handler': 'CreeTutorielDetails' };
+        const state = { 'id': data.value.idTutoP, 'handler': 'CreeTutorielDetails' };
         const url = '/Tutoriel/CreationTuto';
 
         history.pushState(state, '', url);
@@ -40,10 +38,16 @@ $(document).ready(function () {
         $('[id="idTutoP"]').val(data.value.idTutoP);
         $('[id="idTutoP2"]').val(data.value.idTutoP);
         $('[name="idtutoVal"]').val(data.value.idTutoP);
-        console.log(data.value.idTutoP)
+        
         $('#btnAddRangee').removeClass('disabled');
-        $('<button id="btnModifierTuto" data-modificationTuto type="submit" class="btn btn-outline-primary">Enregistré modification</button>').insertAfter($('#btnCreeTuto'));
-        $('#btnCreeTuto').remove();
+        $('#btnCreeTuto').attr('hidden', '');
+        $('#btnModifierTuto').removeAttr('hidden', '');
+
+        var o = new Option(data.value.titre + ' (Non Publié)');
+        o.value = data.value.idTutoP;
+        o.selected = true;
+        console.log(o)
+        $('#selectTutoModifier').append(o);
         // lancement du toast
         window.scriptToastNotification.AjouterNotification('Le tutoriel a été créé!', true);
     }
