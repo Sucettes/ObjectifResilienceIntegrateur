@@ -22,7 +22,12 @@
     padding: 0.8rem;
     background-color: #f1f9ee;
     text-align: center;
-    border-radius: 10px;
+    border-radius: var(--bs-alert-border-radius,0);
+    color: #0f513;
+}
+.pageDescriptionBox, p {
+    color: #0f513;
+    text-align: center;
 }
 
 

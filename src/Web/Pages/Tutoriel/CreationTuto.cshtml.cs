@@ -133,10 +133,10 @@ namespace Gwenael.Web.Pages
 
         public IActionResult OnPostPublierTutoriel(string id, string handler)
         {
-            NewPages = _db.NewPages.ToList();
-            ViewData["NewPages"] = NewPages;
             try
             {
+                NewPages = _db.NewPages.ToList();
+                ViewData["NewPages"] = NewPages;
                 if (User.Identity.IsAuthenticated)
                 {
                     Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
@@ -159,10 +159,10 @@ namespace Gwenael.Web.Pages
         }
         public IActionResult OnPostPublieTuto(string id)
         {
-            NewPages = _db.NewPages.ToList();
-            ViewData["NewPages"] = NewPages;
             try
             {
+                NewPages = _db.NewPages.ToList();
+                ViewData["NewPages"] = NewPages;
                 if (User.Identity.IsAuthenticated)
                 {
                     Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
@@ -192,10 +192,10 @@ namespace Gwenael.Web.Pages
         }
         public IActionResult OnPostTutoChanger(string tutoId)
         {
-            NewPages = _db.NewPages.ToList();
-            ViewData["NewPages"] = NewPages;
             try
             {
+                NewPages = _db.NewPages.ToList();
+                ViewData["NewPages"] = NewPages;
                 if (User.Identity.IsAuthenticated)
                 {
                     Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
@@ -205,7 +205,6 @@ namespace Gwenael.Web.Pages
                         Input.id = tutoId;
 
                         UpdateInputData();
-                        //return Redirect("/tutoriel/CreationTuto?handler=TutoRangee&id=" + tutoId);
                         return Redirect("/tutoriel/CreationTuto?handler=CreeTutorielDetails&id=" + tutoId);
                     }
                 }
@@ -220,10 +219,10 @@ namespace Gwenael.Web.Pages
 
         public IActionResult OnGetRangeeById(string idRangee)
         {
-            NewPages = _db.NewPages.ToList();
-            ViewData["NewPages"] = NewPages;
             try
             {
+                NewPages = _db.NewPages.ToList();
+                ViewData["NewPages"] = NewPages;
                 if (User.Identity.IsAuthenticated)
                 {
                     Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
@@ -254,10 +253,10 @@ namespace Gwenael.Web.Pages
         }
         public IActionResult OnPostAjoutRangee([FromForm] CreationTutoRangeeFormData formData)
         {
-            NewPages = _db.NewPages.ToList();
-            ViewData["NewPages"] = NewPages;
             try
             {
+                NewPages = _db.NewPages.ToList();
+                ViewData["NewPages"] = NewPages;
                 Console.WriteLine(formData);
                 if (User.Identity.IsAuthenticated)
                 {
@@ -330,10 +329,10 @@ namespace Gwenael.Web.Pages
         }
         public IActionResult OnPutEditRangee([FromForm] CreationTutoRangeeFormData formData)
         {
-            NewPages = _db.NewPages.ToList();
-            ViewData["NewPages"] = NewPages;
             try
             {
+                NewPages = _db.NewPages.ToList();
+                ViewData["NewPages"] = NewPages;
                 if (User.Identity.IsAuthenticated)
                 {
                     Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
@@ -408,10 +407,10 @@ namespace Gwenael.Web.Pages
         }
         public IActionResult OnDeleteDeleteRange([FromForm] Rangee r)
         {
-            NewPages = _db.NewPages.ToList();
-            ViewData["NewPages"] = NewPages;
             try
             {
+                NewPages = _db.NewPages.ToList();
+                ViewData["NewPages"] = NewPages;
                 if (User.Identity.IsAuthenticated)
                 {
                     Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
@@ -452,10 +451,10 @@ namespace Gwenael.Web.Pages
         }
         public IActionResult OnPostSwitchRangeeTuto([FromForm] rangeeSwitchData rangeeSwitchData)
         {
-            NewPages = _db.NewPages.ToList();
-            ViewData["NewPages"] = NewPages;
             try
             {
+                NewPages = _db.NewPages.ToList();
+                ViewData["NewPages"] = NewPages;
                 if (User.Identity.IsAuthenticated)
                 {
                     Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
@@ -512,10 +511,10 @@ namespace Gwenael.Web.Pages
 
         public IActionResult OnPostCreeTutorielDetails([FromForm] CreationTutoFormData formData)
         {
-            NewPages = _db.NewPages.ToList();
-            ViewData["NewPages"] = NewPages;
             try
             {
+                NewPages = _db.NewPages.ToList();
+                ViewData["NewPages"] = NewPages;
                 if (User.Identity.IsAuthenticated)
                 {
                     Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
@@ -589,10 +588,10 @@ namespace Gwenael.Web.Pages
 
         public IActionResult OnPostModifieTutorielDetails([FromForm] CreationTutoFormData formData)
         {
-            NewPages = _db.NewPages.ToList();
-            ViewData["NewPages"] = NewPages;
             try
             {
+                NewPages = _db.NewPages.ToList();
+                ViewData["NewPages"] = NewPages;
                 if (User.Identity.IsAuthenticated)
                 {
                     Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);

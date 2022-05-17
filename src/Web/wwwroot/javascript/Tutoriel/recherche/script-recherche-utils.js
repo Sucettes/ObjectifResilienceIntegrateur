@@ -126,7 +126,7 @@
             }
             $divBody.append($('<p>Catégorie : ' + tutoData.categorie.nom + '</p>'));
 
-            $divBody.append($('<p>' + tutoData.introduction.substring(0,200) + '</p>'));
+            $divBody.append($('<p style="text-align:justify;">' + tutoData.introduction.substring(0,200) + '</p>'));
 
             $div.append($div2);
             $div.append($divBody);
