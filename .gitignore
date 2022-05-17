@@ -7,7 +7,6 @@ src/Web/wwwroot/js
 src/Web/wwwroot/.dev
 src/Web/appsettings.local.json
 site.css
-src/Web/Sass/site.scss
 # Created by https://www.gitignore.io/api/dotsettings,git,tortoisegit,csharp,visualstudio,visualstudiocode,jetbrains,umbraco,phpstorm,node,webstorm,ncrunch,aspnetcore
 
 ### ASPNETCore ###

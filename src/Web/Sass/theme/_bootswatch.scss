@@ -9,6 +9,7 @@ $web-font-path: "https://fonts.googleapis.com/css?family=Lato:400,700,400italic"
 @import url('https://fonts.googleapis.com/css2?family=Cabin+Sketch&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Dosis:wght@200&display=swap');
 @import '_variables.scss';
 
 // Navbar =======================================================================
@@ -190,9 +191,9 @@ h2, h3 {
 }
 
 p {
-    font-family: 'Patrick Hand', cursive !important;
+    font-family: 'Dosis', sans-serif !important;
 }
 
 a {
-    font-family: 'Patrick Hand', cursive !important;
+    font-family: 'Dosis', sans-serif !important;
 }
