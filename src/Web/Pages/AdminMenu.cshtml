@@ -265,7 +265,7 @@
                         <th scope="col">Courriel</th>
                         <th scope="col">Rôles</th>
                         <th scope="col">Date de création</th>
-                        <th scope="col"><a asp-page="user" asp-route-id="" class="btn btn-primary btn-sm"><img src="~/icons/addIcon.svg" /></a></th>
+                        <th scope="col"><a asp-page="user" asp-route-id="" class="btn btn-primary btn-sm"><img src="~/icons/addIcon.svg" /> Ajouter un utilisateur</a></th>
 
                     </tr>
                 </thead>
@@ -375,7 +375,7 @@
                         </div>
                     </div>
                     <div>
-                        <a href="/AudioFolder/PoadcastForm" class="btn btn-primary btn-sm"><img src="~/icons/addIcon.svg" /></a>
+                        <a href="/AudioFolder/PoadcastForm" class="btn btn-primary btn-sm"><img src="~/icons/addIcon.svg" /> Ajouter un podcast</a>
                     </div>
                 </form>
                 @if (lstAudios is not null && lstAudios.Count > 0)
@@ -526,6 +526,9 @@
                             <button class="btn btn-outline-primary" type="submit"><img style="width:40%;" src="~/icons/searchIcon.svg" /></button>
                             <a class="btn btn-outline-primary" href="?tab=tutoriels"><img style="width:40%;" src="~/icons/refresh.svg" /></a>
                         </div>
+                    </div>
+                    <div>
+                        <a href="/Tutoriel/CreationTuto" class="btn btn-primary btn-sm"><img src="~/icons/addIcon.svg" /> Ajouter un tutoriel</a>
                     </div>
                 </form>
                 if (lstTutos != null && lstTutos.Count > 0)
@@ -684,7 +687,7 @@
                         </div>
                     </div>
                     <div>
-                        <a href="/CreationArticle" class="btn btn-primary btn-sm"><img src="~/icons/addIcon.svg" /></a>
+                        <a href="/CreationArticle" class="btn btn-primary btn-sm"><img src="~/icons/addIcon.svg" /> Ajouter un article</a>
                     </div>
                 </form>
                 if (lstArticles != null && lstArticles.Count > 0)
@@ -767,7 +770,7 @@
             else if (ViewData["Tab"].ToString() == "pages")
             {
                 <div>
-                    <a href="/newpagecreation" class="btn btn-primary btn-sm"><img src="~/icons/addIcon.svg" /></a>
+                    <a href="/newpagecreation" class="btn btn-primary btn-sm"><img src="~/icons/addIcon.svg" /> Ajouter une page</a>
                 </div>
                 if (lstPages != null && lstPages.Count > 0)
                 {
@@ -840,7 +843,7 @@
                     <div class="container">
                         <div class="row">
                             <div class="col-12">
-                                <p style="text-align:center;">Aucune pages</p>
+                                <p style="text-align:center;">Aucune page</p>
                             </div>
                         </div>
                     </div>
