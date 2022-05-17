@@ -33,9 +33,9 @@ namespace Gwenael.Web.Pages
         {
             public string nomCat { get; set; }
         }
-        public class UserVal
+        public class FormValId
         {
-            public string idUserToDelete { get; set; }
+            public string idCurrentObject { get; set; }
         }
         public IActionResult OnGetAjoutCategorie()
         {
@@ -75,18 +75,46 @@ namespace Gwenael.Web.Pages
             return StatusCode(500);
 
         }
-        public IActionResult OnPostSupprimerUser([FromForm] UserVal userVal)
+        public IActionResult OnPostSupprimerUser([FromForm] FormValId userVal)
         {
-            User userToDelete = _context.Users.Find(Guid.Parse(userVal.idUserToDelete));
+            User userToDelete = _context.Users.Find(Guid.Parse(userVal.idCurrentObject));
             if (userToDelete != null)
             {
                 _context.Users.Remove(userToDelete);
                 _context.SaveChanges();
 
             }
-            Console.WriteLine(userToDelete);
             return Redirect("/AdminMenu/?tab=utilisateurs");
 
+        }
+        public IActionResult OnPostSupprimerArticle([FromForm] FormValId articleVal)
+        {
+            Article articleBD = _context.Articles.Where(a => a.Id == int.Parse(articleVal.idCurrentObject)).First();
+            _context.Articles.Remove(articleBD);
+            _context.SaveChanges();
+            return Redirect("/AdminMenu/?tab=articles");
+        }
+        public IActionResult OnPostSupprimerAudio([FromForm] FormValId audioVal)
+        {
+            Audio audioBd = _context.Audios.Where(a => a.ID == Guid.Parse(audioVal.idCurrentObject)).First();
+            _context.Audios.Remove(audioBd);
+            _context.SaveChanges();
+            return Redirect("/AdminMenu/?tab=podcasts");
+        }
+        public IActionResult OnPostSupprimerTuto([FromForm] FormValId tutoVal)
+        {
+            Tutos tutoBD = _context.Tutos.Where(t => t.Id == Guid.Parse(tutoVal.idCurrentObject)).First();
+            _context.Tutos.Remove(tutoBD);
+            _context.SaveChanges();
+            return Redirect("/AdminMenu/?tab=tutoriels");
+
+        }
+        public IActionResult OnPostSupprimerPage([FromForm] FormValId pageVal)
+        {
+            NewPage newPageBD = _context.NewPages.Where(np => np.Id == int.Parse(pageVal.idCurrentObject)).First();
+            _context.NewPages.Remove(newPageBD);
+            _context.SaveChanges();
+            return Redirect("/AdminMenu/?tab=pages");
         }
         public async Task<IActionResult> OnGetAsync()
         {
@@ -493,39 +521,6 @@ namespace Gwenael.Web.Pages
                             return Redirect("/AdminMenu/?tab=tutoriels");
                         }
                        
-                    }
-                    else if (btnSupprimer is not null)
-                    {
-                        Audio audioBd = _context.Audios.Where(a => a.ID == Guid.Parse(name)).First();
-                        _context.Audios.Remove(audioBd);
-                        await _context.SaveChangesAsync();
-                        return Redirect("/AdminMenu/?tab=podcasts");
-                    }
-                    else if (btnSupprimerTuto is not null)
-                    {
-                        Tutos tutoBD = _context.Tutos.Where(t => t.Id == Guid.Parse(name)).First();
-                        List<RangeeTutos> lstRangee = _context.RangeeTutos.Where(r => r.TutorielId == tutoBD.Id).ToList();
-                        foreach(RangeeTutos range in lstRangee)
-                        {
-                            _context.RangeeTutos.Remove(range);
-                        }
-                        _context.Tutos.Remove(tutoBD);
-                        await _context.SaveChangesAsync();
-                        return Redirect("/AdminMenu/?tab=tutoriels");
-                    }
-                    else if (btnSupprimerPage is not null)
-                    {
-                        NewPage newPageBD = _context.NewPages.Where(np => np.Id == int.Parse(name)).First();
-                        _context.NewPages.Remove(newPageBD);
-                        await _context.SaveChangesAsync();
-                        return Redirect("/AdminMenu/?tab=pages");
-                    }
-                    else if (btnSupprimerArticle is not null)
-                    {
-                        Article articleBD = _context.Articles.Where(a => a.Id == int.Parse(name)).First();
-                        _context.Articles.Remove(articleBD);
-                        await _context.SaveChangesAsync();
-                        return Redirect("/AdminMenu/?tab=articles");
                     }
                 }
             }
