@@ -40,11 +40,16 @@ namespace Gwenael.Web.Pages
         public List<Article> Articles { get; set; }
 
         public string NewArticleCreated;
+        public string erreurArticle;
 
         public IActionResult  OnGet()
         {
             NewPages = _context.NewPages.ToList();
             ViewData["NewPages"] = NewPages;
+
+            erreurArticle = "false";
+            ViewData["erreurChamps"] = erreurArticle;
+
 
             Input = new InputModel();
             string idArticle;
@@ -88,6 +93,7 @@ namespace Gwenael.Web.Pages
 
             NewPages = _context.NewPages.ToList();
             ViewData["NewPages"] = NewPages;
+            bool valide = false;
 
             if (Request.Query.Count > 0 && Request.Query.ContainsKey("id"))
             {
@@ -97,6 +103,29 @@ namespace Gwenael.Web.Pages
                 b.Titre = titre;
                 b.InerText = inerText;
                 _context.Articles.Update(b);
+            }
+
+            
+            
+            if (titre != null)
+            {
+                valide = true;
+
+                NewArticleCreated = "true";
+                ViewData["NewArticleCreated"] = NewArticleCreated;
+
+                erreurArticle = "false";
+                ViewData["erreurChamps"] = erreurArticle;
+            }
+            else
+            {
+                valide = false;
+
+                NewArticleCreated = "false";
+                ViewData["NewArticleCreated"] = NewArticleCreated;
+
+                erreurArticle = "true";
+                ViewData["erreurChamps"] = erreurArticle;
             }
 
             if (Input.FormFile != null)
@@ -129,11 +158,12 @@ namespace Gwenael.Web.Pages
                _context.Articles.Add(newArticle);
             }
 
-            NewArticleCreated = "true";
-            ViewData["NewArticleCreated"] = NewArticleCreated;
 
-            _context.SaveChanges();
-            
+            if (valide)
+            {
+                _context.SaveChanges();
+            }
+
             return Page();
         }
 

@@ -25,7 +25,7 @@
             <h3 style="text-align: left">Redaction de l'article :</h3>
             <textarea name="inerText" asp-for="Input.TextArea"></textarea><br /><br />
 
-            <input multiple="multiple" asp-for="Input.FormFile" class="form-control" type="file" id="formFile"><br = />
+            <input multiple="multiple" asp-for="Input.FormFile" class="form-control" type="file" id="formFile"><br/>
 
             @if (ViewData["Modifier"] as string == "true")
             {
@@ -42,15 +42,28 @@
 
         @if (ViewData["NewArticleCreated"] as String == "true")
         {
-            <script>window.onload = function () {
+            <script>
+                window.onload = function () {
                     window.scriptToastNotification.AjouterNotification("Article valider", true);
                     setTimeout(function () {
-                      //  window.location.href = '/AdminMenu/?tab=categories';
                     }, 3600);
                 }
             </script>
 
         }
+
+        @if (ViewData["erreurChamps"] as String == "true")
+        {
+            <script>
+                window.onload = function () {
+                    window.scriptToastNotification.AjouterNotification("Les champs de l'article ne sont pas valide", false);
+                    setTimeout(function () {
+                    }, 3600);
+                }
+            </script>
+
+        }
+
 
 
 
