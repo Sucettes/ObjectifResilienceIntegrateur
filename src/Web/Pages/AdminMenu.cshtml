@@ -258,6 +258,9 @@
                             <a class="btn btn-outline-primary" href="?tab=utilisateurs"><img style="width:40%;" src="~/icons/refresh.svg" /></a>
                         </div>
                     </div>
+                    <div style="margin-bottom:1em;">
+                        <a asp-page="user" asp-route-id="" class="btn btn-primary btn-sm"><img src="~/icons/addIcon.svg" /> Ajouter un utilisateur</a>
+                    </div>
                 </form>
                 <thead>
                     <tr>
@@ -265,7 +268,7 @@
                         <th scope="col">Courriel</th>
                         <th scope="col">Rôles</th>
                         <th scope="col">Date de création</th>
-                        <th scope="col"><a asp-page="user" asp-route-id="" class="btn btn-primary btn-sm"><img src="~/icons/addIcon.svg" /></a></th>
+                        <th scope="col"></th>
 
                     </tr>
                 </thead>
@@ -294,11 +297,8 @@
 
                                 <td>
                                     <div class="row" style="display:inline-flex;">
-                                        <form method="post">
-                                            <input type="hidden" name="idUserToDelete" value="@tupleUser.Item1.Id" style="width:2em;height:2em;" />
-                                            <a asp-page="user" asp-route-id="@tupleUser.Item1.Id" class="btn btn-primary btn-sm"><img src="~/icons/editIcon.svg" style="width:2em;height:2em;" /></a>
-                                            <button class="btn btn-danger btn-sm" type="submit"><img src="~/icons/deleteIcon.svg" style="width:2em;height:2em;" /></button>
-                                        </form>
+                                        <a asp-page="user" asp-route-id="@tupleUser.Item1.Id" class="btn btn-primary btn-sm" style="width:fit-content;"><img src="~/icons/editIcon.svg" style="width:fit-content;" /></a>
+                                        <button type="button" data-bs-toggle="modal" data="@tupleUser.Item1.Id" data-id="@tupleUser.Item1.Id" class="open-AddBookDialog btn-sm btn-danger" data-bs-target="#modalValideDelete" style="margin-right:0.2rem; width:fit-content;"><img src="~/icons/deleteIcon.svg" /></button>
                                     </div>
                                 </td>
                             </tr>
@@ -315,6 +315,24 @@
                         </div>
                     </div>
                 }
+                <!-- Modal -->
+                <div class="modal" id="modalValideDelete" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalValideDeleteLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modalValideDeleteLabel">Confirmation!</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Cette action n’est pas réversible, est-ce que vous voulez vraiment supprimer cet utilisateur?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Non</button>
+                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="confirmSuppressionUser()">Oui</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             }
             else if (ViewData["Tab"].ToString() == "demandes")
             {
@@ -374,74 +392,70 @@
                             <a class="btn btn-outline-primary" href="?tab=podcasts"><img style="width:40%;" src="~/icons/refresh.svg" /></a>
                         </div>
                     </div>
-                    <div>
-                        <a href="/AudioFolder/PoadcastForm" class="btn btn-primary btn-sm"><img src="~/icons/addIcon.svg" /></a>
+                    <div style="margin-bottom:1em;">
+                        <a href="/AudioFolder/PoadcastForm" class="btn btn-primary btn-sm"><img src="~/icons/addIcon.svg" /> Ajouter un podcast</a>
                     </div>
                 </form>
                 @if (lstAudios is not null && lstAudios.Count > 0)
                 {
                     @foreach (var audio in ViewData["lstAudios"] as IList<Audio>)
                     {
-                        <a asp-page="./AudioFolder/PoadcastDetail" asp-route-id="@audio.ID">
-                            <div class="list-group-item ">
-                                <div class="row">
-                                    <div class="col-9">
-                                        <div class="row">
-                                            <div class="col-2">
-                                                @if (audio.EstPublier)
-                                                {
-                                                    <img src="~/icons/published.svg" style="width:2em; height:2em;" />
-                                                }
-                                                else
-                                                {
-                                                    <img src="~/icons/unpublished.svg" style="width:2em; height:2em;" />
-                                                }
-                                            </div>
-                                            <div class="col-8">
-                                                <h3>@audio.titre</h3>
-                                            </div>
-                                        </div>
-                                        <div class="row">
+                        <div class="list-group-item ">
+                            <div class="row">
+                                <div class="col-9">
+                                    <div class="row">
+                                        <div class="col-2">
                                             @if (audio.EstPublier)
                                             {
-                                                <p style="text-align:center;">Statut: Publié</p>
+                                                <img src="~/icons/published.svg" style="width:2em; height:2em;" />
                                             }
                                             else
                                             {
-                                                <p style="text-align:center;">Statut: Non publié</p>
+                                                <img src="~/icons/unpublished.svg" style="width:2em; height:2em;" />
                                             }
+                                        </div>
+                                        <div class="col-8">
+                                            <h3>@audio.titre</h3>
                                         </div>
                                     </div>
-                                    <div class="col-3">
-                                        <div class="row" style="justify-content:center;">
-                                            <form method="post">
-                                                <input type="hidden" name="name" value="@audio.ID" />
-                                                <input name="btnSupprimer" type="submit" value="Supprimer" class="btn btn-danger form-control" style="width: 10em; margin-top: 10px;" />
-                                            </form>
-                                        </div>
-                                        <div class="row" style="justify-content:center;">
-                                            <br />
-                                            @if (!audio.EstPublier)
-                                            {
-                                                <form method="post">
-                                                    <input name="idAudio" hidden value="@audio.ID" />
-                                                    <button type="submit" class="btn btn-outline-primary form-control" style="margin-top:10px; width:10em;">Publier</button>
-                                                </form>
-                                            }
-                                            else
-                                            {
-                                                <form method="post">
-                                                    <input name="idAudio" hidden value="@audio.ID" />
-                                                    <button type="submit" class="btn btn-outline-primary form-control" style="margin-top:10px; width:10em;">Rendre non public</button>
-                                                </form>
-                                            }
-
-                                        </div>
-
+                                    <div class="row">
+                                        @if (audio.EstPublier)
+                                        {
+                                            <p style="text-align:center;">Statut: Publié</p>
+                                        }
+                                        else
+                                        {
+                                            <p style="text-align:center;">Statut: Non publié</p>
+                                        }
                                     </div>
                                 </div>
+                                <div class="col-3">
+                                    <div class="row" style="justify-content:center;">
+                                        <a asp-page="./AudioFolder/PoadcastDetail" asp-route-id="@audio.ID" class="btn-sm btn-primary" style="margin-right:0.2rem; width:fit-content;"><img src="~/icons/editIcon.svg" /></a>
+                                        <button type="button" data-bs-toggle="modal" data="@audio.ID" data-id="@audio.ID" class="open-dialogAudio btn-sm btn-danger" data-bs-target="#modalValideDeleteAudio" style="margin-right:0.2rem; width:fit-content;"><img src="~/icons/deleteIcon.svg" /></button>
+                                    </div>
+                                    <div class="row" style="justify-content:center;">
+                                        <br />
+                                        @if (!audio.EstPublier)
+                                        {
+                                            <form method="post">
+                                                <input name="idAudio" hidden value="@audio.ID" />
+                                                <button type="submit" class="btn btn-outline-primary form-control" style="margin-top:10px; width:10em;">Publier</button>
+                                            </form>
+                                        }
+                                        else
+                                        {
+                                            <form method="post">
+                                                <input name="idAudio" hidden value="@audio.ID" />
+                                                <button type="submit" class="btn btn-outline-primary form-control" style="margin-top:10px; width:10em;">Rendre non public</button>
+                                            </form>
+                                        }
+
+                                    </div>
+
+                                </div>
                             </div>
-                        </a>
+                        </div>
                     }
                 }
                 else
@@ -455,7 +469,24 @@
                         </div>
                     </div>
                 }
-
+                <!-- Modal -->
+                <div class="modal" id="modalValideDeleteAudio" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalValideDeleteLabelAudio" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modalValideDeleteLabelAudio">Confirmation!</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Cette action n’est pas réversible, est-ce que vous voulez vraiment supprimer ce podcast?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Non</button>
+                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="confirmSuppressionPodcast()">Oui</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             }
             else if (ViewData["Tab"].ToString() == "categories")
             {
@@ -475,8 +506,6 @@
                         </div>
                         <div class="col-4">
                             <button id="btnAjoutCategorie" class="btn btn-primary form-control" )" asp-page-handler="AjoutCategorie">Ajouter</button>
-
-                            @* <input name="btnAjoutCategorie" type="submit" value="Ajouter" class="btn btn-primary form-control" />*@
                         </div>
                         <div class="col-2"></div>
                         <br />
@@ -527,6 +556,9 @@
                             <a class="btn btn-outline-primary" href="?tab=tutoriels"><img style="width:40%;" src="~/icons/refresh.svg" /></a>
                         </div>
                     </div>
+                    <div style="margin-bottom:1em;">
+                        <a href="/Tutoriel/CreationTuto" class="btn btn-primary btn-sm"><img src="~/icons/addIcon.svg" /> Ajouter un tutoriel</a>
+                    </div>
                 </form>
                 if (lstTutos != null && lstTutos.Count > 0)
                 {
@@ -534,129 +566,119 @@
                     {
                         @if (!tuto.EstPublier)
                         {
-                            <a href="/Tutoriel/CreationTuto?handler=TutoRangee&id=@tuto.Id">
-                                <div class="list-group-item ">
-                                    <div class="row">
-                                        <div class="col-9">
-                                            <div class="row">
-                                                <div class="col-2">
-                                                    @if (tuto.EstPublier)
-                                                    {
-                                                        <img src="~/icons/published.svg" style="width:2em; height:2em;" />
-                                                    }
-                                                    else
-                                                    {
-                                                        <img src="~/icons/unpublished.svg" style="width:2em; height:2em;" />
-                                                    }
-                                                </div>
-                                                <div class="col-8">
-                                                    <h3>@tuto.Titre</h3>
-                                                </div>
-                                            </div>
-                                            <div class="row">
+                            <div class="list-group-item ">
+                                <div class="row">
+                                    <div class="col-9">
+                                        <div class="row">
+                                            <div class="col-2">
                                                 @if (tuto.EstPublier)
                                                 {
-                                                    <p style="text-align:center;">Status: Publié</p>
+                                                    <img src="~/icons/published.svg" style="width:2em; height:2em;" />
                                                 }
                                                 else
                                                 {
-                                                    <p style="text-align:center;">Status: Non publié</p>
+                                                    <img src="~/icons/unpublished.svg" style="width:2em; height:2em;" />
                                                 }
+                                            </div>
+                                            <div class="col-8">
+                                                <h3>@tuto.Titre</h3>
                                             </div>
                                         </div>
-                                        <div class="col-3">
-                                            <div class="row" style="justify-content:center;">
-                                                <form method="post">
-                                                    <input type="hidden" name="name" value="@tuto.Id" />
-
-                                                    <input name="btnSupprimerTuto" type="submit" value="Supprimer" class="btn btn-danger form-control" style="width: 10em; margin-top: 10px;" />
-                                                </form>
-                                            </div>
-                                            <div class="row" style="justify-content:center;">
-                                                <br />
-                                                @if (!tuto.EstPublier)
-                                                {
-                                                    <form method="post">
-                                                        <input name="idTuto" hidden value="@tuto.Id" />
-                                                        <button type="submit" class="btn btn-outline-primary form-control" style="margin-top:10px; width:10em;">Publier</button>
-                                                    </form>
-                                                }
-                                                else
-                                                {
-                                                    <form method="post">
-                                                        <input name="idTuto" hidden value="@tuto.Id" />
-                                                        <button type="submit" class="btn btn-outline-primary form-control" style="margin-top:10px; width:10em;">Rendre non public</button>
-                                                    </form>
-                                                }
-                                            </div>
-
+                                        <div class="row">
+                                            @if (tuto.EstPublier)
+                                            {
+                                                <p style="text-align:center;">Status: Publié</p>
+                                            }
+                                            else
+                                            {
+                                                <p style="text-align:center;">Status: Non publié</p>
+                                            }
                                         </div>
                                     </div>
+                                    <div class="col-3">
+                                        <div class="row" style="justify-content:center;">
+                                            <a href="/Tutoriel/CreationTuto?handler=TutoRangee&id=@tuto.Id" class="btn-sm btn-primary" style="margin-right:0.2rem; width:fit-content;"><img src="~/icons/editIcon.svg" /></a>
+                                            <button type="button" data-bs-toggle="modal" data="@tuto.Id" data-id="@tuto.Id" class="open-dialogTuto btn-sm btn-danger" data-bs-target="#modalValideDeleteTuto" style="margin-right:0.2rem; width:fit-content;"><img src="~/icons/deleteIcon.svg" /></button>
+                                        </div>
+                                        <div class="row" style="justify-content:center;">
+                                            <br />
+                                            @if (!tuto.EstPublier)
+                                            {
+                                                <form method="post">
+                                                    <input name="idTuto" hidden value="@tuto.Id" />
+                                                    <button type="submit" class="btn btn-outline-primary form-control" style="margin-top:10px; width:10em;">Publier</button>
+                                                </form>
+                                            }
+                                            else
+                                            {
+                                                <form method="post">
+                                                    <input name="idTuto" hidden value="@tuto.Id" />
+                                                    <button type="submit" class="btn btn-outline-primary form-control" style="margin-top:10px; width:10em;">Rendre non public</button>
+                                                </form>
+                                            }
+                                        </div>
+
+                                    </div>
                                 </div>
-                            </a>
+                            </div>
                         }
                         else
                         {
-                            <a href="/Tutoriel/consultation?id=@tuto.Id">
-                                <div class="list-group-item ">
-                                    <div class="row">
-                                        <div class="col-9">
-                                            <div class="row">
-                                                <div class="col-2">
-                                                    @if (tuto.EstPublier)
-                                                    {
-                                                        <img src="~/icons/published.svg" style="width:2em; height:2em;" />
-                                                    }
-                                                    else
-                                                    {
-                                                        <img src="~/icons/unpublished.svg" style="width:2em; height:2em;" />
-                                                    }
-                                                </div>
-                                                <div class="col-8">
-                                                    <h3>@tuto.Titre</h3>
-                                                </div>
-                                            </div>
-                                            <div class="row">
+                            <div class="list-group-item ">
+                                <div class="row">
+                                    <div class="col-9">
+                                        <div class="row">
+                                            <div class="col-2">
                                                 @if (tuto.EstPublier)
                                                 {
-                                                    <p style="text-align:center;">Status: Publié</p>
+                                                    <img src="~/icons/published.svg" style="width:2em; height:2em;" />
                                                 }
                                                 else
                                                 {
-                                                    <p style="text-align:center;">Status: Non publié</p>
+                                                    <img src="~/icons/unpublished.svg" style="width:2em; height:2em;" />
                                                 }
+                                            </div>
+                                            <div class="col-8">
+                                                <h3>@tuto.Titre</h3>
                                             </div>
                                         </div>
-                                        <div class="col-3">
-                                            <div class="row" style="justify-content:center;">
-                                                <form method="post">
-                                                    <input type="hidden" name="name" value="@tuto.Id" />
-
-                                                    <input name="btnSupprimerTuto" type="submit" value="Supprimer" class="btn btn-danger form-control" style="width: 10em; margin-top: 10px;" />
-                                                </form>
-                                            </div>
-                                            <div class="row" style="justify-content:center;">
-                                                <br />
-                                                @if (!tuto.EstPublier)
-                                                {
-                                                    <form method="post">
-                                                        <input name="idTuto" hidden value="@tuto.Id" />
-                                                        <button type="submit" class="btn btn-outline-primary form-control" style="margin-top:10px; width:10em;">Publier</button>
-                                                    </form>
-                                                }
-                                                else
-                                                {
-                                                    <form method="post">
-                                                        <input name="idTuto" hidden value="@tuto.Id" />
-                                                        <button type="submit" class="btn btn-outline-primary form-control" style="margin-top:10px; width:10em;">Rendre non public</button>
-                                                    </form>
-                                                }
-                                            </div>
-
+                                        <div class="row">
+                                            @if (tuto.EstPublier)
+                                            {
+                                                <p style="text-align:center;">Status: Publié</p>
+                                            }
+                                            else
+                                            {
+                                                <p style="text-align:center;">Status: Non publié</p>
+                                            }
                                         </div>
                                     </div>
+                                    <div class="col-3">
+                                        <div class="row" style="justify-content:center;">
+                                            <a href="/Tutoriel/consultation?id=@tuto.Id" class="btn-sm btn-primary" style="margin-right:0.2rem; width:fit-content;"><img src="~/icons/editIcon.svg" /></a>
+                                            <button type="button" data-bs-toggle="modal" data="@tuto.Id" data-id="@tuto.Id" class="open-dialogTuto btn-sm btn-danger" data-bs-target="#modalValideDeleteTuto" style="margin-right:0.2rem; width:fit-content;"><img src="~/icons/deleteIcon.svg" /></button>
+                                        </div>
+                                        <div class="row" style="justify-content:center;">
+                                            <br />
+                                            @if (!tuto.EstPublier)
+                                            {
+                                                <form method="post">
+                                                    <input name="idTuto" hidden value="@tuto.Id" />
+                                                    <button type="submit" class="btn btn-outline-primary form-control" style="margin-top:10px; width:10em;">Publier</button>
+                                                </form>
+                                            }
+                                            else
+                                            {
+                                                <form method="post">
+                                                    <input name="idTuto" hidden value="@tuto.Id" />
+                                                    <button type="submit" class="btn btn-outline-primary form-control" style="margin-top:10px; width:10em;">Rendre non public</button>
+                                                </form>
+                                            }
+                                        </div>
+
+                                    </div>
                                 </div>
-                            </a>
+                            </div>
                         }
 
                     }
@@ -672,6 +694,24 @@
                         </div>
                     </div>
                 }
+                <!-- Modal -->
+                <div class="modal" id="modalValideDeleteTuto" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalValideDeleteLabelTuto" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modalValideDeleteLabelTuto">Confirmation!</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Cette action n’est pas réversible, est-ce que vous voulez vraiment supprimer ce tutoriel ?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Non</button>
+                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="confirmSuppressionTutoriel()">Oui</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             }
             else if (ViewData["Tab"].ToString() == "articles")
             {
@@ -683,73 +723,70 @@
                             <a class="btn btn-outline-primary" href="?tab=articles"><img style="width:40%;" src="~/icons/refresh.svg" /></a>
                         </div>
                     </div>
-                    <div>
-                        <a href="/CreationArticle" class="btn btn-primary btn-sm"><img src="~/icons/addIcon.svg" /></a>
+                    <div style="margin-bottom:1em;">
+                        <a href="/CreationArticle" class="btn btn-primary btn-sm"><img src="~/icons/addIcon.svg" /> Ajouter un article</a>
                     </div>
                 </form>
                 if (lstArticles != null && lstArticles.Count > 0)
                 {
                     foreach (Article article in lstArticles)
                     {
-                        <a href="/Article?id=@article.Id">
-                            <div class="list-group-item ">
-                                <div class="row">
-                                    <div class="col-9">
-                                        <div class="row">
-                                            <div class="col-2">
-                                                @if (article.EstPublier)
-                                                {
-                                                    <img src="~/icons/published.svg" style="width:2em; height:2em;" />
-                                                }
-                                                else
-                                                {
-                                                    <img src="~/icons/unpublished.svg" style="width:2em; height:2em;" />
-                                                }
-                                            </div>
-                                            <div class="col-8">
-                                                <h3>@article.Titre</h3>
-                                            </div>
-                                        </div>
-                                        <div class="row">
+                        <div class="list-group-item ">
+                            <div class="row">
+                                <div class="col-9">
+                                    <div class="row">
+                                        <div class="col-2">
                                             @if (article.EstPublier)
                                             {
-                                                <p style="text-align:center;">État: Publié</p>
+                                                <img src="~/icons/published.svg" style="width:2em; height:2em;" />
                                             }
                                             else
                                             {
-                                                <p style="text-align:center;">État: Non publié</p>
+                                                <img src="~/icons/unpublished.svg" style="width:2em; height:2em;" />
                                             }
+                                        </div>
+                                        <div class="col-8">
+                                            <h3>@article.Titre</h3>
                                         </div>
                                     </div>
-                                    <div class="col-3">
-                                        <div class="row" style="justify-content:center;">
-                                            <form method="post">
-                                                <input type="hidden" name="name" value="@article.Id" />
-                                                <input name="btnSupprimerArticle" type="submit" value="Supprimer" class="btn btn-danger form-control" style="width: 10em; margin-top: 10px;" />
-                                            </form>
-                                        </div>
-                                        <div class="row" style="justify-content:center;">
-                                            <br />
-                                            @if (!article.EstPublier)
-                                            {
-                                                <form method="post">
-                                                    <input name="idArticle" hidden value="@article.Id" />
-                                                    <button type="submit" class="btn btn-outline-primary form-control" style="margin-top:10px; width:10em;">Publier</button>
-                                                </form>
-                                            }
-                                            else
-                                            {
-                                                <form method="post">
-                                                    <input name="idArticle" hidden value="@article.Id" />
-                                                    <button type="submit" class="btn btn-outline-primary form-control" style="margin-top:10px; width:10em;">Rendre non public</button>
-                                                </form>
-                                            }
-                                        </div>
-
+                                    <div class="row">
+                                        @if (article.EstPublier)
+                                        {
+                                            <p style="text-align:center;">État: Publié</p>
+                                        }
+                                        else
+                                        {
+                                            <p style="text-align:center;">État: Non publié</p>
+                                        }
                                     </div>
                                 </div>
+                                <div class="col-3">
+                                    <div class="row" style="justify-content:center;">
+                                        <a href="/Article?id=@article.Id" class="btn-sm btn-primary" style="margin-right:0.2rem; width:fit-content;"><img src="~/icons/editIcon.svg" /></a>
+                                        <button type="button" data-bs-toggle="modal" data="@article.Id" data-id="@article.Id" class="open-dialogArticle btn-sm btn-danger" data-bs-target="#modalValideDeleteArticle" style="margin-right:0.2rem; width:fit-content;"><img src="~/icons/deleteIcon.svg" /></button>
+
+                                    </div>
+                                    <div class="row" style="justify-content:center;">
+                                        <br />
+                                        @if (!article.EstPublier)
+                                        {
+                                            <form method="post">
+                                                <input name="idArticle" hidden value="@article.Id" />
+                                                <button type="submit" class="btn btn-outline-primary form-control" style="margin-top:10px; width:10em;">Publier</button>
+                                            </form>
+                                        }
+                                        else
+                                        {
+                                            <form method="post">
+                                                <input name="idArticle" hidden value="@article.Id" />
+                                                <button type="submit" class="btn btn-outline-primary form-control" style="margin-top:10px; width:10em;">Rendre non public</button>
+                                            </form>
+                                        }
+                                    </div>
+
+                                </div>
                             </div>
-                        </a>
+                        </div>
                     }
                 }
                 else
@@ -763,75 +800,98 @@
                         </div>
                     </div>
                 }
+                <!-- Modal -->
+                <div class="modal" id="modalValideDeleteArticle" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalValideDeleteLabelArticle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modalValideDeleteLabelArticle">Confirmation!</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Cette action n’est pas réversible, est-ce que vous voulez vraiment supprimer cet article ?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Non</button>
+                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="confirmSuppressionArticle()">Oui</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             }
             else if (ViewData["Tab"].ToString() == "pages")
             {
-                <div>
-                    <a href="/newpagecreation" class="btn btn-primary btn-sm"><img src="~/icons/addIcon.svg" /></a>
-                </div>
+                <form method="post" style="display:flex; justify-content: right;">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Recherche" required name="rechercheValeurPage">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-primary" type="submit"><img style="width:40%;" src="~/icons/searchIcon.svg" /></button>
+                            <a class="btn btn-outline-primary" href="?tab=podcasts"><img style="width:40%;" src="~/icons/refresh.svg" /></a>
+                        </div>
+                    </div>
+                    <div style="margin-bottom:1em;">
+                        <a href="/newpagecreation" class="btn btn-primary btn-sm"><img src="~/icons/addIcon.svg" /> Ajouter une page</a>
+                    </div>
+                </form>
                 if (lstPages != null && lstPages.Count > 0)
                 {
                     foreach (NewPage newPage in lstPages)
                     {
-                        <a href="/NewPage?Titre=@newPage.Titre">
-                            <div class="list-group-item ">
-                                <div class="row">
-                                    <div class="col-9">
-                                        <div class="row">
-                                            <div class="col-2">
-                                                @if (newPage.EstPublier)
-                                                {
-                                                    <img src="~/icons/published.svg" style="width:2em; height:2em;" />
-                                                }
-                                                else
-                                                {
-                                                    <img src="~/icons/unpublished.svg" style="width:2em; height:2em;" />
-                                                }
-                                            </div>
-                                            <div class="col-8">
-                                                <h3>@newPage.Titre</h3>
-                                            </div>
-                                        </div>
-                                        <div class="row">
+                        <div class="list-group-item ">
+                            <div class="row">
+                                <div class="col-9">
+                                    <div class="row">
+                                        <div class="col-2">
                                             @if (newPage.EstPublier)
                                             {
-                                                <p style="text-align:center;">État: Publié</p>
+                                                <img src="~/icons/published.svg" style="width:2em; height:2em;" />
                                             }
                                             else
                                             {
-                                                <p style="text-align:center;">État: Non publié</p>
+                                                <img src="~/icons/unpublished.svg" style="width:2em; height:2em;" />
                                             }
+                                        </div>
+                                        <div class="col-8">
+                                            <h3>@newPage.Titre</h3>
                                         </div>
                                     </div>
-                                    <div class="col-3">
-                                        <div class="row" style="justify-content:center;">
-                                            <form method="post">
-                                                <input type="hidden" name="name" value="@newPage.Id" />
-                                                <input name="btnSupprimerPage" type="submit" value="Supprimer" class="btn btn-danger form-control" style="width: 10em; margin-top: 10px;" />
-                                            </form>
-                                        </div>
-                                        <div class="row" style="justify-content:center;">
-                                            <br />
-                                            @if (!newPage.EstPublier)
-                                            {
-                                                <form method="post">
-                                                    <input name="idPage" hidden value="@newPage.Id" />
-                                                    <button type="submit" class="btn btn-outline-primary form-control" style="margin-top:10px; width:10em;">Publier</button>
-                                                </form>
-                                            }
-                                            else
-                                            {
-                                                <form method="post">
-                                                    <input name="idPage" hidden value="@newPage.Id" />
-                                                    <button type="submit" class="btn btn-outline-primary form-control" style="margin-top:10px; width:10em;">Rendre non public</button>
-                                                </form>
-                                            }
-                                        </div>
-
+                                    <div class="row">
+                                        @if (newPage.EstPublier)
+                                        {
+                                            <p style="text-align:center;">État: Publié</p>
+                                        }
+                                        else
+                                        {
+                                            <p style="text-align:center;">État: Non publié</p>
+                                        }
                                     </div>
                                 </div>
+                                <div class="col-3">
+                                    <div class="row" style="justify-content:center;">
+                                        <a href="/NewPage?Titre=@newPage.Titre" class="btn-sm btn-primary" style="margin-right:0.2rem; width:fit-content;"><img src="~/icons/editIcon.svg" /></a>
+                                        <button type="button" data-bs-toggle="modal" data="@newPage.Id" data-id="@newPage.Id" class="open-dialogPage btn-sm btn-danger" data-bs-target="#modalValideDeletePage" style="margin-right:0.2rem; width:fit-content;"><img src="~/icons/deleteIcon.svg" /></button>
+                                    </div>
+                                    <div class="row" style="justify-content:center;">
+                                        <br />
+                                        @if (!newPage.EstPublier)
+                                        {
+                                            <form method="post">
+                                                <input name="idPage" hidden value="@newPage.Id" />
+                                                <button type="submit" class="btn btn-outline-primary form-control" style="margin-top:10px; width:10em;">Publier</button>
+                                            </form>
+                                        }
+                                        else
+                                        {
+                                            <form method="post">
+                                                <input name="idPage" hidden value="@newPage.Id" />
+                                                <button type="submit" class="btn btn-outline-primary form-control" style="margin-top:10px; width:10em;">Rendre non public</button>
+                                            </form>
+                                        }
+                                    </div>
+
+                                </div>
                             </div>
-                        </a>
+                        </div>
                     }
                 }
                 else
@@ -840,19 +900,212 @@
                     <div class="container">
                         <div class="row">
                             <div class="col-12">
-                                <p style="text-align:center;">Aucune pages</p>
+                                <p style="text-align:center;">Aucune page</p>
                             </div>
                         </div>
                     </div>
                 }
+                <!-- Modal -->
+                <div class="modal" id="modalValideDeletePage" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalValideDeleteLabelPage" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modalValideDeleteLabelPage">Confirmation!</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Cette action n’est pas réversible, est-ce que vous voulez vraiment supprimer cette page ?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Non</button>
+                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="confirmSuppressionPage()">Oui</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             }
         }
     </table>
+
+    <form id="form-delete">
+        <input name="idCurrentObject" id="IdCurrent" hidden/>
+    </form>
 </div>
 
 <script src="~/javascript/utils/ToastNotification.js" asp-append-version="true"></script>
 
 <script>
+    $(document).on("click", ".open-dialogArticle", function () {
+        var articleId = $(this).data('id');
+        $('#IdCurrent').val(articleId);
+    });
+    $(document).on("click", ".open-dialogPage", function () {
+        var pageId = $(this).data('id');
+        $('#IdCurrent').val(pageId);
+    });
+    $(document).on("click", ".open-dialogAudio", function () {
+        var audioId = $(this).data('id');
+        $('#IdCurrent').val(audioId);
+    });
+    $(document).on("click", ".open-AddBookDialog", function () {
+        var userId = $(this).data('id');
+        $('#IdCurrent').val(userId);
+    });
+    $(document).on("click", ".open-dialogTuto", function () {
+        var tutoId = $(this).data('id');
+        $('#IdCurrent').val(tutoId);
+    });
+    function confirmSuppressionPage() {
+        var href = window.location.pathname + "?handler=SupprimerPage";
+        event.preventDefault();
+        event.stopPropagation();
+        $.ajax({
+            type: 'POST',
+            url: href,
+            data: new FormData(document.getElementById('form-delete')),
+            contentType: "application/json",
+            headers: {
+                RequestVerificationToken:
+                    $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function () {
+                window.scriptToastNotification.AjouterNotification("La page à bien été supprimée !", true);
+                setTimeout(function () {
+                    window.location.href = '/AdminMenu/?tab=pages';
+                }, 3600);
+            },
+            error: function () {
+                window.scriptToastNotification.AjouterNotification("Une erreure est survenu lors de la suppression de la page !", false);
+                setTimeout(function () {
+                    window.locati3600ref = '/AdminMenu/?tab=pages';
+                }, 3600);
+            }
+        });
+    }
+    function confirmSuppressionArticle() {
+        var href = window.location.pathname + "?handler=SupprimerArticle";
+        event.preventDefault();
+        event.stopPropagation();
+        $.ajax({
+            type: 'POST',
+            url: href,
+            data: new FormData(document.getElementById('form-delete')),
+            contentType: "application/json",
+            headers: {
+                RequestVerificationToken:
+                    $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function () {
+                window.scriptToastNotification.AjouterNotification("L'article à bien été supprimé !", true);
+                setTimeout(function () {
+                    window.location.href = '/AdminMenu/?tab=articles';
+                }, 3600);
+            },
+            error: function () {
+                window.scriptToastNotification.AjouterNotification("Une erreure est survenu lors de la suppression de l'article !", false);
+                setTimeout(function () {
+                    window.locati3600ref = '/AdminMenu/?tab=articles';
+                }, 3600);
+            }
+        });
+    }
+
+    function confirmSuppressionTutoriel() {
+        var href = window.location.pathname + "?handler=SupprimerTuto";
+        event.preventDefault();
+        event.stopPropagation();
+        $.ajax({
+            type: 'POST',
+            url: href,
+            data: new FormData(document.getElementById('form-delete')),
+            contentType: "application/json",
+            headers: {
+                RequestVerificationToken:
+                    $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function () {
+                window.scriptToastNotification.AjouterNotification("Le tutoriel à bien été supprimé !", true);
+                setTimeout(function () {
+                    window.location.href = '/AdminMenu/?tab=tutoriels';
+                }, 3600);
+            },
+            error: function () {
+                window.scriptToastNotification.AjouterNotification("Une erreure est survenu lors de la suppression de l'audio !", false);
+                setTimeout(function () {
+                    window.locati3600ref = '/AdminMenu/?tab=tutoriels';
+                }, 3600);
+            }
+        });
+    }
+    function confirmSuppressionPodcast() {
+        var href = window.location.pathname + "?handler=SupprimerAudio";
+        event.preventDefault();
+        event.stopPropagation();
+        $.ajax({
+            type: 'POST',
+            url: href,
+            data: new FormData(document.getElementById('form-delete')),
+            contentType: "application/json",
+            headers: {
+                RequestVerificationToken:
+                    $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function () {
+                window.scriptToastNotification.AjouterNotification("L'audio à bien été supprimé !", true);
+                setTimeout(function () {
+                    window.location.href = '/AdminMenu/?tab=podcasts';
+                }, 3600);
+            },
+            error: function () {
+                window.scriptToastNotification.AjouterNotification("Une erreure est survenu lors de la suppression de l'audio !", false);
+                setTimeout(function () {
+                    window.locati3600ref = '/AdminMenu/?tab=podcasts';
+                }, 3600);
+            }
+        });
+    }
+    function confirmSuppressionUser() {
+        var href = window.location.pathname + "?handler=SupprimerUser";
+        event.preventDefault();
+        event.stopPropagation();
+        $.ajax({
+            type: 'POST',
+            url: href,
+            data: new FormData(document.getElementById('form-delete')),
+            contentType: "application/json",
+            headers: {
+                RequestVerificationToken:
+                    $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function () {
+                window.scriptToastNotification.AjouterNotification("L'utilisateur à bien été supprimé !", true);
+                setTimeout(function () {
+                    window.location.href = '/AdminMenu/?tab=utilisateurs';
+                }, 3600);
+            },
+            error: function () {
+                window.scriptToastNotification.AjouterNotification("Une erreure est survenu lors de la suppression de l'utilisateur !", false);
+                setTimeout(function () {
+                    window.locati3600ref = '/AdminMenu/?tab=utilisateurs';
+                }, 3600);
+            }
+        });
+    }
     $('#btnAjoutCategorie').click(function () {
         var href = window.location.pathname + "?handler=AjoutCategorie";
         event.preventDefault();
