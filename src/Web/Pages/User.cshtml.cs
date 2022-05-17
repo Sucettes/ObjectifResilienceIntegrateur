@@ -71,6 +71,7 @@ namespace Gwenael.Web.Pages
             catch
             {
             }
+            Console.WriteLine(userBd);
             if (btnSave != null)
             {
                 if (userBd.Email != user.Email)
@@ -81,28 +82,45 @@ namespace Gwenael.Web.Pages
                     }
                     else
                     {
-                        List<User> userTest = _context.Users.Where(u => u.Email == user.Email).ToList();
-                        if (userTest.Count == 0)
+                        try
                         {
-                            userBd.Email = user.Email;
-                            userBd.UserName = user.Email;
+                            List<User> userTest = _context.Users.Where(u => u.Email == user.Email).ToList();
+                            if (userTest.Count == 0)
+                            {
+                                userBd.Email = user.Email.ToString();
+                                userBd.UserName = user.Email.ToString();
+                            }
+                            else
+                            {
+                                return Redirect("/User/" + user.Id + "/?erreur=courrielExist");
+                            }
                         }
-                        else
+                        catch
                         {
-                            return Redirect("/User/" + user.Id +"/?erreur=courrielExist");
+                            Console.WriteLine("Erreur");
                         }
+                      
                     }
                 }
-                if (userBd.FirstName != user.FirstName)
+                if (user.FirstName.Length > 0)
                 {
-                    userBd.FirstName = user.FirstName;
+                    userBd.FirstName = user.FirstName.ToString();
                 }
-                if (userBd.LastName != user.LastName)
+                else
                 {
-                    userBd.LastName = user.LastName;
+                    userBd.FirstName = "Non défini";
                 }
-                await _context.SaveChangesAsync();
-                return RedirectToPage("adminMenu");
+                if (user.LastName.Length > 0)
+                {
+                    userBd.LastName = user.LastName.ToString();
+                }
+                else
+                {
+                    userBd.LastName = "Non défini";
+
+                }
+                _context.SaveChanges();
+                return Redirect("/AdminMenu/?tab=utilisateurs");
             }
             else if (btnDelete != null)
             {
