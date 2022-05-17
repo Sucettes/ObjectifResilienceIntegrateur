@@ -88,8 +88,6 @@ namespace Gwenael.Web.Pages
                     Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
                     if (Permission.VerifierAccesGdC(idConnectedUser, _db))
                     {
-                        Console.WriteLine(tutoVal);
-
                         Tutos t = _db.Tutos.Where(t => t.Id == Guid.Parse(tutoVal.tutorielIdVal)).First();
                         
                         bool status = false;

@@ -46,7 +46,6 @@ $(document).ready(function () {
         var o = new Option(data.value.titre + ' (Non Publié)');
         o.value = data.value.idTutoP;
         o.selected = true;
-        console.log(o)
         $('#selectTutoModifier').append(o);
         // lancement du toast
         window.scriptToastNotification.AjouterNotification('Le tutoriel a été créé!', true);

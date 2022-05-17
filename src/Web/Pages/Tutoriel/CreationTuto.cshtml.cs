@@ -257,7 +257,6 @@ namespace Gwenael.Web.Pages
             {
                 NewPages = _db.NewPages.ToList();
                 ViewData["NewPages"] = NewPages;
-                Console.WriteLine(formData);
                 if (User.Identity.IsAuthenticated)
                 {
                     Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
