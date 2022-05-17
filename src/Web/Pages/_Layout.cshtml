@@ -48,13 +48,15 @@
                                 }
                         @if (User.Identity.IsAuthenticated)
                         {
-                    <a class="nav-link" href="/AdminMenu">Administrateur</a> } @*<span class="navbar-text">*@
+                    <a class="nav-link" href="/AdminMenu">Administrateur</a>
+                    <a class="nav-link" href="/NewPageCreation">Creation nouvelle page</a>} @*<span class="navbar-text">*@
+                    <p>@User.Identity.Name</p>
                         @await Html.PartialAsync("_LoginPartial")
                         @*</span>*@
                         <!-- Je sais pas comment cétait, faq j'ai juste copier coller ton truc.' -->
 
 
-
+                        
                     </div>
                 </div>
             </div>
