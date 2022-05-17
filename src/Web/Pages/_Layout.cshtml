@@ -42,7 +42,7 @@
                         <a class="nav-link" href="/AudioFolder/PoadcastPage">Podcasts</a>
                         @foreach (var nouvellePage in ViewData["newPages"] as IList<NewPage>)
                         {
-                            if (nouvellePage != null)
+                            if (nouvellePage != null && nouvellePage.EstPublier )
                             {
                     <a class="nav-link" href="/NewPage?Titre=@nouvellePage.Titre">@nouvellePage.Titre</a>}
                                 }

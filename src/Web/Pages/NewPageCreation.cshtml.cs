@@ -60,8 +60,6 @@ namespace Gwenael.Web.Pages
                 ViewData["Modifier"] = "true";
             }
 
-            NewPageCreated = "true";
-            ViewData["NewPageCreated"] = NewPageCreated;
             return Page();
         }
 
