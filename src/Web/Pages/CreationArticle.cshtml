@@ -3,6 +3,15 @@
 @using Domain.Entities
 
 
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src="~/javascript/utils/ToastNotification.js" asp-append-version="true"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.0.20/tinymce.min.js"></script>
+<script type="text/javascript">
+    tinymce.init({ selector: 'textarea' });
+</script>
+
 <div class="container">
     <h1 style="text-align:center">Creation d'un article</h1>
     <div style="margin:3rem;">
@@ -18,8 +27,6 @@
 
             <input multiple="multiple" asp-for="Input.FormFile" class="form-control" type="file" id="formFile"><br = />
 
-
-
             @if (ViewData["Modifier"] as string == "true")
             {
                 <button id="btnCreeTuto" data-creationTuto type="submit" value="Upload" class="btn btn-primary">Modifier</button>
@@ -28,11 +35,25 @@
             {
                 <button id="btnCreeTuto" data-creationTuto type="submit" value="Upload" class="btn btn-primary">Créé Article</button>
             }
+
+
         </form>
 
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.0.20/tinymce.min.js"></script>
-        <script type="text/javascript">
-            tinymce.init({ selector: 'textarea' });
-        </script>
+
+        @if (ViewData["NewArticleCreated"] as String == "true")
+        {
+            <script>window.onload = function () {
+                    window.scriptToastNotification.AjouterNotification("Article valider", true);
+                    setTimeout(function () {
+                      //  window.location.href = '/AdminMenu/?tab=categories';
+                    }, 3600);
+                }
+            </script>
+
+        }
+
+
+
+
     </div>
 </div>

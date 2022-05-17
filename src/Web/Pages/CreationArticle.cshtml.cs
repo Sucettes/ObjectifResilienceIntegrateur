@@ -39,6 +39,8 @@ namespace Gwenael.Web.Pages
         public InputModel Input { get; set; }
         public List<Article> Articles { get; set; }
 
+        public string NewArticleCreated;
+
         public IActionResult  OnGet()
         {
             NewPages = _context.NewPages.ToList();
@@ -58,7 +60,8 @@ namespace Gwenael.Web.Pages
                 Input.Titre = b.Titre;
                 ViewData["Modifier"] = "true";
             }
-            
+            NewArticleCreated = "false";
+            ViewData["NewArticleCreated"] = NewArticleCreated;
             return Page();
         }
 
@@ -74,6 +77,7 @@ namespace Gwenael.Web.Pages
 
         public async Task<IActionResult> OnPost(string titre, string inerText)
         {
+
             Article newArticle = new Article
             {
                 Titre = titre,
@@ -125,7 +129,10 @@ namespace Gwenael.Web.Pages
                _context.Articles.Add(newArticle);
             }
 
-                _context.SaveChanges();
+            NewArticleCreated = "true";
+            ViewData["NewArticleCreated"] = NewArticleCreated;
+
+            _context.SaveChanges();
             
             return Page();
         }
