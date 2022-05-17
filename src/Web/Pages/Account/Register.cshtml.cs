@@ -32,6 +32,8 @@ namespace Gwenael.Web.Pages.Account
         public string ReturnUrl { get; set; }
         public void OnGet(string returnUrl = null)
         {
+            NewPages = _db.NewPages.ToList();
+            ViewData["NewPages"] = NewPages;
             ReturnUrl = returnUrl;
         }
         public class RegisterForm

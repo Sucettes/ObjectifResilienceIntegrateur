@@ -36,6 +36,7 @@ namespace Gwenael.Web.Pages
         [BindProperty]
         public InputModel Input { get; set; }
         public List<NewPage> NewPages { get; set; }
+        public String NewPageCreated;
 
         public IActionResult OnGet()
         {
@@ -59,6 +60,8 @@ namespace Gwenael.Web.Pages
                 ViewData["Modifier"] = "true";
             }
 
+            NewPageCreated = "true";
+            ViewData["NewPageCreated"] = NewPageCreated;
             return Page();
         }
 
@@ -127,6 +130,8 @@ namespace Gwenael.Web.Pages
 
             _context.SaveChanges();
 
+            NewPageCreated = "true";
+            ViewData["NewPageCreated"] = NewPageCreated;
             return Page();
         }
 

@@ -75,6 +75,8 @@ namespace Gwenael.Web.Pages.Account
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             ReturnUrl = returnUrl;
+            NewPages = await _db.NewPages.ToListAsync();
+            ViewData["NewPages"] = NewPages;
 
             if (ModelState.IsValid)
             {
