@@ -245,8 +245,8 @@ namespace Gwenael.Web.Pages
                         }
                         else if(Tab == "pages")
                         {
-                            if (DynamicQueryableExtensions.Any(_context.Articles))
-                                ViewData["lstPages"] = _context.Articles.ToList();
+                            if (DynamicQueryableExtensions.Any(_context.NewPages))
+                                ViewData["lstPages"] = _context.NewPages.ToList();
 
                         }
                         else if (Tab == "articles")
@@ -276,7 +276,7 @@ namespace Gwenael.Web.Pages
             }
             return tupleUsers;
         }
-        public async Task<IActionResult> OnPostAsync(string btnSupprimerArticle, string idUserToDelete, string btnSupprimer, string btnSupprimerTuto, string idAudio, string idTuto, string supprCatVal, string nomCat, string rechercheValeurArticle, string rechercheValeurTuto, string rechercheValeurPodcast, string rechercheValeurDemande, string rechercheValeurUtilisateur, string rechercheValeurUtilisateurRole, string btnDeleteRole, string name, string selectRole, string btnAccepter, string btnRefuser, int? id)
+        public async Task<IActionResult> OnPostAsync(string btnSupprimerPage, string idPage, string idArticle, string btnSupprimerArticle, string idUserToDelete, string btnSupprimer, string btnSupprimerTuto, string idAudio, string idTuto, string supprCatVal, string nomCat, string rechercheValeurArticle, string rechercheValeurTuto, string rechercheValeurPodcast, string rechercheValeurDemande, string rechercheValeurUtilisateur, string rechercheValeurUtilisateurRole, string btnDeleteRole, string name, string selectRole, string btnAccepter, string btnRefuser, int? id)
         {
             if (User.Identity.IsAuthenticated)
             {
@@ -364,7 +364,56 @@ namespace Gwenael.Web.Pages
                     {
                         return Redirect("/AdminMenu/?tab=articles&recherche=" + rechercheValeurTuto);
                     }
-                    
+                    else if (idArticle != null)
+                    {
+                        Article article = new Article();
+                        try
+                        {
+                            article = _context.Articles.Where(a => a.Id == int.Parse(idArticle)).First();
+                        }
+                        catch
+                        {
+                            Console.WriteLine("ERREUR");
+                        }
+                        if (article != null)
+                        {
+                            if (article.EstPublier)
+                            {
+                                article.EstPublier = false;
+                            }
+                            else
+                            {
+                                article.EstPublier = true;
+                            }
+                            _context.SaveChanges();
+                            return Redirect("/AdminMenu/?tab=articles");
+                        }
+                    }
+                    else if(idPage != null)
+                    {
+                        NewPage newPage = new NewPage();
+                        try
+                        {
+                            newPage = _context.NewPages.Where(np => np.Id == int.Parse(idPage)).First();
+                        }
+                        catch
+                        {
+                            Console.WriteLine("ERREUR");
+                        }
+                        if (newPage != null)
+                        {
+                            if (newPage.EstPublier)
+                            {
+                                newPage.EstPublier = false;
+                            }
+                            else
+                            {
+                                newPage.EstPublier = true;
+                            }
+                            _context.SaveChanges();
+                            return Redirect("/AdminMenu/?tab=pages");
+                        }
+                    }
                     else if (idAudio != null)
                     {
                         Audio audio = new Audio();
@@ -434,6 +483,13 @@ namespace Gwenael.Web.Pages
                         _context.Tutos.Remove(tutoBD);
                         await _context.SaveChangesAsync();
                         return Redirect("/AdminMenu/?tab=tutoriels");
+                    }
+                    else if (btnSupprimerPage is not null)
+                    {
+                        NewPage newPageBD = _context.NewPages.Where(np => np.Id == int.Parse(name)).First();
+                        _context.NewPages.Remove(newPageBD);
+                        await _context.SaveChangesAsync();
+                        return Redirect("/AdminMenu/?tab=pages");
                     }
                     else if (btnSupprimerArticle is not null)
                     {
