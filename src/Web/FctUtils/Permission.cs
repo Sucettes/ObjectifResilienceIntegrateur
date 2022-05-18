@@ -91,5 +91,10 @@ namespace Gwenael.Web.FctUtils
             }
             return lstRolesDuUser;
         }
+        public static Guid ObtenirIdDuUserSelonEmail(string email, GwenaelDbContext _context)
+        {
+            User user = (User)_context.Users.Where(u => u.UserName == email).First();
+            return user.Id;
+        }
     }
 }
