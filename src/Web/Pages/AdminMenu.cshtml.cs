@@ -102,6 +102,13 @@ namespace Gwenael.Web.Pages
             return StatusCode(500);
 
         }
+        public IActionResult OnPostSupprimerCategorie([FromForm] FormValId categorieVal)
+        {
+            CategoriesTutos catTuto = (CategoriesTutos)_context.CategoriesTutos.Where(c => c.Id == Guid.Parse(categorieVal.idCurrentObject)).First();
+            _context.CategoriesTutos.Remove(catTuto);
+            _context.SaveChanges();
+            return Redirect("/AdminMenu/?tab=categories");
+        }
         public IActionResult OnPostSupprimerUser([FromForm] FormValId userVal)
         {
             if (User.Identity.IsAuthenticated)
@@ -440,7 +447,7 @@ namespace Gwenael.Web.Pages
             }
             return tupleUsers;
         }
-        public async Task<IActionResult> OnPostAsync(string rechercheValeurPage, string btnSupprimerPage, string idPage, string idArticle, string btnSupprimerArticle, string idUserToDelete, string btnSupprimer, string btnSupprimerTuto, string idAudio, string idTuto, string supprCatVal, string nomCat, string rechercheValeurArticle, string rechercheValeurTuto, string rechercheValeurPodcast, string rechercheValeurDemande, string rechercheValeurUtilisateur, string rechercheValeurUtilisateurRole, string btnDeleteRole, string name, string selectRole, string btnAccepter, string btnRefuser, int? id)
+        public async Task<IActionResult> OnPostAsync(string rechercheValeurPage, string idPage, string idArticle, string idAudio, string idTuto, string rechercheValeurArticle, string rechercheValeurTuto, string rechercheValeurPodcast, string rechercheValeurDemande, string rechercheValeurUtilisateur, string rechercheValeurUtilisateurRole, string btnDeleteRole, string name, string selectRole, string btnAccepter, string btnRefuser, int? id)
         {
             if (User.Identity.IsAuthenticated)
             {
@@ -461,13 +468,6 @@ namespace Gwenael.Web.Pages
                 Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
                 if (Permission.EstAdministrateur(idConnectedUser, _context))
                 {
-                    if (supprCatVal is not null)
-                    {
-                        CategoriesTutos catTuto = (CategoriesTutos)_context.CategoriesTutos.Where(c => c.Id == Guid.Parse(supprCatVal)).First();
-                        _context.CategoriesTutos.Remove(catTuto);
-                        await _context.SaveChangesAsync();
-                        return Redirect("/AdminMenu/?tab=categories");
-                    }
                     if (btnDeleteRole is not null)
                     {
                         Guid selectedUserId = Guid.Parse(Request.Query["guid"]);
