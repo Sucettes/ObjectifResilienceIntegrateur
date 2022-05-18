@@ -41,6 +41,19 @@ namespace Gwenael.Web.Pages
 
         public IActionResult OnGet()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _context);
+                if (Permission.EstAdministrateur(idConnectedUser, _context))
+                {
+                    ViewData["estAdmin"] = "true";
+                }
+            }
+            else
+            {
+                ViewData["estAdmin"] = "false";
+            }
+
             Input = new InputModel();
             string idNewPage;
 
@@ -83,6 +96,18 @@ namespace Gwenael.Web.Pages
 
         public async Task<IActionResult> OnPost(string titre, string inerText)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _context);
+                if (Permission.EstAdministrateur(idConnectedUser, _context))
+                {
+                    ViewData["estAdmin"] = "true";
+                }
+            }
+            else
+            {
+                ViewData["estAdmin"] = "false";
+            }
 
             NewPages = _context.NewPages.ToList();
             ViewData["NewPages"] = NewPages;
@@ -163,8 +188,8 @@ namespace Gwenael.Web.Pages
                 _context.SaveChanges();
             }
 
-            //NewPageCreated = "true";
-            //ViewData["NewPageCreated"] = NewPageCreated;
+            NewPageCreated = "true";
+            ViewData["NewPageCreated"] = NewPageCreated;
             return Page();
         }
 

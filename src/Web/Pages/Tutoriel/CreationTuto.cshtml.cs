@@ -76,10 +76,36 @@ namespace Gwenael.Web.Pages
         #region Redirection
         public IActionResult OnPostRedirectHomeTuto()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _db);
+                if (Permission.EstAdministrateur(idConnectedUser, _db))
+                {
+                    ViewData["estAdmin"] = "true";
+                }
+            }
+            else
+            {
+                ViewData["estAdmin"] = "false";
+            }
+
             return RedirectToPage("Index");
         }
         public IActionResult OnPostRedirectAdminMenu()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _db);
+                if (Permission.EstAdministrateur(idConnectedUser, _db))
+                {
+                    ViewData["estAdmin"] = "true";
+                }
+            }
+            else
+            {
+                ViewData["estAdmin"] = "false";
+            }
+
             NewPages = _db.NewPages.ToList();
             ViewData["NewPages"] = NewPages;
             if (User.Identity.IsAuthenticated)
@@ -97,6 +123,19 @@ namespace Gwenael.Web.Pages
         #region GET POST UPDATE DELETE
         public IActionResult OnGet()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _db);
+                if (Permission.EstAdministrateur(idConnectedUser, _db))
+                {
+                    ViewData["estAdmin"] = "true";
+                }
+            }
+            else
+            {
+                ViewData["estAdmin"] = "false";
+            }
+
             NewPages = _db.NewPages.ToList();
             ViewData["NewPages"] = NewPages;
 
@@ -126,6 +165,20 @@ namespace Gwenael.Web.Pages
             return RedirectToPage("Index");
         }
         public IActionResult OnPostAsync() {
+
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _db);
+                if (Permission.EstAdministrateur(idConnectedUser, _db))
+                {
+                    ViewData["estAdmin"] = "true";
+                }
+            }
+            else
+            {
+                ViewData["estAdmin"] = "false";
+            }
+
             NewPages = _db.NewPages.ToList();
             ViewData["NewPages"] = NewPages;
             UpdateInputData(); return Page(); 
@@ -133,6 +186,19 @@ namespace Gwenael.Web.Pages
 
         public IActionResult OnPostPublierTutoriel(string id, string handler)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _db);
+                if (Permission.EstAdministrateur(idConnectedUser, _db))
+                {
+                    ViewData["estAdmin"] = "true";
+                }
+            }
+            else
+            {
+                ViewData["estAdmin"] = "false";
+            }
+
             try
             {
                 NewPages = _db.NewPages.ToList();
@@ -159,6 +225,19 @@ namespace Gwenael.Web.Pages
         }
         public IActionResult OnPostPublieTuto(string id)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _db);
+                if (Permission.EstAdministrateur(idConnectedUser, _db))
+                {
+                    ViewData["estAdmin"] = "true";
+                }
+            }
+            else
+            {
+                ViewData["estAdmin"] = "false";
+            }
+
             try
             {
                 NewPages = _db.NewPages.ToList();
@@ -192,6 +271,19 @@ namespace Gwenael.Web.Pages
         }
         public IActionResult OnPostTutoChanger(string tutoId)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _db);
+                if (Permission.EstAdministrateur(idConnectedUser, _db))
+                {
+                    ViewData["estAdmin"] = "true";
+                }
+            }
+            else
+            {
+                ViewData["estAdmin"] = "false";
+            }
+
             try
             {
                 NewPages = _db.NewPages.ToList();
@@ -219,6 +311,19 @@ namespace Gwenael.Web.Pages
 
         public IActionResult OnGetRangeeById(string idRangee)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _db);
+                if (Permission.EstAdministrateur(idConnectedUser, _db))
+                {
+                    ViewData["estAdmin"] = "true";
+                }
+            }
+            else
+            {
+                ViewData["estAdmin"] = "false";
+            }
+
             try
             {
                 NewPages = _db.NewPages.ToList();
@@ -253,6 +358,19 @@ namespace Gwenael.Web.Pages
         }
         public IActionResult OnPostAjoutRangee([FromForm] CreationTutoRangeeFormData formData)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _db);
+                if (Permission.EstAdministrateur(idConnectedUser, _db))
+                {
+                    ViewData["estAdmin"] = "true";
+                }
+            }
+            else
+            {
+                ViewData["estAdmin"] = "false";
+            }
+
             try
             {
                 NewPages = _db.NewPages.ToList();
@@ -328,6 +446,19 @@ namespace Gwenael.Web.Pages
         }
         public IActionResult OnPutEditRangee([FromForm] CreationTutoRangeeFormData formData)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _db);
+                if (Permission.EstAdministrateur(idConnectedUser, _db))
+                {
+                    ViewData["estAdmin"] = "true";
+                }
+            }
+            else
+            {
+                ViewData["estAdmin"] = "false";
+            }
+
             try
             {
                 NewPages = _db.NewPages.ToList();
@@ -406,6 +537,19 @@ namespace Gwenael.Web.Pages
         }
         public IActionResult OnDeleteDeleteRange([FromForm] Rangee r)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _db);
+                if (Permission.EstAdministrateur(idConnectedUser, _db))
+                {
+                    ViewData["estAdmin"] = "true";
+                }
+            }
+            else
+            {
+                ViewData["estAdmin"] = "false";
+            }
+
             try
             {
                 NewPages = _db.NewPages.ToList();
@@ -450,6 +594,19 @@ namespace Gwenael.Web.Pages
         }
         public IActionResult OnPostSwitchRangeeTuto([FromForm] rangeeSwitchData rangeeSwitchData)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _db);
+                if (Permission.EstAdministrateur(idConnectedUser, _db))
+                {
+                    ViewData["estAdmin"] = "true";
+                }
+            }
+            else
+            {
+                ViewData["estAdmin"] = "false";
+            }
+
             try
             {
                 NewPages = _db.NewPages.ToList();
@@ -510,6 +667,19 @@ namespace Gwenael.Web.Pages
 
         public IActionResult OnPostCreeTutorielDetails([FromForm] CreationTutoFormData formData)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _db);
+                if (Permission.EstAdministrateur(idConnectedUser, _db))
+                {
+                    ViewData["estAdmin"] = "true";
+                }
+            }
+            else
+            {
+                ViewData["estAdmin"] = "false";
+            }
+
             try
             {
                 NewPages = _db.NewPages.ToList();
@@ -587,6 +757,19 @@ namespace Gwenael.Web.Pages
 
         public IActionResult OnPostModifieTutorielDetails([FromForm] CreationTutoFormData formData)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _db);
+                if (Permission.EstAdministrateur(idConnectedUser, _db))
+                {
+                    ViewData["estAdmin"] = "true";
+                }
+            }
+            else
+            {
+                ViewData["estAdmin"] = "false";
+            }
+
             try
             {
                 NewPages = _db.NewPages.ToList();

@@ -38,6 +38,18 @@ namespace Gwenael.Web.Pages
 
         public async Task<IActionResult> OnGetAsync()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _context);
+                if (Permission.EstAdministrateur(idConnectedUser, _context))
+                {
+                    ViewData["estAdmin"] = "true";
+                }
+            }
+            else
+            {
+                ViewData["estAdmin"] = "false";
+            }
 
             try
             {
@@ -92,14 +104,28 @@ namespace Gwenael.Web.Pages
 
         public Guid ObtenirIdDuUserSelonEmail(string email)
         {
+
             User user = (User)_context.Users.Where(u => u.UserName == email).First();
             return user.Id;
         }
 
         public async Task<IActionResult> OnPost(string categorie)
         {
-           
-                audios = await _context.Audios.ToListAsync();
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _context);
+                if (Permission.EstAdministrateur(idConnectedUser, _context))
+                {
+                    ViewData["estAdmin"] = "true";
+                }
+            }
+            else
+            {
+                ViewData["estAdmin"] = "false";
+            }
+
+
+            audios = await _context.Audios.ToListAsync();
                 ViewData["lstAudios"] = audios;
 
 

@@ -7,6 +7,7 @@ using Gwenael.Domain.Entities;
 using System.Collections.Generic;
 using Gwenael.Domain;
 using Microsoft.EntityFrameworkCore;
+using Gwenael.Web.FctUtils;
 
 namespace Gwenael.Web.Pages.Account
 {
@@ -27,7 +28,19 @@ namespace Gwenael.Web.Pages.Account
             NewPages = await _db.NewPages.ToListAsync();
             ViewData["NewPages"] = NewPages;
 
-            if (userId == null || code == null)
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _db);
+                if (Permission.EstAdministrateur(idConnectedUser, _db)) {
+                    ViewData["estAdmin"] = "true";
+                }
+            }
+            else
+            {
+                ViewData["estAdmin"] = "false";
+            }
+
+                    if (userId == null || code == null)
             {
                 return RedirectToPage("/Index");
             }
