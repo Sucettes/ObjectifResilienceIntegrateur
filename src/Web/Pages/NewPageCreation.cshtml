@@ -18,8 +18,6 @@
 
             <input multiple="multiple" asp-for="Input.FormFile" class="form-control" type="file" id="formFile"><br = />
 
-
-
             @if (ViewData["Modifier"] as string == "true")
             {
                 <button id="btnCreeTuto" data-creationTuto type="submit" value="Upload" class="btn btn-primary">Modifier</button>
@@ -28,24 +26,33 @@
             {
                 <button id="btnCreeTuto" data-creationTuto type="submit" value="Upload" class="btn btn-primary">Créé nouvelle page</button>
             }
-        </form>
 
+        </form>
 
 
         @if (ViewData["NewPageCreated"] as String == "true")
         {
             <script>
-                    window.onload = function () {
+                window.onload = function () {
                     window.scriptToastNotification.AjouterNotification("Nouvelle page valider", true);
                     setTimeout(function () {
-                        //  window.location.href = '/AdminMenu/?tab=categories';
                     }, 3600);
                 }
             </script>
 
-}
+        }
 
+        @if (ViewData["erreurChamps"] as String == "true")
+        {
+            <script>
+                window.onload = function () {
+                    window.scriptToastNotification.AjouterNotification("Les champs de l'article ne sont pas valide", false);
+                    setTimeout(function () {
+                    }, 3600);
+                }
+            </script>
 
+        }
     </div>
 </div>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.0.20/tinymce.min.js"></script>

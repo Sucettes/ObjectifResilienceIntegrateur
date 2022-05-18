@@ -27,14 +27,13 @@
                 <button id="btnCreeTuto" data-creationTuto type="submit" value="Upload" class="btn btn-primary">Créé Article</button>
             }
 
-
         </form>
 
 
         @if (ViewData["NewArticleCreated"] as String == "true")
         {
             <script>
-                window.onload = function () {
+                    window.onload = function () {
                     window.scriptToastNotification.AjouterNotification("Article valider", true);
                     setTimeout(function () {
                     }, 3600);
