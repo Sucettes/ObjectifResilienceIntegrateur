@@ -21,12 +21,11 @@
 
 <div class="container-fluid">
     <br />
-    
     <div class="row">
         
         <div class="col-3">
             <form method="post" enctype="multipart/form-data">
-                <h4>Filtrer par: </h4>
+                <h4>Filtrer par :</h4>
                 <hr />              
                 <label for="categorie" style="width: 100%;">Sélectionner une catégorie</label>
                 <div class="searchBar-container">
@@ -76,7 +75,7 @@
                         <a asp-page="./PoadcastDetail" asp-route-id="@audio.ID" class="col">
                             <div class="shadow-lg rounded cardPodcast" style="background-color:#f1f9ee;">
                                 <div><img src="@audio.urlImage" class="card-img-top shadow-lg sizeImage"></div>
-                                
+
                                 <div class="card-body">
                                     <h5 class="card-title">titre : @audio.titre</h5>
                                     @foreach (var cat in @Model.lstCategories)

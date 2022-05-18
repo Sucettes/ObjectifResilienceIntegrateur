@@ -9,6 +9,7 @@ using Gwenael.Domain;
 using Microsoft.AspNetCore.Identity;
 using System.Text.RegularExpressions;
 using System.Linq;
+using Gwenael.Web.FctUtils;
 
 namespace Gwenael.Web.Pages
 {
@@ -28,6 +29,18 @@ namespace Gwenael.Web.Pages
         public User user { get; set; }
         public async Task<IActionResult> OnGetAsync(Guid id)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _context);
+                if (Permission.EstAdministrateur(idConnectedUser, _context))
+                {
+                    ViewData["estAdmin"] = "true";
+                }
+            }
+            else
+            {
+                ViewData["estAdmin"] = "false";
+            }
 
             NewPages = await _context.NewPages.ToListAsync();
             ViewData["NewPages"] = NewPages;
@@ -60,6 +73,19 @@ namespace Gwenael.Web.Pages
         }
         public async Task<IActionResult> OnPost(string btnSave, string btnDelete, string btnAdd, string ConfPassword, string NewPassword)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _context);
+                if (Permission.EstAdministrateur(idConnectedUser, _context))
+                {
+                    ViewData["estAdmin"] = "true";
+                }
+            }
+            else
+            {
+                ViewData["estAdmin"] = "false";
+            }
+
             NewPages = await _context.NewPages.ToListAsync();
             ViewData["NewPages"] = NewPages;
 

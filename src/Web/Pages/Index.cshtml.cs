@@ -6,9 +6,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
 using Gwenael.Domain;
-
-
-
+using Gwenael.Web.FctUtils;
 
 namespace Gwenael.Web.Pages
 {
@@ -28,6 +26,19 @@ namespace Gwenael.Web.Pages
 
         public async Task<IActionResult> OnGetAsync()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _context);
+                if (Permission.EstAdministrateur(idConnectedUser, _context))
+                {
+                    ViewData["estAdmin"] = "true";
+                }
+            }
+            else
+            {
+                ViewData["estAdmin"] = "false";
+            }
+
 
             try
             {

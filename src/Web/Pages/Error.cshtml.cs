@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Gwenael.Domain;
 using Gwenael.Domain.Entities;
+using Gwenael.Web.FctUtils;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Gwenael.Web.Pages
@@ -22,6 +24,19 @@ namespace Gwenael.Web.Pages
 
         public void OnGet()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _context);
+                if (Permission.EstAdministrateur(idConnectedUser, _context))
+                {
+                    ViewData["estAdmin"] = "true";
+                }
+            }
+            else
+            {
+                ViewData["estAdmin"] = "false";
+            }
+
 
             NewPages = _context.NewPages.ToList();
             ViewData["NewPages"] = NewPages;

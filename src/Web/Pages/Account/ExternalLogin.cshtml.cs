@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using Gwenael.Domain;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Gwenael.Web.FctUtils;
 
 namespace Gwenael.Web.Pages.Account
 {
@@ -57,6 +58,20 @@ namespace Gwenael.Web.Pages.Account
 
         public IActionResult OnGetAsync()
         {
+
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _db);
+                if (Permission.EstAdministrateur(idConnectedUser, _db))
+                {
+                    ViewData["estAdmin"] = "true";
+                }
+            }
+            else
+            {
+                ViewData["estAdmin"] = "false";
+            }
+
             NewPages = _db.NewPages.ToList();
             ViewData["NewPages"] = NewPages;
             return RedirectToPage("./Login");
@@ -64,6 +79,20 @@ namespace Gwenael.Web.Pages.Account
 
         public IActionResult OnPost(string provider, string returnUrl = null)
         {
+
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _db);
+                if (Permission.EstAdministrateur(idConnectedUser, _db))
+                {
+                    ViewData["estAdmin"] = "true";
+                }
+            }
+            else
+            {
+                ViewData["estAdmin"] = "false";
+            }
+
             // Request a redirect to the external login provider.
             var redirectUrl = Url.Page("./ExternalLogin", pageHandler: "Callback", values: new { returnUrl });
             var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
@@ -74,6 +103,21 @@ namespace Gwenael.Web.Pages.Account
         {
             NewPages = await _db.NewPages.ToListAsync();
             ViewData["NewPages"] = NewPages;
+
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _db);
+                if (Permission.EstAdministrateur(idConnectedUser, _db))
+                {
+                    ViewData["estAdmin"] = "true";
+                }
+            }
+            else
+            {
+                ViewData["estAdmin"] = "false";
+            }
+
+
 
             if (remoteError != null)
             {
@@ -117,6 +161,20 @@ namespace Gwenael.Web.Pages.Account
         {
             NewPages = await _db.NewPages.ToListAsync();
             ViewData["NewPages"] = NewPages;
+
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _db);
+                if (Permission.EstAdministrateur(idConnectedUser, _db))
+                {
+                    ViewData["estAdmin"] = "true";
+                }
+            }
+            else
+            {
+                ViewData["estAdmin"] = "false";
+            }
+
 
             if (ModelState.IsValid)
             {

@@ -53,6 +53,19 @@ namespace Gwenael.Web.Pages
         }
         public IActionResult OnGet()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _db);
+                if (Permission.EstAdministrateur(idConnectedUser, _db))
+                {
+                    ViewData["estAdmin"] = "true";
+                }
+            }
+            else
+            {
+                ViewData["estAdmin"] = "false";
+            }
+
             NewPages = _db.NewPages.ToList();
             ViewData["NewPages"] = NewPages;
 
@@ -72,9 +85,41 @@ namespace Gwenael.Web.Pages
             return Page();
         }
 
-        public IActionResult OnPost() => Page();
+        public IActionResult OnPost()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _db);
+                if (Permission.EstAdministrateur(idConnectedUser, _db))
+                {
+                    ViewData["estAdmin"] = "true";
+                }
+            }
+            else
+            {
+                ViewData["estAdmin"] = "false";
+            }
 
-        public IActionResult OnPostRedirectCreationTuto() => RedirectToPage("CreationTuto");
+            return Page();
+        }
+
+        public IActionResult OnPostRedirectCreationTuto() 
+            {
+                if (User.Identity.IsAuthenticated)
+                {
+                    Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _db);
+                    if (Permission.EstAdministrateur(idConnectedUser, _db))
+                    {
+                        ViewData["estAdmin"] = "true";
+                    }
+                }
+                else
+                {
+                    ViewData["estAdmin"] = "false";
+                }
+
+                return RedirectToPage("CreationTuto");
+            }
 
         public class RechercherFiltre
         {
@@ -88,6 +133,19 @@ namespace Gwenael.Web.Pages
         {
             try
             {
+                if (User.Identity.IsAuthenticated)
+                {
+                    Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _db);
+                    if (Permission.EstAdministrateur(idConnectedUser, _db))
+                    {
+                        ViewData["estAdmin"] = "true";
+                    }
+                }
+                else
+                {
+                    ViewData["estAdmin"] = "false";
+                }
+
                 List<Tutos> t = new List<Tutos>();
                 if (!formData.cat.IsNullOrEmpty() && formData.cat != "Toutes")
                 {
@@ -136,6 +194,19 @@ namespace Gwenael.Web.Pages
         {
             try
             {
+                if (User.Identity.IsAuthenticated)
+                {
+                    Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _db);
+                    if (Permission.EstAdministrateur(idConnectedUser, _db))
+                    {
+                        ViewData["estAdmin"] = "true";
+                    }
+                }
+                else
+                {
+                    ViewData["estAdmin"] = "false";
+                }
+
                 if (User.Identity.IsAuthenticated)
                 {
                     Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);

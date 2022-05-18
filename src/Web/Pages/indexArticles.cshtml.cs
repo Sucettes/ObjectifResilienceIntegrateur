@@ -38,6 +38,20 @@ namespace Gwenael.Web.Pages
 
         public IActionResult OnGet()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _db);
+                if (Permission.EstAdministrateur(idConnectedUser, _db))
+                {
+                    ViewData["estAdmin"] = "true";
+                }
+            }
+            else
+            {
+                ViewData["estAdmin"] = "false";
+            }
+
+
             NewPages = _db.NewPages.ToList();
             ViewData["NewPages"] = NewPages;
 
@@ -61,6 +75,18 @@ namespace Gwenael.Web.Pages
 
         public IActionResult OnPostRedirectCreationArticle()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _db);
+                if (Permission.EstAdministrateur(idConnectedUser, _db))
+                {
+                    ViewData["estAdmin"] = "true";
+                }
+            }
+            else
+            {
+                ViewData["estAdmin"] = "false";
+            }
             return RedirectToPage("CreationArticle");
         }
 
@@ -68,6 +94,18 @@ namespace Gwenael.Web.Pages
         {
             try
             {
+                if (User.Identity.IsAuthenticated)
+                {
+                    Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _db);
+                    if (Permission.EstAdministrateur(idConnectedUser, _db))
+                    {
+                        ViewData["estAdmin"] = "true";
+                    }
+                }
+                else
+                {
+                    ViewData["estAdmin"] = "false";
+                }
                 List<Article> lstArticles = new List<Article>();
                 //if (!formData.cat.IsNullOrEmpty() && formData.cat != "Toutes")
                 //{
@@ -119,6 +157,19 @@ namespace Gwenael.Web.Pages
         {
             try
             {
+                if (User.Identity.IsAuthenticated)
+                {
+                    Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _db);
+                    if (Permission.EstAdministrateur(idConnectedUser, _db))
+                    {
+                        ViewData["estAdmin"] = "true";
+                    }
+                }
+                else
+                {
+                    ViewData["estAdmin"] = "false";
+                }
+
                 if (User.Identity.IsAuthenticated)
                 {
                     Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);

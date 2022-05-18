@@ -1,6 +1,7 @@
 using Gwenael.Application.Mailing;
 using Gwenael.Domain;
 using Gwenael.Domain.Entities;
+using Gwenael.Web.FctUtils;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -32,6 +33,19 @@ namespace Gwenael.Web.Pages.Account
         public string ReturnUrl { get; set; }
         public void OnGet(string returnUrl = null)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _db);
+                if (Permission.EstAdministrateur(idConnectedUser, _db))
+                {
+                    ViewData["estAdmin"] = "true";
+                }
+            }
+            else
+            {
+                ViewData["estAdmin"] = "false";
+            }
+
             NewPages = _db.NewPages.ToList();
             ViewData["NewPages"] = NewPages;
             ReturnUrl = returnUrl;
@@ -44,6 +58,18 @@ namespace Gwenael.Web.Pages.Account
         }
         public async Task<IActionResult> OnPostAsync([FromForm] RegisterForm registerForm)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _db);
+                if (Permission.EstAdministrateur(idConnectedUser, _db))
+                {
+                    ViewData["estAdmin"] = "true";
+                }
+            }
+            else
+            {
+                ViewData["estAdmin"] = "false";
+            }
 
             NewPages = await _db.NewPages.ToListAsync();
             ViewData["NewPages"] = NewPages;

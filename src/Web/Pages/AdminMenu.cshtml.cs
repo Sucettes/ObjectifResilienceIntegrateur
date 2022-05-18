@@ -39,10 +39,37 @@ namespace Gwenael.Web.Pages
         }
         public IActionResult OnGetAjoutCategorie()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _context);
+                if (Permission.EstAdministrateur(idConnectedUser, _context))
+                {
+                    ViewData["estAdmin"] = "true";
+                }
+            }
+            else
+            {
+                ViewData["estAdmin"] = "false";
+            }
+
             return Redirect("/AdminMenu/?tab=categories");
         }
         public IActionResult OnPostAjoutCategorie([FromForm] CategorieNameVal catName)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _context);
+                if (Permission.EstAdministrateur(idConnectedUser, _context))
+                {
+                    ViewData["estAdmin"] = "true";
+                }
+            }
+            else
+            {
+                ViewData["estAdmin"] = "false";
+            }
+
+
             Dictionary<string, string> dictError = new Dictionary<string, string>();
             if (catName.nomCat != null)
             {
@@ -77,6 +104,20 @@ namespace Gwenael.Web.Pages
         }
         public IActionResult OnPostSupprimerUser([FromForm] FormValId userVal)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _context);
+                if (Permission.EstAdministrateur(idConnectedUser, _context))
+                {
+                    ViewData["estAdmin"] = "true";
+                }
+            }
+            else
+            {
+                ViewData["estAdmin"] = "false";
+            }
+
+
             User userToDelete = _context.Users.Find(Guid.Parse(userVal.idCurrentObject));
             if (userToDelete != null)
             {
@@ -89,6 +130,21 @@ namespace Gwenael.Web.Pages
         }
         public IActionResult OnPostSupprimerArticle([FromForm] FormValId articleVal)
         {
+
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _context);
+                if (Permission.EstAdministrateur(idConnectedUser, _context))
+                {
+                    ViewData["estAdmin"] = "true";
+                }
+            }
+            else
+            {
+                ViewData["estAdmin"] = "false";
+            }
+
+
             Article articleBD = _context.Articles.Where(a => a.Id == int.Parse(articleVal.idCurrentObject)).First();
             _context.Articles.Remove(articleBD);
             _context.SaveChanges();
@@ -96,6 +152,20 @@ namespace Gwenael.Web.Pages
         }
         public IActionResult OnPostSupprimerAudio([FromForm] FormValId audioVal)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _context);
+                if (Permission.EstAdministrateur(idConnectedUser, _context))
+                {
+                    ViewData["estAdmin"] = "true";
+                }
+            }
+            else
+            {
+                ViewData["estAdmin"] = "false";
+            }
+
+
             Audio audioBd = _context.Audios.Where(a => a.ID == Guid.Parse(audioVal.idCurrentObject)).First();
             _context.Audios.Remove(audioBd);
             _context.SaveChanges();
@@ -103,6 +173,20 @@ namespace Gwenael.Web.Pages
         }
         public IActionResult OnPostSupprimerTuto([FromForm] FormValId tutoVal)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _context);
+                if (Permission.EstAdministrateur(idConnectedUser, _context))
+                {
+                    ViewData["estAdmin"] = "true";
+                }
+            }
+            else
+            {
+                ViewData["estAdmin"] = "false";
+            }
+
+
             Tutos tutoBD = _context.Tutos.Where(t => t.Id == Guid.Parse(tutoVal.idCurrentObject)).First();
             _context.Tutos.Remove(tutoBD);
             _context.SaveChanges();
@@ -111,6 +195,20 @@ namespace Gwenael.Web.Pages
         }
         public IActionResult OnPostSupprimerPage([FromForm] FormValId pageVal)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _context);
+                if (Permission.EstAdministrateur(idConnectedUser, _context))
+                {
+                    ViewData["estAdmin"] = "true";
+                }
+            }
+            else
+            {
+                ViewData["estAdmin"] = "false";
+            }
+
+
             NewPage newPageBD = _context.NewPages.Where(np => np.Id == int.Parse(pageVal.idCurrentObject)).First();
             _context.NewPages.Remove(newPageBD);
             _context.SaveChanges();
@@ -118,6 +216,19 @@ namespace Gwenael.Web.Pages
         }
         public async Task<IActionResult> OnGetAsync()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _context);
+                if (Permission.EstAdministrateur(idConnectedUser, _context))
+                {
+                    ViewData["estAdmin"] = "true";
+                }
+            }
+            else
+            {
+                ViewData["estAdmin"] = "false";
+            }
+
 
             NewPages = await _context.NewPages.ToListAsync();
             ViewData["NewPages"] = NewPages;
@@ -331,6 +442,20 @@ namespace Gwenael.Web.Pages
         }
         public async Task<IActionResult> OnPostAsync(string rechercheValeurPage, string btnSupprimerPage, string idPage, string idArticle, string btnSupprimerArticle, string idUserToDelete, string btnSupprimer, string btnSupprimerTuto, string idAudio, string idTuto, string supprCatVal, string nomCat, string rechercheValeurArticle, string rechercheValeurTuto, string rechercheValeurPodcast, string rechercheValeurDemande, string rechercheValeurUtilisateur, string rechercheValeurUtilisateurRole, string btnDeleteRole, string name, string selectRole, string btnAccepter, string btnRefuser, int? id)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _context);
+                if (Permission.EstAdministrateur(idConnectedUser, _context))
+                {
+                    ViewData["estAdmin"] = "true";
+                }
+            }
+            else
+            {
+                ViewData["estAdmin"] = "false";
+            }
+
+
             if (User.Identity.IsAuthenticated)
             {
                 Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
