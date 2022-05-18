@@ -8,7 +8,7 @@
 
 <nav class="navbar navbar-light shadow-sm">
     <div class="container-fluid">
-        <h1>Podcasts</h1>
+        <h1>Les podcasts</h1>
         @if (Model.droitAccess == true)
         {
             <div class="d-flex">
@@ -66,7 +66,7 @@
         <div class="col-9">
 
             <div class="pageDescriptionBox">
-                voici un ensemble de balados qui ont été produits lors des formations du Centre Jacques-Cartier.
+                Voici un ensemble de balados qui ont été produits lors des formations du Centre Jacques-Cartier.
             </div>
             <div class="row row-cols-1 row-cols-md-3 g-4">
                 @foreach (var audio in ViewData["lstAudios"] as IList<Audio>)
