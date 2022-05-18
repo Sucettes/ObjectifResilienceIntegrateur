@@ -37,6 +37,7 @@ namespace Gwenael.Web.Pages
         public InputModel Input { get; set; }
         public List<NewPage> NewPages { get; set; }
         public String NewPageCreated;
+        public string erreurNouvellePage;
 
         public IActionResult OnGet()
         {
@@ -46,6 +47,10 @@ namespace Gwenael.Web.Pages
 
             NewPages = _context.NewPages.ToList();
             ViewData["NewPages"] = NewPages;
+
+
+            erreurNouvellePage = "false";
+            ViewData["erreurChamps"] = erreurNouvellePage;
 
             if (Request.Query.Count > 0 && Request.Query.ContainsKey("id"))
             {
@@ -59,6 +64,9 @@ namespace Gwenael.Web.Pages
                 Input.Titre = b.Titre;
                 ViewData["Modifier"] = "true";
             }
+
+            NewPageCreated = "false";
+            ViewData["NewArticleCreated"] = NewPageCreated;
 
             return Page();
         }
@@ -86,6 +94,9 @@ namespace Gwenael.Web.Pages
                 EstPublier = false
 
             };
+
+            bool valide = false;
+
             if (Request.Query.Count > 0 && Request.Query.ContainsKey("id"))
             {
                 string idNewPage = Request.Query["id"];
@@ -94,6 +105,27 @@ namespace Gwenael.Web.Pages
                 b.Titre = titre;
                 b.InerText = inerText;
                 _context.NewPages.Update(b);
+            }
+
+            if (titre != null)
+            {
+                valide = true;
+
+                NewPageCreated = "true";
+                ViewData["NewArticleCreated"] = NewPageCreated;
+
+                erreurNouvellePage = "false";
+                ViewData["erreurChamps"] = erreurNouvellePage;
+            }
+            else
+            {
+                valide = false;
+
+                NewPageCreated = "false";
+                ViewData["NewArticleCreated"] = NewPageCreated;
+
+                erreurNouvellePage = "true";
+                ViewData["erreurChamps"] = erreurNouvellePage;
             }
 
             if (Input.FormFile != null)
@@ -126,10 +158,13 @@ namespace Gwenael.Web.Pages
                 _context.NewPages.Add(newPage);
             }
 
-            _context.SaveChanges();
+            if (valide)
+            {
+                _context.SaveChanges();
+            }
 
-            NewPageCreated = "true";
-            ViewData["NewPageCreated"] = NewPageCreated;
+            //NewPageCreated = "true";
+            //ViewData["NewPageCreated"] = NewPageCreated;
             return Page();
         }
 
