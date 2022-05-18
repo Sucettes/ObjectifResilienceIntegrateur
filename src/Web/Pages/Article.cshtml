@@ -9,10 +9,18 @@
 
 
     @{ Article unArticle = ViewData["unArticle"] as Article;
-       string articleC = unArticle.InerText;
-       var imageRef = ViewData["uneImage"];
+        string articleC = unArticle.InerText;
+        var imageRef = ViewData["uneImage"];
 
-            <h2>@unArticle.Titre</h2>
+        <h2 style="margin-bottom: 2rem; text-align: center">@unArticle.Titre</h2>
+
+
+
+        @if (@unArticle.LienImg != null)
+        {
+            <img style="margin-bottom: 2rem; width: 100%" src="https://mediafileobjectifresiliance.s3.ca-central-1.amazonaws.com/@unArticle.LienImg"  class="divBanner" >
+        }
+
         <div>
             <script>
             var article = '@articleC';
@@ -29,7 +37,12 @@
             tst.innerHTML += tst2;
             </script>
         </div>
-      }
-    <a href="/CreationArticle?=@unArticle.Id" class="btn">Modifier</a>
+    }
+
+    @if (ViewData["estAdmin"] as string == "true")
+    {
+        <a href="/CreationArticle?id=@unArticle.Id" class="btn">Modifier</a>
+    }
+
 
 </div>
