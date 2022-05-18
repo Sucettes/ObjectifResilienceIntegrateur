@@ -525,10 +525,8 @@
                                 <div class="col-3">
                                 </div>
                                 <div class="col-sm">
-                                    <form method="post">
-                                        <input type="hidden" name="supprCatVal" value="@categorie.Id" />
-                                        <input type="submit" value="Supprimer" class="btn btn-danger form-control" />
-                                    </form>
+                                    <button type="button" data-bs-toggle="modal" data="@categorie.Id" data-id="@categorie.Id" class="open-dialogCategorie btn-sm btn-danger" data-bs-target="#modalValideDeleteCategorie" style="margin-right:0.2rem; width:fit-content;"><img src="~/icons/deleteIcon.svg" /></button>
+
                                 </div>
                             </div>
                         </div>
@@ -545,6 +543,24 @@
                         </div>
                     </div>
                 }
+                <!-- Modal -->
+                <div class="modal" id="modalValideDeleteCategorie" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalValideDeleteLabelCategorie" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modalValideDeleteLabelCategorie">Confirmation!</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Cette action n’est pas réversible, elle supprimera tous les articles, podcasts et tutoriels reliés à celle-ci. Est-ce que vous voulez vraiment supprimer cette catégorie ?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Non</button>
+                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="confirmSuppressionCategorie()">Oui</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             }
             else if (ViewData["Tab"].ToString() == "tutoriels")
             {
@@ -955,6 +971,10 @@
         var tutoId = $(this).data('id');
         $('#IdCurrent').val(tutoId);
     });
+    $(document).on("click", ".open-dialogCategorie", function () {
+        var categorieId = $(this).data('id');
+        $('#IdCurrent').val(categorieId);
+    });
     function confirmSuppressionPage() {
         var href = window.location.pathname + "?handler=SupprimerPage";
         event.preventDefault();
@@ -1015,7 +1035,36 @@
             }
         });
     }
-
+    function confirmSuppressionCategorie() {
+        var href = window.location.pathname + "?handler=SupprimerCategorie";
+        event.preventDefault();
+        event.stopPropagation();
+        $.ajax({
+            type: 'POST',
+            url: href,
+            data: new FormData(document.getElementById('form-delete')),
+            contentType: "application/json",
+            headers: {
+                RequestVerificationToken:
+                    $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function () {
+                window.scriptToastNotification.AjouterNotification("La catégorie à bien été supprimé !", true);
+                setTimeout(function () {
+                    window.location.href = '/AdminMenu/?tab=categories';
+                }, 3600);
+            },
+            error: function () {
+                window.scriptToastNotification.AjouterNotification("Une erreure est survenu lors de la suppression de la catégorie !", false);
+                setTimeout(function () {
+                    window.locati3600ref = '/AdminMenu/?tab=categories';
+                }, 3600);
+            }
+        });
+    }
     function confirmSuppressionTutoriel() {
         var href = window.location.pathname + "?handler=SupprimerTuto";
         event.preventDefault();
