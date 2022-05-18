@@ -3,7 +3,7 @@
 @using Domain.Entities
 @model Web.Pages.IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Accueil";
 }
 
 <div>
@@ -93,7 +93,7 @@
                             <div class="div-article shadow-lg rounded">
                                 <a href="/Article?id=@unarticle.Id">
                                     <h4 class="articleTitle">@unarticle.Titre</h4>
-                                    @if (unarticle.LienImg != "")
+                                    @if (unarticle.LienImg != null)
                                     {
                                         <img src="https://mediafileobjectifresiliance.s3.ca-central-1.amazonaws.com/@unarticle.LienImg" style="max-width:100%">
                                     }
