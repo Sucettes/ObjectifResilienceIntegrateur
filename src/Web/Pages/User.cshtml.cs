@@ -41,17 +41,9 @@ namespace Gwenael.Web.Pages
             {
                 ViewData["estAdmin"] = "false";
             }
-
-            NewPages = await _context.NewPages.ToListAsync();
-            ViewData["NewPages"] = NewPages;
-
-            if (Guid.Empty == id)
+            if (User.Identity.IsAuthenticated)
             {
-                return Page();
-            }
-            else
-            {
-                Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
+                Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _context);
                 if (Permission.EstAdministrateur(idConnectedUser, _context))
                 {
                     NewPages = await _context.NewPages.ToListAsync();
@@ -83,7 +75,7 @@ namespace Gwenael.Web.Pages
                     }
                 }
             }
-            return Redirect("/");
+            return RedirectToPage("index");
 
         }
         public async Task<IActionResult> OnPost(string btnSave, string btnDelete, string btnAdd, string ConfPassword, string NewPassword)
@@ -91,23 +83,6 @@ namespace Gwenael.Web.Pages
             if (User.Identity.IsAuthenticated)
             {
                 Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _context);
-                if (Permission.EstAdministrateur(idConnectedUser, _context))
-                {
-                    ViewData["estAdmin"] = "true";
-                }
-            }
-            else
-            {
-                ViewData["estAdmin"] = "false";
-            }
-
-            NewPages = await _context.NewPages.ToListAsync();
-            ViewData["NewPages"] = NewPages;
-
-            User userBd = null;
-            try
-            {
-                Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
                 if (Permission.EstAdministrateur(idConnectedUser, _context))
                 {
                     NewPages = await _context.NewPages.ToListAsync();
@@ -121,6 +96,7 @@ namespace Gwenael.Web.Pages
                     catch
                     {
                     }
+                    Console.WriteLine(userBd);
                     if (btnSave != null)
                     {
                         if (userBd.Email != user.Email)
@@ -148,7 +124,7 @@ namespace Gwenael.Web.Pages
                                 {
                                     Console.WriteLine("Erreur");
                                 }
-                      
+
                             }
                         }
                         if (user.FirstName.Length > 0)
@@ -209,12 +185,7 @@ namespace Gwenael.Web.Pages
                     return RedirectToPage("index");
                 }
             }
-            return Redirect("/");
-        }
-        public Guid ObtenirIdDuUserSelonEmail(string email)
-        {
-            User user = (User)_context.Users.Where(u => u.UserName == email).First();
-            return user.Id;
+            return RedirectToPage("index");
         }
 
     }
