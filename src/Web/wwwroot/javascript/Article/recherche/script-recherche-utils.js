@@ -108,7 +108,7 @@
             // TODO : Ici retiré le cardPodcast si est pas a la bonne place et si ca marche pas....
             let $div = $('<div class="shadow-lg rounded cardPodcast" style="background-color:#f1f9ee;"></div>');
             let $div2 = $('<div></div>');
-            if (articleData.lienImgBanniere !== null) {
+            if (articleData.lienImg !== null) {
                 $div2.append('<img style="max-width:100%;height:13.125rem;" src="https://mediafileobjectifresiliance.s3.ca-central-1.amazonaws.com/' + articleData.lienImg + '" class="card-img-top" alt="...">');
             } else {
                 $div2.append('<img style="max-width:100%;height:13.125rem;" src="/images/imgplaceholder.png" class="card-img-top" alt="...">');
