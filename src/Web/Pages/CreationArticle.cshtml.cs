@@ -51,10 +51,15 @@ namespace Gwenael.Web.Pages
                 {
                     ViewData["estAdmin"] = "true";
                 }
+                else
+                {
+                    return Redirect("/");
+                }
             }
             else
             {
                 ViewData["estAdmin"] = "false";
+                return Redirect("/");
             }
 
 
