@@ -11,6 +11,7 @@ using Amazon.S3;
 using Amazon;
 using Amazon.S3.Model;
 using System.IO;
+using Gwenael.Web.FctUtils;
 
 namespace Gwenael.Web.Pages
 {
@@ -31,6 +32,18 @@ namespace Gwenael.Web.Pages
             NewPages = await _context.NewPages.ToListAsync();
             string titre = Request.Query["Titre"];
 
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _context);
+                if (Permission.EstAdministrateur(idConnectedUser, _context))
+                {
+                    ViewData["estAdmin"] = "true";
+                }
+            }
+            else
+            {
+                ViewData["estAdmin"] = "false";
+            }
 
             newPage = NewPages.Where(newPage => newPage.Titre == titre).First();
             ViewData["newPage"] = newPage;

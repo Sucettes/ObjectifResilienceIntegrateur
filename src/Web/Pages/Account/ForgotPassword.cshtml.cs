@@ -9,6 +9,8 @@ using Gwenael.Web.Extensions;
 using System.Collections.Generic;
 using Gwenael.Domain;
 using Microsoft.EntityFrameworkCore;
+using System;
+using Gwenael.Web.FctUtils;
 
 namespace Gwenael.Web.Pages.Account
 {
@@ -40,6 +42,21 @@ namespace Gwenael.Web.Pages.Account
 
         public async Task<IActionResult> OnPostAsync()
         {
+
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idConnectedUser = FctUtils.Permission.ObtenirIdDuUserSelonEmail(User.Identity.Name, _db);
+                if (Permission.EstAdministrateur(idConnectedUser, _db))
+                {
+                    ViewData["estAdmin"] = "true";
+                }
+            }
+            else
+            {
+                ViewData["estAdmin"] = "false";
+            }
+
+
             NewPages = await _db.NewPages.ToListAsync();
             ViewData["NewPages"] = NewPages;
 
