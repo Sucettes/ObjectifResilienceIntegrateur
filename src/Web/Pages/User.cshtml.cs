@@ -51,24 +51,39 @@ namespace Gwenael.Web.Pages
             }
             else
             {
-                user = await _context.Users.FindAsync(id);
-                ViewData["user"] = user;
-                string erreur = Request.Query["erreur"];
-                if (erreur != null)
+                Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
+                if (Permission.EstAdministrateur(idConnectedUser, _context))
                 {
-                    Console.WriteLine(erreur);
-                    if (erreur == "courriel")
+                    NewPages = await _context.NewPages.ToListAsync();
+                    ViewData["NewPages"] = NewPages;
+
+                    if (Guid.Empty == id)
                     {
-                        Console.WriteLine("Test");
-                        ViewData["erreur"] = "Le courriel n'est pas valide";
+                        return Page();
                     }
-                    else if (erreur == "courrielExist")
+                    else
                     {
-                        ViewData["erreur"] = "Le courriel est déjà utilisé";
+                        user = await _context.Users.FindAsync(id);
+                        ViewData["user"] = user;
+                        string erreur = Request.Query["erreur"];
+                        if (erreur != null)
+                        {
+                            Console.WriteLine(erreur);
+                            if (erreur == "courriel")
+                            {
+                                Console.WriteLine("Test");
+                                ViewData["erreur"] = "Le courriel n'est pas valide";
+                            }
+                            else if (erreur == "courrielExist")
+                            {
+                                ViewData["erreur"] = "Le courriel est déjà utilisé";
+                            }
+                        }
+                        return Page();
                     }
                 }
-                return Page();
             }
+            return Redirect("/");
 
         }
         public async Task<IActionResult> OnPost(string btnSave, string btnDelete, string btnAdd, string ConfPassword, string NewPassword)
@@ -92,98 +107,114 @@ namespace Gwenael.Web.Pages
             User userBd = null;
             try
             {
-                userBd = await _context.Users.FindAsync(user.Id);
-            }
-            catch
-            {
-            }
-            Console.WriteLine(userBd);
-            if (btnSave != null)
-            {
-                if (userBd.Email != user.Email)
+                Guid idConnectedUser = ObtenirIdDuUserSelonEmail(User.Identity.Name);
+                if (Permission.EstAdministrateur(idConnectedUser, _context))
                 {
-                    if (!Regex.IsMatch(user.Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+                    NewPages = await _context.NewPages.ToListAsync();
+                    ViewData["NewPages"] = NewPages;
+
+                    User userBd = null;
+                    try
                     {
-                        return Redirect("/User/" + user.Id + "/?erreur=courriel");
+                        userBd = await _context.Users.FindAsync(user.Id);
                     }
-                    else
+                    catch
                     {
-                        try
+                    }
+                    if (btnSave != null)
+                    {
+                        if (userBd.Email != user.Email)
                         {
-                            List<User> userTest = _context.Users.Where(u => u.Email == user.Email).ToList();
-                            if (userTest.Count == 0)
+                            if (!Regex.IsMatch(user.Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
                             {
-                                userBd.Email = user.Email.ToString();
-                                userBd.UserName = user.Email.ToString();
+                                return Redirect("/User/" + user.Id + "/?erreur=courriel");
                             }
                             else
                             {
-                                return Redirect("/User/" + user.Id + "/?erreur=courrielExist");
+                                try
+                                {
+                                    List<User> userTest = _context.Users.Where(u => u.Email == user.Email).ToList();
+                                    if (userTest.Count == 0)
+                                    {
+                                        userBd.Email = user.Email.ToString();
+                                        userBd.UserName = user.Email.ToString();
+                                    }
+                                    else
+                                    {
+                                        return Redirect("/User/" + user.Id + "/?erreur=courrielExist");
+                                    }
+                                }
+                                catch
+                                {
+                                    Console.WriteLine("Erreur");
+                                }
+                      
                             }
                         }
-                        catch
+                        if (user.FirstName.Length > 0)
                         {
-                            Console.WriteLine("Erreur");
-                        }
-                      
-                    }
-                }
-                if (user.FirstName.Length > 0)
-                {
-                    userBd.FirstName = user.FirstName.ToString();
-                }
-                else
-                {
-                    userBd.FirstName = "Non défini";
-                }
-                if (user.LastName.Length > 0)
-                {
-                    userBd.LastName = user.LastName.ToString();
-                }
-                else
-                {
-                    userBd.LastName = "Non défini";
-
-                }
-                _context.SaveChanges();
-                return Redirect("/AdminMenu/?tab=utilisateurs");
-            }
-            else if (btnDelete != null)
-            {
-                _context.Users.Remove(userBd);
-                _context.SaveChanges();
-                return RedirectToPage("adminMenu");
-            }
-            else if (btnAdd != null)
-            {
-                bool mdpSontPareille = NewPassword == ConfPassword;
-                if (NewPassword is not null && ConfPassword != null)
-                {
-                    if (mdpSontPareille)
-                    {
-                        User newUser = new User
-                        {
-                            FirstName = user.FirstName,
-                            LastName = user.LastName,
-                            Email = user.Email,
-                            UserName = user.Email,
-                            Active = true
-                        };
-                        var result = await _userManager.CreateAsync(newUser, NewPassword);
-                        if (result.Succeeded)
-                        {
-                            _context.SaveChanges();
+                            userBd.FirstName = user.FirstName.ToString();
                         }
                         else
                         {
-                            Console.WriteLine(result);
+                            userBd.FirstName = "Non défini";
                         }
+                        if (user.LastName.Length > 0)
+                        {
+                            userBd.LastName = user.LastName.ToString();
+                        }
+                        else
+                        {
+                            userBd.LastName = "Non défini";
 
+                        }
+                        _context.SaveChanges();
+                        return Redirect("/AdminMenu/?tab=utilisateurs");
                     }
+                    else if (btnDelete != null)
+                    {
+                        _context.Users.Remove(userBd);
+                        _context.SaveChanges();
+                        return RedirectToPage("adminMenu");
+                    }
+                    else if (btnAdd != null)
+                    {
+                        bool mdpSontPareille = NewPassword == ConfPassword;
+                        if (NewPassword is not null && ConfPassword != null)
+                        {
+                            if (mdpSontPareille)
+                            {
+                                User newUser = new User
+                                {
+                                    FirstName = user.FirstName,
+                                    LastName = user.LastName,
+                                    Email = user.Email,
+                                    UserName = user.Email,
+                                    Active = true
+                                };
+                                var result = await _userManager.CreateAsync(newUser, NewPassword);
+                                if (result.Succeeded)
+                                {
+                                    _context.SaveChanges();
+                                }
+                                else
+                                {
+                                    Console.WriteLine(result);
+                                }
+
+                            }
+                        }
+                        return RedirectToPage("adminMenu");
+                    }
+                    return RedirectToPage("index");
                 }
-                return RedirectToPage("adminMenu");
             }
-            return RedirectToPage("index");
+            return Redirect("/");
+        }
+        public Guid ObtenirIdDuUserSelonEmail(string email)
+        {
+            User user = (User)_context.Users.Where(u => u.UserName == email).First();
+            return user.Id;
         }
 
     }
